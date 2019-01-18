@@ -1,6 +1,8 @@
 {
   "name": "stream-frontend",
   "version": "0.1.0",
+  "description": "Implements the frontend for the Stream microservice. It is part of Viva con Aguas Pool².",
+  "author": "Johann Sell",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8082",
@@ -24,5 +26,17 @@
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.21"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viva-con-Agua/stream-frontend"
+  },
+  "bugs": {
+    "url": "https://github.com/Viva-con-Agua/stream-frontend/issues"
+  },
+  "homepage": "https://github.com/Viva-con-Agua/stream-frontend#readme",
+  "license": {
+    "type": "AGPL-3.0-or-later",
+    "url": "https://www.gnu.org/licenses/agpl.txt"
   }
 }
