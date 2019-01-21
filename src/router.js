@@ -22,7 +22,12 @@ export default new Router({
     {
         path: '/donations',
         name: 'donations',
-        component: () => import(/* webpackChunkName: "donations" */ './views/Donations.vue')
+        component: () => import('./views/Donations.vue')
     },
+    {
+        path: '/donations/add',
+        name: 'donations-add',
+        component: () => import('./views/DonationsAdd.vue')
+    }
   ]
 })

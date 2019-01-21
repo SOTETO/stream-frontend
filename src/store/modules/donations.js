@@ -1,8 +1,10 @@
+const uuidv5 = require('uuid/v5');
+
 // initial state
 // shape: [{ id, comment }]
 const state = {
     items: [
-        { "id": 1, "comment": "Super Spende!" }
+        { "id": uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL), "comment": "Super Spende!" }
     ]
 }
 
@@ -20,13 +22,16 @@ const getters = {
 
 const actions = {
     add ({ state, commit }, donation) {
-        commit({ "type": 'push', "donation": donation })
+        commit({ "type": 'push', "comment": donation.comment })
     }
 }
 
 const mutations = {
     push(state, pushDonation) {
-        state.items.push(pushDonation.donation)
+        state.items.push({
+            "id": uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL),
+            "comment": pushDonation.comment
+        })
     }
 }
 

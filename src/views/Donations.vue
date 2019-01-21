@@ -9,6 +9,11 @@
                 </ul>
             </VcABox>
         </VcAColumn>
+        <VcAColumn>
+            <VcABox :first="true" title="Edit">
+                <router-link class="vca-button-primary vca-full-width" to="/donations/add">Spende hinzufügen</router-link>
+            </VcABox>
+        </VcAColumn>
     </VcAFrame>
 </template>
 
