@@ -1,22 +1,22 @@
 <template>
-    <VcAFrame title="Save donation" hasContainer="true">
+    <VcAFrame :title="$t('donation.header.frame.create')" hasContainer="true">
         <el-form
                 :model="donation"
                 :rules="rules"
                 class="columns-container">
             <VcAColumn>
-                <VcABox :first="true" title="Save">
-                    <span>Bitte zahle die Spende bis spätestens ...TODO... ein!</span>
+                <VcABox :first="true" :title="$t('donation.header.box.save')">
+                    <span>{{ $t("donation.hints.deadline", { "deadline": $d(getDeadline(), 'short') }) }}</span>
                     <el-input
                             type="textarea"
                             :rows="4"
-                            placeholder="Bemerkung / Frage"
+                            :placeholder="$t('donation.placeholder.comment')"
                             v-model="donation.comment">
                     </el-input>
                     <button
                             class="vca-button-primary vca-full-width"
                             @click.prevent="submitForm">
-                        Speichern
+                        {{ $t("donation.buttons.save") }}
                     </button>
                 </VcABox>
             </VcAColumn>
@@ -55,6 +55,9 @@
             submitForm () {
                 this.add(this.donation)
                 this.$router.push('/donations')
+            },
+            getDeadline () {
+                return new Date()
             }
         }
     }

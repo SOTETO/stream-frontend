@@ -1,1 +1,24 @@
-{}
+{
+  "donation": {
+    "header": {
+      "frame": {
+        "create": "Add donation"
+      },
+      "box": {
+        "list": "All donations",
+        "list-methods": "Edit",
+        "save": "Save"
+      }
+    },
+    "hints": {
+      "deadline": "Please deposit the donation until {deadline}!"
+    },
+    "buttons": {
+      "add": "Add donation",
+      "save": "Save"
+    },
+    "placeholder": {
+      "comment": "Comment / Question"
+    }
+  }
+}

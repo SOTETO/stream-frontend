@@ -7,11 +7,33 @@ import en from '@/lang/en_US.json';
 import de from '@/lang/de_DE.json';
 import store from './store'
 
+const dateTimeFormats = {
+    'en-US': {
+        short: {
+            year: 'numeric', month: 'short', day: 'numeric'
+        },
+        long: {
+            year: 'numeric', month: 'short', day: 'numeric',
+            weekday: 'short', hour: 'numeric', minute: 'numeric'
+        }
+    },
+    'de-DE': {
+        short: {
+            year: 'numeric', month: 'short', day: 'numeric'
+        },
+        long: {
+            year: 'numeric', month: 'short', day: 'numeric',
+            weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: true
+        }
+    }
+}
+
 Vue.use(VueI18n);
 
 const locale =  navigator.language;
 const i18n = new VueI18n({
     locale: locale,
+    dateTimeFormats,
     messages: {
         'en-US': en,
         'de-DE': de,

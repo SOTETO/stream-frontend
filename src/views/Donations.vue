@@ -1,7 +1,7 @@
 <template>
     <VcAFrame>
         <VcAColumn>
-            <VcABox :first="true" size="90%" title="Donations">
+            <VcABox :first="true" size="90%" :title="$t('donation.header.box.list')">
                 <ul class="donations">
                     <li v-for="donation in donations">
                         {{ donation.comment }}
@@ -10,8 +10,8 @@
             </VcABox>
         </VcAColumn>
         <VcAColumn>
-            <VcABox :first="true" title="Edit">
-                <router-link class="vca-button-primary vca-full-width" to="/donations/add">Spende hinzufügen</router-link>
+            <VcABox :first="true" :title="$t('donation.header.box.list-methods')">
+                <router-link class="vca-button-primary vca-full-width" to="/donations/add">{{ $t('donation.buttons.add') }}</router-link>
             </VcABox>
         </VcAColumn>
     </VcAFrame>

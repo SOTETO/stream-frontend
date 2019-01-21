@@ -1,1 +1,24 @@
-{}
+{
+  "donation": {
+    "header": {
+      "frame": {
+        "create": "Spende hinzufügen"
+      },
+      "box": {
+        "list": "Alle Spenden",
+        "list-methods": "Editieren",
+        "save": "Speichern"
+      }
+    },
+    "hints": {
+      "deadline": "Bitte zahle die Spende bis spätestens {deadline} ein!"
+    },
+    "buttons": {
+      "add": "Spende hinzufügen",
+      "save": "Speichern"
+    },
+    "placeholder": {
+      "comment": "Bemerkung / Frage"
+    }
+  }
+}
