@@ -7,18 +7,39 @@
       "box": {
         "list": "All donations",
         "list-methods": "Edit",
-        "save": "Save"
+        "save": "Save",
+        "amount": "Donations amount"
+      },
+      "donationSource": {
+        "sourceSelect": "What type of donation?",
+        "sum": "Sum",
+        "sourceType": {
+          "cash": "Cash",
+          "extern": "external transaction"
+        }
       }
     },
     "hints": {
-      "deadline": "Please deposit the donation until {deadline}!"
+      "deadline": "Please deposit the donation until {deadline}!",
+      "error": {
+        "amount": {
+          "pattern": "Please consider the format for money amounts: e.g. 37,50 or 37.50"
+        }
+      }
     },
     "buttons": {
       "add": "Add donation",
       "save": "Save"
     },
     "placeholder": {
-      "comment": "Comment / Question"
+      "comment": "Comment / Question",
+      "received": "When did you received the donation?",
+      "source": {
+        "can": "Deposit can",
+        "box": "Donation box",
+        "gl": "Guest list"
+      },
+      "currency": "€"
     }
   }
 }

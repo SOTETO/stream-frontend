@@ -4,6 +4,11 @@
                 :model="donation"
                 :rules="rules"
                 class="columns-container">
+            <VcAColumn size="40%">
+                <VcABox :first="true" :title="$t('donation.header.box.amount')">
+                    <DonationCalculator />
+                </VcABox>
+            </VcAColumn>
             <VcAColumn>
                 <VcABox :first="true" :title="$t('donation.header.box.save')">
                     <span>{{ $t("donation.hints.deadline", { "deadline": $d(getDeadline(), 'short') }) }}</span>
@@ -29,10 +34,12 @@
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { Input, Form } from 'element-ui'
+    import DonationCalculator from '@/components/DonationCalculator.vue'
 
     export default {
         name: "DonationsAdd",
         components: {
+            'DonationCalculator': DonationCalculator,
             'VcAFrame': VcAFrame,
             'VcAColumn': VcAColumn,
             'VcABox': VcABox,

@@ -7,18 +7,39 @@
       "box": {
         "list": "Alle Spenden",
         "list-methods": "Editieren",
-        "save": "Speichern"
+        "save": "Speichern",
+        "amount": "Spendenbetrag"
+      },
+      "donationSource": {
+        "sourceSelect": "Woher kommt die Spende?",
+        "sum": "Summe",
+        "sourceType": {
+          "cash": "Bar",
+          "extern": "externe Überweisung"
+        }
       }
     },
     "hints": {
-      "deadline": "Bitte zahle die Spende bis spätestens {deadline} ein!"
+      "deadline": "Bitte zahle die Spende bis spätestens {deadline} ein!",
+      "error": {
+        "amount": {
+          "pattern": "Bitte halte dich daran, wie Geldbeträge angegeben werden: z.B. 37,50 oder 37.50"
+        }
+      }
     },
     "buttons": {
       "add": "Spende hinzufügen",
       "save": "Speichern"
     },
     "placeholder": {
-      "comment": "Bemerkung / Frage"
+      "comment": "Bemerkung / Frage",
+      "received": "Wann hast du die Spende erhalten?",
+      "source": {
+        "can": "Pfandtonne",
+        "box": "Spendendose",
+        "gl": "Gästeliste"
+      },
+      "currency": "€"
     }
   }
 }
