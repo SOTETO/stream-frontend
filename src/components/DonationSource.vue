@@ -37,7 +37,7 @@
             },
             "currency": {
                 "type": String,
-                "default": "euro",
+                "required": true,
                 "validator": function (value) {
                     // The value must match one of these strings
                     return ["euro", "dollar"].indexOf(value) !== -1
@@ -63,6 +63,8 @@
                         "formatted": this.amount,
                         "type": this.type
                     })
+                } else if(!this.checked && !this.amountErrorState) {
+                    this.$emit('deselect', this.category)
                 }
             },
             validate(value) {

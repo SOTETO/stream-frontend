@@ -1,7 +1,14 @@
 <template>
     <VcABox :first="first" :title="$t('donation.header.box.amount')">
         <template slot="header">
-            
+            <el-select v-model="currency" size="small">
+                <el-option
+                        v-for="c in currencyOptions"
+                        :key="c"
+                        :label="$t('currencies.label.' + c)"
+                        :value="c">
+                </el-option>
+            </el-select>
         </template>
         <div class="collector">
             <el-form-item
@@ -24,7 +31,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <DonationSource v-for="category in sourceTypes" :category="category" :key="category" @input="changeDonation" />
+                    <DonationSource
+                            v-for="category in sourceTypes"
+                            :category="category"
+                            :currency="currency"
+                            :key="category"
+                            @input="changeDonation"
+                            @deselect="deselect"
+                    />
                 </tbody>
             </table>
         </div>
@@ -37,7 +51,7 @@
 </template>
 
 <script>
-    import { DatePicker, FormItem } from 'element-ui'
+    import { DatePicker, FormItem, Select, Option } from 'element-ui'
     import { VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import DonationSource from '@/components/DonationSource.vue'
@@ -48,6 +62,8 @@
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
+            "el-select": Select,
+            "el-option": Option,
             "DonationSource": DonationSource,
             "VcABox": VcABox
         },
@@ -66,6 +82,10 @@
                 },
                 "sourceTypes": [
                     "can", "box", "gl"
+                ],
+                "currency": this.$t("currencies.default"),
+                "currencyOptions": [
+                    "euro", "dollar"
                 ],
                 "received": new Date(),
                 "sources": []
@@ -89,6 +109,11 @@
                 copy.push(source)
                 this.sources = copy
             },
+            deselect(category) {
+                var copy = this.sources.slice(0)
+                copy = copy.filter(s => category !== s.category)
+                this.sources = copy
+            },
             getTotal(part) {
                 const reducer = (acc, c) => acc + c.amount
                 const filter = source => source.type === part
@@ -96,7 +121,7 @@
                 if(typeof part === "string" && (part === "cash" || part === "extern")) {
                     result = this.sources.filter(filter).reduce(reducer, 0)
                 }
-                return CurrencyFormatter.getFromNumeric("euro", result)
+                return CurrencyFormatter.getFromNumeric(this.currency, result)
             }
         }
     }

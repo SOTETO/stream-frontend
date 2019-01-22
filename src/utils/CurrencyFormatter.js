@@ -36,7 +36,7 @@ export default class CurrencyFormatter {
         if(this.selectedCurrency === "euro" && this.value.match(CurrencyFormatter.regex.euro)) {
             localized = CurrencyFormatter.formatMoney(this.numericValue, 2, ",", ".") + " €"
         } else if(this.selectedCurrency === "dollar" && this.value.match(CurrencyFormatter.regex.dollar)) {
-            localized = "$ " + CurrencyFormatter.formatMoney(this.numericValue)
+            localized = "$" + CurrencyFormatter.formatMoney(this.numericValue)
         }
         return localized
     }
@@ -50,7 +50,7 @@ export default class CurrencyFormatter {
         if(currency === "euro") {
             localized = CurrencyFormatter.formatMoney(numeric, 2, ",", ".") + " €"
         } else if(currency === "dollar") {
-            localized = "$ " + CurrencyFormatter.formatMoney(numeric)
+            localized = "$" + CurrencyFormatter.formatMoney(numeric)
         }
         return new CurrencyFormatter(currency, localized)
     }

@@ -28,7 +28,7 @@
       },
       "error": {
         "amount": {
-          "pattern": "Bitte halte dich daran, wie Geldbeträge angegeben werden: z.B. 37,50 oder 37.50"
+          "pattern": "Bitte halte dich daran, wie Geldbeträge angegeben werden: z.B. 37,50 €"
         }
       }
     },
@@ -43,8 +43,14 @@
         "can": "Pfandtonne",
         "box": "Spendendose",
         "gl": "Gästeliste"
-      },
-      "currency": "€"
+      }
+    }
+  },
+  "currencies": {
+    "default": "euro",
+    "label": {
+      "euro": "€",
+      "dollar": "$"
     }
   }
 }

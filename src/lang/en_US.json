@@ -28,7 +28,7 @@
       },
       "error": {
         "amount": {
-          "pattern": "Please consider the format for money amounts: e.g. 37,50 or 37.50"
+          "pattern": "Please consider the format for money amounts: e.g. $37.50"
         }
       }
     },
@@ -43,8 +43,14 @@
         "can": "Deposit can",
         "box": "Donation box",
         "gl": "Guest list"
-      },
-      "currency": "€"
+      }
+    },
+    "currencies": {
+      "default": "dollar",
+      "label": {
+        "euro": "€",
+        "dollar": "$"
+      }
     }
   }
 }
