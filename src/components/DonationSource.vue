@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <td><el-checkbox v-model="checked">{{ $t("donation.placeholder.source." + category) }}</el-checkbox></td>
+        <td><el-checkbox v-model="checked" @change="commit">{{ $t("donation.placeholder.source." + category) }}</el-checkbox></td>
         <td>
             <el-input class="vca-input" v-model="amount" @change="validate"/>
             <div
@@ -10,8 +10,8 @@
                 {{ $t('donation.hints.error.amount.pattern') }}
             </div>
         </td>
-        <td><el-radio v-model="type" label="cash">&nbsp;</el-radio></td>
-        <td><el-radio v-model="type" label="extern">&nbsp;</el-radio></td>
+        <td><el-radio v-model="type" label="cash" @change="commit">&nbsp;</el-radio></td>
+        <td><el-radio v-model="type" label="extern" @change="commit">&nbsp;</el-radio></td>
     </tr>
 </template>
 
@@ -55,12 +55,23 @@
             }
         },
         methods: {
+            commit() {
+                if(this.checked && !this.amountErrorState) {
+                    this.$emit('input', {
+                        "category": this.category,
+                        "amount": this.numericAmount,
+                        "formatted": this.amount,
+                        "type": this.type
+                    })
+                }
+            },
             validate(value) {
                 var formatter = new CurrencyFormatter(this.currency, value)
                 if(formatter.match()) {
                     this.amount = formatter.localize()
                     this.numericAmount = formatter.getNumeric()
                     this.amountErrorState = false
+                    this.commit()
                 } else {
                     this.amountErrorState = true
                 }

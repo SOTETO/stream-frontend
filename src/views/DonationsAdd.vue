@@ -5,9 +5,7 @@
                 :rules="rules"
                 class="columns-container">
             <VcAColumn size="40%">
-                <VcABox :first="true" :title="$t('donation.header.box.amount')">
-                    <DonationCalculator />
-                </VcABox>
+                <DonationCalculator :first="true" />
             </VcAColumn>
             <VcAColumn>
                 <VcABox :first="true" :title="$t('donation.header.box.save')">

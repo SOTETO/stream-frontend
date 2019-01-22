@@ -21,6 +21,11 @@
     },
     "hints": {
       "deadline": "Bitte zahle die Spende bis spätestens {deadline} ein!",
+      "total": {
+        "cash": "Summe Barspende: {total}",
+        "extern": "Summe Spende durch externe Überweisung: {total}",
+        "all": "Spendensumme: {total}"
+      },
       "error": {
         "amount": {
           "pattern": "Bitte halte dich daran, wie Geldbeträge angegeben werden: z.B. 37,50 oder 37.50"

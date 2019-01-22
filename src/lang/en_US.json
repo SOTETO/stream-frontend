@@ -21,6 +21,11 @@
     },
     "hints": {
       "deadline": "Please deposit the donation until {deadline}!",
+      "total": {
+        "cash": "Total (cash): {total}",
+        "extern": "Total (external transaction): {total}",
+        "all": "Total donation: {total}"
+      },
       "error": {
         "amount": {
           "pattern": "Please consider the format for money amounts: e.g. 37,50 or 37.50"
