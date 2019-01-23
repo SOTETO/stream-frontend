@@ -76,7 +76,6 @@
                     "receipt": this.donationReceipt,
                     "partner": this.partner
                 }
-                console.log(this.donationReceipt)
                 this.$emit("input", result)
             }
         }
