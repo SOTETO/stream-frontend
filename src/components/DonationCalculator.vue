@@ -32,12 +32,15 @@
                 </thead>
                 <tbody>
                     <DonationSource
-                            v-for="category in sourceTypes"
-                            :category="category"
-                            :currency="currency"
-                            :key="category"
-                            @input="changeDonation"
-                            @deselect="deselect"
+                        v-for="category in sourceTypes"
+                        :category="category"
+                        :currency="currency"
+                        :checked="getCheckedSource(category)"
+                        :type="getTypeSource(category)"
+                        :numeric="getNumericSource(category)"
+                        :key="category + currency"
+                        @input="changeDonation"
+                        @deselect="deselect"
                     />
                 </tbody>
             </table>
@@ -122,6 +125,30 @@
                     result = this.sources.filter(filter).reduce(reducer, 0)
                 }
                 return CurrencyFormatter.getFromNumeric(this.currency, result)
+            },
+            getCheckedSource(category) {
+                var source = this.sources.filter(s => s.category === category).pop()
+                var result = false
+                if(typeof source !== "undefined") {
+                    result = true
+                }
+                return result
+            },
+            getTypeSource(category) {
+                var source = this.sources.filter(s => s.category === category).pop()
+                var result = "cash"
+                if(typeof source !== "undefined") {
+                    result = source.type
+                }
+                return result
+            },
+            getNumericSource(category) {
+                var source = this.sources.filter(s => s.category === category).pop()
+                var result = 0.0
+                if(typeof source !== "undefined") {
+                    result = source.amount
+                }
+                return result
             }
         }
     }
@@ -136,6 +163,10 @@
         width: 100%;
         & /deep/ th:not(:first-child), & /deep/ td:not(:first-child) {
             padding-left: 1em;
+        }
+
+        thead tr th {
+            padding-bottom: 1em;
         }
     }
 

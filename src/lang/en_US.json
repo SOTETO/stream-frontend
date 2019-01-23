@@ -28,7 +28,7 @@
       },
       "error": {
         "amount": {
-          "pattern": "Please consider the format for money amounts: e.g. $37.50"
+          "pattern": "Wrong money format (e.g. $37.50)"
         }
       }
     },

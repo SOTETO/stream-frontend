@@ -1,22 +1,36 @@
 <template>
-    <tr>
-        <td><el-checkbox v-model="checked" @change="commit">{{ $t("donation.placeholder.source." + category) }}</el-checkbox></td>
+    <tr class="source">
         <td>
-            <el-input class="vca-input" v-model="amount" @change="validate"/>
-            <div
-                    v-if="amountErrorState"
-                    class="el-form-item__error"
-            >
-                {{ $t('donation.hints.error.amount.pattern') }}
-            </div>
+            <el-form-item>
+                <el-checkbox v-model="checkedVar" @change="commit">{{ $t("donation.placeholder.source." + category) }}</el-checkbox>
+            </el-form-item>
         </td>
-        <td><el-radio v-model="type" label="cash" @change="commit">&nbsp;</el-radio></td>
-        <td><el-radio v-model="type" label="extern" @change="commit">&nbsp;</el-radio></td>
+        <td>
+            <el-form-item>
+                <el-input class="vca-input" v-model="amount" @change="validate"/>
+                <div
+                        v-if="amountErrorState"
+                        class="el-form-item__error"
+                >
+                    {{ $t('donation.hints.error.amount.pattern') }}
+                </div>
+            </el-form-item>
+        </td>
+        <td>
+            <el-form-item>
+                <el-radio v-model="typeVar" label="cash" @change="commit">&nbsp;</el-radio>
+            </el-form-item>
+        </td>
+        <td>
+            <el-form-item>
+                <el-radio v-model="typeVar" label="extern" @change="commit">&nbsp;</el-radio>
+            </el-form-item>
+        </td>
     </tr>
 </template>
 
 <script>
-    import { Input, Checkbox, Radio } from 'element-ui'
+    import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
@@ -24,7 +38,8 @@
         components: {
             "el-input": Input,
             "el-checkbox": Checkbox,
-            "el-radio": Radio
+            "el-radio": Radio,
+            "el-form-item": FormItem
         },
         props: {
             "category": {
@@ -42,28 +57,47 @@
                     // The value must match one of these strings
                     return ["euro", "dollar"].indexOf(value) !== -1
                 }
+            },
+            "checked": {
+                "type": Boolean,
+                "default": false
+            },
+            "numeric": {
+                "type": Number,
+                "default": 0.0
+            },
+            "type": {
+                "type": String,
+                "default": "cash"
             }
         },
         data () {
             var formatter = CurrencyFormatter.getDefault(this.currency)
             return {
-                "checked": false,
+                "checkedVar": false,
                 "amount": formatter.localize(),
                 "numericAmount": formatter.getNumeric(),
-                "type": "cash",
+                "typeVar": "cash",
                 "amountErrorState": false
             }
         },
+        created: function () {
+            var formatter = CurrencyFormatter.getFromNumeric(this.currency, this.numeric)
+            this.amount = formatter.localize()
+            this.numericAmount = formatter.getNumeric()
+            this.checkedVar = this.checked
+            this.typeVar = this.type
+        },
         methods: {
             commit() {
-                if(this.checked && !this.amountErrorState) {
+                if(this.checkedVar && !this.amountErrorState) {
                     this.$emit('input', {
                         "category": this.category,
                         "amount": this.numericAmount,
                         "formatted": this.amount,
-                        "type": this.type
+                        "type": this.typeVar
                     })
-                } else if(!this.checked && !this.amountErrorState) {
+                } else if(!this.checkedVar && !this.amountErrorState) {
                     this.$emit('deselect', this.category)
                 }
             },
@@ -72,6 +106,7 @@
                 if(formatter.match()) {
                     this.amount = formatter.localize()
                     this.numericAmount = formatter.getNumeric()
+                    this.checkedVar = true
                     this.amountErrorState = false
                     this.commit()
                 } else {
