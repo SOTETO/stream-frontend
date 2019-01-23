@@ -87,6 +87,7 @@
             this.numericAmount = formatter.getNumeric()
             this.checkedVar = this.checked
             this.typeVar = this.type
+            this.commit()
         },
         methods: {
             commit() {

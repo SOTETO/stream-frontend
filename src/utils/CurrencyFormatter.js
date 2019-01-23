@@ -74,7 +74,7 @@ export default class CurrencyFormatter {
 
 CurrencyFormatter.regex = {
     "euro": /^\d+(\.\d{3})*(,\d{2})?(\s*€)?$/,
-    "dollar": /^(\$\s*)?\d+(,d{3})*.\d{2}(\s*\$)?$/
+    "dollar": /^(\$\s*)?\d+(,\d{3})*(\.\d{2})?(\s*\$)?$/
 }
 
 CurrencyFormatter.defaults = {

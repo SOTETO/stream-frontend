@@ -5,7 +5,7 @@
                 :rules="rules"
                 class="columns-container">
             <VcAColumn size="40%">
-                <DonationCalculator :first="true" @externalTransactions="triggerExternalTransactions" />
+                <DonationCalculator :first="true" v-model="donation.amount" />
             </VcAColumn>
             <VcAColumn>
                 <VcABox v-if="showExternalTransactions" :first="showExternalTransactions" :title="$t('donation.header.box.externalTransactions')">
@@ -57,16 +57,19 @@
                         "reasonForPayment": "",
                         "receipt": false,
                         "partner": {}
+                    },
+                    "amount": {
+                        "received": new Date(),
+                        "sources": []
                     }
                 },
                 comment: '',
                 rules: {},
-                externalTransactions: []
             }
         },
         computed: {
             showExternalTransactions () {
-                return this.externalTransactions.length > 0
+                return this.donation.amount.sources.filter(s => s.type === "extern").length > 0
             }
         },
         methods: {
@@ -79,9 +82,6 @@
             },
             getDeadline () {
                 return new Date()
-            },
-            triggerExternalTransactions(sources) {
-                this.externalTransactions = sources
             }
         }
     }

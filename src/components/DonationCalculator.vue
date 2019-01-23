@@ -71,10 +71,13 @@
             "VcABox": VcABox
         },
         props: {
-           "first": {
+            "first": {
                "type": Boolean,
                "default": true
-           }
+            },
+            "value": {
+               "type": Object
+            }
         },
         data () {
             return {
@@ -105,19 +108,30 @@
                 return this.getTotal()
             }
         },
+        created () {
+            if(typeof this.value !== "undefined" && this.value !== null) {
+                if(this.value.hasOwnProperty("received")) {
+                    this.received = this.value.received
+                }
+                if(this.value.hasOwnProperty("sources")) {
+                    this.sources = this.value.sources
+                }
+            }
+            this.commit()
+        },
         methods: {
             changeDonation(source) {
                 var copy = this.sources.slice(0)
                 copy = copy.filter(s => source.category !== s.category)
                 copy.push(source)
                 this.sources = copy
-                this.triggerStateExternal()
+                this.commit()
             },
             deselect(category) {
                 var copy = this.sources.slice(0)
                 copy = copy.filter(s => category !== s.category)
                 this.sources = copy
-                this.triggerStateExternal()
+                this.commit()
             },
             getTotal(part) {
                 const reducer = (acc, c) => acc + c.amount
@@ -128,9 +142,12 @@
                 }
                 return CurrencyFormatter.getFromNumeric(this.currency, result)
             },
-            triggerStateExternal() {
-                var externalTransactions = this.sources.filter(s => s.type === "extern")
-                this.$emit("externalTransactions", externalTransactions)
+            commit() {
+                var result = {
+                    "received": this.received,
+                    "sources": this.sources
+                }
+                this.$emit("input", result)
             },
             getCheckedSource(category) {
                 var source = this.sources.filter(s => s.category === category).pop()
