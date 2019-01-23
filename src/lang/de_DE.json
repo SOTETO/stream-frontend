@@ -8,7 +8,8 @@
         "list": "Alle Spenden",
         "list-methods": "Editieren",
         "save": "Speichern",
-        "amount": "Spendenbetrag"
+        "amount": "Spendenbetrag",
+        "externalTransactions": "Details externer Überweiser"
       },
       "donationSource": {
         "sourceSelect": "Woher kommt die Spende?",

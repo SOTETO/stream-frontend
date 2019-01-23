@@ -111,11 +111,13 @@
                 copy = copy.filter(s => source.category !== s.category)
                 copy.push(source)
                 this.sources = copy
+                this.triggerStateExternal()
             },
             deselect(category) {
                 var copy = this.sources.slice(0)
                 copy = copy.filter(s => category !== s.category)
                 this.sources = copy
+                this.triggerStateExternal()
             },
             getTotal(part) {
                 const reducer = (acc, c) => acc + c.amount
@@ -125,6 +127,10 @@
                     result = this.sources.filter(filter).reduce(reducer, 0)
                 }
                 return CurrencyFormatter.getFromNumeric(this.currency, result)
+            },
+            triggerStateExternal() {
+                var externalTransactions = this.sources.filter(s => s.type === "extern")
+                this.$emit("externalTransactions", externalTransactions)
             },
             getCheckedSource(category) {
                 var source = this.sources.filter(s => s.category === category).pop()

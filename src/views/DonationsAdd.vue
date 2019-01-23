@@ -5,10 +5,13 @@
                 :rules="rules"
                 class="columns-container">
             <VcAColumn size="40%">
-                <DonationCalculator :first="true" />
+                <DonationCalculator :first="true" @externalTransactions="triggerExternalTransactions" />
             </VcAColumn>
             <VcAColumn>
-                <VcABox :first="true" :title="$t('donation.header.box.save')">
+                <VcABox v-if="showExternalTransactions" :first="showExternalTransactions" :title="$t('donation.header.box.externalTransactions')">
+                    Todo
+                </VcABox>
+                <VcABox :first="!showExternalTransactions" :title="$t('donation.header.box.save')">
                     <span>{{ $t("donation.hints.deadline", { "deadline": $d(getDeadline(), 'short') }) }}</span>
                     <el-input
                             type="textarea"
@@ -50,7 +53,13 @@
                     "comment": ''
                 },
                 comment: '',
-                rules: {}
+                rules: {},
+                externalTransactions: []
+            }
+        },
+        computed: {
+            showExternalTransactions () {
+                return this.externalTransactions.length > 0
             }
         },
         methods: {
@@ -63,6 +72,9 @@
             },
             getDeadline () {
                 return new Date()
+            },
+            triggerExternalTransactions(sources) {
+                this.externalTransactions = sources
             }
         }
     }

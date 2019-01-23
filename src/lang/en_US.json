@@ -8,7 +8,8 @@
         "list": "All donations",
         "list-methods": "Edit",
         "save": "Save",
-        "amount": "Donations amount"
+        "amount": "Donations amount",
+        "externalTransactions": "Details external transaction"
       },
       "donationSource": {
         "sourceSelect": "What type of donation?",
