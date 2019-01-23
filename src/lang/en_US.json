@@ -44,6 +44,16 @@
         "can": "Deposit can",
         "box": "Donation box",
         "gl": "Guest list"
+      },
+      "externalDetails": {
+        "receipt": "Donation receipt required?",
+        "partner": {
+          "label": "Who transfers the donation?",
+          "name": "Location / Organizer",
+          "asp": "Contact person",
+          "email": "Email address",
+          "address": "Postal address"
+        }
       }
     },
     "currencies": {
@@ -51,6 +61,12 @@
       "label": {
         "euro": "€",
         "dollar": "$"
+      }
+    },
+    "externalTransaction": {
+      "reasonForPayment": "Reason for payment",
+      "label": {
+        "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
     }
   }

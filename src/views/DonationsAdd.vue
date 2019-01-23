@@ -9,7 +9,7 @@
             </VcAColumn>
             <VcAColumn>
                 <VcABox v-if="showExternalTransactions" :first="showExternalTransactions" :title="$t('donation.header.box.externalTransactions')">
-                    Todo
+                    <ExternalTransactionDetails v-model="donation.details" />
                 </VcABox>
                 <VcABox :first="!showExternalTransactions" :title="$t('donation.header.box.save')">
                     <span>{{ $t("donation.hints.deadline", { "deadline": $d(getDeadline(), 'short') }) }}</span>
@@ -36,11 +36,13 @@
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { Input, Form } from 'element-ui'
     import DonationCalculator from '@/components/DonationCalculator.vue'
+    import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
 
     export default {
         name: "DonationsAdd",
         components: {
             'DonationCalculator': DonationCalculator,
+            'ExternalTransactionDetails': ExternalTransactionDetails,
             'VcAFrame': VcAFrame,
             'VcAColumn': VcAColumn,
             'VcABox': VcABox,
@@ -50,7 +52,12 @@
         data () {
             return {
                 donation: {
-                    "comment": ''
+                    "comment": '',
+                    "details": {
+                        "reasonForPayment": "",
+                        "receipt": false,
+                        "partner": {}
+                    }
                 },
                 comment: '',
                 rules: {},

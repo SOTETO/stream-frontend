@@ -44,6 +44,16 @@
         "can": "Pfandtonne",
         "box": "Spendendose",
         "gl": "Gästeliste"
+      },
+      "externalDetails": {
+        "receipt": "Spendenbescheinigung erwünscht?",
+        "partner": {
+          "label": "Wer überweist die Spende?",
+          "name": "Location / Veranstalter",
+          "asp": "Ansprechpartner",
+          "email": "Emailadresse",
+          "address": "Postanschrift"
+        }
       }
     }
   },
@@ -52,6 +62,12 @@
     "label": {
       "euro": "€",
       "dollar": "$"
+    }
+  },
+  "externalTransaction": {
+    "reasonForPayment": "Verwendungszweck",
+    "label": {
+      "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
     }
   }
 }
