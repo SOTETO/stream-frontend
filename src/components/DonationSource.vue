@@ -98,7 +98,7 @@
                         "type": this.typeVar
                     })
                 } else if(!this.checkedVar && !this.amountErrorState) {
-                    this.$emit('deselect', this.category)
+                    this.deselect()
                 }
             },
             validate(value) {
@@ -111,7 +111,12 @@
                     this.commit()
                 } else {
                     this.amountErrorState = true
+                    this.checkedVar = false
+                    this.deselect()
                 }
+            },
+            deselect() {
+                this.$emit('deselect', this.category)
             }
         }
     }
