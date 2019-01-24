@@ -32,13 +32,15 @@
                 </thead>
                 <tbody>
                     <DonationSource
-                        v-for="category in sourceTypes"
-                        :category="category"
+                        v-for="t in sourceTypes"
+                        :category="t.category"
                         :currency="currency"
-                        :checked="getCheckedSource(category)"
-                        :type="getTypeSource(category)"
-                        :numeric="getNumericSource(category)"
-                        :key="category + currency"
+                        :checked="getCheckedSource(t.category)"
+                        :type="getTypeSource(t.category)"
+                        :numeric="getNumericSource(t.category)"
+                        :description="t.desc"
+                        :descriptionText="getDescSource(t.category)"
+                        :key="t.category + currency"
                         @input="changeDonation"
                         @deselect="deselect"
                     />
@@ -87,7 +89,10 @@
                     }
                 },
                 "sourceTypes": [
-                    "can", "box", "gl"
+                    { "category": "can", "desc": false},
+                    { "category": "box", "desc": false},
+                    { "category": "gl", "desc": false},
+                    { "category": "other", "desc": true}
                 ],
                 "currency": this.$t("currencies.default"),
                 "currencyOptions": [
@@ -170,6 +175,14 @@
                 var result = 0.0
                 if(typeof source !== "undefined") {
                     result = source.amount
+                }
+                return result
+            },
+            getDescSource(category) {
+                var source = this.sources.filter(s => s.category === category).pop()
+                var result = ""
+                if(typeof source !== "undefined" && source !== null && source.hasOwnProperty("description")) {
+                    result = source.description
                 }
                 return result
             }

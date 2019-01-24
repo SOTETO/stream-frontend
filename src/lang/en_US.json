@@ -43,7 +43,9 @@
       "source": {
         "can": "Deposit can",
         "box": "Donation box",
-        "gl": "Guest list"
+        "gl": "Guest list",
+        "other": "Other",
+        "description": "Description..."
       },
       "externalDetails": {
         "receipt": "Donation receipt required?",

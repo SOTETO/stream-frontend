@@ -43,7 +43,9 @@
       "source": {
         "can": "Pfandtonne",
         "box": "Spendendose",
-        "gl": "Gästeliste"
+        "gl": "Gästeliste",
+        "other": "Sonstiges",
+        "description": "Beschreibung..."
       },
       "externalDetails": {
         "receipt": "Spendenbescheinigung erwünscht?",

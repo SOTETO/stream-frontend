@@ -1,9 +1,14 @@
 <template>
     <tr class="source">
         <td>
-            <el-form-item>
-                <el-checkbox v-model="checkedVar" @change="commit">{{ $t("donation.placeholder.source." + category) }}</el-checkbox>
-            </el-form-item>
+            <div class="category">
+                <el-form-item>
+                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("donation.placeholder.source." + category) }}</el-checkbox>
+                </el-form-item>
+                <el-form-item v-if="description">
+                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('donation.placeholder.source.description')"></el-input>
+                </el-form-item>
+            </div>
         </td>
         <td>
             <el-form-item>
@@ -47,7 +52,7 @@
                 "required": true,
                 "validator": function (value) {
                     // The value must match one of these strings
-                    return ["can", "box", "gl"].indexOf(value) !== -1
+                    return ["can", "box", "gl", "other"].indexOf(value) !== -1
                 }
             },
             "currency": {
@@ -69,6 +74,14 @@
             "type": {
                 "type": String,
                 "default": "cash"
+            },
+            "description": {
+                "type": Boolean,
+                "default": false
+            },
+            "descriptionText": {
+                "type": String,
+                "default": ""
             }
         },
         data () {
@@ -78,7 +91,8 @@
                 "amount": formatter.localize(),
                 "numericAmount": formatter.getNumeric(),
                 "typeVar": "cash",
-                "amountErrorState": false
+                "amountErrorState": false,
+                "descriptionTextVar": ""
             }
         },
         created: function () {
@@ -87,17 +101,22 @@
             this.numericAmount = formatter.getNumeric()
             this.checkedVar = this.checked
             this.typeVar = this.type
+            this.descriptionTextVar = this.descriptionText
             this.commit()
         },
         methods: {
             commit() {
                 if(this.checkedVar && !this.amountErrorState) {
-                    this.$emit('input', {
+                    var result = {
                         "category": this.category,
                         "amount": this.numericAmount,
                         "formatted": this.amount,
                         "type": this.typeVar
-                    })
+                    }
+                    if(this.description) {
+                        result["description"] = this.descriptionTextVar
+                    }
+                    this.$emit('input', result)
                 } else if(!this.checkedVar && !this.amountErrorState) {
                     this.deselect()
                 }
@@ -124,4 +143,12 @@
 </script>
 
 <style scoped lang="less">
+    .category {
+        display: flex;
+        flex-direction: row;
+
+        & > :first-child {
+            margin-right: 1em;
+        }
+    }
 </style>
