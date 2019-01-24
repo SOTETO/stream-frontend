@@ -12,7 +12,7 @@
                     <ExternalTransactionDetails v-model="donation.details" />
                 </VcABox>
                 <VcABox :first="!showExternalTransactions" :title="$t('donation.header.box.save')">
-                    <span>{{ $t("donation.hints.deadline", { "deadline": $d(getDeadline(), 'short') }) }}</span>
+                    <span>{{ $t("donation.hints.deadline", { "deadline": $d(deadline, 'short') }) }}</span>
                     <el-input
                             type="textarea"
                             :rows="4"
@@ -59,7 +59,7 @@
                         "partner": {}
                     },
                     "amount": {
-                        "received": new Date(),
+                        "received": Date.now(),
                         "sources": []
                     }
                 },
@@ -70,6 +70,11 @@
         computed: {
             showExternalTransactions () {
                 return this.donation.amount.sources.filter(s => s.type === "extern").length > 0
+            },
+            deadline () {
+                var received = new Date(this.donation.amount.received)
+                received.setDate(received.getDate() + 28)
+                return received
             }
         },
         methods: {
@@ -79,9 +84,6 @@
             submitForm () {
                 this.add(this.donation)
                 this.$router.push('/donations')
-            },
-            getDeadline () {
-                return new Date()
             }
         }
     }

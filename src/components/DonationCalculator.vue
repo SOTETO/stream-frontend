@@ -20,7 +20,8 @@
                     :placeholder="$t('donation.placeholder.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
-                    :picker-options="datePickerOptions">
+                    :picker-options="datePickerOptions"
+                    @change="commit">
                 </el-date-picker>
             </el-form-item>
             <table class="sources">
@@ -101,7 +102,7 @@
                 "currencyOptions": [
                     "euro", "dollar"
                 ],
-                "received": new Date(),
+                "received": Date.now(),
                 "sources": []
             }
         },
