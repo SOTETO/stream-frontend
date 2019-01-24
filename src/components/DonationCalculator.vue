@@ -13,6 +13,7 @@
         <div class="collector">
             <el-form-item
                 class="vca-form"
+                :required="true"
                 :label="$t('donation.placeholder.received')">
                 <el-date-picker
                     v-model="received"
@@ -20,6 +21,7 @@
                     :placeholder="$t('donation.placeholder.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
+                    :clearable="false"
                     :picker-options="datePickerOptions"
                     @change="commit">
                 </el-date-picker>
