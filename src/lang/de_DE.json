@@ -65,10 +65,10 @@
     }
   },
   "currencies": {
-    "default": "euro",
+    "default": "EUR",
     "label": {
-      "euro": "€",
-      "dollar": "$"
+      "EUR": "€",
+      "USD": "$"
     }
   },
   "externalTransaction": {

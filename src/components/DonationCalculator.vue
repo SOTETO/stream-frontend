@@ -102,7 +102,7 @@
                 ],
                 "currency": this.$t("currencies.default"),
                 "currencyOptions": [
-                    "euro", "dollar"
+                    "EUR", "USD"
                 ],
                 "received": Date.now(),
                 "sources": []

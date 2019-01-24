@@ -60,7 +60,7 @@
                 "required": true,
                 "validator": function (value) {
                     // The value must match one of these strings
-                    return ["euro", "dollar"].indexOf(value) !== -1
+                    return ["EUR", "USD"].indexOf(value) !== -1
                 }
             },
             "checked": {
