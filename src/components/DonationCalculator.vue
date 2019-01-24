@@ -18,6 +18,8 @@
                     v-model="received"
                     type="date"
                     :placeholder="$t('donation.placeholder.received')"
+                    format="dd. MMM. yyyy"
+                    value-format="timestamp"
                     :picker-options="datePickerOptions">
                 </el-date-picker>
             </el-form-item>
