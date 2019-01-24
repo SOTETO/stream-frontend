@@ -21,7 +21,11 @@
       }
     },
     "hints": {
-      "deadline": "Bitte zahle die Spende bis spätestens {deadline} ein!",
+      "deadline": {
+        "prefix": "Bitte zahle die Spende {0} ein!",
+        "date": "bis spätestens {deadline}",
+        "immediately": "umgehend"
+      },
       "total": {
         "cash": "Summe Barspende: {total}",
         "extern": "Summe Spende durch externe Überweisung: {total}",

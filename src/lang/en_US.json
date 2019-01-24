@@ -21,7 +21,11 @@
       }
     },
     "hints": {
-      "deadline": "Please deposit the donation until {deadline}!",
+      "deadline": {
+        "prefix": "Please deposit the donation {0}!",
+        "date": "until {deadline}",
+        "immediately": "immediately"
+      },
       "total": {
         "cash": "Total (cash): {total}",
         "extern": "Total (external transaction): {total}",

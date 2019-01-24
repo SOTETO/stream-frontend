@@ -12,7 +12,7 @@
                     <ExternalTransactionDetails v-model="donation.details" />
                 </VcABox>
                 <VcABox :first="!showExternalTransactions" :title="$t('donation.header.box.save')">
-                    <span>{{ $t("donation.hints.deadline", { "deadline": $d(deadline, 'short') }) }}</span>
+                    <DonationDeadline :received="donation.amount.received" />
                     <el-input
                             type="textarea"
                             :rows="4"
@@ -37,12 +37,14 @@
     import { Input, Form } from 'element-ui'
     import DonationCalculator from '@/components/DonationCalculator.vue'
     import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
+    import DonationDeadline from '@/components/DonationDeadline.vue'
 
     export default {
         name: "DonationsAdd",
         components: {
             'DonationCalculator': DonationCalculator,
             'ExternalTransactionDetails': ExternalTransactionDetails,
+            'DonationDeadline': DonationDeadline,
             'VcAFrame': VcAFrame,
             'VcAColumn': VcAColumn,
             'VcABox': VcABox,
@@ -70,11 +72,6 @@
         computed: {
             showExternalTransactions () {
                 return this.donation.amount.sources.filter(s => s.type === "extern").length > 0
-            },
-            deadline () {
-                var received = new Date(this.donation.amount.received)
-                received.setDate(received.getDate() + 28)
-                return received
             }
         },
         methods: {
