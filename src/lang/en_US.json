@@ -41,6 +41,7 @@
       "comment": "Comment / Question",
       "received": "When did you received the donation?",
       "source": {
+        "unknown": "I don't know",
         "can": "Deposit can",
         "box": "Donation box",
         "gl": "Guest list",

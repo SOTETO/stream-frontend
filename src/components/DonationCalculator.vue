@@ -89,6 +89,7 @@
                     }
                 },
                 "sourceTypes": [
+                    { "category": "unknown", "desc": false},
                     { "category": "can", "desc": false},
                     { "category": "box", "desc": false},
                     { "category": "gl", "desc": false},

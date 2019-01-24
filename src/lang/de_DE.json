@@ -41,6 +41,7 @@
       "comment": "Bemerkung / Frage",
       "received": "Wann hast du die Spende erhalten?",
       "source": {
+        "unknown": "Kann ich nicht zuordnen",
         "can": "Pfandtonne",
         "box": "Spendendose",
         "gl": "Gästeliste",

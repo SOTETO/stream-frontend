@@ -52,7 +52,7 @@
                 "required": true,
                 "validator": function (value) {
                     // The value must match one of these strings
-                    return ["can", "box", "gl", "other"].indexOf(value) !== -1
+                    return ["unknown", "can", "box", "gl", "other"].indexOf(value) !== -1
                 }
             },
             "currency": {
