@@ -33,7 +33,7 @@
       },
       "error": {
         "amount": {
-          "pattern": "Falsches Format (z.B. 37,50 €)"
+          "pattern": "Falsches Format (z.B. 37,50 € oder Fr. 37.50)"
         }
       }
     },
@@ -68,6 +68,7 @@
     "default": "EUR",
     "label": {
       "EUR": "€",
+      "CHF": "Fr.",
       "USD": "$"
     }
   },

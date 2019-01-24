@@ -11,6 +11,7 @@ export default class CurrencyFormatter {
 
     match() {
         return (this.selectedCurrency === "EUR" && this.value.match(CurrencyFormatter.regex.EUR)) ||
+            (this.selectedCurrency === "CHF" && this.value.match(CurrencyFormatter.regex.CHF)) ||
             (this.selectedCurrency === "USD" && this.value.match(CurrencyFormatter.regex.USD))
     }
 
@@ -21,6 +22,11 @@ export default class CurrencyFormatter {
             removed = removed.replace(".", "")
             removed = removed.replace(/(\s*€)/g, "")
             removed = removed.replace(",", '.')
+            numeric = parseFloat(removed)
+        } else if(this.selectedCurrency === "CHF" && this.value.match(CurrencyFormatter.regex.CHF)) {
+            removed = removed.replace(",", "")
+            removed = removed.replace(/((F|f)(R|r)\.?\s*)/g, "")
+            removed = removed.replace(/(\s*(F|f)(R|r)\.?)/g, "")
             numeric = parseFloat(removed)
         } else if(this.selectedCurrency === "USD" && this.value.match(CurrencyFormatter.regex.USD)) {
             removed = removed.replace(",", "")
@@ -35,6 +41,8 @@ export default class CurrencyFormatter {
         var localized = this.value
         if(this.selectedCurrency === "EUR" && this.value.match(CurrencyFormatter.regex.EUR)) {
             localized = CurrencyFormatter.formatMoney(this.numericValue, 2, ",", ".") + " €"
+        } else if(this.selectedCurrency === "CHF" && this.value.match(CurrencyFormatter.regex.CHF)) {
+            localized = "Fr. " + CurrencyFormatter.formatMoney(this.numericValue)
         } else if(this.selectedCurrency === "USD" && this.value.match(CurrencyFormatter.regex.USD)) {
             localized = "$" + CurrencyFormatter.formatMoney(this.numericValue)
         }
@@ -49,6 +57,8 @@ export default class CurrencyFormatter {
         var localized = CurrencyFormatter.defaults[currency]
         if(currency === "EUR") {
             localized = CurrencyFormatter.formatMoney(numeric, 2, ",", ".") + " €"
+        } else if(currency === "CHF") {
+            localized = "Fr. " + CurrencyFormatter.formatMoney(numeric)
         } else if(currency === "USD") {
             localized = "$" + CurrencyFormatter.formatMoney(numeric)
         }
@@ -74,10 +84,12 @@ export default class CurrencyFormatter {
 
 CurrencyFormatter.regex = {
     "EUR": /^\d+(\.\d{3})*(,\d{2})?(\s*€)?$/,
+    "CHF": /^((F|f)(R|r)\.?\s*)?\d+(,\d{3})*(\.\d{2})?(\s*(F|f)(R|r)\.?)?$/,
     "USD": /^(\$\s*)?\d+(,\d{3})*(\.\d{2})?(\s*\$)?$/
 }
 
 CurrencyFormatter.defaults = {
     "EUR": "0,00",
+    "CHF": "0.00",
     "USD": "0.00"
 }
