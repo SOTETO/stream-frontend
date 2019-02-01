@@ -22,7 +22,7 @@
     },
     "hints": {
       "deadline": {
-        "prefix": "Bitte zahle die Spende {0} ein!",
+        "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte ein!",
         "date": "bis spätestens {deadline}",
         "immediately": "umgehend"
       },

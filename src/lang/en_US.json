@@ -22,7 +22,7 @@
     },
     "hints": {
       "deadline": {
-        "prefix": "Please deposit the donation {0}!",
+        "prefix": "Please deposit the cash donation using the banking card {0}!",
         "date": "until {deadline}",
         "immediately": "immediately"
       },
