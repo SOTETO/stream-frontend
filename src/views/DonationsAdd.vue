@@ -62,10 +62,10 @@
                     },
                     "amount": {
                         "received": Date.now(),
-                        "sources": []
+                        "sources": [],
+                        "involvedSupporter": []
                     }
                 },
-                comment: '',
                 rules: {},
             }
         },

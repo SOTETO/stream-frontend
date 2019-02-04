@@ -44,6 +44,10 @@
     "placeholder": {
       "comment": "Bemerkung / Frage",
       "received": "Wann hast du die Spende erhalten?",
+      "involved": {
+        "label": "Von wem hast du die Spende erhalten?",
+        "indicator": "Max Mustermann aus deiner Crew..."
+      },
       "source": {
         "unknown": "Kann ich nicht zuordnen",
         "can": "Pfandtonne",

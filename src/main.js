@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui';
+import { WidgetUserAutocomplete } from 'vca-widget-user'
 import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation'
 import router from './router'
 import VueI18n from 'vue-i18n'
@@ -48,6 +49,7 @@ const i18n = new VueI18n({
 Vue.use(ElementUI, {
     i18n: (key, value) => i18n.t(key, value)
 });
+Vue.use(WidgetUserAutocomplete, { 'i18n': i18n })
 Vue.use(WidgetBottomNavigation, { 'i18n': i18n })
 Vue.use(WidgetTopNavigation, { 'i18n': i18n })
 

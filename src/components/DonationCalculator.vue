@@ -12,6 +12,17 @@
         </template>
         <div class="collector">
             <el-form-item
+                class="vca-form user-select"
+                :required="false"
+                :label="$t('donation.placeholder.involved.label')"
+                >
+                <WidgetUserAutocomplete
+                        :placeholder="$t('donation.placeholder.involved.indicator')"
+                        :preselection="involvedSupporter"
+                        @vca-user-selection="selectSupporter"
+                />
+            </el-form-item>
+            <el-form-item
                 class="vca-form"
                 :required="true"
                 :label="$t('donation.placeholder.received')">
@@ -64,6 +75,8 @@
     import { DatePicker, FormItem, Select, Option } from 'element-ui'
     import { VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
+    import { WidgetUserAutocomplete } from 'vca-widget-user'
+    import 'vca-widget-user/dist/vca-widget-user.css'
     import DonationSource from '@/components/DonationSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
@@ -75,6 +88,7 @@
             "el-select": Select,
             "el-option": Option,
             "DonationSource": DonationSource,
+            'WidgetUserAutocomplete': WidgetUserAutocomplete,
             "VcABox": VcABox
         },
         props: {
@@ -83,10 +97,25 @@
                "default": true
             },
             "value": {
-               "type": Object
+               "type": Object,
+                "required": false
             }
         },
         data () {
+            var sources = []
+            var received = Date.now()
+            var involvedSupporter = []
+            if(typeof this.value !== "undefined" && this.value !== null) {
+                if(this.value.hasOwnProperty("sources")) {
+                    sources = this.value.sources
+                }
+                if(this.value.hasOwnProperty("received")) {
+                    received = this.value.received
+                }
+                if(this.value.hasOwnProperty("involvedSupporter")) {
+                    involvedSupporter = this.value.involvedSupporter
+                }
+            }
             return {
                 "datePickerOptions": {
                     disabledDate(time) {
@@ -104,8 +133,9 @@
                 "currencyOptions": [
                     "EUR", "USD", "CHF"
                 ],
-                "received": Date.now(),
-                "sources": []
+                "involvedSupporter": involvedSupporter,
+                "received": received,
+                "sources": sources
             }
         },
         computed: {
@@ -126,6 +156,9 @@
                 }
                 if(this.value.hasOwnProperty("sources")) {
                     this.sources = this.value.sources
+                }
+                if(this.value.hasOwnProperty("involvedSupporter")) {
+                    this.involvedSupporter = this.value.involvedSupporter
                 }
             }
             this.commit()
@@ -156,7 +189,8 @@
             commit() {
                 var result = {
                     "received": this.received,
-                    "sources": this.sources
+                    "sources": this.sources,
+                    "involvedSupporter": this.involvedSupporter
                 }
                 this.$emit("input", result)
             },
@@ -191,6 +225,9 @@
                     result = source.description
                 }
                 return result
+            },
+            selectSupporter(supporter) {
+                this.involvedSupporter = supporter
             }
         }
     }
@@ -199,6 +236,10 @@
 <style scoped lang="less">
     .vca-form .el-input {
         width: 100%;
+    }
+
+    .user-select /deep/ .small {
+        font-size: 100%;
     }
 
     .sources {

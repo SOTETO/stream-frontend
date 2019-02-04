@@ -44,6 +44,10 @@
     "placeholder": {
       "comment": "Comment / Question",
       "received": "When did you received the donation?",
+      "involved": {
+        "label": "Who has given the donation to you?",
+        "indicator": "Jane Doe of your crew..."
+      },
       "source": {
         "unknown": "I don't know",
         "can": "Deposit can",

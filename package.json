@@ -14,6 +14,7 @@
     "uuid": "^3.3.2",
     "vca-widget-base": "^0.1.2",
     "vca-widget-navigation": "^0.2.6",
+    "vca-widget-user": "^0.5.1",
     "vue": "^2.5.21",
     "vue-i18n": "^8.7.0",
     "vue-router": "^3.0.1",
