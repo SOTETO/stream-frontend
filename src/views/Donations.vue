@@ -1,15 +1,41 @@
 <template>
     <VcAFrame>
-        <VcAColumn>
-            <VcABox :first="true" size="90%" :title="$t('donation.header.box.list')">
-                <ul class="donations">
-                    <li v-for="donation in donations">
-                        {{ donation.comment }}
-                    </li>
-                </ul>
+        <VcAColumn size="70%">
+            <VcABox :first="true" :title="$t('donation.header.box.list')">
+                <table class="donations">
+                    <thead>
+                        <tr>
+                            <th>Name / Aktion</th>
+                            <th>Crew</th>
+                            <th>Betrag</th>
+                            <th>Eingezahlt</th>
+                            <th>Datum</th>
+                            <th>Beteiligte Supporter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="donation in donations" :key="donation.id">
+                            <td>{{ donation.name }}</td>
+                            <td>{{ donation.crew }}</td>
+                            <td>{{ formatAmount(donation.amount) }}</td>
+                            <td>{{ donation.deposited }}</td>
+                            <td>
+                                <div class="dates">
+                                    <span>{{ $t("donation.hints.dates.received", { "date":  formatDate(donation.date.received) }) }}</span>
+                                    <span>{{ $t("donation.hints.dates.created", { "date":  formatDate(donation.date.created) }) }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="supporter">
+                                    <WidgetUser v-for="user in donation.supporter" type="small" :user="user" />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </VcABox>
         </VcAColumn>
-        <VcAColumn>
+        <VcAColumn size="20%">
             <VcABox :first="true" :title="$t('donation.header.box.list-methods')">
                 <router-link class="vca-button-primary vca-full-width" to="/donations/add">{{ $t('donation.buttons.add') }}</router-link>
             </VcABox>
@@ -21,27 +47,51 @@
     import { mapGetters, mapState } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
+    import { WidgetUser } from 'vca-widget-user'
+    import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
         name: "donations",
         components: {
-            VcAFrame, VcAColumn, VcABox
+            VcAFrame, VcAColumn, VcABox, WidgetUser
         },
         computed: {
             // ...mapState({
             //     checkoutStatus: state => state.cart.checkoutStatus
             // }),
-            // ...mapGetters({
-            //     donations: 'all'
-            // })
-            donations () {
-                return this.$store.state.donations.items
-            }
+            ...mapGetters('donations', {
+                donations: 'overview'
+            })
+            // donations () {
+            //     return this.$store.state.donations.items
+            // }
         },
-
+        methods: {
+            formatAmount(amount) {
+                var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
+                return formatter.localize()
+            },
+            formatDate(date) {
+                var d = new Date(date)
+                return this.$d(d, 'short')
+            }
+        }
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    .donations {
+        width: 100%;
+    }
+    .dates {
+        display: flex;
+        flex-direction: column;
+    }
+    .supporter {
+        display: flex;
+        flex-direction: row;
+        & /deep/ .user-role-wrapper:not(:first-child) {
+            margin-left: 0.2em;
+        }
+    }
 </style>

@@ -27,6 +27,10 @@
         "date": "until {deadline}",
         "immediately": "immediately"
       },
+      "dates": {
+        "received": "Received: {date}",
+        "created": "Recorded: {date}"
+      },
       "total": {
         "cash": "Total (cash): {total}",
         "extern": "Total (external transaction): {total}",

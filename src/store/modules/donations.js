@@ -1,19 +1,47 @@
 const uuidv5 = require('uuid/v5');
 
 // initial state
-// shape: [{ id, comment }]
+// shape: [{
+//             "id"
+//             "context": {
+//                 "description": "",
+//                 "category": ""
+//             },
+//             "comment": "",
+//             "details": {
+//                 "reasonForPayment": "",
+//                 "receipt": false,
+//                 "partner": {}
+//             },
+//             "amount": {
+//                 "received": Date.now(),
+//                 "sources": [{"category", "amount", "formatted", "type"}],
+//                 "involvedSupporter": []
+//             },
+//             "created": Date.now(),
+//             "updated": Date.now()
+//         }]
 const state = {
-    items: [
-        { "id": uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL), "comment": "Super Spende!" }
-    ]
+    items: []
 }
 
 const getters = {
     all: (state, getters) => {
-        return state.items.map(({ id, comment }) => {
+        return state.items
+    },
+    overview: (state, getters) => {
+        return state.items.map((donation) => {
             return {
-                id: id,
-                comment: comment
+                "id": donation.id,
+                "name": donation.context.description,
+                "crew": "TODO", // Todo: Add crew of creator!
+                "amount": donation.amount.sources.reduce((amount, source) => amount + source.amount, 0),
+                "deposited": "TODO", // Todo: add deposition information
+                "date": {
+                    "received": donation.amount.received,
+                    "created": donation.created
+                },
+                "supporter": donation.amount.involvedSupporter // Todo: add creator!
             }
         })
     }
@@ -22,16 +50,14 @@ const getters = {
 
 const actions = {
     add ({ state, commit }, donation) {
-        commit({ "type": 'push', "comment": donation.comment })
+        commit({ "type": 'push', "donation": donation })
     }
 }
 
 const mutations = {
     push(state, pushDonation) {
-        state.items.push({
-            "id": uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL),
-            "comment": pushDonation.comment
-        })
+        pushDonation.donation["id"] = uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL)
+        state.items.push(pushDonation.donation)
     }
 }
 

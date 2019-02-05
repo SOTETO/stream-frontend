@@ -27,6 +27,10 @@
         "date": "bis spätestens {deadline}",
         "immediately": "umgehend"
       },
+      "dates": {
+        "received": "Erhalten: {date}",
+        "created": "Eingetragen: {date}"
+      },
       "total": {
         "cash": "Summe Barspende: {total}",
         "extern": "Summe Spende durch externe Überweisung: {total}",
