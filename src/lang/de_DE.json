@@ -9,7 +9,8 @@
         "list-methods": "Editieren",
         "save": "Speichern",
         "amount": "Spendenbetrag",
-        "externalTransactions": "Details externer Überweiser"
+        "externalTransactions": "Details externer Überweiser",
+        "action": "Aktion"
       },
       "donationSource": {
         "sourceSelect": "Woher kommt die Spende?",
@@ -47,6 +48,22 @@
       "involved": {
         "label": "Von wem hast du die Spende erhalten?",
         "indicator": "Max Mustermann aus deiner Crew..."
+      },
+      "context": {
+        "label": "Wobei ist die Spende entstanden?",
+        "indicator": "z.B. Straßenfest"
+      },
+      "category": "Kategorie",
+      "categories": {
+        "concert": "Konzerte",
+        "festival": "Festivals",
+        "stadium": "Stadien",
+        "run4wash": "Run 4 WASH",
+        "school": "Schule",
+        "party": "Party",
+        "streetFestivals": "Straßenfeste",
+        "karaoke": "Karaoke",
+        "kicker": "Kickertuniere"
       },
       "source": {
         "unknown": "Kann ich nicht zuordnen",

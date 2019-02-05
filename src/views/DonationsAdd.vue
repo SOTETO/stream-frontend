@@ -5,7 +5,10 @@
                 :rules="rules"
                 class="columns-container">
             <VcAColumn size="40%">
-                <DonationCalculator :first="true" v-model="donation.amount" />
+                <VcABox :first="true" :title="$t('donation.header.box.action')">
+                    <DonationContext v-model="donation.context" />
+                </VcABox>
+                <DonationCalculator v-if="showCalculator" :first="false" v-model="donation.amount" />
             </VcAColumn>
             <VcAColumn>
                 <VcABox v-if="showExternalTransactions" :first="showExternalTransactions" :title="$t('donation.header.box.externalTransactions')">
@@ -20,6 +23,7 @@
                             v-model="donation.comment">
                     </el-input>
                     <button
+                            :disabled="!validDonation"
                             class="vca-button-primary vca-full-width"
                             @click.prevent="submitForm">
                         {{ $t("donation.buttons.save") }}
@@ -38,6 +42,7 @@
     import DonationCalculator from '@/components/DonationCalculator.vue'
     import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
     import DonationDeadline from '@/components/DonationDeadline.vue'
+    import DonationContext from '@/components/DonationContext.vue'
 
     export default {
         name: "DonationsAdd",
@@ -45,6 +50,7 @@
             'DonationCalculator': DonationCalculator,
             'ExternalTransactionDetails': ExternalTransactionDetails,
             'DonationDeadline': DonationDeadline,
+            'DonationContext': DonationContext,
             'VcAFrame': VcAFrame,
             'VcAColumn': VcAColumn,
             'VcABox': VcABox,
@@ -54,7 +60,11 @@
         data () {
             return {
                 donation: {
-                    "comment": '',
+                    "context": {
+                        "description": "",
+                        "category": ""
+                    },
+                    "comment": "",
                     "details": {
                         "reasonForPayment": "",
                         "receipt": false,
@@ -64,7 +74,9 @@
                         "received": Date.now(),
                         "sources": [],
                         "involvedSupporter": []
-                    }
+                    },
+                    "created": Date.now(),
+                    "updated": Date.now()
                 },
                 rules: {},
             }
@@ -72,6 +84,13 @@
         computed: {
             showExternalTransactions () {
                 return this.donation.amount.sources.filter(s => s.type === "extern").length > 0
+            },
+            showCalculator () {
+                return this.donation.context.hasOwnProperty("category") && this.donation.context.category !== "" &&
+                    this.donation.context.hasOwnProperty("description") && this.donation.context.description !== ""
+            },
+            validDonation () {
+                return this.showCalculator && this.donation.amount.sources.length > 0
             }
         },
         methods: {

@@ -9,7 +9,8 @@
         "list-methods": "Edit",
         "save": "Save",
         "amount": "Donations amount",
-        "externalTransactions": "Details external transaction"
+        "externalTransactions": "Details external transaction",
+        "action": "Event"
       },
       "donationSource": {
         "sourceSelect": "What type of donation?",
@@ -47,6 +48,10 @@
       "involved": {
         "label": "Who has given the donation to you?",
         "indicator": "Jane Doe of your crew..."
+      },
+      "context": {
+        "label": "How does the donation was collected?",
+        "indicator": "e.g. street festival"
       },
       "source": {
         "unknown": "I don't know",
