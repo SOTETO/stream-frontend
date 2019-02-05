@@ -1,4 +1,26 @@
 {
+  "household": {
+    "header": {
+      "box": {
+        "list": "Overview",
+        "expense": "Expense"
+      }
+    },
+    "placeholder": {
+      "amount": "Amount",
+      "what": "What?",
+      "wherefor": "Wherefor?",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "request": "Only a request"
+    },
+    "buttons": {
+      "save": "Save"
+    },
+    "hints": {
+      "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before."
+    }
+  },
   "donation": {
     "header": {
       "frame": {

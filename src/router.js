@@ -28,6 +28,11 @@ export default new Router({
         path: '/donations/add',
         name: 'donations-add',
         component: () => import('./views/DonationsAdd.vue')
+    },
+    {
+      path: '/household',
+      name: 'household',
+      component: () => import('./views/Household.vue')
     }
   ]
 })

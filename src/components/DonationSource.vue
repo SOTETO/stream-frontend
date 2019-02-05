@@ -38,6 +38,7 @@
     import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
+    // Todo: Should use new component utils.MoneyInput!
     export default {
         name: "DonationSource",
         components: {
