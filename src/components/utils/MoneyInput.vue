@@ -79,6 +79,7 @@
                 } else {
                     this.amountErrorState = true
                 }
+                this.$emit("change")
                 this.commit()
             }
         }

@@ -11,15 +11,13 @@
             </div>
         </td>
         <td>
-            <el-form-item>
-                <el-input class="vca-input" v-model="amount" @change="validate"/>
-                <div
-                        v-if="amountErrorState"
-                        class="el-form-item__error"
-                >
-                    {{ $t('donation.hints.error.amount.pattern') }}
-                </div>
-            </el-form-item>
+            <MoneyInput
+                    v-model="amount"
+                    :currency="currency"
+                    @change="valid"
+                    @input="commit"
+                    @vca-money-validationError="invalid"
+            />
         </td>
         <td>
             <el-form-item>
@@ -37,6 +35,7 @@
 <script>
     import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+    import MoneyInput from '@/components/utils/MoneyInput'
 
     // Todo: Should use new component utils.MoneyInput!
     export default {
@@ -45,7 +44,8 @@
             "el-input": Input,
             "el-checkbox": Checkbox,
             "el-radio": Radio,
-            "el-form-item": FormItem
+            "el-form-item": FormItem,
+            "MoneyInput": MoneyInput
         },
         props: {
             "category": {
@@ -89,17 +89,19 @@
             var formatter = CurrencyFormatter.getDefault(this.currency)
             return {
                 "checkedVar": false,
-                "amount": formatter.localize(),
-                "numericAmount": formatter.getNumeric(),
+                "amount": {
+                    "formatted": formatter.localize(),
+                    "amount": formatter.getNumeric()
+                },
                 "typeVar": "cash",
-                "amountErrorState": false,
-                "descriptionTextVar": ""
+                "descriptionTextVar": "",
+                "amountErrorState": false
             }
         },
         created: function () {
             var formatter = CurrencyFormatter.getFromNumeric(this.currency, this.numeric)
-            this.amount = formatter.localize()
-            this.numericAmount = formatter.getNumeric()
+            this.amount.formatted = formatter.localize()
+            this.amount.amount = formatter.getNumeric()
             this.checkedVar = this.checked
             this.typeVar = this.type
             this.descriptionTextVar = this.descriptionText
@@ -110,8 +112,8 @@
                 if(this.checkedVar && !this.amountErrorState) {
                     var result = {
                         "category": this.category,
-                        "amount": this.numericAmount,
-                        "formatted": this.amount,
+                        "amount": this.amount.amount,
+                        "formatted": this.amount.formatted,
                         "type": this.typeVar
                     }
                     if(this.description) {
@@ -122,22 +124,18 @@
                     this.deselect()
                 }
             },
-            validate(value) {
-                var formatter = new CurrencyFormatter(this.currency, value)
-                if(formatter.match()) {
-                    this.amount = formatter.localize()
-                    this.numericAmount = formatter.getNumeric()
-                    this.checkedVar = true
-                    this.amountErrorState = false
-                    this.commit()
-                } else {
-                    this.amountErrorState = true
-                    this.checkedVar = false
-                    this.deselect()
-                }
-            },
             deselect() {
                 this.$emit('deselect', this.category)
+            },
+            valid () {
+                this.amountErrorState = false
+                this.checkedVar = true
+                this.commit()
+            },
+            invalid () {
+                this.amountErrorState = true
+                this.checkedVar = false
+                this.commit()
             }
         }
     }
