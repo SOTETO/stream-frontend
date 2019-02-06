@@ -16,15 +16,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(expose, i) in exposes" :key="i">
-                            <td>{{ expose.reason.what }}</td>
-                            <td>{{ expose.reason.wherefor }}</td>
-                            <td> TODO </td>
-                            <td>{{ expose.amount.formatted }}</td>
-                            <td> TODO </td>
-                            <td> TODO </td>
-                            <td> TODO </td>
-                            <td> TODO </td>
+                        <tr v-for="expose in exposes" :key="expose.id">
+                            <td>{{ expose.what }}</td>
+                            <td>{{ expose.wherefor }}</td>
+                            <td>{{ expose.crew }}</td>
+                            <td>{{ expose.amount }}</td>
+                            <td>
+                                <div class="dates">
+                                    <span>{{ $t("household.hints.dates.created", { "date":  $d(new Date(expose.date.created), "short") }) }}</span>
+                                    <span v-if="expose.date.created !== expose.date.updated">
+                                        {{ $t("household.hints.dates.updated", { "date":  $d(new Date(expose.date.created), "short") }) }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>{{ expose.supporter }}</td>
+                            <td>{{ formatState(expose.state) }}</td>
+                            <td>{{ expose.processing }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -39,6 +46,7 @@
 </template>
 
 <script>
+    import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import ExpenseForm from '../components/household/ExpenseForm'
@@ -48,14 +56,24 @@
         components: {
             VcAFrame, VcAColumn, VcABox, ExpenseForm
         },
-        data () {
-            return {
-                "exposes": []
-            }
+        computed: {
+            ...mapGetters('household', {
+                exposes: 'overview'
+            })
         },
         methods: {
+            ...mapActions('household', [
+                'add', // -> this.foo()
+            ]),
             save (expose) {
-                this.exposes.push(expose)
+                this.add(expose)
+            },
+            formatState(state) {
+                var stringified = this.$t("household.states.appliedFor")
+                if(state) {
+                    stringified = this.$t("household.states.requested")
+                }
+                return stringified
             }
         }
     }
@@ -64,5 +82,9 @@
 <style scoped>
     .exposes {
         width: 100%;
+    }
+    .dates {
+        display: flex;
+        flex-direction: column;
     }
 </style>

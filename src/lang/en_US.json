@@ -18,7 +18,15 @@
       "save": "Save"
     },
     "hints": {
-      "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before."
+      "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before.",
+      "dates": {
+        "created": "Entered: {date}",
+        "updated": "Updated: {date}"
+      }
+    },
+    "states": {
+      "appliedFor": "Applied for money return",
+      "requested": "Release requested"
     }
   },
   "donation": {

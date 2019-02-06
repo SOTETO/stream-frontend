@@ -23,6 +23,10 @@
             "el-form-item": FormItem
         },
         props: {
+            "value": {
+                "type": Object,
+                "required": false
+            },
             "currency": {
                 "type": String,
                 "required": true,
@@ -46,16 +50,28 @@
         },
         data () {
             var formatter = CurrencyFormatter.getDefault(this.currency)
+            var amount = formatter.localize()
+            var numericAmount = formatter.getNumeric()
+            if(typeof this.value !== "undefined" && this.value !== null) {
+                amount = this.value.formatted
+                numericAmount = this.value.amount
+            }
             return {
-                "amount": formatter.localize(),
-                "numericAmount": formatter.getNumeric(),
+                "amount": amount,
+                "numericAmount": numericAmount,
                 "amountErrorState": false
             }
         },
         created: function () {
             var formatter = CurrencyFormatter.getFromNumeric(this.currency, this.numeric)
-            this.amount = formatter.localize()
-            this.numericAmount = formatter.getNumeric()
+            var amount = formatter.localize()
+            var numericAmount = formatter.getNumeric()
+            if(typeof this.value !== "undefined" && this.value !== null) {
+                amount = this.value.formatted
+                numericAmount = this.value.amount
+            }
+            this.amount = amount
+            this.numericAmount = numericAmount
             this.commit()
         },
         methods: {

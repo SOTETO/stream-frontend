@@ -1,4 +1,4 @@
-const uuidv5 = require('uuid/v5');
+const uuidv4 = require('uuid/v4');
 
 // initial state
 // shape: [{
@@ -56,7 +56,7 @@ const actions = {
 
 const mutations = {
     push(state, pushDonation) {
-        pushDonation.donation["id"] = uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL)
+        pushDonation.donation["id"] = uuidv4()
         state.items.push(pushDonation.donation)
     }
 }

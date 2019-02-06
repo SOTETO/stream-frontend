@@ -7,7 +7,9 @@
                 v-model="expense.amount"
                 currency="EUR"
                 :label="$t('household.placeholder.amount')"
-                :required="true" />
+                :required="true"
+                :key="expense.amount.amount"
+        />
         <el-form-item
                 :required="true"
         >
@@ -62,6 +64,7 @@
             }
         },
         data () {
+            var now = Date.now()
             var defaultExpense = {
                 "amount": {
                     "amount": 0,
@@ -73,12 +76,14 @@
                 },
                 "iban": "",
                 "bic": "",
-                "request": false
+                "request": false,
+                "created": now,
+                "updated": now
             }
 
-            var expense = defaultExpense
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                expense = this.value
+            var expense = JSON.parse(JSON.stringify(defaultExpense))
+            if(this.isUpdate) {
+                expense = JSON.parse(JSON.stringify(this.value))
             }
             return {
                 "expense": expense,
@@ -86,16 +91,32 @@
                 "rules": {}
             }
         },
+        computed: {
+            isUpdate () {
+                return typeof this.value !== "undefined" && this.value !== null
+            }
+        },
         methods: {
             commit () {
+                this.setDate()
                 this.$emit("input", this.expense)
             },
             clear () {
                 this.expense = this.default
+                this.$forceUpdate()
             },
             submitForm () {
                 this.commit()
                 this.clear()
+            },
+            setDate () {
+                if(this.isUpdate) {
+                    this.expense.updated = Date.now()
+                } else {
+                    var now = Date.now()
+                    this.expense.created = now
+                    this.expense.updated = now
+                }
             }
         }
     }
