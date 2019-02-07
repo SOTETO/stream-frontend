@@ -13,7 +13,9 @@ const uuidv4 = require('uuid/v4');
 //             },
 //             "iban": "",
 //             "bic": "",
-//             "request": false
+//             "request": false,
+//             "created": Date,
+//             "updated": Date
 //         }]
 const state = {
     items: []
@@ -40,6 +42,9 @@ const getters = {
                 "processing": " Todo " // Todo: add processing states (ASP, employee)
             }
         })
+    },
+    byId: (state) => (id) => {
+        return state.items.find(household => household.id === id)
     }
 }
 
@@ -47,6 +52,9 @@ const getters = {
 const actions = {
     add ({ state, commit }, household) {
         commit({ "type": 'push', "household": household })
+    },
+    update ({ state, commit}, household) {
+        commit({ "type": 'replace', "household": household })
     }
 }
 
@@ -54,6 +62,10 @@ const mutations = {
     push(state, pushHousehold) {
         pushHousehold.household["id"] = uuidv4()
         state.items.push(pushHousehold.household)
+    },
+    replace(state, replaceHousehold) {
+        var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
+        state.items.splice(i, 1, replaceHousehold.household)
     }
 }
 

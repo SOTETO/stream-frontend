@@ -17,7 +17,13 @@
                     </thead>
                     <tbody>
                         <tr v-for="expose in exposes" :key="expose.id">
-                            <td>{{ expose.what }}</td>
+                            <td>
+                                <span>{{ expose.what }}</span>
+                                <button
+                                        class="vca-button-secundary"
+                                        @click="editState(expose)"
+                                >Edit</button>
+                            </td>
                             <td>{{ expose.wherefor }}</td>
                             <td>{{ expose.crew }}</td>
                             <td>{{ expose.amount }}</td>
@@ -39,14 +45,14 @@
         </VcAColumn>
         <VcAColumn size="20%">
             <VcABox :first="true" :title="$t('household.header.box.expense')">
-                <ExpenseForm @input="save" />
+                <ExpenseForm v-model="editable.value" :key="editable.key" @vca-expense-update="addState" />
             </VcABox>
         </VcAColumn>
     </VcAFrame>
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
+    import { mapGetters } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import ExpenseForm from '../components/household/ExpenseForm'
@@ -56,17 +62,32 @@
         components: {
             VcAFrame, VcAColumn, VcABox, ExpenseForm
         },
+        data () {
+            var editableDefault = {
+                "value": null,
+                "key": -1
+            }
+            return {
+                "editableDefault" : editableDefault,
+                "editable": JSON.parse(JSON.stringify(editableDefault))
+            }
+        },
         computed: {
             ...mapGetters('household', {
-                exposes: 'overview'
-            })
+                exposes: 'overview',
+                byId: 'byId'
+            }),
+            isEditState () {
+                return typeof this.editable.value !== "undefined" && this.editable.value !== null
+            }
         },
         methods: {
-            ...mapActions('household', [
-                'add', // -> this.foo()
-            ]),
-            save (expose) {
-                this.add(expose)
+            editState (expose) {
+                this.editable.value = this.byId(expose.id)
+                this.editable.key = expose.id
+            },
+            addState (expose) {
+                this.editable = JSON.parse(JSON.stringify(this.editableDefault))
             },
             formatState(state) {
                 var stringified = this.$t("household.states.appliedFor")

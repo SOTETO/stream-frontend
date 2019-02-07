@@ -45,6 +45,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import { Form, Input, Checkbox, FormItem } from 'element-ui'
     import MoneyInput from '@/components/utils/MoneyInput'
 
@@ -81,25 +82,35 @@
                 "updated": now
             }
 
-            var expense = JSON.parse(JSON.stringify(defaultExpense))
-            if(this.isUpdate) {
-                expense = JSON.parse(JSON.stringify(this.value))
-            }
             return {
-                "expense": expense,
+                "expense": JSON.parse(JSON.stringify(defaultExpense)),
                 "default": defaultExpense,
                 "rules": {}
             }
         },
         computed: {
             isUpdate () {
-                return typeof this.value !== "undefined" && this.value !== null
+                return typeof this.value !== "undefined" && this.value !== null // alternative: this.expense.hasOwnProperty("id") ??
+            }
+        },
+        created () {
+            if(this.isUpdate) {
+                this.expense = JSON.parse(JSON.stringify(this.value))
             }
         },
         methods: {
+            ...mapActions('household', [
+                'add', 'update' // -> this.foo()
+            ]),
             commit () {
                 this.setDate()
-                this.$emit("input", this.expense)
+                if(this.isUpdate) {
+                    this.update(this.expense)
+                    this.$emit("vca-expense-update", this.expense)
+                } else {
+                    this.add(this.expense)
+                    this.$emit("vca-expense-create", this.expense)
+                }
             },
             clear () {
                 this.expense = this.default
