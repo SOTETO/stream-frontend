@@ -27,24 +27,27 @@ const getters = {
     },
     overview: (state, getters) => {
         return state.items.map((household) => {
+            var first = household.versions[0]
+            var last = household.versions[household.versions.length - 1]
             return {
                 "id": household.id,
-                "what": household.reason.what,
-                "wherefor": household.reason.wherefor,
+                "what": last.reason.what,
+                "wherefor": last.reason.wherefor,
                 "crew": " TODO ", // Todo: add crew information
-                "amount": household.amount.formatted,
+                "amount": household.versions.map(h => h.amount.formatted),
                 "date": {
-                    "created": household.created,
-                    "updated": household.updated
+                    "created": first.created,
+                    "updated": last.updated
                 },
                 "supporter": " TODO ", // Todo: add creator! And more?
-                "state": household.request, // Todo: Represent other possible states!
+                "state": last.request, // Todo: Represent other possible states!
                 "processing": " Todo " // Todo: add processing states (ASP, employee)
             }
         })
     },
     byId: (state) => (id) => {
-        return state.items.find(household => household.id === id)
+        var entry = state.items.find(household => household.id === id)
+        return entry.versions[entry.versions.length - 1]
     }
 }
 
@@ -61,11 +64,19 @@ const actions = {
 const mutations = {
     push(state, pushHousehold) {
         pushHousehold.household["id"] = uuidv4()
-        state.items.push(pushHousehold.household)
+        var init = {
+            "id": pushHousehold.household.id,
+            "versions": [
+                pushHousehold.household
+            ]
+        }
+        state.items.push(init)
     },
     replace(state, replaceHousehold) {
         var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
-        state.items.splice(i, 1, replaceHousehold.household)
+        var element = state.items[i]
+        element.versions.push(replaceHousehold.household)
+        state.items.splice(i, 1, element)
     }
 }
 

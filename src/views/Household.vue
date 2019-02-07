@@ -26,7 +26,17 @@
                             </td>
                             <td>{{ expose.wherefor }}</td>
                             <td>{{ expose.crew }}</td>
-                            <td>{{ expose.amount }}</td>
+                            <td  class="vca-amount-wrapper">
+                                <span class="vca-amount">
+                                    {{ expose.amount[expose.amount.length - 1] }}
+                                </span>
+                                <div class="vca-amount-previous">
+                                    <span v-if="expose.amount.length > 1" class="vca-amount">
+                                        {{ expose.amount[expose.amount.length - 2] }}
+                                    </span>
+                                    <span v-if="expose.amount.length > 2" class="vca-amount">...</span>
+                                </div>
+                            </td>
                             <td>
                                 <div class="dates">
                                     <span>{{ $t("household.hints.dates.created", { "date":  $d(new Date(expose.date.created), "short") }) }}</span>
@@ -100,12 +110,20 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .exposes {
         width: 100%;
     }
     .dates {
         display: flex;
         flex-direction: column;
+    }
+    .vca-amount-wrapper {
+        .vca-amount:not(:first-child) {
+            margin-left: 0.2em
+        }
+        .vca-amount-previous {
+            color: #8a8a8a;
+        }
     }
 </style>
