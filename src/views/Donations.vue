@@ -5,12 +5,12 @@
                 <table class="donations">
                     <thead>
                         <tr>
-                            <th>Name / Aktion</th>
-                            <th>Crew</th>
-                            <th>Betrag</th>
-                            <th>Eingezahlt</th>
-                            <th>Datum</th>
-                            <th>Beteiligte Supporter</th>
+                            <th>{{ $t("donation.header.table.title") }}</th>
+                            <th>{{ $t("donation.header.table.crew") }}</th>
+                            <th>{{ $t("donation.header.table.amount") }}</th>
+                            <th>{{ $t("donation.header.table.deposited") }}</th>
+                            <th>{{ $t("donation.header.table.date") }}</th>
+                            <th>{{ $t("donation.header.table.supporter") }}</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -5,14 +5,14 @@
                 <table class="exposes">
                     <thead>
                         <tr>
-                            <th>Was?</th>
-                            <th>Wofür?</th>
-                            <th>Crew</th>
-                            <th>Betrag</th>
-                            <th>Datum</th>
-                            <th>Beteiligte</th>
-                            <th>Status</th>
-                            <th>Bearbeitung</th>
+                            <th>{{ $t("household.header.table.what") }}</th>
+                            <th>{{ $t("household.header.table.wherefor") }}</th>
+                            <th>{{ $t("household.header.table.crew") }}</th>
+                            <th>{{ $t("household.header.table.amount") }}</th>
+                            <th>{{ $t("household.header.table.date") }}</th>
+                            <th>{{ $t("household.header.table.supporter") }}</th>
+                            <th>{{ $t("household.header.table.state") }}</th>
+                            <th>{{ $t("household.header.table.process") }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -22,7 +22,7 @@
                                 <button
                                         class="vca-button-secundary"
                                         @click="editState(expose)"
-                                >Edit</button>
+                                >{{ $t("household.buttons.edit") }}</button>
                             </td>
                             <td>{{ expose.wherefor }}</td>
                             <td>{{ expose.crew }}</td>

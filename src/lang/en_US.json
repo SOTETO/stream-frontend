@@ -4,6 +4,16 @@
       "box": {
         "list": "Overview",
         "expense": "Expense"
+      },
+      "table": {
+        "what": "What?",
+        "wherefor": "Wherefor?",
+        "crew": "Crew",
+        "amount": "Amount",
+        "date": "Date",
+        "supporter": "Supporter",
+        "state": "State",
+        "process": "Process"
       }
     },
     "placeholder": {
@@ -20,8 +30,8 @@
     "hints": {
       "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before.",
       "dates": {
-        "created": "Entered: {date}",
-        "updated": "Updated: {date}"
+        "created": "{date} (entered)",
+        "updated": "{date} (updated)"
       }
     },
     "states": {
@@ -49,6 +59,14 @@
           "cash": "Cash",
           "extern": "external transaction"
         }
+      },
+      "table": {
+        "title": "Name / Event",
+        "crew": "Crew",
+        "amount": "Amount",
+        "deposited": "Deposited",
+        "date": "Date",
+        "supporter": "Supporter"
       }
     },
     "hints": {

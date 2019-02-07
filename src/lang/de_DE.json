@@ -4,6 +4,16 @@
       "box": {
         "list": "Übersicht",
         "expense": "Ausgabe"
+      },
+      "table": {
+        "what": "Was?",
+        "wherefor": "Wofür?",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "date": "Datum",
+        "supporter": "Beteiligte",
+        "state": "Status",
+        "process": "Bearbeitung"
       }
     },
     "placeholder": {
@@ -15,13 +25,14 @@
       "request": "Nur eine Anfrage"
     },
     "buttons": {
-      "save": "Speichern"
+      "save": "Speichern",
+      "edit": "Editieren"
     },
     "hints": {
       "expense": "Hier kannst du alle Ausgaben hinzufügen.<br /><br />Beachte bitte, dass es passieren kann, dass eine Ausgabe nicht erstattet werden kann, etwa weil diese nicht dem Satzungszeck von VcA entspricht.<br /><br />Falls du dir unsicher bist oder eine größere Auslage tätigen willst, kannst du eine Ausgabe zuerst beantragen und erhälst gegebenenfalls eine Freigabe bevor du das Geld auslegst.",
       "dates": {
-        "created": "Eingetragen: {date}",
-        "updated": "Aktualisiert: {date}"
+        "created": "{date} (eingetragen)",
+        "updated": "{date} (aktualisiert)"
       }
     },
     "states": {
@@ -49,6 +60,14 @@
           "cash": "Bar",
           "extern": "externe Überweisung"
         }
+      },
+      "table": {
+        "title": "Name / Aktion",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "deposited": "Eingezahlt",
+        "date": "Datum",
+        "supporter": "Beteiligte Supporter"
       }
     },
     "hints": {
