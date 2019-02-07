@@ -3,8 +3,8 @@ export default class HouseholdStateMachine {
      * Init the HouseholdStateMachine with a state.
      * @author Johann Sell
      * @param currentState Int in the range of [0..5]
-     * @param volunteerManager Int in the range of [0..2]
-     * @param employee Int in the range of [0..2]
+     * @param volunteerManager Int in the range of [6..8]
+     * @param employee Int in the range of [9..11]
      */
     constructor(currentState, volunteerManager, employee) {
         this.state = currentState
@@ -13,19 +13,22 @@ export default class HouseholdStateMachine {
     }
 
     /**
-     * Check if something has changed and execute a transformation.
+     * Check if something has changed and execute a transformation, if needed.
      *
      * @author Johann Sell
      * @param household
+     * @returns {HouseholdStateMachine | null}
      */
     update (household) {
         if(household.hasOwnProperty("request")) {
-            if(household.request) {
-                this.state = HouseholdStateMachine.States.Requested
-            } else {
-                this.state = HouseholdStateMachine.States.AppliedFor
+            if(household.request && HouseholdStateMachine.States.AppliedFor === this.state) {
+                return this.swapInitState()
+            } else if(!household.request && HouseholdStateMachine.States.Requested === this.state) {
+                return this.swapInitState()
             }
+            return this
         }
+        return this
     }
 
     /**
@@ -43,22 +46,67 @@ export default class HouseholdStateMachine {
         return result
     }
 
+    /**
+     * TRANSITION: Volunteer manager marks as known
+     * @author Johann Sell
+     * @returns {HouseholdStateMachine | null}
+     */
     isKnown () {
         return this.transform(HouseholdStateMachine.States.VolunteerManager.Knows)
     }
 
+    /**
+     * TRANSITION: Volunteer manager marks as unknown
+     * @author Johann Sell
+     * @returns {HouseholdStateMachine | null}
+     */
     isUnknown () {
         return this.transform(HouseholdStateMachine.States.VolunteerManager.KnowsNothing)
     }
 
+    /**
+     * TRANSITION: Employee frees the request / application
+     * @author Johann Sell
+     * @returns {HouseholdStateMachine | null}
+     */
     free () {
         return this.transform(HouseholdStateMachine.States.Employee.Freed)
     }
 
+    /**
+     * TRANSITION: Employee blocks the request / application
+     * @author Johann Sell
+     * @returns {HouseholdStateMachine | null}
+     */
     block () {
         return this.transform(HouseholdStateMachine.States.Employee.Blocked)
     }
 
+    /**
+     * TRANSITION: Owner requests repayment (if state is approved)
+     * @author Johann Sell
+     * @returns {HouseholdStateMachine | null}
+     */
+    requestRepayment () {
+        return this.transform(HouseholdStateMachine.States.Owner.RequestRepayment)
+    }
+
+    /**
+     * TRANSITION: Owner switches from "appliedFor" state to "requested" state or the other way around
+     * @author Johann Sell
+     * @returns {HouseholdStateMachine | null}
+     */
+    swapInitState () {
+        return this.transform(HouseholdStateMachine.States.Owner.SwapInitState)
+    }
+
+    /**
+     * Executes the transformation from one valid state into another.
+     *
+     * @author Johann Sell
+     * @param arc {number} a new state for volunteer manager, employee or one of the transition trigger states of the owner
+     * @returns {HouseholdStateMachine | null}
+     */
     transform (arc) {
         if(this.isValid()) {
             var combi = this.combiFinder()
@@ -78,6 +126,11 @@ export default class HouseholdStateMachine {
         }
     }
 
+    /**
+     * Finds the valid combination that represents the current instance or returns "undefined", if the instance is invalid.
+     * @author Johann Sell
+     * @returns {T | undefined}
+     */
     combiFinder () {
         return HouseholdStateMachine.States.ValidCombinations.find(combi =>
             combi.state === this.state &&
@@ -118,6 +171,10 @@ HouseholdStateMachine.States = {
         "Idle": 9,
         "Freed": 10,
         "Blocked": 11
+    },
+    "Owner": {
+        "RequestRepayment": 12,
+        "SwapInitState": 13
     }
 }
 
@@ -239,9 +296,9 @@ HouseholdStateMachine.States.Transitions = {
     "rii": {},
     "rki": {},
     "rni": {},
-    "apif": {}, // Todo
-    "apkf": {}, // Todo
-    "apnf": {}, // Todo
+    "apif": {},
+    "apkf": {},
+    "apnf": {},
     "tif": {},
     "tkf": {},
     "tnf": {},
@@ -259,40 +316,46 @@ HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Volunt
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.VolunteerManager.Knows] = "aki"
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Employee.Freed] = "apif"
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Employee.Blocked] = "reib"
+HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Owner.SwapInitState] = "rii"
 
 HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "ani"
 HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Employee.Freed] = "apkf"
 HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Employee.Blocked] = "rekb"
+HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Owner.SwapInitState] = "rki"
 
 HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.VolunteerManager.Knows] = "aki"
 HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Employee.Freed] = "apnf"
 HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Employee.Blocked] = "renb"
+HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Owner.SwapInitState] = "rni"
 
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "rni"
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.VolunteerManager.Knows] = "rki"
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Employee.Freed] = "tif"
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Employee.Blocked] = "reib"
+HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Owner.SwapInitState] = "aii"
 
 HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "rni"
 HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Employee.Freed] = "tkf"
 HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Employee.Blocked] = "rekb"
+HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Owner.SwapInitState] = "aki"
 
 HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.VolunteerManager.Knows] = "rki"
 HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Employee.Freed] = "tnf"
 HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Employee.Blocked] = "renb"
+HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Owner.SwapInitState] = "ani"
 
 HouseholdStateMachine.States.Transitions.apif[HouseholdStateMachine.States.VolunteerManager.Knows] = "apkf"
 HouseholdStateMachine.States.Transitions.apif[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "apnf"
 HouseholdStateMachine.States.Transitions.apif[HouseholdStateMachine.States.Employee.Blocked] = "reib"
-// TODO: apif + Supporter erbittet Erstattung --> zu erstatten (tif)
+HouseholdStateMachine.States.Transitions.apif[HouseholdStateMachine.States.Owner.RequestRepayment] = "tif"
 
 HouseholdStateMachine.States.Transitions.apkf[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "apnf"
 HouseholdStateMachine.States.Transitions.apkf[HouseholdStateMachine.States.Employee.Blocked] = "rekb"
-// TODO: apkf + Supporter erbittet Erstattung --> zu erstatten (tkf)
+HouseholdStateMachine.States.Transitions.apkf[HouseholdStateMachine.States.Owner.RequestRepayment] = "tkf"
 
 HouseholdStateMachine.States.Transitions.apnf[HouseholdStateMachine.States.VolunteerManager.Knows] = "apkf"
 HouseholdStateMachine.States.Transitions.apnf[HouseholdStateMachine.States.Employee.Blocked] = "renb"
-// TODO: apnf + Supporter erbittet Erstattung --> zu erstatten (tnf)
+HouseholdStateMachine.States.Transitions.apnf[HouseholdStateMachine.States.Owner.RequestRepayment] = "tnf"
 
 HouseholdStateMachine.States.Transitions.tif[HouseholdStateMachine.States.VolunteerManager.Knows] = "tkf"
 HouseholdStateMachine.States.Transitions.tif[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "tnf"
