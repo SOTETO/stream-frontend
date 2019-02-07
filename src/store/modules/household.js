@@ -1,3 +1,4 @@
+import HouseholdStateMachine from '@/utils/HouseholdStateMachine.js'
 const uuidv4 = require('uuid/v4');
 
 // initial state
@@ -66,6 +67,7 @@ const mutations = {
         pushHousehold.household["id"] = uuidv4()
         var init = {
             "id": pushHousehold.household.id,
+            "state": HouseholdStateMachine.init(pushHousehold.household),
             "versions": [
                 pushHousehold.household
             ]
@@ -76,6 +78,7 @@ const mutations = {
         var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
         var element = state.items[i]
         element.versions.push(replaceHousehold.household)
+        element.state.update(replaceHousehold.household)
         state.items.splice(i, 1, element)
     }
 }
