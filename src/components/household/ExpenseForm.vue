@@ -34,7 +34,7 @@
                 :label="$t('household.placeholder.request')"
                 :required="true"
         >
-            <el-checkbox v-model="expense.request"></el-checkbox>
+            <el-checkbox v-model="expense.request" :disabled="!allowedRequestChange"></el-checkbox>
         </el-form-item>
         <button
                 class="vca-button-primary vca-full-width"
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     import { Form, Input, Checkbox, FormItem } from 'element-ui'
     import MoneyInput from '@/components/utils/MoneyInput'
 
@@ -89,8 +89,19 @@
             }
         },
         computed: {
+            ...mapGetters('household', {
+                stateById: 'stateById'
+            }),
             isUpdate () {
                 return typeof this.value !== "undefined" && this.value !== null // alternative: this.expense.hasOwnProperty("id") ??
+            },
+            allowedRequestChange () {
+                var res = true
+                if(this.isUpdate) {
+                    var state = this.stateById(this.expense.id)
+                    res = state.isAllowed("Owner", "SwapInitState")
+                }
+                return res
             }
         },
         created () {

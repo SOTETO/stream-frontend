@@ -42,13 +42,20 @@ const getters = {
                 },
                 "supporter": " TODO ", // Todo: add creator! And more?
                 "state": last.request, // Todo: Represent other possible states!
-                "processing": " Todo " // Todo: add processing states (ASP, employee)
+                "processing": {
+                    "VolunteerManager": household.state.get("VolunteerManager"),
+                    "Employee": household.state.get("Employee")
+                }
             }
         })
     },
     byId: (state) => (id) => {
         var entry = state.items.find(household => household.id === id)
         return entry.versions[entry.versions.length - 1]
+    },
+    stateById: (state) => (id) => {
+        var entry = state.items.find(household => household.id === id)
+        return entry.state
     }
 }
 
@@ -57,9 +64,22 @@ const actions = {
     add ({ state, commit }, household) {
         commit({ "type": 'push', "household": household })
     },
-    update ({ state, commit}, household) {
+    update ({ state, commit }, household) {
         commit({ "type": 'replace', "household": household })
+    },
+    isKnown({ state, commit }, household) {
+        commit({ "type": 'isKnown', "household": household })
+    },
+    isUnknown({ state, commit }, household) {
+        commit({ "type": 'isUnknown', "household": household })
+    },
+    free({ state, commit }, household) {
+        commit({ "type": 'free', "household": household })
+    },
+    block({ state, commit }, household) {
+        commit({ "type": 'block', "household": household })
     }
+
 }
 
 const mutations = {
@@ -78,7 +98,46 @@ const mutations = {
         var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
         var element = state.items[i]
         element.versions.push(replaceHousehold.household)
-        element.state.update(replaceHousehold.household)
+        var newState = element.state.update(replaceHousehold.household)
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
+        state.items.splice(i, 1, element)
+    },
+    isKnown(state, container) {
+        var i = state.items.findIndex(h => h.id === container.household.id)
+        var element = state.items[i]
+        var newState = element.state.isKnown()
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
+        state.items.splice(i, 1, element)
+    },
+    isUnknown(state, container) {
+        var i = state.items.findIndex(h => h.id === container.household.id)
+        var element = state.items[i]
+        var newState = element.state.isUnknown()
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
+        state.items.splice(i, 1, element)
+    },
+    free(state, container) {
+        var i = state.items.findIndex(h => h.id === container.household.id)
+        var element = state.items[i]
+        var newState = element.state.free()
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
+        state.items.splice(i, 1, element)
+    },
+    block(state, container) {
+        var i = state.items.findIndex(h => h.id === container.household.id)
+        var element = state.items[i]
+        var newState = element.state.block()
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
         state.items.splice(i, 1, element)
     }
 }

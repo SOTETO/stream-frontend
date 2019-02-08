@@ -127,6 +127,53 @@ export default class HouseholdStateMachine {
     }
 
     /**
+     * Checks, if there exists an arc in the state machine outgoing of the current state.
+     *
+     * @author Johann Sell
+     * @param role {String}
+     * @param action {String}
+     * @returns {boolean}
+     */
+    isAllowed(role, action) {
+        var combi = this.combiFinder()
+        var arc = HouseholdStateMachine.getArc(role, action)
+        var res = false
+        if(typeof combi !== "undefined" && arc != -1) {
+            res = HouseholdStateMachine.States.Transitions[combi.name].hasOwnProperty(arc)
+        }
+        return res
+    }
+
+    /**
+     * Get the state of a given role.
+     *
+     * @author Johann Sell
+     * @param role {string}
+     * @returns {string}
+     */
+    get(role) {
+        var res = "unknown"
+        var s = -1
+        switch (role) {
+            case "VolunteerManager":
+                s = this.volunteerManager
+                break;
+            case "Employee":
+                s = this.employee
+                break;
+        }
+        if(HouseholdStateMachine.States.hasOwnProperty(role)) {
+            var states = HouseholdStateMachine.States[role]
+            for(var key in states) {
+                if(states[key] === s) {
+                    res = key
+                }
+            }
+        }
+        return res
+    }
+
+    /**
      * Finds the valid combination that represents the current instance or returns "undefined", if the instance is invalid.
      * @author Johann Sell
      * @returns {T | undefined}
@@ -137,6 +184,23 @@ export default class HouseholdStateMachine {
             combi.volunteerManager === this.volunteerManager &&
             combi.employee === this.employee
         )
+    }
+
+    /**
+     * Returns the arc in our state machine that represents the given role and action.
+     *
+     * @author Johann Sell
+     * @param role {String}
+     * @param action {String}
+     * @returns {number}
+     */
+    static getArc(role, action) {
+        var res = -1
+        if(HouseholdStateMachine.States.hasOwnProperty(role) &&
+            HouseholdStateMachine.States[role].hasOwnProperty(action)) {
+            res = HouseholdStateMachine.States[role][action]
+        }
+        return res
     }
 
     /**

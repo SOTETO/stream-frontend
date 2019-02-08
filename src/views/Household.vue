@@ -47,7 +47,10 @@
                             </td>
                             <td>{{ expose.supporter }}</td>
                             <td>{{ formatState(expose.state) }}</td>
-                            <td>{{ expose.processing }}</td>
+                            <td>
+                                <span>VolunteerManager: {{ expose.processing.VolunteerManager }}</span>
+                                <span>Employee: {{ expose.processing.Employee }}</span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -57,20 +60,24 @@
             <VcABox :first="true" :title="$t('household.header.box.expense')">
                 <ExpenseForm v-model="editable.value" :key="editable.key" @vca-expense-update="addState" />
             </VcABox>
+            <VcABox title="Options" v-if="isEditState">
+                <ExpenseStateTransition :expense="editable.value" />
+            </VcABox>
         </VcAColumn>
     </VcAFrame>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import ExpenseForm from '../components/household/ExpenseForm'
+    import ExpenseStateTransition from '../components/household/ExpenseStateTransition'
 
     export default {
         name: "Household",
         components: {
-            VcAFrame, VcAColumn, VcABox, ExpenseForm
+            VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition
         },
         data () {
             var editableDefault = {
