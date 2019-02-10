@@ -3,7 +3,8 @@
     "header": {
       "box": {
         "list": "Übersicht",
-        "expense": "Ausgabe"
+        "expense": "Ausgabe",
+        "transitions": "Prozess"
       },
       "table": {
         "what": "Was?",
@@ -36,8 +37,38 @@
       }
     },
     "states": {
-      "appliedFor": "Auszahlung beantragt",
-      "requested": "Freigabe angefragt"
+      "Unknown": "Zustand kann nicht erkennt werden",
+      "AppliedFor": "Auszahlung beantragt",
+      "Requested": "Freigabe angefragt",
+      "Approved": "Genehmigt",
+      "ToRepay": "Zurückzuzahlen",
+      "Repaid": "Zurückgezahlt",
+      "Refused": "Verwehrt"
+    },
+    "transitions": {
+      "VolunteerManager": {
+        "knows": "Ich weiß davon",
+        "knowsNothing": "Ich weiß davon nichts"
+      },
+      "Employee": {
+        "free": "Freigeben",
+        "block": "Verwehren"
+      },
+      "Owner": {
+        "requestPayment": "Rückzahlung beantragen"
+      }
+    },
+    "process": {
+      "VolunteerManager": {
+        "Idle": "ASP: Nicht bearbeitet",
+        "Knows": "ASP: Weiß Bescheid",
+        "KnowsNothing": "ASP: Weiß nichts davon"
+      },
+      "Employee": {
+        "Idle": "Hauptamt: Nicht bearbeitet",
+        "Freed": "Hauptamt: Freigegeben",
+        "Blocked": "Hauptamt: Verwehrt"
+      }
     }
   },
   "donation": {

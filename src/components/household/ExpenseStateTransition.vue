@@ -2,23 +2,33 @@
     <div>
         <button
                 class="vca-button-primary vca-full-width"
+                :disabled="!allowedRequestChange('Owner', 'RequestRepayment')"
+                @click="requestRepayment">
+            {{ $t("household.transitions.Owner.requestPayment") }}
+        </button>
+        <button
+                class="vca-button-primary vca-full-width"
+                :disabled="!allowedRequestChange('VolunteerManager', 'Knows')"
                 @click="markAsKnown">
-            Ich weiß davon
+            {{ $t("household.transitions.VolunteerManager.knows") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
+                :disabled="!allowedRequestChange('VolunteerManager', 'KnowsNothing')"
                 @click="markAsUnknown">
-            Ich weiß davon nichts
+            {{ $t("household.transitions.VolunteerManager.knowsNothing") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
+                :disabled="!allowedRequestChange('Employee', 'Freed')"
                 @click="markAsFreed">
-            Freigeben
+            {{ $t("household.transitions.Employee.free") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
+                :disabled="!allowedRequestChange('Employee', 'Blocked')"
                 @click="markAsBlocked">
-            Verwehren
+            {{ $t("household.transitions.Employee.block") }}
         </button>
     </div>
 </template>
@@ -34,9 +44,14 @@
                 "required": true
             }
         },
+        computed: {
+            ...mapGetters('household', {
+                stateById: 'stateById'
+            }),
+        },
         methods: {
             ...mapActions('household', [
-                'isKnown', 'isUnknown', 'free', 'block' // -> this.foo()
+                'isKnown', 'isUnknown', 'free', 'block', 'requestRepayment' // -> this.foo()
             ]),
             markAsKnown() {
                 this.isKnown(this.expense)
@@ -49,6 +64,15 @@
             },
             markAsBlocked() {
                 this.block(this.expense)
+            },
+            requestRepayment() {
+                this.requestRepayment(this.expense)
+            },
+            allowedRequestChange (role, action) {
+                var res = true
+                var state = this.stateById(this.expense.id)
+                res = state.isAllowed(role, action)
+                return res
             }
         }
     }

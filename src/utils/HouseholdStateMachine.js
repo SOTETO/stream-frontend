@@ -151,8 +151,8 @@ export default class HouseholdStateMachine {
      * @param role {string}
      * @returns {string}
      */
-    get(role) {
-        var res = "unknown"
+    getFor (role) {
+        var res = "Unknown"
         var s = -1
         switch (role) {
             case "VolunteerManager":
@@ -168,6 +168,22 @@ export default class HouseholdStateMachine {
                 if(states[key] === s) {
                     res = key
                 }
+            }
+        }
+        return res
+    }
+
+    /**
+     * Get the state of the household entry.
+     *
+     * @author Johann Sell
+     * @returns {string}
+     */
+    get () {
+        var res = "Unknown"
+        for (var key in HouseholdStateMachine.States) {
+            if(HouseholdStateMachine.States[key] === this.state) {
+                res = key
             }
         }
         return res

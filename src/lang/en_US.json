@@ -3,7 +3,8 @@
     "header": {
       "box": {
         "list": "Overview",
-        "expense": "Expense"
+        "expense": "Expense",
+        "transitions": "Process"
       },
       "table": {
         "what": "What?",
@@ -35,8 +36,38 @@
       }
     },
     "states": {
-      "appliedFor": "Applied for money return",
-      "requested": "Release requested"
+      "Unknown": "Not possible to identify",
+      "AppliedFor": "Applied for money return",
+      "Requested": "Release requested",
+      "Approved": "Approved",
+      "ToRepay": "To repay",
+      "Repaid": "Repaid",
+      "Refused": "Refused"
+    },
+    "transitions": {
+      "VolunteerManager": {
+        "knows": "I know it",
+        "knowsNothing": "I don't know"
+      },
+      "Employee": {
+        "free": "Free",
+        "block": "Block"
+      },
+      "Owner": {
+        "requestPayment": "Request payment"
+      }
+    },
+    "process": {
+      "VolunteerManager": {
+        "Idle": "Volunteer manager: Missing interaction",
+        "Knows": "Volunteer manager: Knows it",
+        "KnowsNothing": "Volunteer manager: Knows nothing"
+      },
+      "Employee": {
+        "Idle": "Employee: Missing interaction",
+        "Freed": "Employee: Free",
+        "Blocked": "Employee: Blocked"
+      }
     }
   },
   "donation": {

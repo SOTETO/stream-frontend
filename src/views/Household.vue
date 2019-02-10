@@ -46,10 +46,10 @@
                                 </div>
                             </td>
                             <td>{{ expose.supporter }}</td>
-                            <td>{{ formatState(expose.state) }}</td>
+                            <td>{{ $t("household.states." + expose.state) }}</td>
                             <td>
-                                <span>VolunteerManager: {{ expose.processing.VolunteerManager }}</span>
-                                <span>Employee: {{ expose.processing.Employee }}</span>
+                                <span>{{ $t("household.process.VolunteerManager." + expose.processing.VolunteerManager) }}</span><br />
+                                <span>{{ $t("household.process.Employee." + expose.processing.Employee) }}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -60,7 +60,7 @@
             <VcABox :first="true" :title="$t('household.header.box.expense')">
                 <ExpenseForm v-model="editable.value" :key="editable.key" @vca-expense-update="addState" />
             </VcABox>
-            <VcABox title="Options" v-if="isEditState">
+            <VcABox :title="$t('household.header.box.transitions')" v-if="isEditState">
                 <ExpenseStateTransition :expense="editable.value" />
             </VcABox>
         </VcAColumn>
@@ -105,13 +105,6 @@
             },
             addState (expose) {
                 this.editable = JSON.parse(JSON.stringify(this.editableDefault))
-            },
-            formatState(state) {
-                var stringified = this.$t("household.states.appliedFor")
-                if(state) {
-                    stringified = this.$t("household.states.requested")
-                }
-                return stringified
             }
         }
     }

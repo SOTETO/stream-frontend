@@ -41,10 +41,10 @@ const getters = {
                     "updated": last.updated
                 },
                 "supporter": " TODO ", // Todo: add creator! And more?
-                "state": last.request, // Todo: Represent other possible states!
+                "state": household.state.get(),
                 "processing": {
-                    "VolunteerManager": household.state.get("VolunteerManager"),
-                    "Employee": household.state.get("Employee")
+                    "VolunteerManager": household.state.getFor("VolunteerManager"),
+                    "Employee": household.state.getFor("Employee")
                 }
             }
         })
@@ -78,6 +78,9 @@ const actions = {
     },
     block({ state, commit }, household) {
         commit({ "type": 'block', "household": household })
+    },
+    requestRepayment({ state, commit }, household) {
+        commit({ "type": 'requestRepayment', "household": household})
     }
 
 }
@@ -135,6 +138,15 @@ const mutations = {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
         var newState = element.state.block()
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
+        state.items.splice(i, 1, element)
+    },
+    requestRepayment(state, container) {
+        var i = state.items.findIndex(h => h.id === container.household.id)
+        var element = state.items[i]
+        var newState = element.state.requestRepayment()
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }
