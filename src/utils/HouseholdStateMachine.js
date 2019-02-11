@@ -394,33 +394,33 @@ HouseholdStateMachine.States.Transitions = {
 // All possible transitions inside the state graph:
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "ani"
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.VolunteerManager.Knows] = "aki"
-HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Employee.Freed] = "apif"
+HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Employee.Freed] = "tif"
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Employee.Blocked] = "reib"
 HouseholdStateMachine.States.Transitions.aii[HouseholdStateMachine.States.Owner.SwapInitState] = "rii"
 
 HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "ani"
-HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Employee.Freed] = "apkf"
+HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Employee.Freed] = "tkf"
 HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Employee.Blocked] = "rekb"
 HouseholdStateMachine.States.Transitions.aki[HouseholdStateMachine.States.Owner.SwapInitState] = "rki"
 
 HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.VolunteerManager.Knows] = "aki"
-HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Employee.Freed] = "apnf"
+HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Employee.Freed] = "tnf"
 HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Employee.Blocked] = "renb"
 HouseholdStateMachine.States.Transitions.ani[HouseholdStateMachine.States.Owner.SwapInitState] = "rni"
 
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "rni"
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.VolunteerManager.Knows] = "rki"
-HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Employee.Freed] = "tif"
+HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Employee.Freed] = "apif"
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Employee.Blocked] = "reib"
 HouseholdStateMachine.States.Transitions.rii[HouseholdStateMachine.States.Owner.SwapInitState] = "aii"
 
 HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.VolunteerManager.KnowsNothing] = "rni"
-HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Employee.Freed] = "tkf"
+HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Employee.Freed] = "apkf"
 HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Employee.Blocked] = "rekb"
 HouseholdStateMachine.States.Transitions.rki[HouseholdStateMachine.States.Owner.SwapInitState] = "aki"
 
 HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.VolunteerManager.Knows] = "rki"
-HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Employee.Freed] = "tnf"
+HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Employee.Freed] = "apnf"
 HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Employee.Blocked] = "renb"
 HouseholdStateMachine.States.Transitions.rni[HouseholdStateMachine.States.Owner.SwapInitState] = "ani"
 
