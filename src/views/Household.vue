@@ -58,9 +58,19 @@
         </VcAColumn>
         <VcAColumn size="20%">
             <VcABox :first="true" :title="$t('household.header.box.expense')">
+                <div slot="header" v-if="isEditState">
+                    <button class="vca-button-default" @click.prevent="addState">
+                        {{ $t("household.buttons.cancel") }}
+                    </button>
+                </div>
                 <ExpenseForm v-model="editable.value" :key="editable.key" @vca-expense-update="addState" />
             </VcABox>
             <VcABox :title="$t('household.header.box.transitions')" v-if="isEditState">
+                <div slot="header" v-if="isEditState">
+                    <button class="vca-button-default" @click.prevent="addState">
+                        {{ $t("household.buttons.cancel") }}
+                    </button>
+                </div>
                 <ExpenseStateTransition :expense="editable.value" />
             </VcABox>
         </VcAColumn>

@@ -27,7 +27,8 @@
     },
     "buttons": {
       "save": "Speichern",
-      "edit": "Editieren"
+      "edit": "Editieren",
+      "cancel": "Abbrechen"
     },
     "hints": {
       "expense": "Hier kannst du alle Ausgaben hinzufügen.<br /><br />Beachte bitte, dass es passieren kann, dass eine Ausgabe nicht erstattet werden kann, etwa weil diese nicht dem Satzungszeck von VcA entspricht.<br /><br />Falls du dir unsicher bist oder eine größere Auslage tätigen willst, kannst du eine Ausgabe zuerst beantragen und erhälst gegebenenfalls eine Freigabe bevor du das Geld auslegst.",
@@ -148,7 +149,7 @@
         "party": "Party",
         "streetFestivals": "Straßenfeste",
         "karaoke": "Karaoke",
-        "kicker": "Kickertuniere"
+        "kicker": "Kickerturniere"
       },
       "source": {
         "unknown": "Kann ich nicht zuordnen",

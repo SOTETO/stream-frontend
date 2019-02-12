@@ -26,7 +26,9 @@
       "request": "Only a request"
     },
     "buttons": {
-      "save": "Save"
+      "save": "Save",
+      "edit": "Edit",
+      "cancel": "Cancel"
     },
     "hints": {
       "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before.",
@@ -136,6 +138,18 @@
       "context": {
         "label": "How does the donation was collected?",
         "indicator": "e.g. street festival"
+      },
+      "category": "Category",
+      "categories": {
+        "concert": "Concerts",
+        "festival": "Festivals",
+        "stadium": "Stadium",
+        "run4wash": "Run 4 WASH",
+        "school": "School",
+        "party": "Party",
+        "streetFestivals": "Street markets / festivals",
+        "karaoke": "Karaoke",
+        "kicker": "Kicker tournament"
       },
       "source": {
         "unknown": "I don't know",
