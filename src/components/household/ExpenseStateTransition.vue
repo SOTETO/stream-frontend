@@ -1,6 +1,7 @@
 <template>
     <div>
         <button
+                v-if="isApproved"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('requestPayment')"
                 @click="startRequestRepayment">
@@ -54,6 +55,10 @@
             ...mapGetters('household', {
                 stateById: 'stateById'
             }),
+            isApproved () {
+                var state = this.stateById(this.expense.id)
+                return state.isApproved()
+            }
         },
         methods: {
             ...mapActions('household', [

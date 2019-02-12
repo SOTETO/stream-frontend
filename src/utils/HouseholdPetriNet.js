@@ -178,6 +178,11 @@ export default class HouseholdPetriNet {
             this.states[HouseholdPetriNet.States.ProcessState.Requested] >= 1
     }
 
+    isApproved () {
+        return this.states.hasOwnProperty(HouseholdPetriNet.States.ProcessState.Approved) &&
+            this.states[HouseholdPetriNet.States.ProcessState.Approved] >= 1
+    }
+
     isEditable () {
         return !this.states.hasOwnProperty(HouseholdPetriNet.States.ProcessState.NotEditable) ||
             this.states[HouseholdPetriNet.States.ProcessState.NotEditable] === 0
