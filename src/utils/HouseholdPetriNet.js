@@ -120,7 +120,7 @@ export default class HouseholdPetriNet {
      * @returns {HouseholdPetriNet}
      */
     complete() {
-        var statesCopy = this.states.slice(0)
+        var statesCopy = JSON.parse(JSON.stringify(this.states))
         statesCopy[HouseholdPetriNet.States.ProcessState.HouseholdComplete] = 1
         return new HouseholdPetriNet(statesCopy)
     }
@@ -132,7 +132,7 @@ export default class HouseholdPetriNet {
      * @returns {HouseholdPetriNet}
      */
     incomplete() {
-        var statesCopy = this.states.slice(0)
+        var statesCopy = JSON.parse(JSON.stringify(this.states))
         statesCopy[HouseholdPetriNet.States.ProcessState.HouseholdComplete] = 0
         return new HouseholdPetriNet(statesCopy)
     }

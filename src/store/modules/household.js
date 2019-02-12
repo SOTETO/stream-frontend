@@ -2,6 +2,19 @@ import HouseholdStateMachine from '@/utils/HouseholdPetriNet.js'
 import HouseholdPetriNet from "../../utils/HouseholdPetriNet";
 const uuidv4 = require('uuid/v4');
 
+const model = {
+    isComplete(household) {
+        return household.hasOwnProperty("amount") && household.amount.hasOwnProperty("amount") && household.amount.amount > 0 &&
+            household.hasOwnProperty("reason") && household.reason.hasOwnProperty("what") &&
+            typeof household.reason.what !== "undefined" && household.reason.what !== null && household.reason.what !== "" &&
+            household.reason.hasOwnProperty("wherefor") && typeof household.reason.wherefor !== "undefined" &&
+            household.reason.wherefor !== null && household.reason.wherefor !== "" &&
+            household.hasOwnProperty("iban") && typeof household.iban !== "undefined" && household.iban !== null &&
+            household.iban !== "" && household.hasOwnProperty("bic") && typeof household.bic !== "undefined" &&
+            household.bic !== null && household.bic !== ""
+    }
+}
+
 // initial state
 // shape: [{
 //             "id"
@@ -92,7 +105,7 @@ const actions = {
 
 const mutations = {
     push(state, pushHousehold) {
-        var s = HouseholdPetriNet.init(true) // Todo: Check, if complete and put it in here!
+        var s = HouseholdPetriNet.init(model.isComplete(pushHousehold.household))
         if(pushHousehold.household.request) {
             s = s.execute("request")
         } else {
@@ -112,12 +125,17 @@ const mutations = {
         var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
         var element = state.items[i]
         element.versions.push(replaceHousehold.household)
-        var newState = null
+        var newState = element.state
         if(replaceHousehold.household.request && element.state.isAppliedFor()) {
             newState = element.state.execute("request")
         } else if(!replaceHousehold.household.request && element.state.isRequest()) {
             newState = element.state.execute("apply")
-        } // TODO: Check completeness!!
+        }
+        if(model.isComplete(replaceHousehold.household)) {
+            newState = newState.complete()
+        } else {
+            newState = newState.incomplete()
+        }
         // var newState = element.state.update(replaceHousehold.household)
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
