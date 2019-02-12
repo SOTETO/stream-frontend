@@ -178,6 +178,11 @@ export default class HouseholdPetriNet {
             this.states[HouseholdPetriNet.States.ProcessState.Requested] >= 1
     }
 
+    isEditable () {
+        return !this.states.hasOwnProperty(HouseholdPetriNet.States.ProcessState.NotEditable) ||
+            this.states[HouseholdPetriNet.States.ProcessState.NotEditable] === 0
+    }
+
     /**
      * Checks if a named transition is defined.
      *
@@ -225,7 +230,8 @@ HouseholdPetriNet.States = {
         "Approved": 5,
         "Free": 6,
         "Repaid": 7,
-        "HouseholdComplete": 8
+        "HouseholdComplete": 8,
+        "NotEditable": 12
     },
     "VolunteerManager": {
         "Idle": 9,
@@ -370,7 +376,8 @@ HouseholdPetriNet.Transitions = [
             8: 1
         },
         "targets": {
-            7: 1
+            7: 1,
+            12: 1
         }
     },
     {

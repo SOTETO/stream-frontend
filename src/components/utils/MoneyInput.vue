@@ -2,7 +2,7 @@
     <el-form-item
         :required="required"
     >
-        <el-input class="vca-input" v-model="amount" @change="validate" :placeholder="label"/>
+        <el-input class="vca-input" v-model="amount" @change="validate" :placeholder="label" :disabled="disabled" />
             <div
                 v-if="amountErrorState"
                 class="el-form-item__error"
@@ -46,6 +46,10 @@
             "required": {
                 "type": Boolean,
                 "default": true
+            },
+            "disabled": {
+                "type": Boolean,
+                "default": false
             }
         },
         data () {

@@ -8,36 +8,38 @@
                 currency="EUR"
                 :label="$t('household.placeholder.amount')"
                 :required="true"
+                :disabled="!isEditable"
                 :key="expense.amount.amount"
         />
         <el-form-item
                 :required="true"
         >
-            <el-input v-model="expense.reason.what" :placeholder="$t('household.placeholder.what')"></el-input>
+            <el-input v-model="expense.reason.what" :placeholder="$t('household.placeholder.what')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
                 :required="true"
         >
-            <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')"></el-input>
+            <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
                 :required="false"
         >
-            <el-input v-model="expense.iban" :placeholder="$t('household.placeholder.iban')"></el-input>
+            <el-input v-model="expense.iban" :placeholder="$t('household.placeholder.iban')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
                 :required="false"
         >
-            <el-input v-model="expense.bic" :placeholder="$t('household.placeholder.bic')"></el-input>
+            <el-input v-model="expense.bic" :placeholder="$t('household.placeholder.bic')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
                 :label="$t('household.placeholder.request')"
                 :required="true"
         >
-            <el-checkbox v-model="expense.request" :disabled="!allowedRequestChange"></el-checkbox>
+            <el-checkbox v-model="expense.request" :disabled="!allowedRequestChange || !isEditable"></el-checkbox>
         </el-form-item>
         <button
                 class="vca-button-primary vca-full-width"
+                :disabled="!isEditable"
                 @click.prevent="submitForm">
             {{ $t("household.buttons.save") }}
         </button>
@@ -102,6 +104,15 @@
                     res = state.allowedTo("request") || state.allowedTo("apply")
                 }
                 return res
+            },
+            isEditable () {
+                var res = true
+                if(this.isUpdate) {
+                    var state = this.stateById(this.expense.id)
+                    res = state.isEditable()
+                }
+                return res
+
             }
         },
         created () {
