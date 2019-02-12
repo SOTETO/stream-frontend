@@ -18,9 +18,9 @@
                     <tbody>
                         <tr v-for="expose in exposes" :key="expose.id">
                             <td>
-                                <span>{{ expose.what }}</span>
+                                <span>{{ expose.what }}</span><br />
                                 <button
-                                        class="vca-button-secundary"
+                                        class="vca-button-inline"
                                         @click="editState(expose)"
                                 >{{ $t("household.buttons.edit") }}</button>
                             </td>
