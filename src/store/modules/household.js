@@ -50,7 +50,12 @@ const getters = {
                 "what": last.reason.what,
                 "wherefor": last.reason.wherefor,
                 "crew": " TODO ", // Todo: add crew information
-                "amount": household.versions.map(h => h.amount.formatted),
+                "amount": household.versions.reduce((amounts, version) => {
+                    if(amounts.length === 0 || amounts[amounts.length - 1].amount !== version.amount.amount) {
+                        amounts.push(version.amount)
+                    }
+                    return amounts
+                }, []).map(version => version.formatted),
                 "date": {
                     "created": first.created,
                     "updated": last.updated
