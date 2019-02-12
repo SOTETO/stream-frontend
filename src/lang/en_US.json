@@ -51,7 +51,8 @@
       },
       "Employee": {
         "free": "Free",
-        "block": "Block"
+        "block": "Block",
+        "repay": "Repay"
       },
       "Owner": {
         "requestPayment": "Request payment"

@@ -83,18 +83,19 @@ const actions = {
     },
     requestRepayment({ state, commit }, household) {
         commit({ "type": 'requestRepayment', "household": household})
+    },
+    repay({ state, commit }, household) {
+        commit({ "type": 'repay', "household": household })
     }
 
 }
 
 const mutations = {
     push(state, pushHousehold) {
-        var s = HouseholdPetriNet.init(false) // Todo: Check, if complete and put it in here!
-        console.log(pushHousehold.household)
+        var s = HouseholdPetriNet.init(true) // Todo: Check, if complete and put it in here!
         if(pushHousehold.household.request) {
             s = s.execute("request")
         } else {
-            console.log(s.allowedTo("apply"))
             s = s.execute("apply")
         }
         pushHousehold.household["id"] = uuidv4()
@@ -166,6 +167,15 @@ const mutations = {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
         var newState = element.state.execute("requestPayment")
+        if(typeof newState !== "undefined" && newState !== null) {
+            element.state = newState
+        }
+        state.items.splice(i, 1, element)
+    },
+    repay(state, container) {
+        var i = state.items.findIndex(h => h.id === container.household.id)
+        var element = state.items[i]
+        var newState = element.state.execute("repay")
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }

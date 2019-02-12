@@ -52,7 +52,8 @@
       },
       "Employee": {
         "free": "Freigeben",
-        "block": "Verwehren"
+        "block": "Verwehren",
+        "repay": "Zurückzahlen"
       },
       "Owner": {
         "requestPayment": "Rückzahlung beantragen"

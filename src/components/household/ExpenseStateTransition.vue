@@ -30,6 +30,12 @@
                 @click="markAsBlocked">
             {{ $t("household.transitions.Employee.block") }}
         </button>
+        <button
+                class="vca-button-primary vca-full-width"
+                :disabled="!allowedRequestChange('repay')"
+                @click="markAsRepaid">
+            {{ $t("household.transitions.Employee.repay") }}
+        </button>
     </div>
 </template>
 
@@ -51,7 +57,7 @@
         },
         methods: {
             ...mapActions('household', [
-                'isKnown', 'isUnknown', 'free', 'block', 'requestRepayment' // -> this.foo()
+                'isKnown', 'isUnknown', 'free', 'block', 'requestRepayment', 'repay' // -> this.foo()
             ]),
             markAsKnown() {
                 this.isKnown(this.expense)
@@ -67,6 +73,9 @@
             },
             startRequestRepayment() {
                 this.requestRepayment(this.expense)
+            },
+            markAsRepaid() {
+                this.repay(this.expense)
             },
             allowedRequestChange (action) {
                 var res = true
