@@ -21,9 +21,9 @@ export default class HouseholdStateMachine {
      */
     update (household) {
         if(household.hasOwnProperty("request")) {
-            if(household.request && HouseholdStateMachine.States.AppliedFor === this.state) {
+            if(household.request && HouseholdStateMachine.States.ProcessState.AppliedFor === this.state) {
                 return this.swapInitState()
-            } else if(!household.request && HouseholdStateMachine.States.Requested === this.state) {
+            } else if(!household.request && HouseholdStateMachine.States.ProcessState.Requested === this.state) {
                 return this.swapInitState()
             }
             return this
@@ -181,8 +181,8 @@ export default class HouseholdStateMachine {
      */
     get () {
         var res = "Unknown"
-        for (var key in HouseholdStateMachine.States) {
-            if(HouseholdStateMachine.States[key] === this.state) {
+        for (var key in HouseholdStateMachine.States.ProcessState) {
+            if(HouseholdStateMachine.States.ProcessState[key] === this.state) {
                 res = key
             }
         }
@@ -225,9 +225,9 @@ export default class HouseholdStateMachine {
      * @param household
      */
     static init(household) {
-        var state = HouseholdStateMachine.States.AppliedFor
+        var state = HouseholdStateMachine.States.ProcessState.AppliedFor
         if(household.hasOwnProperty("request") && household.request) {
-            state = HouseholdStateMachine.States.Requested
+            state = HouseholdStateMachine.States.ProcessState.Requested
         }
         return new HouseholdStateMachine(
             state, HouseholdStateMachine.States.VolunteerManager.Idle, HouseholdStateMachine.States.Employee.Idle
@@ -236,12 +236,14 @@ export default class HouseholdStateMachine {
 }
 
 HouseholdStateMachine.States = {
-    "AppliedFor": 0,
-    "Requested": 1,
-    "Approved": 2,
-    "ToRepay": 3,
-    "Repaid": 4,
-    "Refused": 5,
+    "ProcessState": {
+        "AppliedFor": 0,
+        "Requested": 1,
+        "Approved": 2,
+        "ToRepay": 3,
+        "Repaid": 4,
+        "Refused": 5,
+    },
     "VolunteerManager": {
         "Idle": 6,
         "KnowsNothing": 7,
@@ -261,109 +263,109 @@ HouseholdStateMachine.States = {
 HouseholdStateMachine.States.ValidCombinations = [
     {
         "name": "aii", // appliedFor - idle - idle
-        "state": HouseholdStateMachine.States.AppliedFor,
+        "state": HouseholdStateMachine.States.ProcessState.AppliedFor,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Idle,
         "employee": HouseholdStateMachine.States.Employee.Idle
     },
     {
         "name": "aki", // appliedFor - knows - idle
-        "state": HouseholdStateMachine.States.AppliedFor,
+        "state": HouseholdStateMachine.States.ProcessState.AppliedFor,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Knows,
         "employee": HouseholdStateMachine.States.Employee.Idle
     },
     {
         "name": "ani", // appliedFor - knows nothing - idle
-        "state": HouseholdStateMachine.States.AppliedFor,
+        "state": HouseholdStateMachine.States.ProcessState.AppliedFor,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.KnowsNothing,
         "employee": HouseholdStateMachine.States.Employee.Idle
     },
     {
         "name": "rii", // requested - idle - idle
-        "state": HouseholdStateMachine.States.Requested,
+        "state": HouseholdStateMachine.States.ProcessState.Requested,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Idle,
         "employee": HouseholdStateMachine.States.Employee.Idle
     },
     {
         "name": "rki", // requested - knows - idle
-        "state": HouseholdStateMachine.States.Requested,
+        "state": HouseholdStateMachine.States.ProcessState.Requested,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Knows,
         "employee": HouseholdStateMachine.States.Employee.Idle
     },
     {
         "name": "rni", // requested - knows nothing - idle
-        "state": HouseholdStateMachine.States.Requested,
+        "state": HouseholdStateMachine.States.ProcessState.Requested,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.KnowsNothing,
         "employee": HouseholdStateMachine.States.Employee.Idle
     },
     {
         "name": "apif", // approved - idle - freed
-        "state": HouseholdStateMachine.States.Approved,
+        "state": HouseholdStateMachine.States.ProcessState.Approved,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Idle,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "apkf", // approved - knows - freed
-        "state": HouseholdStateMachine.States.Approved,
+        "state": HouseholdStateMachine.States.ProcessState.Approved,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Knows,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "apnf", // approved - knows nothing - freed
-        "state": HouseholdStateMachine.States.Approved,
+        "state": HouseholdStateMachine.States.ProcessState.Approved,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.KnowsNothing,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "tif", // to repay - idle - freed
-        "state": HouseholdStateMachine.States.ToRepay,
+        "state": HouseholdStateMachine.States.ProcessState.ToRepay,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Idle,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "tkf", // to repay - knows - freed
-        "state": HouseholdStateMachine.States.ToRepay,
+        "state": HouseholdStateMachine.States.ProcessState.ToRepay,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Knows,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "tnf", // to repay - knows nothing - freed
-        "state": HouseholdStateMachine.States.ToRepay,
+        "state": HouseholdStateMachine.States.ProcessState.ToRepay,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.KnowsNothing,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "rif", // repaid - idle - freed
-        "state": HouseholdStateMachine.States.Repaid,
+        "state": HouseholdStateMachine.States.ProcessState.Repaid,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Idle,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "rkf", // repaid - knows - freed
-        "state": HouseholdStateMachine.States.Repaid,
+        "state": HouseholdStateMachine.States.ProcessState.Repaid,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Knows,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "rnf", // repaid - knows nothing - freed
-        "state": HouseholdStateMachine.States.Repaid,
+        "state": HouseholdStateMachine.States.ProcessState.Repaid,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.KnowsNothing,
         "employee": HouseholdStateMachine.States.Employee.Freed
     },
     {
         "name": "reib", // refused - idle - blocked
-        "state": HouseholdStateMachine.States.Refused,
+        "state": HouseholdStateMachine.States.ProcessState.Refused,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Idle,
         "employee": HouseholdStateMachine.States.Employee.Blocked
     },
     {
         "name": "rekb", // refused - knows - blocked
-        "state": HouseholdStateMachine.States.Refused,
+        "state": HouseholdStateMachine.States.ProcessState.Refused,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.Knows,
         "employee": HouseholdStateMachine.States.Employee.Blocked
     },
     {
         "name": "renb", // refused - knows nothing - blocked
-        "state": HouseholdStateMachine.States.Refused,
+        "state": HouseholdStateMachine.States.ProcessState.Refused,
         "volunteerManager": HouseholdStateMachine.States.VolunteerManager.KnowsNothing,
         "employee": HouseholdStateMachine.States.Employee.Blocked
     }

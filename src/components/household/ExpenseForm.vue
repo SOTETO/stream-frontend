@@ -99,7 +99,7 @@
                 var res = true
                 if(this.isUpdate) {
                     var state = this.stateById(this.expense.id)
-                    res = state.isAllowed("Owner", "SwapInitState")
+                    res = state.allowedTo("request") || state.allowedTo("apply")
                 }
                 return res
             }

@@ -1,4 +1,5 @@
-import HouseholdStateMachine from '@/utils/HouseholdStateMachine.js'
+import HouseholdStateMachine from '@/utils/HouseholdPetriNet.js'
+import HouseholdPetriNet from "../../utils/HouseholdPetriNet";
 const uuidv4 = require('uuid/v4');
 
 // initial state
@@ -28,6 +29,7 @@ const getters = {
     },
     overview: (state, getters) => {
         return state.items.map((household) => {
+            var stateDescription = household.state.describe()
             var first = household.versions[0]
             var last = household.versions[household.versions.length - 1]
             return {
@@ -41,10 +43,10 @@ const getters = {
                     "updated": last.updated
                 },
                 "supporter": " TODO ", // Todo: add creator! And more?
-                "state": household.state.get(),
+                "state": stateDescription.Household,
                 "processing": {
-                    "VolunteerManager": household.state.getFor("VolunteerManager"),
-                    "Employee": household.state.getFor("Employee")
+                    "VolunteerManager": stateDescription.VolunteerManager,
+                    "Employee": stateDescription.Employee
                 }
             }
         })
@@ -87,10 +89,18 @@ const actions = {
 
 const mutations = {
     push(state, pushHousehold) {
+        var s = HouseholdPetriNet.init(false) // Todo: Check, if complete and put it in here!
+        console.log(pushHousehold.household)
+        if(pushHousehold.household.request) {
+            s = s.execute("request")
+        } else {
+            console.log(s.allowedTo("apply"))
+            s = s.execute("apply")
+        }
         pushHousehold.household["id"] = uuidv4()
         var init = {
             "id": pushHousehold.household.id,
-            "state": HouseholdStateMachine.init(pushHousehold.household),
+            "state": s,
             "versions": [
                 pushHousehold.household
             ]
@@ -101,7 +111,13 @@ const mutations = {
         var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
         var element = state.items[i]
         element.versions.push(replaceHousehold.household)
-        var newState = element.state.update(replaceHousehold.household)
+        var newState = null
+        if(replaceHousehold.household.request && element.state.isAppliedFor()) {
+            newState = element.state.execute("request")
+        } else if(!replaceHousehold.household.request && element.state.isRequest()) {
+            newState = element.state.execute("apply")
+        } // TODO: Check completeness!!
+        // var newState = element.state.update(replaceHousehold.household)
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }
@@ -110,7 +126,7 @@ const mutations = {
     isKnown(state, container) {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
-        var newState = element.state.isKnown()
+        var newState = element.state.execute("isKnown")
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }
@@ -119,7 +135,7 @@ const mutations = {
     isUnknown(state, container) {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
-        var newState = element.state.isUnknown()
+        var newState = element.state.execute("isUnknown")
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }
@@ -128,7 +144,10 @@ const mutations = {
     free(state, container) {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
-        var newState = element.state.free()
+        var newState = element.state.execute("free")
+        if(element.state.equals(newState)) {
+            newState = element.state.execute("approve")
+        }
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }
@@ -137,7 +156,7 @@ const mutations = {
     block(state, container) {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
-        var newState = element.state.block()
+        var newState = element.state.execute("block")
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }
@@ -146,7 +165,7 @@ const mutations = {
     requestRepayment(state, container) {
         var i = state.items.findIndex(h => h.id === container.household.id)
         var element = state.items[i]
-        var newState = element.state.requestRepayment()
+        var newState = element.state.execute("requestPayment")
         if(typeof newState !== "undefined" && newState !== null) {
             element.state = newState
         }

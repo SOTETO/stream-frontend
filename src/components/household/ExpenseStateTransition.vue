@@ -2,31 +2,31 @@
     <div>
         <button
                 class="vca-button-primary vca-full-width"
-                :disabled="!allowedRequestChange('Owner', 'RequestRepayment')"
-                @click="requestRepayment">
+                :disabled="!allowedRequestChange('requestPayment')"
+                @click="startRequestRepayment">
             {{ $t("household.transitions.Owner.requestPayment") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
-                :disabled="!allowedRequestChange('VolunteerManager', 'Knows')"
+                :disabled="!allowedRequestChange('isKnown')"
                 @click="markAsKnown">
             {{ $t("household.transitions.VolunteerManager.knows") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
-                :disabled="!allowedRequestChange('VolunteerManager', 'KnowsNothing')"
+                :disabled="!allowedRequestChange('isUnknown')"
                 @click="markAsUnknown">
             {{ $t("household.transitions.VolunteerManager.knowsNothing") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
-                :disabled="!allowedRequestChange('Employee', 'Freed')"
+                :disabled="!allowedRequestChange('free') && !allowedRequestChange('approve')"
                 @click="markAsFreed">
             {{ $t("household.transitions.Employee.free") }}
         </button>
         <button
                 class="vca-button-primary vca-full-width"
-                :disabled="!allowedRequestChange('Employee', 'Blocked')"
+                :disabled="!allowedRequestChange('block')"
                 @click="markAsBlocked">
             {{ $t("household.transitions.Employee.block") }}
         </button>
@@ -65,13 +65,13 @@
             markAsBlocked() {
                 this.block(this.expense)
             },
-            requestRepayment() {
+            startRequestRepayment() {
                 this.requestRepayment(this.expense)
             },
-            allowedRequestChange (role, action) {
+            allowedRequestChange (action) {
                 var res = true
                 var state = this.stateById(this.expense.id)
-                res = state.isAllowed(role, action)
+                res = state.allowedTo(action)
                 return res
             }
         }
