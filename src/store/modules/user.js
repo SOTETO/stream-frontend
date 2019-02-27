@@ -63,6 +63,19 @@ const actions = {
                 // set `state.loading` to false and do something with error
                 store.commit('API_USER_FAILURE', error)
             })
+    },
+    /**
+     * Has to be called by all other AJAX requests, if they receive an [401 status code](https://tools.ietf.org/html/rfc7235#section-3.1).
+     * If an ajax call receives a 401, the user has been logged out.
+     *
+     * Since all AJAX requests are executed by the VUEX store, this is a matter of accuracy.
+     *
+     * @author Johann Sell
+     * @param store
+     * @param error
+     */
+    logout(store, error) {
+        store.commit('API_USER_LOGOUT', error)
     }
 }
 
@@ -78,6 +91,11 @@ const mutations = {
         state.error = null
     },
     API_USER_FAILURE(state, error) {
+        state.user = null
+        state.pending = false
+        state.error = error
+    },
+    API_USER_LOGOUT(state, error) {
         state.user = null
         state.pending = false
         state.error = error
