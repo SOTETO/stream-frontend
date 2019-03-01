@@ -10,16 +10,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "element-ui": "^2.4.11",
     "uuid": "^3.3.2",
     "vca-widget-base": "^0.1.2",
     "vca-widget-navigation": "^0.2.6",
-    "vca-widget-user": "^0.5.1",
+    "vca-widget-user": "^0.5.2",
     "vue": "^2.5.21",
     "vue-i18n": "^8.7.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.1.0",
-    "axios": "^0.18.0"
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",

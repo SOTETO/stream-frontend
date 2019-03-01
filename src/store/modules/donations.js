@@ -18,6 +18,7 @@ const uuidv4 = require('uuid/v4');
 //                 "sources": [{"category", "amount", "formatted", "type"}],
 //                 "involvedSupporter": []
 //             },
+//             "author": "some-uuid",
 //             "created": Date.now(),
 //             "updated": Date.now()
 //         }]
@@ -41,7 +42,8 @@ const getters = {
                     "received": donation.amount.received,
                     "created": donation.created
                 },
-                "supporter": donation.amount.involvedSupporter // Todo: add creator!
+                "author": donation.author,
+                "supporter":  donation.amount.involvedSupporter // Todo: add creator!
             }
         })
     }
@@ -49,8 +51,10 @@ const getters = {
 
 
 const actions = {
-    add ({ state, commit }, donation) {
-        commit({ "type": 'push', "donation": donation })
+    add (store, donation) {
+        var user = store.rootGetters['user/get']
+        donation["author"] = user.uuid
+        store.commit({ "type": 'push', "donation": donation })
     }
 }
 

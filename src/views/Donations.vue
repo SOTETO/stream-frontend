@@ -27,7 +27,8 @@
                             </td>
                             <td>
                                 <div class="supporter">
-                                    <WidgetUser v-for="user in donation.supporter" type="small" :user="user" />
+                                    <Tag :uuid="donation.author" />
+                                    <Tag v-for="user in donation.supporter" :user="user" />
                                 </div>
                             </td>
                         </tr>
@@ -47,13 +48,13 @@
     import { mapGetters, mapState } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
-    import { WidgetUser } from 'vca-widget-user'
+    import { Tag } from 'vca-widget-user'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
         name: "donations",
         components: {
-            VcAFrame, VcAColumn, VcABox, WidgetUser
+            VcAFrame, VcAColumn, VcABox, Tag
         },
         computed: {
             // ...mapState({
