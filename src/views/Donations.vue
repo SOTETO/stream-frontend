@@ -27,8 +27,8 @@
                             </td>
                             <td>
                                 <div class="supporter">
-                                    <Tag :uuid="donation.author" />
-                                    <Tag v-for="user in donation.supporter" :user="user" />
+                                    <Tag :uuid="donation.author" :key="donation.author" />
+                                    <Tag v-for="uuid in donation.supporter" :uuid="uuid" :key="uuid" />
                                 </div>
                             </td>
                         </tr>

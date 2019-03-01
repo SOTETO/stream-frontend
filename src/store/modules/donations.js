@@ -42,7 +42,7 @@ const getters = {
                     "created": donation.created
                 },
                 "author": donation.author,
-                "supporter":  donation.amount.involvedSupporter // Todo: add creator!
+                "supporter":  donation.amount.involvedSupporter
             }
         })
     }
@@ -53,6 +53,7 @@ const actions = {
     add (store, donation) {
         var user = store.rootGetters['user/get']
         donation["author"] = user.uuid
+        donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
         store.commit({ "type": 'push', "donation": donation })
     }
 }
