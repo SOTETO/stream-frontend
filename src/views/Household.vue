@@ -25,7 +25,7 @@
                                 >{{ $t("household.buttons.edit") }}</button>
                             </td>
                             <td>{{ expose.wherefor }}</td>
-                            <td>{{ expose.crew }}</td>
+                            <td><Tag :crew="true" :uuid="expose.author" /></td>
                             <td  class="vca-amount-wrapper">
                                 <span class="vca-amount">
                                     {{ expose.amount[expose.amount.length - 1] }}
@@ -45,7 +45,7 @@
                                     </span>
                                 </div>
                             </td>
-                            <td>{{ expose.supporter }}</td>
+                            <td><Tag v-for="uuid in expose.supporter" :key="uuid" :uuid="uuid" /></td>
                             <td>{{ $t("household.states." + expose.state) }}</td>
                             <td>
                                 <span>{{ $t("household.process.VolunteerManager." + expose.processing.VolunteerManager) }}</span><br />
@@ -81,13 +81,14 @@
     import { mapActions, mapGetters } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
+    import { Tag } from 'vca-widget-user'
     import ExpenseForm from '../components/household/ExpenseForm'
     import ExpenseStateTransition from '../components/household/ExpenseStateTransition'
 
     export default {
         name: "Household",
         components: {
-            VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition
+            VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition, Tag
         },
         data () {
             var editableDefault = {

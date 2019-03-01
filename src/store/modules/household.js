@@ -17,20 +17,27 @@ const model = {
 
 // initial state
 // shape: [{
-//             "id"
-//             "amount": {
-//                 "amount": 0,
-//                 "formatted": "0,00"
-//             },
-//             "reason": {
-//                 "what": "",
-//                 "wherefor": ""
-//             },
-//             "iban": "",
-//             "bic": "",
-//             "request": false,
-//             "created": Date,
-//             "updated": Date
+//             "id",
+//             "state",
+//             "versions": [{
+//                  "amount": {
+//                      "amount": 0,
+//                      "formatted": "0,00"
+//                  },
+//                  "reason": {
+//                      "what": "",
+//                      "wherefor": ""
+//                  },
+//                  "iban": "",
+//                  "bic": "",
+//                  "request": false,
+//                  "created": Date,
+//                  "updated": Date,
+//                  "author": "",
+//                  "editor": "",
+//                  "volunteerManager": ""
+//                  "employee": ""
+//              }]
 //         }]
 const state = {
     items: []
@@ -49,7 +56,9 @@ const getters = {
                 "id": household.id,
                 "what": last.reason.what,
                 "wherefor": last.reason.wherefor,
-                "crew": " TODO ", // Todo: add crew information
+                "author": household.versions
+                    .filter(version => version.hasOwnProperty("author"))    // get the author (usually one!)
+                    .map(version => version.author).pop(),
                 "amount": household.versions.reduce((amounts, version) => {
                     if(amounts.length === 0 || amounts[amounts.length - 1].amount !== version.amount.amount) {
                         amounts.push(version.amount)
@@ -60,7 +69,13 @@ const getters = {
                     "created": first.created,
                     "updated": last.updated
                 },
-                "supporter": " TODO ", // Todo: add creator! And more?
+                "supporter": household.versions
+                    .filter(version => version.hasOwnProperty("author"))    // get the author (usually one!)
+                    .map(version => version.author)
+                    .concat(
+                        household.versions.filter(version => version.hasOwnProperty("editor"))  // get all editors
+                            .map(version => version.editor)
+                    ).filter((value, index, self) => self.indexOf(value) === index),    // unique! If author === editor
                 "state": stateDescription.Household,
                 "processing": {
                     "VolunteerManager": stateDescription.VolunteerManager,
@@ -81,29 +96,45 @@ const getters = {
 
 
 const actions = {
-    add ({ state, commit }, household) {
-        commit({ "type": 'push', "household": household })
+    add (store, household) {
+        var user = store.rootGetters['user/get']
+        household["author"] = user.uuid
+        store.commit({ "type": 'push', "household": household })
     },
-    update ({ state, commit }, household) {
-        commit({ "type": 'replace', "household": household })
+    update (store, household) {
+        var user = store.rootGetters['user/get']
+        household["editor"] = user.uuid
+        store.commit({ "type": 'replace', "household": household })
     },
-    isKnown({ state, commit }, household) {
-        commit({ "type": 'isKnown', "household": household })
+    isKnown(store, household) {
+        var user = store.rootGetters['user/get']
+        household["volunteerManager"] = user.uuid
+        store.commit({ "type": 'isKnown', "household": household })
     },
-    isUnknown({ state, commit }, household) {
-        commit({ "type": 'isUnknown', "household": household })
+    isUnknown(store, household) {
+        var user = store.rootGetters['user/get']
+        household["volunteerManager"] = user.uuid
+        store.commit({ "type": 'isUnknown', "household": household })
     },
-    free({ state, commit }, household) {
-        commit({ "type": 'free', "household": household })
+    free(store, household) {
+        var user = store.rootGetters['user/get']
+        household["employee"] = user.uuid
+        store.commit({ "type": 'free', "household": household })
     },
-    block({ state, commit }, household) {
-        commit({ "type": 'block', "household": household })
+    block(store, household) {
+        var user = store.rootGetters['user/get']
+        household["employee"] = user.uuid
+        store.commit({ "type": 'block', "household": household })
     },
-    requestRepayment({ state, commit }, household) {
-        commit({ "type": 'requestRepayment', "household": household})
+    requestRepayment(store, household) {
+        var user = store.rootGetters['user/get']
+        household["employee"] = user.uuid
+        store.commit({ "type": 'requestRepayment', "household": household})
     },
-    repay({ state, commit }, household) {
-        commit({ "type": 'repay', "household": household })
+    repay(store, household) {
+        var user = store.rootGetters['user/get']
+        household["employee"] = user.uuid
+        store.commit({ "type": 'repay', "household": household })
     }
 
 }
