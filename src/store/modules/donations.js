@@ -35,7 +35,6 @@ const getters = {
             return {
                 "id": donation.id,
                 "name": donation.context.description,
-                "crew": "TODO", // Todo: Add crew of creator!
                 "amount": donation.amount.sources.reduce((amount, source) => amount + source.amount, 0),
                 "deposited": "TODO", // Todo: add deposition information
                 "date": {

@@ -16,7 +16,7 @@
                     <tbody>
                         <tr v-for="donation in donations" :key="donation.id">
                             <td>{{ donation.name }}</td>
-                            <td>{{ donation.crew }}</td>
+                            <td><Tag :uuid="donation.author" :crew="true" /></td>
                             <td>{{ formatAmount(donation.amount) }}</td>
                             <td>{{ donation.deposited }}</td>
                             <td>
