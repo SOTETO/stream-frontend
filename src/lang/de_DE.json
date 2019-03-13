@@ -1,4 +1,27 @@
 {
+  "defaults": {
+    "support": "it@vivaconagua.org"
+  },
+  "errors": {
+    "ajax": {
+      "badRequest": {
+        "header": "Das versteht der Server nicht",
+        "msg": "Die Daten, die du geschickt hast, können vom Server nicht verstanden werden. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+      },
+      "forbidden": {
+        "header": "Das darfst du nicht",
+        "msg": "Leider hast du nicht die Berechtigung dies zu machen."
+      },
+      "notFound": {
+        "header": "Server nicht gefunden",
+        "msg": "Der Server scheint nicht erreichbar zu sein. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+      },
+      "server": {
+        "header": "Ooops...",
+        "msg": "Ein interner Fehler ist aufgetreten. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+      }
+    }
+  },
   "household": {
     "header": {
       "box": {

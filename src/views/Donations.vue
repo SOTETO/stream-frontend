@@ -45,11 +45,16 @@
 </template>
 
 <script>
-    import { mapGetters, mapState } from 'vuex'
+    import Vue from 'vue'
+    import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { Tag } from 'vca-widget-user'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+    import { Notification } from 'element-ui'
+
+    Vue.use(Notification)
+    Notification.closeAll()
 
     export default {
         name: "donations",
@@ -61,13 +66,39 @@
             //     checkoutStatus: state => state.cart.checkoutStatus
             // }),
             ...mapGetters('donations', {
-                donations: 'overview'
+                donations: 'overview',
+                isError: 'isError',
+                getErrorCode: 'getErrorCode'
             })
             // donations () {
             //     return this.$store.state.donations.items
             // }
         },
+        created () {
+            if(this.isError) {
+                switch(this.getErrorCode) {
+                    case 400:
+                        this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
+                        break;
+                    case 403:
+                        this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
+                        break;
+                    case 404:
+                        this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
+                        break;
+                    default:
+                        if(this.getErrorCode > 404) {
+                            this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
+                        }
+                }
+            } else {
+                this.init()
+            }
+        },
         methods: {
+            ...mapActions('donations', [
+                'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
+            ]),
             formatAmount(amount) {
                 var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
                 return formatter.localize()
@@ -75,6 +106,13 @@
             formatDate(date) {
                 var d = new Date(date)
                 return this.$d(d, 'short')
+            },
+            open(title, message, type) {
+                Notification({
+                    title:  title,
+                    message: message,
+                    type: type
+                });
             }
         }
     }
