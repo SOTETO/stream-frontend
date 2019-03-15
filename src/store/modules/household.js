@@ -94,146 +94,114 @@ const getters = {
     }
 }
 
+/**
+ * Calculates an updated version of a household entry that has been identified by its UUID.
+ *
+ * @author Johann Sell
+ * @param store vuex store instance
+ * @param household the new version
+ * @param role of the person who changed the household entry ("editor", "employee" or "volunteerManager")
+ * @param changer function that generates a new state depending of the current state
+ * @param dependsOnState a boolean flag that indicates if the new version of the household entry has to be saved only on
+ * a successful update of its state
+ */
+function addVersion(store, household, role, changer, dependsOnState = true) {
+    var user = store.rootGetters['user/get']
+    household[role] = user.uuid
+
+    var i = store.state.items.findIndex(h => h.id === household.id)
+    var element = store.state.items[i] // Altering a store item outside a mutation is not allowed. Thus, create a clone / hard copy of it!
+
+    var newState = changer(element.state)
+
+    store.commit({
+        "type": 'update',
+        "i": i,
+        "householdContainer": element,
+        "version": household,
+        "state": newState,
+        "dependsOnState": dependsOnState
+    })
+}
 
 const actions = {
     add (store, household) {
         var user = store.rootGetters['user/get']
         household["author"] = user.uuid
-        store.commit({ "type": 'push', "household": household })
+        var s = HouseholdPetriNet.init(model.isComplete(household))
+        if(household.request) {
+            s = s.execute("request")
+        } else {
+            s = s.execute("apply")
+        }
+        household["id"] = uuidv4()
+        var init = {
+            "id": household.id,
+            "state": s,
+            "versions": [
+                household
+            ]
+        }
+        store.commit({ "type": 'push', "household": init })
     },
     update (store, household) {
-        var user = store.rootGetters['user/get']
-        household["editor"] = user.uuid
-        store.commit({ "type": 'replace', "household": household })
+        addVersion(store, household, "editor", (state) => {
+            var newState = state
+            if(household.request && state.isAppliedFor()) {
+                newState = state.execute("request")
+            } else if(!household.request && state.isRequest()) {
+                newState = state.execute("apply")
+            }
+            if(model.isComplete(household)) {
+                newState = newState.complete()
+            } else {
+                newState = newState.incomplete()
+            }
+            return newState
+        }, false)
     },
     isKnown(store, household) {
-        var user = store.rootGetters['user/get']
-        household["volunteerManager"] = user.uuid
-        store.commit({ "type": 'isKnown', "household": household })
+        addVersion(store, household, "volunteerManager", (state) => state.execute("isKnown"))
     },
     isUnknown(store, household) {
-        var user = store.rootGetters['user/get']
-        household["volunteerManager"] = user.uuid
-        store.commit({ "type": 'isUnknown', "household": household })
+        addVersion(store, household, "volunteerManager", (state) => state.execute("isUnknown"))
     },
     free(store, household) {
-        var user = store.rootGetters['user/get']
-        household["employee"] = user.uuid
-        store.commit({ "type": 'free', "household": household })
+        addVersion(store, household, "employee", (state) => {
+            var newState = state.execute("free")
+            if(state.equals(newState)) {
+                newState = state.execute("approve")
+            }
+            return newState
+        })
     },
     block(store, household) {
-        var user = store.rootGetters['user/get']
-        household["employee"] = user.uuid
-        store.commit({ "type": 'block', "household": household })
+        addVersion(store, household, "employee", (state) => state.execute("block"))
     },
     requestRepayment(store, household) {
-        var user = store.rootGetters['user/get']
-        household["employee"] = user.uuid
-        store.commit({ "type": 'requestRepayment', "household": household})
+        addVersion(store, household, "employee", (state) => state.execute("requestPayment"))
     },
     repay(store, household) {
-        var user = store.rootGetters['user/get']
-        household["employee"] = user.uuid
-        store.commit({ "type": 'repay', "household": household })
+        addVersion(store, household, "employee", (state) => state.execute("repay"))
     }
 
 }
 
 const mutations = {
     push(state, pushHousehold) {
-        var s = HouseholdPetriNet.init(model.isComplete(pushHousehold.household))
-        if(pushHousehold.household.request) {
-            s = s.execute("request")
-        } else {
-            s = s.execute("apply")
-        }
-        pushHousehold.household["id"] = uuidv4()
-        var init = {
-            "id": pushHousehold.household.id,
-            "state": s,
-            "versions": [
-                pushHousehold.household
-            ]
-        }
-        state.items.push(init)
+        state.items.push(pushHousehold.household)
     },
-    replace(state, replaceHousehold) {
-        var i = state.items.findIndex(h => h.id === replaceHousehold.household.id)
-        var element = state.items[i]
-        element.versions.push(replaceHousehold.household)
-        var newState = element.state
-        if(replaceHousehold.household.request && element.state.isAppliedFor()) {
-            newState = element.state.execute("request")
-        } else if(!replaceHousehold.household.request && element.state.isRequest()) {
-            newState = element.state.execute("apply")
+    update(state, container) {
+        if(!container.dependsOnState) {
+            container.householdContainer.versions.push(container.version)
         }
-        if(model.isComplete(replaceHousehold.household)) {
-            newState = newState.complete()
-        } else {
-            newState = newState.incomplete()
+        if(typeof container.state !== "undefined" && container.state !== null) {
+            container.householdContainer.state = container.state
+            if(container.dependsOnState) {
+                container.householdContainer.versions.push(container.version)
+            }
         }
-        // var newState = element.state.update(replaceHousehold.household)
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
-    },
-    isKnown(state, container) {
-        var i = state.items.findIndex(h => h.id === container.household.id)
-        var element = state.items[i]
-        var newState = element.state.execute("isKnown")
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
-    },
-    isUnknown(state, container) {
-        var i = state.items.findIndex(h => h.id === container.household.id)
-        var element = state.items[i]
-        var newState = element.state.execute("isUnknown")
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
-    },
-    free(state, container) {
-        var i = state.items.findIndex(h => h.id === container.household.id)
-        var element = state.items[i]
-        var newState = element.state.execute("free")
-        if(element.state.equals(newState)) {
-            newState = element.state.execute("approve")
-        }
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
-    },
-    block(state, container) {
-        var i = state.items.findIndex(h => h.id === container.household.id)
-        var element = state.items[i]
-        var newState = element.state.execute("block")
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
-    },
-    requestRepayment(state, container) {
-        var i = state.items.findIndex(h => h.id === container.household.id)
-        var element = state.items[i]
-        var newState = element.state.execute("requestPayment")
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
-    },
-    repay(state, container) {
-        var i = state.items.findIndex(h => h.id === container.household.id)
-        var element = state.items[i]
-        var newState = element.state.execute("repay")
-        if(typeof newState !== "undefined" && newState !== null) {
-            element.state = newState
-        }
-        state.items.splice(i, 1, element)
+        state.items.splice(container.i, 1, container.householdContainer)
     }
 }
 
