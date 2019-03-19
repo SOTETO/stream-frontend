@@ -1,3 +1,4 @@
+import axios from 'axios'
 import HouseholdStateMachine from '@/utils/HouseholdPetriNet.js'
 import HouseholdPetriNet from "../../utils/HouseholdPetriNet";
 const uuidv4 = require('uuid/v4');
@@ -40,7 +41,8 @@ const model = {
 //              }]
 //         }]
 const state = {
-    items: []
+    items: [],
+    error: null
 }
 
 const getters = {
@@ -86,12 +88,68 @@ const getters = {
     },
     byId: (state) => (id) => {
         var entry = state.items.find(household => household.id === id)
-        return entry.versions[entry.versions.length - 1]
+        var res = JSON.parse(JSON.stringify(entry.versions[entry.versions.length - 1]))
+        if(!res.hasOwnProperty("id")) {
+            res["id"] = id
+        }
+        return res
     },
     stateById: (state) => (id) => {
         var entry = state.items.find(household => household.id === id)
         return entry.state
     }
+}
+
+function serverDefaultFailure(error, store) {
+    switch(error.response.code) {
+        case 401:
+            store.root.dispatch('user/logout')
+            break;
+        case _:
+            store.commit({ "type": 'setError', error: error })
+            break;
+    }
+}
+
+function prepareAjax(copy, descriptiveState, newVersion = null) {
+    let newState = {};
+    for (let prop in descriptiveState) {
+        if (descriptiveState.hasOwnProperty(prop)) {
+            newState[prop.charAt(0).toLowerCase() + prop.slice(1)] = descriptiveState[prop];
+        }
+    }
+    copy.state = newState
+
+    if(newVersion !== null) {
+        copy.versions.push(newVersion)
+    }
+
+    copy.versions.forEach((version) => {
+        if(version.hasOwnProperty("id")) {
+            delete version.id
+        }
+    })
+    return copy
+}
+
+function serverCreate(container, descriptiveState, onSuccess, onFailure, update = false) {
+    var copy = JSON.parse(JSON.stringify(container))
+
+    copy = prepareAjax(copy, descriptiveState)
+
+    axios.post("/backend/stream/household/create", copy, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(response => onSuccess(response.data.data[0]))
+        .catch(error => onFailure(error))
+}
+
+function serverUpdate(container, descriptiveState, newVersion, onSuccess, onFailure) {
+    var copy = JSON.parse(JSON.stringify(container))
+
+    copy = prepareAjax(copy, descriptiveState, newVersion)
+
+    axios.post("/backend/stream/household/update", copy, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(response => onSuccess(response.data.data[0]))
+        .catch(error => onFailure(error))
 }
 
 /**
@@ -110,18 +168,21 @@ function addVersion(store, household, role, changer, dependsOnState = true) {
     household[role] = user.uuid
 
     var i = store.state.items.findIndex(h => h.id === household.id)
-    var element = store.state.items[i] // Altering a store item outside a mutation is not allowed. Thus, create a clone / hard copy of it!
+    var element = store.state.items[i]
 
     var newState = changer(element.state)
 
-    store.commit({
-        "type": 'update',
-        "i": i,
-        "householdContainer": element,
-        "version": household,
-        "state": newState,
-        "dependsOnState": dependsOnState
-    })
+    serverUpdate(element, newState.describe(), household,
+        (result) => store.commit({
+            "type": 'update',
+            "i": i,
+            "householdContainer": element,
+            "version": household,
+            "state": newState,
+            "dependsOnState": dependsOnState
+        }),
+        (error) => serverDefaultFailure(error, store)
+    )
 }
 
 const actions = {
@@ -134,15 +195,21 @@ const actions = {
         } else {
             s = s.execute("apply")
         }
-        household["id"] = uuidv4()
+
+        var id = uuidv4()
+        household["id"] = id
         var init = {
-            "id": household.id,
+            "id": id,
             "state": s,
             "versions": [
                 household
             ]
         }
-        store.commit({ "type": 'push', "household": init })
+
+        serverCreate(init, init.state.describe(),
+            (result) => store.commit({ "type": 'push', "household": init }),
+            (error) => serverDefaultFailure(error, store)
+        )
     },
     update (store, household) {
         addVersion(store, household, "editor", (state) => {
@@ -202,6 +269,9 @@ const mutations = {
             }
         }
         state.items.splice(container.i, 1, container.householdContainer)
+    },
+    setError(state, pushError) {
+        state.error = pushError.error
     }
 }
 

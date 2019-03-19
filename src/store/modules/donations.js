@@ -53,7 +53,11 @@ const getters = {
         return state.error !== null
     },
     getErrorCode: (state, getters) => {
-        return state.error.response.code
+        var res = null
+        if(state.error !== null && typeof state.error !== "undefined" && state.error.hasOwnProperty("response")) {
+            res = state.error.response.code
+        }
+        return res
     }
 }
 

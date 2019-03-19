@@ -46,18 +46,22 @@
     export default {
         name: "ExpenseStateTransition",
         props: {
-            "expense": {
-                "type": Object,
+            "uuid": {
+                "type": String,
                 "required": true
             }
         },
         computed: {
             ...mapGetters('household', {
-                stateById: 'stateById'
+                stateById: 'stateById',
+                byId: 'byId'
             }),
             isApproved () {
-                var state = this.stateById(this.expense.id)
+                var state = this.stateById(this.uuid)
                 return state.isApproved()
+            },
+            expense () {
+                return this.byId(this.uuid)
             }
         },
         methods: {
@@ -84,7 +88,7 @@
             },
             allowedRequestChange (action) {
                 var res = true
-                var state = this.stateById(this.expense.id)
+                var state = this.stateById(this.uuid)
                 res = state.allowedTo(action)
                 return res
             }

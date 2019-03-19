@@ -61,8 +61,8 @@
             "MoneyInput": MoneyInput
         },
         props: {
-            "value": {
-                "type": Object,
+            "uuid": {
+                "type": String,
                 "required": false
             }
         },
@@ -92,8 +92,16 @@
         },
         computed: {
             ...mapGetters('household', {
-                stateById: 'stateById'
+                stateById: 'stateById',
+                byId: 'byId'
             }),
+            value () {
+                var res = null
+                if(typeof this.uuid !== "undefined" && this.uuid !== null) {
+                    res = this.byId(this.uuid)
+                }
+                return res
+            },
             isUpdate () {
                 return typeof this.value !== "undefined" && this.value !== null // alternative: this.expense.hasOwnProperty("id") ??
             },
