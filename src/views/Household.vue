@@ -101,6 +101,9 @@
                 "editable": JSON.parse(JSON.stringify(editableDefault))
             }
         },
+        created () {
+            this.init()
+        },
         computed: {
             ...mapGetters('household', {
                 exposes: 'overview',
@@ -111,6 +114,9 @@
             }
         },
         methods: {
+            ...mapActions('household', [
+                'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
+            ]),
             editState (expose) {
                 this.editable.value = this.byId(expose.id)
                 this.editable.key = expose.id

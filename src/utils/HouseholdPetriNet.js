@@ -168,6 +168,44 @@ export default class HouseholdPetriNet {
         return res
     }
 
+    /**
+     * Generates a representation that is interpretable by a machine.
+     *
+     * @author Johann Sell
+     * @return { <placePath.placeName>: <countTokens> }
+     */
+    getConfig () {
+        function placeName (placeId) {
+            function recursiveSearch(placeId, tree) {
+                var res = ""
+                for(var layerName in tree) {
+                    if(tree[layerName].toString() === placeId) {
+                        res = layerName
+                    } else if(typeof tree[layerName] === "object") {
+                        var suffix = recursiveSearch(placeId, tree[layerName])
+                        if(suffix !== "") {
+                            res = layerName + "." + suffix
+                        }
+                    }
+                }
+                return res
+            }
+            return recursiveSearch(placeId, HouseholdPetriNet.States)
+        }
+        var res = []
+        for(var placeId in this.states) {
+            var name = placeName(placeId)
+            if(name !== "") {
+                var place = {
+                    "name": name,
+                    "tokens": this.states[placeId]
+                }
+                res.push(place)
+            } // else: Error, because an invalid place is represented!
+        }
+        return res
+    }
+
     isAppliedFor () {
         return this.states.hasOwnProperty(HouseholdPetriNet.States.ProcessState.AppliedFor) &&
             this.states[HouseholdPetriNet.States.ProcessState.AppliedFor] >= 1
@@ -213,6 +251,34 @@ export default class HouseholdPetriNet {
         if(complete) {
             state[HouseholdPetriNet.States.ProcessState.HouseholdComplete] = 1
         }
+        return new HouseholdPetriNet(state)
+    }
+
+    /**
+     * Creates an HouseholdPetriNet instance from a given configuration.
+     *
+     * @author Johann Sell
+     * @param config { <placePath.placeName>: <countTokens> }
+     * @returns {HouseholdPetriNet}
+     */
+    static initFromConfig(config) {
+        function placeId(placePath) {
+            var pathNodes = placePath.split(".")
+             return pathNodes.reduce((pathOrId, step) => {
+                var res = pathOrId
+                if(typeof pathOrId === "object" && pathOrId.hasOwnProperty(step)) {
+                    res = pathOrId[step]
+                }
+                return res
+            }, HouseholdPetriNet.States)
+        }
+        var state = config.reduce((state, place) => {
+            var id = placeId(place.name)
+            if(typeof id === "number") {
+                state[id] = place.tokens
+            } // else: Error, because an invalid place is represented!
+            return state
+        }, {})
         return new HouseholdPetriNet(state)
     }
 }

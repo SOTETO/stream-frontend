@@ -112,13 +112,7 @@ function serverDefaultFailure(error, store) {
 }
 
 function prepareAjax(copy, descriptiveState, newVersion = null) {
-    let newState = {};
-    for (let prop in descriptiveState) {
-        if (descriptiveState.hasOwnProperty(prop)) {
-            newState[prop.charAt(0).toLowerCase() + prop.slice(1)] = descriptiveState[prop];
-        }
-    }
-    copy.state = newState
+    copy.state = descriptiveState
 
     if(newVersion !== null) {
         copy.versions.push(newVersion)
@@ -172,7 +166,7 @@ function addVersion(store, household, role, changer, dependsOnState = true) {
 
     var newState = changer(element.state)
 
-    serverUpdate(element, newState.describe(), household,
+    serverUpdate(element, newState.getConfig(), household,
         (result) => store.commit({
             "type": 'update',
             "i": i,
@@ -186,6 +180,16 @@ function addVersion(store, household, role, changer, dependsOnState = true) {
 }
 
 const actions = {
+    init (store) {
+        axios.get('/backend/stream/household').then(response => {
+            var entries = response.data.data
+            entries.map(entry => {
+                entry.state = HouseholdPetriNet.initFromConfig(entry.state)
+                return entry
+            })
+            store.commit({ "type": 'init', "entries": entries })
+        }).catch(error => serverDefaultFailure(error))
+    },
     add (store, household) {
         var user = store.rootGetters['user/get']
         household["author"] = user.uuid
@@ -206,7 +210,7 @@ const actions = {
             ]
         }
 
-        serverCreate(init, init.state.describe(),
+        serverCreate(init, init.state.getConfig(),
             (result) => store.commit({ "type": 'push', "household": init }),
             (error) => serverDefaultFailure(error, store)
         )
@@ -255,6 +259,9 @@ const actions = {
 }
 
 const mutations = {
+    init(state, initHousehold) {
+        state.items = initHousehold["entries"]
+    },
     push(state, pushHousehold) {
         state.items.push(pushHousehold.household)
     },
