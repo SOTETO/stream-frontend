@@ -58,6 +58,14 @@
       "dates": {
         "created": "{date} (entered)",
         "updated": "{date} (updated)"
+      },
+      "reason": {
+        "what": {
+          "missing": "Missing"
+        },
+        "wherefor": {
+          "missing": "No reason given"
+        }
       }
     },
     "states": {

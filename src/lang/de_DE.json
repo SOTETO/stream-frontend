@@ -58,6 +58,14 @@
       "dates": {
         "created": "{date} (eingetragen)",
         "updated": "{date} (aktualisiert)"
+      },
+      "reason": {
+        "what": {
+          "missing": "Nichts angegeben"
+        },
+        "wherefor": {
+          "missing": "Kein Grund angegeben"
+        }
       }
     },
     "states": {
