@@ -17,7 +17,7 @@ const uuidv4 = require('uuid/v4');
 //             },
 //             "amount": {
 //                 "received": Date.now(),
-//                 "sources": [{"category", "amount", "formatted", "type"}],
+//                 "sources": [{"category", "amount", "currency", "type"}],
 //                 "involvedSupporter": []
 //             },
 //             "author": "some-uuid",

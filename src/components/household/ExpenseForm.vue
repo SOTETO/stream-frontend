@@ -71,7 +71,7 @@
             var defaultExpense = {
                 "amount": {
                     "amount": 0,
-                    "formatted": "0,00"
+                    "currency": "EUR"
                 },
                 "reason": {
                     "what": "",

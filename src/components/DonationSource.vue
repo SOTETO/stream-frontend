@@ -113,7 +113,7 @@
                     var result = {
                         "category": this.category,
                         "amount": this.amount.amount,
-                        "formatted": this.amount.formatted,
+                        "currency": this.currency,
                         "type": this.typeVar
                     }
                     if(this.description) {

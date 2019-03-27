@@ -23,13 +23,13 @@
             <td>{{ formatWherefor(expose) }}</td>
             <td><Tag :crew="true" :uuid="expose.author" /></td>
             <td  class="vca-amount-wrapper">
-                                <span class="vca-amount">
-                                    {{ expose.amount[expose.amount.length - 1] }}
-                                </span>
+                <span class="vca-amount">
+                    {{ formatAmount(expose.amount[expose.amount.length - 1]) }}
+                </span>
                 <div class="vca-amount-previous">
-                                    <span v-if="expose.amount.length > 1" class="vca-amount">
-                                        {{ expose.amount[expose.amount.length - 2] }}
-                                    </span>
+                    <span v-if="expose.amount.length > 1" class="vca-amount">
+                        {{ formatAmount(expose.amount[expose.amount.length - 2]) }}
+                    </span>
                     <span v-if="expose.amount.length > 2" class="vca-amount">...</span>
                 </div>
             </td>
@@ -57,6 +57,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex'
     import { Tag } from 'vca-widget-user'
+    import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
         name: "ExpenseList",
@@ -91,6 +92,10 @@
                     res = this.$t("household.hints.reason.wherefor.missing")
                 }
                 return res
+            },
+            formatAmount(amount) {
+                var formatter = CurrencyFormatter.getFromNumeric(amount.currency, amount.amount)
+                return formatter.localize()
             }
         }
     }

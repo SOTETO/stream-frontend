@@ -23,7 +23,7 @@ const model = {
 //             "versions": [{
 //                  "amount": {
 //                      "amount": 0,
-//                      "formatted": "0,00"
+//                      "currency": "EUR"
 //                  },
 //                  "reason": {
 //                      "what": "",
@@ -66,7 +66,7 @@ const getters = {
                         amounts.push(version.amount)
                     }
                     return amounts
-                }, []).map(version => version.formatted),
+                }, []),
                 "date": {
                     "created": first.created,
                     "updated": last.updated
