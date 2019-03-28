@@ -29,13 +29,13 @@
             </td>
             <td class="process">
                 <div class="labeled">
-                    <span>{{ $t("household.process.VolunteerManager.RoleName") }}</span>
+                    <span class="process-label">{{ $t("household.process.VolunteerManager.RoleName") }}</span>
                     <div class="states">
                         <RoleDependentStateLight v-for="state in expense.processing.VolunteerManager" :key="'vm.' + state.name" :value="formatStateNames('household.process.VolunteerManager.', state)" />
                     </div>
                 </div>
                 <div class="labeled">
-                    <span>{{ $t("household.process.Employee.RoleName") }}</span>
+                    <span class="process-label">{{ $t("household.process.Employee.RoleName") }}</span>
                     <div class="states">
                         <RoleDependentStateLight v-for="state in expense.processing.Employee" :key="'em.' + state.name" :value="formatStateNames('household.process.Employee.', state)" />
                     </div>
@@ -95,11 +95,11 @@
                 var paid = this.expense.state.find(state => state.name === "Repaid")
                 var res = this.expense.state
                 if(typeof paid !== "undefined" && paid !== -1 && paid !== null) {
-                    res = this.expense.state.filter(state =>
+                    res = res.filter(state =>
                         state.name !== "HouseholdComplete" && state.name !== "NotEditable"
                     )
                 }
-                res = this.expense.state.filter(state =>
+                res = res.filter(state =>
                     state.name !== "HouseholdComplete" || (
                         (state.attentionLights.Supporter === 0 && !this.hasRole(["Employee", "VolunteerManager"])) ||
                         (state.attentionLights.Employee === 0 && this.hasRole(["Employee"])) ||
@@ -167,7 +167,8 @@
         .labeled {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: flex-end;
+            align-items: center;
 
             & .states {
                 width: 60%;
@@ -177,6 +178,12 @@
             }
             &:not(:last-child) {
                 margin-bottom: 0.3em;
+            }
+
+            & .process-label {
+                font-size: 0.8em;
+                font-style: italic;
+                padding-right: 0.3em;
             }
         }
     }

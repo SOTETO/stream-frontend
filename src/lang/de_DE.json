@@ -76,7 +76,8 @@
       "ToRepay": "Zurückzuzahlen",
       "Repaid": "Zurückgezahlt",
       "Refused": "Verwehrt",
-      "HouseholdComplete": "Unvollständig"
+      "HouseholdComplete": "Unvollständig",
+      "NotEditable": "Unveränderbar"
     },
     "transitions": {
       "VolunteerManager": {

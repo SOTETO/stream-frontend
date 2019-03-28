@@ -76,7 +76,8 @@
       "ToRepay": "To repay",
       "Repaid": "Repaid",
       "Refused": "Refused",
-      "HouseholdComplete": "Incomplete"
+      "HouseholdComplete": "Incomplete",
+      "NotEditable": "Not editable"
     },
     "transitions": {
       "VolunteerManager": {
