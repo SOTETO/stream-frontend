@@ -52,5 +52,17 @@
         & .expense:nth-child(even) {
             background-color: #colors[primaryDeactivated];
         }
+
+        & th {
+            .colorProfilePrimary();
+            font-weight: bold;
+            padding: 0.25em 0;
+            &:first-child {
+                padding-left: 0.5em;
+            }
+            &:last-child {
+                padding-right: 0.5em;
+            }
+        }
     }
 </style>

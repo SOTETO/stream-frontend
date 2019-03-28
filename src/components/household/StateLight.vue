@@ -41,7 +41,7 @@
             },
             classSmall () {
                 var res = ""
-                if(this.small) {
+                if(this.small && (!this.colorDisabledOnNoError || this.value.state !== 1 )) {
                     res = "small"
                 }
                 return res

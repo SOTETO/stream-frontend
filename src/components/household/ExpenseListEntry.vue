@@ -2,13 +2,13 @@
     <tbody class="expense">
         <tr class="details-table">
             <td>
-                <StateLight v-model="what" :color-disabled-on-no-error="true" /><br />
+                <StateLight v-model="what" :color-disabled-on-no-error="true" :small="true" /><br />
                 <button
                         class="vca-button-inline"
                         @click="editState(expense)"
                 >{{ $t("household.buttons.edit") }}</button>
             </td>
-            <td><StateLight v-model="wherefor" :color-disabled-on-no-error="true" /></td>
+            <td><StateLight v-model="wherefor" :color-disabled-on-no-error="true" :small="true" /></td>
             <td><Tag :crew="true" :uuid="expense.author" /></td>
             <td  class="vca-amount-wrapper">
                     <span class="vca-amount">
