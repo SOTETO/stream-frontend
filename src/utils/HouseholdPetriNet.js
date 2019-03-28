@@ -160,11 +160,35 @@ export default class HouseholdPetriNet {
             for (var desc in HouseholdPetriNet.Descriptions[role]) {
                 for (var state in HouseholdPetriNet.Descriptions[role][desc]) {
                     if (this.states[state] >= HouseholdPetriNet.Descriptions[role][desc][state]) {
-                        res[role] = desc
+                        var description = {
+                            "name": desc,
+                            "attentionLights": HouseholdPetriNet.DescriptionStates[role][desc]
+                        }
+                        if(res.hasOwnProperty(role)) {
+                            res[role].push(description)
+                        } else {
+                            res[role] = [description]
+                        }
                     }
                 }
             }
         }
+        if(!res.hasOwnProperty("Household")) {
+            res["Household"] = []
+        }
+        var complete = res.Household.find(state => state.name === "HouseholdComplete")
+        if(typeof complete === "undefined" || complete === -1 || complete === null) {
+            var description = {
+                "name": "HouseholdComplete",
+                "attentionLights": {
+                    "Supporter": 0,
+                    "Employee": 0,
+                    "VolunteerManager": 0
+                }
+            }
+            res.Household.push(description)
+        }
+        console.log(res)
         return res
     }
 
@@ -565,6 +589,101 @@ HouseholdPetriNet.Descriptions = {
         },
         "Repaid": {
             7: 1
+        },
+        "HouseholdComplete": {
+            8: 1
+        },
+        "NotEditable": {
+            12: 1
+        }
+    }
+}
+
+/**
+ * Describes for every state description if this state has to become attention (0), is fine / done (1) or if the user
+ * has to bear the expense in mind (2). The description depends on the users role.
+ * @type {{Employee: {Idle: {Employee: number, VolunteerManager: number, Supporter: number}, Freed: {Employee: number, VolunteerManager: number, Supporter: number}, Blocked: {Employee: number, VolunteerManager: number, Supporter: number}}, VolunteerManager: {Idle: {Employee: number, VolunteerManager: number, Supporter: number}, Knows: {Employee: number, VolunteerManager: number, Supporter: number}, KnowsNothing: {Employee: number, VolunteerManager: number, Supporter: number}}, Household: {Idle: {Employee: number, VolunteerManager: number, Supporter: number}, AppliedFor: {Employee: number, VolunteerManager: number, Supporter: number}, Requested: {Employee: number, VolunteerManager: number, Supporter: number}, Approved: {Employee: number, VolunteerManager: number, Supporter: number}, Refused: {Employee: number, VolunteerManager: number, Supporter: number}, ToRepay: {Employee: number, VolunteerManager: number, Supporter: number}, Repaid: {Employee: number, VolunteerManager: number, Supporter: number}}}}
+ */
+HouseholdPetriNet.DescriptionStates = {
+    "Employee": {
+        "Idle": {
+            "Employee": 0,
+            "VolunteerManager": 2,
+            "Supporter": 2
+        },
+        "Freed": {
+            "Employee": 1,
+            "VolunteerManager": 1,
+            "Supporter": 1
+        },
+        "Blocked": {
+            "Employee": 2,
+            "VolunteerManager": 0,
+            "Supporter": 0
+        }
+    },
+    "VolunteerManager": {
+        "Idle": {
+            "Employee": 2,
+            "VolunteerManager": 0,
+            "Supporter": 2
+        },
+        "Knows": {
+            "Employee": 1,
+            "VolunteerManager": 1,
+            "Supporter": 1
+        },
+        "KnowsNothing": {
+            "Employee": 0,
+            "VolunteerManager": 2,
+            "Supporter": 0
+        }
+    },
+    "Household": {
+        "Idle": {
+            "Employee": 0,
+            "VolunteerManager": 0,
+            "Supporter": 0
+        },
+        "AppliedFor": {
+            "Employee": 2,
+            "VolunteerManager": 2,
+            "Supporter": 1
+        },
+        "Requested": {
+            "Employee": 2,
+            "VolunteerManager": 2,
+            "Supporter": 1
+        },
+        "Approved": {
+            "Employee": 1,
+            "VolunteerManager": 1,
+            "Supporter": 1
+        },
+        "Refused": {
+            "Employee": 2,
+            "VolunteerManager": 2,
+            "Supporter": 0
+        },
+        "ToRepay": {
+            "Employee": 0,
+            "VolunteerManager": 2,
+            "Supporter": 2
+        },
+        "Repaid": {
+            "Employee": 1,
+            "VolunteerManager": 1,
+            "Supporter": 1
+        },
+        "HouseholdComplete": {
+            "Employee": 1,
+            "VolunteerManager": 1,
+            "Supporter": 1
+        },
+        "NotEditable": {
+            "Employee": 2,
+            "VolunteerManager": 2,
+            "Supporter": 2
         }
     }
 }

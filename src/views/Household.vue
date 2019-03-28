@@ -2,7 +2,7 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('household.header.box.list')">
-                <ExpenseList @vca-edit-expose="editState" />
+                <ExpenseList @vca-edit-expense="editState" />
             </VcABox>
         </VcAColumn>
         <VcAColumn size="20%">
@@ -59,11 +59,11 @@
             }
         },
         methods: {
-            editState (expose) {
-                this.editable.value = this.byId(expose.id)
-                this.editable.key = expose.id
+            editState (expense) {
+                this.editable.value = this.byId(expense.id)
+                this.editable.key = expense.id
             },
-            addState (expose) {
+            addState (expense) {
                 this.editable = JSON.parse(JSON.stringify(this.editableDefault))
             }
         }

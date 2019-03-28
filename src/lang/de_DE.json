@@ -75,7 +75,8 @@
       "Approved": "Genehmigt",
       "ToRepay": "Zurückzuzahlen",
       "Repaid": "Zurückgezahlt",
-      "Refused": "Verwehrt"
+      "Refused": "Verwehrt",
+      "HouseholdComplete": "Unvollständig"
     },
     "transitions": {
       "VolunteerManager": {
@@ -93,14 +94,16 @@
     },
     "process": {
       "VolunteerManager": {
-        "Idle": "ASP: Nicht bearbeitet",
-        "Knows": "ASP: Weiß Bescheid",
-        "KnowsNothing": "ASP: Weiß nichts davon"
+        "RoleName": "ASP",
+        "Idle": "Nicht bearbeitet",
+        "Knows": "Weiß Bescheid",
+        "KnowsNothing": "Weiß nichts davon"
       },
       "Employee": {
-        "Idle": "Hauptamt: Nicht bearbeitet",
-        "Freed": "Hauptamt: Freigegeben",
-        "Blocked": "Hauptamt: Verwehrt"
+        "RoleName": "Hauptamt",
+        "Idle": "Nicht bearbeitet",
+        "Freed": "Freigegeben",
+        "Blocked": "Verwehrt"
       }
     }
   },
