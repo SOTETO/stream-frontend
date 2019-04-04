@@ -42,6 +42,11 @@ const model = {
 //         }]
 const state = {
     items: [],
+    page: {
+        size: 10,
+        offset: 0
+    },
+    countItems: 0,
     error: null
 }
 
@@ -97,6 +102,12 @@ const getters = {
     stateById: (state) => (id) => {
         var entry = state.items.find(household => household.id === id)
         return entry.state
+    },
+    page: (state) => {
+        return {
+            "previous": state.page.offset,
+            "next": state.countItems - (state.page.offset + state.page.size)
+        }
     }
 }
 
@@ -105,7 +116,7 @@ function serverDefaultFailure(error, store) {
         case 401:
             store.root.dispatch('user/logout')
             break;
-        case _:
+        default:
             store.commit({ "type": 'setError', error: error })
             break;
     }
@@ -146,6 +157,27 @@ function serverUpdate(container, descriptiveState, newVersion, onSuccess, onFail
         .catch(error => onFailure(error))
 }
 
+function serverGet(store) {
+    axios.post(
+        '/backend/stream/household',
+        { 'page': store.state.page },
+        { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+    ).then(response => {
+        var entries = response.data.data
+        entries.map(entry => {
+            entry.state = HouseholdPetriNet.initFromConfig(entry.state)
+            return entry
+        })
+        store.commit({ "type": 'init', "entries": entries })
+    }).catch(error => serverDefaultFailure(error, store))
+}
+
+function serverCount(store) {
+    axios.get("/backend/stream/household/count")
+        .then(response => store.commit({"type": 'count', "count": response.data.data}))
+        .catch(error => serverDefaultFailure(error, store))
+}
+
 /**
  * Calculates an updated version of a household entry that has been identified by its UUID.
  *
@@ -181,14 +213,21 @@ function addVersion(store, household, role, changer, dependsOnState = true) {
 
 const actions = {
     init (store) {
-        axios.get('/backend/stream/household').then(response => {
-            var entries = response.data.data
-            entries.map(entry => {
-                entry.state = HouseholdPetriNet.initFromConfig(entry.state)
-                return entry
-            })
-            store.commit({ "type": 'init', "entries": entries })
-        }).catch(error => serverDefaultFailure(error))
+        serverCount(store)
+        serverGet(store)
+    },
+    page (store, down) {
+        var offset = store.state.page.offset - store.state.page.size
+        var valid = offset >= 0
+        if(!down) {
+            offset = store.state.page.offset + store.state.page.size
+            valid = offset < store.state.countItems
+        }
+        if(valid) {
+            store.commit({ "type": 'page', "offset": offset })
+            serverCount(store)
+            serverGet(store)
+        }
     },
     add (store, household) {
         var user = store.rootGetters['user/get']
@@ -259,8 +298,14 @@ const actions = {
 }
 
 const mutations = {
+    count(state, count) {
+        state.countItems = count.count.count
+    },
     init(state, initHousehold) {
         state.items = initHousehold["entries"]
+    },
+    page(state, offset) {
+        state.page.offset = offset.offset
     },
     push(state, pushHousehold) {
         state.items.push(pushHousehold.household)

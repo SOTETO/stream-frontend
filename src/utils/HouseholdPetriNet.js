@@ -188,7 +188,6 @@ export default class HouseholdPetriNet {
             }
             res.Household.push(description)
         }
-        console.log(res)
         return res
     }
 

@@ -2,7 +2,13 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('household.header.box.list')">
+                <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
+                    {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
+                </button>
                 <ExpenseList @vca-edit-expense="editState" />
+                <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
+                    {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
+                </button>
             </VcABox>
         </VcAColumn>
         <VcAColumn size="20%">
@@ -28,7 +34,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import ExpenseForm from '../components/household/ExpenseForm'
@@ -52,23 +58,48 @@
         },
         computed: {
             ...mapGetters('household', {
-                byId: 'byId'
+                byId: 'byId',
+                pageGet: 'page'
             }),
             isEditState () {
                 return typeof this.editable.value !== "undefined" && this.editable.value !== null
+            },
+            hasPrevious () {
+                return this.pageGet.previous > 0
+            },
+            hasNext () {
+                return this.pageGet.next > 0
             }
         },
         methods: {
+            ...mapActions('household', {
+                page: 'page'
+            }),
             editState (expense) {
                 this.editable.value = this.byId(expense.id)
                 this.editable.key = expense.id
             },
             addState (expense) {
                 this.editable = JSON.parse(JSON.stringify(this.editableDefault))
+            },
+            pageDown () {
+                this.page(true)
+            },
+            pageUp () {
+                this.page(false)
             }
         }
     }
 </script>
 
 <style scoped lang="less">
+    @import '../assets/less/general.less';
+
+    .paginate {
+        width: 100%;
+        height: 2.5em;
+        .inputElement();
+        cursor: pointer;
+        background: none;
+    }
 </style>

@@ -22,6 +22,10 @@
       }
     }
   },
+  "pagination": {
+    "previous": "No more entries | Show first | Show previous (%{number})",
+    "next": "No more entries | Show last | Show next (%{number})"
+  },
   "household": {
     "header": {
       "box": {

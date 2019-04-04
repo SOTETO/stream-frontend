@@ -22,6 +22,10 @@
       }
     }
   },
+  "pagination": {
+    "previous": "Keine vorherigen Einträge | Erster Eintrag | Vorherige %{number} Einträge",
+    "next": "Keine nächsten Einträge | Letzter Eintrag | Nächste %{number} Einträge"
+  },
   "household": {
     "header": {
       "box": {
