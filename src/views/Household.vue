@@ -2,8 +2,9 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('household.header.box.list')">
+                <ListMenu />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
-                    {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
+                    {{ $tac('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
                 </button>
                 <ExpenseList @vca-edit-expense="editState" />
                 <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
@@ -40,11 +41,12 @@
     import ExpenseForm from '../components/household/ExpenseForm'
     import ExpenseStateTransition from '../components/household/ExpenseStateTransition'
     import ExpenseList from '../components/household/ExpenseList'
+    import ListMenu from '../components/utils/ListMenu'
 
     export default {
         name: "Household",
         components: {
-            VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition, ExpenseList
+            VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition, ExpenseList, ListMenu
         },
         data () {
             var editableDefault = {

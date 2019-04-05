@@ -41,7 +41,9 @@
         "date": "Date",
         "supporter": "Supporter",
         "state": "State",
-        "process": "Process"
+        "process": "Process",
+        "created": "Creation date",
+        "updated": "Update"
       }
     },
     "placeholder": {
@@ -55,7 +57,11 @@
     "buttons": {
       "save": "Save",
       "edit": "Edit",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "sorting": {
+        "ASC": "Ascending",
+        "DESC": "Descending"
+      }
     },
     "hints": {
       "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before.",

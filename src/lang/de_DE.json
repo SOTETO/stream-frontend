@@ -41,7 +41,9 @@
         "date": "Datum",
         "supporter": "Beteiligte",
         "state": "Status",
-        "process": "Bearbeitung"
+        "process": "Bearbeitung",
+        "created": "Eingetragungsdatum",
+        "updated": "Aktualisierungsdatum"
       }
     },
     "placeholder": {
@@ -55,7 +57,11 @@
     "buttons": {
       "save": "Speichern",
       "edit": "Editieren",
-      "cancel": "Abbrechen"
+      "cancel": "Abbrechen",
+      "sorting": {
+        "ASC": "Aufsteigend",
+        "DESC": "Absteigend"
+      }
     },
     "hints": {
       "expense": "Hier kannst du alle Ausgaben hinzufügen.<br /><br />Beachte bitte, dass es passieren kann, dass eine Ausgabe nicht erstattet werden kann, etwa weil diese nicht dem Satzungszeck von VcA entspricht.<br /><br />Falls du dir unsicher bist oder eine größere Auslage tätigen willst, kannst du eine Ausgabe zuerst beantragen und erhälst gegebenenfalls eine Freigabe bevor du das Geld auslegst.",

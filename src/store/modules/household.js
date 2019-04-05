@@ -47,6 +47,10 @@ const state = {
         offset: 0
     },
     countItems: 0,
+    sorting: {
+        field: "household.created",
+        dir: "ASC"
+    },
     error: null
 }
 
@@ -108,6 +112,9 @@ const getters = {
             "previous": state.page.offset,
             "next": state.countItems - (state.page.offset + state.page.size)
         }
+    },
+    sort: (state) => {
+        return state.sorting
     }
 }
 
@@ -160,7 +167,7 @@ function serverUpdate(container, descriptiveState, newVersion, onSuccess, onFail
 function serverGet(store) {
     axios.post(
         '/backend/stream/household',
-        { 'page': store.state.page },
+        { 'page': store.state.page, 'sort': store.state.sorting },
         { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
     ).then(response => {
         var entries = response.data.data
@@ -228,6 +235,11 @@ const actions = {
             serverCount(store)
             serverGet(store)
         }
+    },
+    sort (store, sorting) {
+        store.commit({ "type": "sort", "sort": sorting })
+        serverCount(store)
+        serverGet(store)
     },
     add (store, household) {
         var user = store.rootGetters['user/get']
@@ -298,6 +310,9 @@ const actions = {
 }
 
 const mutations = {
+    sort(state, sort) {
+        state.sorting = sort.sort
+    },
     count(state, count) {
         state.countItems = count.count.count
     },
