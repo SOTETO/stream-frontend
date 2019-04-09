@@ -47,16 +47,8 @@
                         "label": this.$t("household.header.table.amount")
                     },
                     {
-                        "value": "household.amount",
+                        "value": "household.supporter",
                         "label": this.$t("household.header.table.supporter")
-                    },
-                    {
-                        "value": "household.amount",
-                        "label": this.$t("household.header.table.state")
-                    },
-                    {
-                        "value": "household.amount",
-                        "label": this.$t("household.header.table.process")
                     },
                     {
                         "value": "household.created",
