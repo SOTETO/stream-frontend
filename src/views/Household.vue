@@ -4,7 +4,7 @@
             <VcABox :first="true" :title="$t('household.header.box.list')">
                 <ListMenu />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
-                    {{ $tac('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
+                    {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
                 </button>
                 <ExpenseList @vca-edit-expense="editState" />
                 <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
