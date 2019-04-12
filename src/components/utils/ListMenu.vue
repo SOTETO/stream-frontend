@@ -47,10 +47,6 @@
                         "label": this.$t("household.header.table.amount")
                     },
                     {
-                        "value": "household.supporter",
-                        "label": this.$t("household.header.table.supporter")
-                    },
-                    {
                         "value": "household.created",
                         "label": this.$t("household.header.table.created")
                     },
