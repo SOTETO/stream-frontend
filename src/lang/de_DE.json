@@ -1,6 +1,8 @@
 {
   "defaults": {
-    "support": "it@vivaconagua.org"
+    "support": "it@vivaconagua.org",
+    "volunteerManager": "ASP",
+    "employee": "Hauptamt"
   },
   "errors": {
     "ajax": {
@@ -20,6 +22,12 @@
         "header": "Ooops...",
         "msg": "Ein interner Fehler ist aufgetreten. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
       }
+    }
+  },
+  "collapse": {
+    "button": {
+      "show": "Ausklappen",
+      "hide": "Einklappen"
     }
   },
   "pagination": {
@@ -61,6 +69,19 @@
       "sorting": {
         "ASC": "Aufsteigend",
         "DESC": "Absteigend"
+      }
+    },
+    "filter": {
+      "title": "Filtern...",
+      "what": "Was?",
+      "wherefor": "Wofür?",
+      "amount": "Betrag",
+      "state": {
+        "general": "Zustand",
+        "complete": "Vollständig",
+        "repayment": "Auszahlung",
+        "volunteerManager": "@:defaults.volunteerManager",
+        "employee": "@:defaults.employee"
       }
     },
     "hints": {

@@ -51,6 +51,20 @@ const state = {
         field: "household.created",
         dir: "ASC"
     },
+    filter: {
+        'what': "",
+        'wherefor': "",
+        'amount': {
+            "formatted": "",
+            "amount": 0.00
+        },
+        'state': {
+            'complete': true,
+            'repayment': "",
+            'volunteerManager': "",
+            'employee': ""
+        }
+    },
     error: null
 }
 
@@ -115,6 +129,9 @@ const getters = {
     },
     sort: (state) => {
         return state.sorting
+    },
+    filter: (state) => {
+        return JSON.parse(JSON.stringify(state.filter))
     }
 }
 
@@ -236,6 +253,11 @@ const actions = {
             serverGet(store)
         }
     },
+    filter (store, filter) {
+        store.commit({ "type": "filter", "filter": filter })
+        serverCount(store)
+        serverGet(store)
+    },
     sort (store, sorting) {
         store.commit({ "type": "sort", "sort": sorting })
         serverCount(store)
@@ -310,6 +332,9 @@ const actions = {
 }
 
 const mutations = {
+    filter(state, filter) {
+        state.filter = filter.filter
+    },
     sort(state, sort) {
         state.sorting = sort.sort
     },

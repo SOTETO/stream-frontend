@@ -2,6 +2,9 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('household.header.box.list')">
+                <Collapse :label="$t('household.filter.title')">
+                    <HouseholdFilter />
+                </Collapse>
                 <ListMenu />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
                     {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
@@ -42,10 +45,14 @@
     import ExpenseStateTransition from '../components/household/ExpenseStateTransition'
     import ExpenseList from '../components/household/ExpenseList'
     import ListMenu from '../components/utils/ListMenu'
+    import HouseholdFilter from "../components/household/HouseholdFilter";
+    import Collapse from "../components/utils/Collapse";
 
     export default {
         name: "Household",
         components: {
+            Collapse,
+            HouseholdFilter,
             VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition, ExpenseList, ListMenu
         },
         data () {
