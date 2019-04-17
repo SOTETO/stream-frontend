@@ -1,6 +1,6 @@
 {
   "defaults": {
-    "support": "it@vivaconagua.org"
+    "support": "it@vivaconagua.org",
     "volunteerManager": "volunteer manager",
     "employee": "employee"
   },

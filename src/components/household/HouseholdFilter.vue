@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item :label="$t('household.filter.state.general')" required>
             <el-form-item :label="$t('household.filter.state.complete')" required>
-                <el-checkbox-group v-model="filter.state.complete" @change="commit" :max="1">
+                <el-checkbox-group v-model="filter.state.complete" @change="commit">
                     <el-checkbox-button v-for="state in completeOptions" :label="state" :key="state">{{ $t('household.filter.options.complete.' + state) }}</el-checkbox-button>
                 </el-checkbox-group>
             </el-form-item>
