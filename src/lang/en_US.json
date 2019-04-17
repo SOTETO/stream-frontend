@@ -1,6 +1,8 @@
 {
   "defaults": {
     "support": "it@vivaconagua.org"
+    "volunteerManager": "volunteer manager",
+    "employee": "employee"
   },
   "errors": {
     "ajax": {
@@ -20,6 +22,12 @@
         "header": "Ooops...",
         "msg": "An internal error occurred! Please contact @:defaults.support and describe the problem."
       }
+    }
+  },
+  "collapse": {
+    "button": {
+      "show": "Show",
+      "hide": "Hide"
     }
   },
   "pagination": {
@@ -61,6 +69,40 @@
       "sorting": {
         "ASC": "Ascending",
         "DESC": "Descending"
+      }
+    },
+    "filter": {
+      "title": "Filter..",
+      "what": "What?",
+      "wherefor": "Wherefor?",
+      "amount": "Amount",
+      "state": {
+        "general": "State",
+        "complete": "Complete",
+        "repayment": "Repayment",
+        "volunteerManager": "@:defaults.volunteerManager",
+        "employee": "@:defaults.employee"
+      },
+      "options": {
+        "complete": {
+          "incomplete": "Incomplete",
+          "complete": "Complete"
+        }
+      },
+      "tag": {
+        "what": "What?",
+        "wherefor": "Wherefor?",
+        "amount": "Amount?",
+        "complete": "Complete?",
+        "repayment": "Repayment?",
+        "volunteerManager": "@:defaults.volunteerManager?",
+        "employee": "@:defaults.employee?",
+        "values": {
+          "complete": {
+            "complete": "Yes",
+            "incomplete": "No"
+          }
+        }
       }
     },
     "hints": {
