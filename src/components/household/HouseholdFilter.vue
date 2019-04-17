@@ -18,7 +18,9 @@
         </el-form-item>
         <el-form-item :label="$t('household.filter.state.general')" required>
             <el-form-item :label="$t('household.filter.state.complete')" required>
-                <el-switch v-model="filter.state.complete" @change="commit"></el-switch>
+                <el-checkbox-group v-model="filter.state.complete" @change="commit" :max="1">
+                    <el-checkbox-button v-for="state in completeOptions" :label="state" :key="state">{{ $t('household.filter.options.complete.' + state) }}</el-checkbox-button>
+                </el-checkbox-group>
             </el-form-item>
             <el-form-item :label="$t('household.filter.state.repayment')" required>
                 <el-select v-model="filter.state.repayment" placeholder="Select" @change="commit">
@@ -89,6 +91,9 @@
             },
             employeeOptions () {
                 return ["Idle", "Freed", "Blocked"]
+            },
+            completeOptions () {
+                return ["incomplete", "complete"]
             }
         },
         data () {
@@ -101,7 +106,7 @@
                         "amount": 0.00
                     },
                     'state': {
-                        'complete': true,
+                        'complete': [],
                         'repayment': "",
                         'volunteerManager': "",
                         'employee': ""

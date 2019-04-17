@@ -59,7 +59,7 @@ const state = {
             "amount": 0.00
         },
         'state': {
-            'complete': true,
+            'complete': [],
             'repayment': "",
             'volunteerManager': "",
             'employee': ""
@@ -132,6 +132,56 @@ const getters = {
     },
     filter: (state) => {
         return JSON.parse(JSON.stringify(state.filter))
+    },
+    taggableFilter: (state) => {
+        var res = []
+        function check(obj, attr) {
+            return obj.hasOwnProperty(attr) && (typeof obj[attr] !== "undefined") && obj[attr] !== null &&
+                (obj[attr] !== "" || typeof obj[attr] !== "string") &&
+                (obj[attr] !== 0.0 || typeof obj[attr] !== "number") &&
+                ((Array.isArray(obj[attr]) && obj[attr].length !== 0) || !Array.isArray(obj[attr]))
+        }
+        var fields = [
+            {
+                "obj": state.filter,
+                "attr": "what"
+            },
+            {
+                "obj": state.filter,
+                "attr": "wherefor"
+            },
+            {
+                "obj": state.filter.state,
+                "attr": "complete"
+            },
+            {
+                "obj": state.filter.state,
+                "attr": "repayment"
+            },
+            {
+                "obj": state.filter.state,
+                "attr": "volunteerManager"
+            },
+            {
+                "obj": state.filter.state,
+                "attr": "employee"
+            }
+        ]
+        for(var field of fields) {
+            if(check(field.obj, field.attr)) {
+                res.push({
+                    "name": field.attr,
+                    "value": field.obj[field.attr]
+                })
+            }
+        }
+        if(check(state.filter.amount, "amount")) {
+            res.push({
+                "name": "amount",
+                "value": state.filter.amount.formatted
+            })
+        }
+        return res
     }
 }
 

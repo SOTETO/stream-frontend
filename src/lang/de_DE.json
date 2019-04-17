@@ -82,6 +82,27 @@
         "repayment": "Auszahlung",
         "volunteerManager": "@:defaults.volunteerManager",
         "employee": "@:defaults.employee"
+      },
+      "options": {
+        "complete": {
+          "incomplete": "Unvollständig",
+          "complete": "Vollständig"
+        }
+      },
+      "tag": {
+        "what": "Was?",
+        "wherefor": "Wofür?",
+        "amount": "Betrag?",
+        "complete": "Vollständig?",
+        "repayment": "Auszahlung?",
+        "volunteerManager": "@:defaults.volunteerManager?",
+        "employee": "@:defaults.employee?",
+        "values": {
+          "complete": {
+            "complete": "Ja",
+            "incomplete": "Nein"
+          }
+        }
       }
     },
     "hints": {

@@ -2,6 +2,9 @@
     <div ref="collapse" class="vca-collapse collapsed">
         <div class="state">
             <span>{{ label }}</span>
+            <div class="status-bar">
+                <slot name="status"></slot>
+            </div>
             <button @click="collapse">{{ buttonLabel }}</button>
         </div>
         <div class="content">
@@ -52,11 +55,14 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         height: 2.5em;
 
         span {
-            flex-grow: 1;
             font-weight: bold;
+        }
+        .status-bar {
+            flex-grow: 1;
         }
         button {
             border: 1px solid rgba(60, 60, 60, 0.26);

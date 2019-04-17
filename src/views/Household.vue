@@ -3,6 +3,11 @@
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('household.header.box.list')">
                 <Collapse :label="$t('household.filter.title')">
+                    <template slot="status">
+                        <div class="tags">
+                            <HouseholdFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" />
+                        </div>
+                    </template>
                     <HouseholdFilter />
                 </Collapse>
                 <ListMenu />
@@ -47,10 +52,12 @@
     import ListMenu from '../components/utils/ListMenu'
     import HouseholdFilter from "../components/household/HouseholdFilter";
     import Collapse from "../components/utils/Collapse";
+    import HouseholdFilterTag from "../components/household/HouseholdFilterTag";
 
     export default {
         name: "Household",
         components: {
+            HouseholdFilterTag,
             Collapse,
             HouseholdFilter,
             VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition, ExpenseList, ListMenu
@@ -68,7 +75,8 @@
         computed: {
             ...mapGetters('household', {
                 byId: 'byId',
-                pageGet: 'page'
+                pageGet: 'page',
+                taggableFilter: 'taggableFilter'
             }),
             isEditState () {
                 return typeof this.editable.value !== "undefined" && this.editable.value !== null
@@ -78,6 +86,34 @@
             },
             hasNext () {
                 return this.pageGet.next > 0
+            },
+            filterTags () {
+                return this.taggableFilter.reduce((fields, field) => {
+                    var translate = f => {
+                        if(f.name === "complete") {
+                            f.value = this.$t("household.filter.tag.values." + f.name + "." + f.value)
+                        } else if(f.name === "repayment") {
+                            f.value = this.$t('household.states.' + f.value)
+                        } else if(f.name === "volunteerManager") {
+                            f.value = this.$t('household.process.VolunteerManager.' + f.value)
+                        } else if(f.name === "employee") {
+                            f.value = this.$t('household.process.Employee.' + f.value)
+                        }
+                        return f
+                    }
+                    var res = fields
+                    if(Array.isArray(field.value)) {
+                        res = res.concat(field.value.map(v => {
+                            return translate({
+                                "name": field.name,
+                                "value": v
+                            })
+                        }))
+                    } else {
+                        res.push(translate(field))
+                    }
+                    return res
+                }, [])
             }
         },
         methods: {
@@ -103,6 +139,13 @@
 
 <style scoped lang="less">
     @import '../assets/less/general.less';
+
+    .tags {
+        margin: 0 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
 
     .paginate {
         width: 100%;
