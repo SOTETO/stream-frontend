@@ -59,7 +59,7 @@ const state = {
             "amount": 0.00
         },
         'state': {
-            'complete': [],
+            'complete': "noSelection",
             'repayment': "",
             'volunteerManager': "",
             'employee': ""
@@ -178,7 +178,7 @@ const getters = {
         if(check(state.filter.amount, "amount")) {
             res.push({
                 "name": "amount",
-                "value": state.filter.amount.formatted
+                "value": state.filter.amount
             })
         }
         return res
@@ -231,10 +231,40 @@ function serverUpdate(container, descriptiveState, newVersion, onSuccess, onFail
         .catch(error => onFailure(error))
 }
 
+function getJSONFilter(store) {
+    var getPetriNetState = (store, json, prefix, attr) => {
+        if(store.state.filter.state.hasOwnProperty(attr) && store.state.filter.state[attr] !== "") {
+            json[attr] = [{ "name": prefix + "." + store.state.filter.state[attr], "tokens": 1 }]
+        }
+        return json
+    }
+    var res =  {}
+
+    if(store.state.filter.hasOwnProperty("what") && store.state.filter.what !== "") {
+        res["what"] = store.state.filter.what
+    }
+    if(store.state.filter.hasOwnProperty("wherefor") && store.state.filter.wherefor !== "") {
+        res["wherefor"] = store.state.filter.wherefor
+    }
+    if(store.state.filter.hasOwnProperty("amount") && store.state.filter.amount.hasOwnProperty("amount") && store.state.filter.amount.amount !== 0.0) {
+        res["amount"] = store.state.filter.amount.amount
+    }
+    res = getPetriNetState(store, res, "ProcessState", "repayment")
+    res = getPetriNetState(store, res, "VolunteerManager", "volunteerManager")
+    res = getPetriNetState(store, res, "Employee", "employee")
+
+    res["complete"] = {
+        'complete': store.state.filter.state.complete === "complete",
+        'incomplete': store.state.filter.state.complete === "incomplete"
+    }
+
+    return res
+}
+
 function serverGet(store) {
     axios.post(
         '/backend/stream/household',
-        { 'page': store.state.page, 'sort': store.state.sorting },
+        { 'page': store.state.page, 'sort': store.state.sorting, 'filter': getJSONFilter(store) },
         { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
     ).then(response => {
         var entries = response.data.data
@@ -247,8 +277,11 @@ function serverGet(store) {
 }
 
 function serverCount(store) {
-    axios.get("/backend/stream/household/count")
-        .then(response => store.commit({"type": 'count', "count": response.data.data}))
+    axios.post(
+        "/backend/stream/household/count",
+        { 'page': store.state.page, 'sort': store.state.sorting, 'filter': getJSONFilter(store) },
+        { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+    ).then(response => store.commit({"type": 'count', "count": response.data.data}))
         .catch(error => serverDefaultFailure(error, store))
 }
 

@@ -86,7 +86,8 @@
       "options": {
         "complete": {
           "incomplete": "Unvollständig",
-          "complete": "Vollständig"
+          "complete": "Vollständig",
+          "noSelection": "Egal"
         }
       },
       "tag": {

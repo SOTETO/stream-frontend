@@ -53,6 +53,7 @@
     import HouseholdFilter from "../components/household/HouseholdFilter";
     import Collapse from "../components/utils/Collapse";
     import HouseholdFilterTag from "../components/household/HouseholdFilterTag";
+    import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
         name: "Household",
@@ -98,20 +99,26 @@
                             f.value = this.$t('household.process.VolunteerManager.' + f.value)
                         } else if(f.name === "employee") {
                             f.value = this.$t('household.process.Employee.' + f.value)
+                        } else if(f.name === "amount") {
+                            var formatter = CurrencyFormatter.getFromNumeric(f.value.currency, f.value.amount)
+                            f.value = formatter.localize()
                         }
                         return f
                     }
                     var res = fields
-                    if(Array.isArray(field.value)) {
-                        res = res.concat(field.value.map(v => {
-                            return translate({
-                                "name": field.name,
-                                "value": v
-                            })
-                        }))
-                    } else {
-                        res.push(translate(field))
+                    if(field.name !== "complete" || field.value !== "noSelection") {
+                        if(Array.isArray(field.value)) {
+                            res = res.concat(field.value.map(v => {
+                                return translate({
+                                    "name": field.name,
+                                    "value": v
+                                })
+                            }))
+                        } else {
+                            res.push(translate(field))
+                        }
                     }
+
                     return res
                 }, [])
             }
