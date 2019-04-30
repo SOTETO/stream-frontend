@@ -75,6 +75,7 @@
       "title": "Filter..",
       "what": "What?",
       "wherefor": "Wherefor?",
+      "crew": "Crew",
       "amount": "Amount",
       "state": {
         "general": "State",
@@ -94,6 +95,7 @@
         "what": "What?",
         "wherefor": "Wherefor?",
         "amount": "Amount?",
+        "crew": "Crew?",
         "complete": "Complete?",
         "repayment": "Repayment?",
         "volunteerManager": "@:defaults.volunteerManager?",

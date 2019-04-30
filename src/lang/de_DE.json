@@ -75,6 +75,7 @@
       "title": "Filtern...",
       "what": "Was?",
       "wherefor": "Wofür?",
+      "crew": "Crew",
       "amount": "Betrag",
       "state": {
         "general": "Zustand",
@@ -94,6 +95,7 @@
         "what": "Was?",
         "wherefor": "Wofür?",
         "amount": "Betrag?",
+        "crew": "Crew?",
         "complete": "Vollständig?",
         "repayment": "Auszahlung?",
         "volunteerManager": "@:defaults.volunteerManager?",

@@ -54,6 +54,7 @@ const state = {
     filter: {
         'what': "",
         'wherefor': "",
+        'crew': null,
         'amount': {
             "formatted": "",
             "amount": 0.00
@@ -151,6 +152,10 @@ const getters = {
                 "attr": "wherefor"
             },
             {
+                "obj": state.filter,
+                "attr": "crew"
+            },
+            {
                 "obj": state.filter.state,
                 "attr": "complete"
             },
@@ -245,6 +250,9 @@ function getJSONFilter(store) {
     }
     if(store.state.filter.hasOwnProperty("wherefor") && store.state.filter.wherefor !== "") {
         res["wherefor"] = store.state.filter.wherefor
+    }
+    if(store.state.filter.hasOwnProperty("crew") && store.state.filter.crew !== "") {
+        res["crew"] = store.state.filter.crew
     }
     if(store.state.filter.hasOwnProperty("amount") && store.state.filter.amount.hasOwnProperty("amount") && store.state.filter.amount.amount !== 0.0) {
         res["amount"] = store.state.filter.amount.amount

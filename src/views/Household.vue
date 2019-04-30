@@ -5,7 +5,10 @@
                 <Collapse :label="$t('household.filter.title')">
                     <template slot="status">
                         <div class="tags">
-                            <HouseholdFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" />
+                            <VcAFilterTag v-if="hasCrewTag" v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">
+                                <CrewPlainName :id="tag.value" />
+                            </VcAFilterTag>
+                            <VcAFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" :key="tag.name" />
                         </div>
                     </template>
                     <HouseholdFilter />
@@ -44,7 +47,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
-    import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
+    import { VcAFrame, VcAColumn, VcABox, VcAFilterTag } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import ExpenseForm from '../components/household/ExpenseForm'
     import ExpenseStateTransition from '../components/household/ExpenseStateTransition'
@@ -52,16 +55,25 @@
     import ListMenu from '../components/utils/ListMenu'
     import HouseholdFilter from "../components/household/HouseholdFilter";
     import Collapse from "../components/utils/Collapse";
-    import HouseholdFilterTag from "../components/household/HouseholdFilterTag";
+    // import HouseholdFilterTag from "../components/household/HouseholdFilterTag";
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+    import { CrewPlainName } from 'vca-widget-user'
 
     export default {
         name: "Household",
         components: {
-            HouseholdFilterTag,
-            Collapse,
-            HouseholdFilter,
-            VcAFrame, VcAColumn, VcABox, ExpenseForm, ExpenseStateTransition, ExpenseList, ListMenu
+            // HouseholdFilterTag,
+            "Collapse": Collapse,
+            "HouseholdFilter": HouseholdFilter,
+            "VcAFrame": VcAFrame,
+            "VcAColumn": VcAColumn,
+            "VcABox": VcABox,
+            "ExpenseForm": ExpenseForm,
+            "ExpenseStateTransition": ExpenseStateTransition,
+            "ExpenseList": ExpenseList,
+            "ListMenu": ListMenu,
+            "VcAFilterTag": VcAFilterTag,
+            "CrewPlainName": CrewPlainName
         },
         data () {
             var editableDefault = {
@@ -88,6 +100,15 @@
             hasNext () {
                 return this.pageGet.next > 0
             },
+            hasCrewTag() {
+                return this.taggableFilter.filter(field => field.name === "crew").length > 0
+            },
+            filterCrewTag () {
+                return JSON.parse(JSON.stringify(this.taggableFilter.filter(field => field.name === "crew"))).map(crewTag => {
+                    crewTag.name = this.$t('household.filter.tag.crew')
+                    return crewTag
+                })
+            },
             filterTags () {
                 return this.taggableFilter.reduce((fields, field) => {
                     var translate = f => {
@@ -103,10 +124,11 @@
                             var formatter = CurrencyFormatter.getFromNumeric(f.value.currency, f.value.amount)
                             f.value = formatter.localize()
                         }
+                        f.name = this.$t('household.filter.tag.' + field.name)
                         return f
                     }
                     var res = fields
-                    if(field.name !== "complete" || field.value !== "noSelection") {
+                    if((field.name !== "complete" || field.value !== "noSelection") && field.name !== "crew") {
                         if(Array.isArray(field.value)) {
                             res = res.concat(field.value.map(v => {
                                 return translate({

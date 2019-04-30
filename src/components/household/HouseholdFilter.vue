@@ -16,6 +16,9 @@
                         @input="commit"
             />
         </el-form-item>
+        <el-form-item :label="$t('household.filter.crew')" required>
+            <CrewSelect v-model="filter.crew" @input="commit" />
+        </el-form-item>
         <el-form-item :label="$t('household.filter.state.general')" required>
             <el-form-item :label="$t('household.filter.state.complete')" required>
                 <el-radio-group v-model="filter.state.complete"@change="commit">
@@ -62,7 +65,8 @@
 <script>
     import { mapGetters, mapActions} from 'vuex'
     import { Input, InputNumber, Form, FormItem } from 'element-ui'
-    import MoneyInput from "../utils/MoneyInput";
+    import MoneyInput from "../utils/MoneyInput"
+    import { CrewSelect } from 'vca-widget-user'
 
     export default {
         name: "HouseholdFilter",
@@ -71,7 +75,8 @@
             'el-input': Input,
             'el-input-number': InputNumber,
             'el-form-item': FormItem,
-            'el-form': Form
+            'el-form': Form,
+            CrewSelect
         },
         props: {
             'currency': {
@@ -101,6 +106,7 @@
                 'filter': {
                     'what': "",
                     'wherefor': "",
+                    'crew': null,
                     'amount': {
                         "formatted": "",
                         "amount": 0.00
@@ -122,6 +128,9 @@
                 setFilter: 'filter'
             }),
             commit() {
+                if(typeof this.filter.crew === "object" && this.filter.crew !== null && this.filter.crew.hasOwnProperty("id")) {
+                    this.filter.crew = this.filter.crew.id
+                }
                 this.setFilter(JSON.parse(JSON.stringify(this.filter)))
             }
         }
