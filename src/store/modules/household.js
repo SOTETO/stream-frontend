@@ -345,9 +345,7 @@ function addVersion(store, household) {
         (result) => {
             store.commit({
                 "type": 'update',
-                "i": i,
-                "householdContainer": element,
-                "version": household
+                "household": result
             })
             // allAllowedActions(store, [element.id])
         },
@@ -514,8 +512,14 @@ const mutations = {
         //         container.householdContainer.versions.push(container.version)
         //     }
         // }
-        container.householdContainer.versions.push(container.version)
-        state.items.splice(container.i, 1, container.householdContainer)
+        // container.householdContainer.versions.push(container.version)
+        state.items = state.items.map(entry => {
+            var res = entry
+            if(entry.id === container.household.id) {
+                res = container.household
+            }
+            return res
+        })
     },
     executeStateAction(state, updated) {
         state.items = state.items.map(entry => {
