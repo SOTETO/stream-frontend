@@ -95,7 +95,7 @@
                 return ["Idle", "Knows", "KnowsNothing"]
             },
             employeeOptions () {
-                return ["Idle", "Freed", "Blocked"]
+                return ["Start", "Free", "Refused"]
             },
             completeOptions () {
                 return ["noSelection", "incomplete", "complete"]
