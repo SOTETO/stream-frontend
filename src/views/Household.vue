@@ -11,7 +11,7 @@
                             <VcAFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" :key="tag.name" />
                         </div>
                     </template>
-                    <HouseholdFilter />
+                    <HouseholdFilter @vca-filter-updated="addState" />
                 </Collapse>
                 <ListMenu />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">

@@ -266,7 +266,7 @@ function serverUpdate(container, newVersion, onSuccess, onFailure) {
 function getJSONFilter(store) {
     var getPetriNetState = (store, json, prefix, attr) => {
         if(store.state.filter.state.hasOwnProperty(attr) && store.state.filter.state[attr] !== "") {
-            json[attr] = [{ "name": prefix + "." + store.state.filter.state[attr], "tokens": 1 }]
+            json[attr] = StateMessageInterpreter.getFilterMessages(prefix, store.state.filter.state[attr]) //[{ "name": prefix + "." + store.state.filter.state[attr], "tokens": 1 }]
         }
         return json
     }
@@ -286,7 +286,7 @@ function getJSONFilter(store) {
     }
     res = getPetriNetState(store, res, "ProcessState", "repayment")
     res = getPetriNetState(store, res, "VolunteerManager", "volunteerManager")
-    res = getPetriNetState(store, res, "ProcessState", "employee")
+    res = getPetriNetState(store, res, "Employee", "employee")
 
     res["complete"] = {
         'complete': store.state.filter.state.complete === "complete",

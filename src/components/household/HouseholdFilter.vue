@@ -132,6 +132,7 @@
                     this.filter.crew = this.filter.crew.id
                 }
                 this.setFilter(JSON.parse(JSON.stringify(this.filter)))
+                this.$emit("vca-filter-updated")
             }
         }
     }

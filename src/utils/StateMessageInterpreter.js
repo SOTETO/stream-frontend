@@ -75,6 +75,67 @@ export default class StateMessageInterpreter {
         }
         return res
     }
+
+    static getFilterMessages(role, state) {
+        var res = []
+        switch(role) {
+            case "ProcessState":
+                switch(state) {
+                    case "Idle":
+                        res = [{ "name": "Start", "tokens": 1 }]
+                        break;
+                    case "AppliedFor":
+                        res = [{ "name": "AppliedFor", "tokens": 1 }]
+                        break;
+                    case "Requested":
+                        res = [{ "name": "Requested", "tokens": 1 }]
+                        break;
+                    case "Approved":
+                        res = [{ "name": "Approved", "tokens": 1 }]
+                        break;
+                    case "Refused":
+                        res = [{ "name": "RefusedFromRequest", "tokens": 1 }, { "name": "RefusedFromApplication", "tokens": 1 }]
+                        break;
+                    case "ToRepay":
+                        res = [{ "name": "Free", "tokens": 1 }]
+                        break;
+                    case "Repaid":
+                        res = [{ "name": "Repaid", "tokens": 1 }]
+                        break;
+                    case "NotEditable":
+                        res = [{ "name": "NotEditable", "tokens": 1 }]
+                        break;
+                }
+                break;
+            case "VolunteerManager":
+                switch(state) {
+                    case "Idle":
+                        res = [ { "name": "VM.Idle", "tokens": 1 } ]
+                        break;
+                    case "Knows":
+                        res = [ { "name": "VM.Knows", "tokens": 1 } ]
+                        break;
+                    case "KnowsNothing":
+                        res = [ { "name": "VM.KnowsNothing", "tokens": 1 } ]
+                        break;
+                }
+                break;
+            case "Employee":
+                switch(state) {
+                    case "Idle":
+                        res = [ { "name": "AppliedFor", "tokens": 1 }, { "name": "Requested", "tokens": 1 }, { "name": "Start", "tokens": 1 } ]
+                        break;
+                    case "Free":
+                        res = [ { "name": "Approved", "tokens": 1 }, { "name": "Free", "tokens": 1 }, { "name": "Repaid", "tokens": 1 } ]
+                        break;
+                    case "Refused":
+                        res = [ { "name": "RefusedFromRequest", "tokens": 1 }, { "name": "RefusedFromApplication", "tokens": 1 } ]
+                        break;
+                }
+                break;
+        }
+        return res
+    }
 }
 
 /**
