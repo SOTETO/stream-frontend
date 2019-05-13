@@ -53,12 +53,12 @@
         },
         computed: {
             ...mapGetters('household', {
-                stateById: 'stateById',
+                isApprovedState: 'isApproved',
+                allowedAction: 'allowedAction',
                 byId: 'byId'
             }),
             isApproved () {
-                var state = this.stateById(this.uuid)
-                return state.isApproved()
+                return this.isApprovedState(this.uuid)
             },
             expense () {
                 return this.byId(this.uuid)
@@ -87,10 +87,10 @@
                 this.repay(this.expense)
             },
             allowedRequestChange (action) {
-                var res = true
-                var state = this.stateById(this.uuid)
-                res = state.allowedTo(action)
-                return res
+                // var res = true
+                // var state = this.stateById(this.uuid)
+                // res = state.allowedTo(action)
+                return this.allowedAction(this.uuid, action)
             }
         }
     }

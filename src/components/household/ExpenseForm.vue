@@ -85,7 +85,8 @@
         },
         computed: {
             ...mapGetters('household', {
-                stateById: 'stateById',
+                allowedAction: 'allowedAction',
+                editAllowed: 'isEditable',
                 byId: 'byId'
             }),
             value () {
@@ -101,16 +102,14 @@
             allowedRequestChange () {
                 var res = true
                 if(this.isUpdate) {
-                    var state = this.stateById(this.expense.id)
-                    res = state.allowedTo("request") || state.allowedTo("apply")
+                    res = this.allowedAction(this.expense.id, "request") || this.allowedAction(this.expense.id, "apply")
                 }
                 return res
             },
             isEditable () {
                 var res = true
                 if(this.isUpdate) {
-                    var state = this.stateById(this.expense.id)
-                    res = state.isEditable()
+                    res = this.editAllowed(this.expense.id)
                 }
                 return res
 

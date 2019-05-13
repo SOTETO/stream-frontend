@@ -125,6 +125,7 @@
       }
     },
     "states": {
+      "Idle": "Undefinierter Zustand",
       "Unknown": "Zustand kann nicht erkennt werden",
       "AppliedFor": "Auszahlung beantragt",
       "Requested": "Freigabe angefragt",
@@ -160,7 +161,10 @@
         "RoleName": "Hauptamt",
         "Idle": "Nicht bearbeitet",
         "Freed": "Freigegeben",
-        "Blocked": "Verwehrt"
+        "Blocked": "Verwehrt",
+        "Start": "@:household.process.Employee.Idle",
+        "Free": "@:household.process.Employee.Freed",
+        "Refused": "@:household.process.Employee.Blocked"
       }
     }
   },

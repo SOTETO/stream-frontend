@@ -1,20 +1,6 @@
 import axios from 'axios'
-import HouseholdStateMachine from '@/utils/HouseholdPetriNet.js'
-import HouseholdPetriNet from "../../utils/HouseholdPetriNet";
+import StateMessageInterpreter from "../../utils/StateMessageInterpreter";
 const uuidv4 = require('uuid/v4');
-
-const model = {
-    isComplete(household) {
-        return household.hasOwnProperty("amount") && household.amount.hasOwnProperty("amount") && household.amount.amount > 0 &&
-            household.hasOwnProperty("reason") && household.reason.hasOwnProperty("what") &&
-            typeof household.reason.what !== "undefined" && household.reason.what !== null && household.reason.what !== "" &&
-            household.reason.hasOwnProperty("wherefor") && typeof household.reason.wherefor !== "undefined" &&
-            household.reason.wherefor !== null && household.reason.wherefor !== "" &&
-            household.hasOwnProperty("iban") && typeof household.iban !== "undefined" && household.iban !== null &&
-            household.iban !== "" && household.hasOwnProperty("bic") && typeof household.bic !== "undefined" &&
-            household.bic !== null && household.bic !== ""
-    }
-}
 
 // initial state
 // shape: [{
@@ -66,6 +52,7 @@ const state = {
             'employee': ""
         }
     },
+    // allowedActions: [],
     error: null
 }
 
@@ -75,7 +62,8 @@ const getters = {
     },
     overview: (state, getters) => {
         return state.items.map((household) => {
-            var stateDescription = household.state.describe()
+            // var stateDescription = household.state.describe()
+            var stateDescription = StateMessageInterpreter.describe(household.state)
             var first = household.versions[0]
             var last = household.versions[household.versions.length - 1]
             return {
@@ -121,6 +109,30 @@ const getters = {
     stateById: (state) => (id) => {
         var entry = state.items.find(household => household.id === id)
         return entry.state
+    },
+    allowedAction: (state) => (id, actionName) => {
+        var res = false
+        var entry = state.items.find(e => e.id === id)
+        if(typeof entry !== "undefined" && entry !== null && entry !== -1) {
+            res = entry.actions.some(action => action.name === actionName)
+        }
+        return res
+    },
+    isEditable: (state) => (id) => {
+        var res = true
+        var entry = state.items.find(household => household.id === id)
+        if(typeof entry !== "undefined" && entry !== null && entry !== -1 && entry.hasOwnProperty("state")) {
+            res = StateMessageInterpreter.isEditable(entry.state)
+        }
+        return res
+    },
+    isApproved: (state) => (id) => {
+        var res = false
+        var entry = state.items.find(household => household.id === id)
+        if(typeof entry !== "undefined" && entry !== null && entry !== -1 && entry.hasOwnProperty("state")) {
+            res = StateMessageInterpreter.isApproved(entry.state)
+        }
+        return res
     },
     page: (state) => {
         return {
@@ -201,8 +213,7 @@ function serverDefaultFailure(error, store) {
     }
 }
 
-function prepareAjax(copy, descriptiveState, newVersion = null) {
-    copy.state = descriptiveState
+function prepareAjax(copy, newVersion = null) {
 
     if(newVersion !== null) {
         copy.versions.push(newVersion)
@@ -216,20 +227,20 @@ function prepareAjax(copy, descriptiveState, newVersion = null) {
     return copy
 }
 
-function serverCreate(container, descriptiveState, onSuccess, onFailure, update = false) {
+function serverCreate(container, onSuccess, onFailure, update = false) {
     var copy = JSON.parse(JSON.stringify(container))
 
-    copy = prepareAjax(copy, descriptiveState)
+    copy = prepareAjax(copy)
 
     axios.post("/backend/stream/household/create", copy, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => onSuccess(response.data.data[0]))
         .catch(error => onFailure(error))
 }
 
-function serverUpdate(container, descriptiveState, newVersion, onSuccess, onFailure) {
+function serverUpdate(container, newVersion, onSuccess, onFailure) {
     var copy = JSON.parse(JSON.stringify(container))
 
-    copy = prepareAjax(copy, descriptiveState, newVersion)
+    copy = prepareAjax(copy, newVersion)
 
     axios.post("/backend/stream/household/update", copy, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => onSuccess(response.data.data[0]))
@@ -239,7 +250,7 @@ function serverUpdate(container, descriptiveState, newVersion, onSuccess, onFail
 function getJSONFilter(store) {
     var getPetriNetState = (store, json, prefix, attr) => {
         if(store.state.filter.state.hasOwnProperty(attr) && store.state.filter.state[attr] !== "") {
-            json[attr] = [{ "name": prefix + "." + store.state.filter.state[attr], "tokens": 1 }]
+            json[attr] = StateMessageInterpreter.getFilterMessages(prefix, store.state.filter.state[attr]) //[{ "name": prefix + "." + store.state.filter.state[attr], "tokens": 1 }]
         }
         return json
     }
@@ -276,10 +287,6 @@ function serverGet(store) {
         { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
     ).then(response => {
         var entries = response.data.data
-        entries.map(entry => {
-            entry.state = HouseholdPetriNet.initFromConfig(entry.state)
-            return entry
-        })
         store.commit({ "type": 'init', "entries": entries })
     }).catch(error => serverDefaultFailure(error, store))
 }
@@ -304,26 +311,45 @@ function serverCount(store) {
  * @param dependsOnState a boolean flag that indicates if the new version of the household entry has to be saved only on
  * a successful update of its state
  */
-function addVersion(store, household, role, changer, dependsOnState = true) {
-    var user = store.rootGetters['user/get']
-    household[role] = user.uuid
+function addVersion(store, household) {
 
     var i = store.state.items.findIndex(h => h.id === household.id)
     var element = store.state.items[i]
 
-    var newState = changer(element.state)
-
-    serverUpdate(element, newState.getConfig(), household,
-        (result) => store.commit({
-            "type": 'update',
-            "i": i,
-            "householdContainer": element,
-            "version": household,
-            "state": newState,
-            "dependsOnState": dependsOnState
-        }),
+    serverUpdate(element, household,
+        (result) => {
+            store.commit({
+                "type": 'update',
+                "household": result
+            })
+        },
         (error) => serverDefaultFailure(error, store)
     )
+}
+
+/**
+ * Executes a state action using ajax and updates the state of an household entry.
+ *
+ * @author Johann Sell
+ * @param actionName
+ * @param uuid
+ * @param role
+ * @param store
+ * @param alternativeAction
+ */
+function executeStateAction(actionName, uuid, role, store, alternativeAction = null ) {
+    var request = [{ "name": actionName }]
+    if(alternativeAction !== null) {
+        request.push({ "name": alternativeAction })
+    }
+    axios.post(
+        '/backend/stream/household/state/action/' + uuid + "/" + role,
+        request,
+        { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+    ).then(response => {
+        var household = response.data.data
+        store.commit({"type": 'executeStateAction', "household": household})
+    }).catch(error => serverDefaultFailure(error, store))
 }
 
 const actions = {
@@ -355,69 +381,40 @@ const actions = {
         serverGet(store)
     },
     add (store, household) {
-        var user = store.rootGetters['user/get']
-        household["author"] = user.uuid
-        var s = HouseholdPetriNet.init(model.isComplete(household))
-        if(household.request) {
-            s = s.execute("request")
-        } else {
-            s = s.execute("apply")
-        }
-
         var id = uuidv4()
-        household["id"] = id
         var init = {
             "id": id,
-            "state": s,
+            "state": [],
             "versions": [
                 household
             ]
         }
 
-        serverCreate(init, init.state.getConfig(),
+        serverCreate(init,
             (result) => store.commit({ "type": 'push', "household": init }),
             (error) => serverDefaultFailure(error, store)
         )
     },
     update (store, household) {
-        addVersion(store, household, "editor", (state) => {
-            var newState = state
-            if(household.request && state.isAppliedFor()) {
-                newState = state.execute("request")
-            } else if(!household.request && state.isRequest()) {
-                newState = state.execute("apply")
-            }
-            if(model.isComplete(household)) {
-                newState = newState.complete()
-            } else {
-                newState = newState.incomplete()
-            }
-            return newState
-        }, false)
+        addVersion(store, household)
     },
     isKnown(store, household) {
-        addVersion(store, household, "volunteerManager", (state) => state.execute("isKnown"))
+        executeStateAction("isKnown", household.id, "volunteerManager", store)
     },
     isUnknown(store, household) {
-        addVersion(store, household, "volunteerManager", (state) => state.execute("isUnknown"))
+        executeStateAction("isUnknown", household.id, "volunteerManager", store)
     },
     free(store, household) {
-        addVersion(store, household, "employee", (state) => {
-            var newState = state.execute("free")
-            if(state.equals(newState)) {
-                newState = state.execute("approve")
-            }
-            return newState
-        })
+        executeStateAction("free", household.id, "employee", store, "approve")
     },
     block(store, household) {
-        addVersion(store, household, "employee", (state) => state.execute("block"))
+        executeStateAction("block", household.id, "employee", store)
     },
     requestRepayment(store, household) {
-        addVersion(store, household, "employee", (state) => state.execute("requestPayment"))
+        executeStateAction("requestPayment", household.id, "employee", store)
     },
     repay(store, household) {
-        addVersion(store, household, "employee", (state) => state.execute("repay"))
+        executeStateAction("repay", household.id, "employee", store)
     }
 
 }
@@ -442,16 +439,22 @@ const mutations = {
         state.items.push(pushHousehold.household)
     },
     update(state, container) {
-        if(!container.dependsOnState) {
-            container.householdContainer.versions.push(container.version)
-        }
-        if(typeof container.state !== "undefined" && container.state !== null) {
-            container.householdContainer.state = container.state
-            if(container.dependsOnState) {
-                container.householdContainer.versions.push(container.version)
+        state.items = state.items.map(entry => {
+            var res = entry
+            if(entry.id === container.household.id) {
+                res = container.household
             }
-        }
-        state.items.splice(container.i, 1, container.householdContainer)
+            return res
+        })
+    },
+    executeStateAction(state, updated) {
+        state.items = state.items.map(entry => {
+            var res = entry
+            if(entry.id === updated.household.id) {
+                res = updated.household
+            }
+            return res
+        })
     },
     setError(state, pushError) {
         state.error = pushError.error

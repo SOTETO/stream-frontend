@@ -95,7 +95,7 @@
                 return ["Idle", "Knows", "KnowsNothing"]
             },
             employeeOptions () {
-                return ["Idle", "Freed", "Blocked"]
+                return ["Start", "Free", "Refused"]
             },
             completeOptions () {
                 return ["noSelection", "incomplete", "complete"]
@@ -132,6 +132,7 @@
                     this.filter.crew = this.filter.crew.id
                 }
                 this.setFilter(JSON.parse(JSON.stringify(this.filter)))
+                this.$emit("vca-filter-updated")
             }
         }
     }

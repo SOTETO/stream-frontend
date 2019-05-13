@@ -125,6 +125,7 @@
       }
     },
     "states": {
+      "Idle": "Undefined state",
       "Unknown": "Not possible to identify",
       "AppliedFor": "Applied for money return",
       "Requested": "Release requested",
@@ -160,7 +161,10 @@
         "RoleName": "Employee",
         "Idle": "Missing interaction",
         "Freed": "Free",
-        "Blocked": "Blocked"
+        "Blocked": "Blocked",
+        "Start": "@:household.process.Employee.Idle",
+        "Free": "@:household.process.Employee.Freed",
+        "Refused": "@:household.process.Employee.Blocked"
       }
     }
   },
