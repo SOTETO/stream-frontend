@@ -1,5 +1,3 @@
-import HouseholdPetriNet from "./HouseholdPetriNet";
-
 export default class StateMessageInterpreter {
     /**
      * Generates a readable description of the current state of the Petri Net.
@@ -46,10 +44,26 @@ export default class StateMessageInterpreter {
         return res
     }
 
+    /**
+     * Check if a given set of places (messanges) represent a given place name.
+     *
+     * @author Johann Sell
+     * @param messages
+     * @param stateName
+     * @returns {boolean}
+     */
     static hasState(messages, stateName) {
         return messages.find(place => place.name === stateName) !== -1
     }
 
+    /**
+     * Check if both states are equivalent.
+     *
+     * @author Johann Sell
+     * @param messages1
+     * @param messages2
+     * @returns {*}
+     */
     static equals(messages1, messages2) {
         function comparison(first, second) {
             return first.map(place => second.some(p => p.name == place.name && p.tokens == place.tokens))
@@ -58,6 +72,13 @@ export default class StateMessageInterpreter {
         return comparison(messages1, messages2) && comparison(messages2, messages1)
     }
 
+    /**
+     * Checks if the state described by given states is editable.
+     *
+     * @author Johann Sell
+     * @param messages
+     * @returns {boolean}
+     */
     static isEditable(messages) {
         var res = true
         var notEditable = messages.find(place => place.name === "NotEditable")
@@ -67,6 +88,13 @@ export default class StateMessageInterpreter {
         return res
     }
 
+    /**
+     * Checks if the state described by given states is approved.
+     *
+     * @author Johann Sell
+     * @param messages
+     * @returns {boolean}
+     */
     static isApproved(messages) {
         var res = false
         var approved = messages.find(place => place.name === "Approved")
@@ -76,6 +104,14 @@ export default class StateMessageInterpreter {
         return res
     }
 
+    /**
+     * Transform user's selection into a PlaceMessage JSON. Can be used for server communication.
+     *
+     * @author Johann Sell
+     * @param role
+     * @param state
+     * @returns {Array}
+     */
     static getFilterMessages(role, state) {
         var res = []
         switch(role) {

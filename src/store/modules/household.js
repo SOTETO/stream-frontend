@@ -1,21 +1,6 @@
 import axios from 'axios'
-// import HouseholdStateMachine from '@/utils/HouseholdPetriNet.js'
-// import HouseholdPetriNet from "../../utils/HouseholdPetriNet";
 import StateMessageInterpreter from "../../utils/StateMessageInterpreter";
 const uuidv4 = require('uuid/v4');
-
-// const model = {
-//     isComplete(household) {
-//         return household.hasOwnProperty("amount") && household.amount.hasOwnProperty("amount") && household.amount.amount > 0 &&
-//             household.hasOwnProperty("reason") && household.reason.hasOwnProperty("what") &&
-//             typeof household.reason.what !== "undefined" && household.reason.what !== null && household.reason.what !== "" &&
-//             household.reason.hasOwnProperty("wherefor") && typeof household.reason.wherefor !== "undefined" &&
-//             household.reason.wherefor !== null && household.reason.wherefor !== "" &&
-//             household.hasOwnProperty("iban") && typeof household.iban !== "undefined" && household.iban !== null &&
-//             household.iban !== "" && household.hasOwnProperty("bic") && typeof household.bic !== "undefined" &&
-//             household.bic !== null && household.bic !== ""
-//     }
-// }
 
 // initial state
 // shape: [{
@@ -229,7 +214,6 @@ function serverDefaultFailure(error, store) {
 }
 
 function prepareAjax(copy, newVersion = null) {
-    // copy.state = descriptiveState
 
     if(newVersion !== null) {
         copy.versions.push(newVersion)
@@ -303,12 +287,7 @@ function serverGet(store) {
         { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
     ).then(response => {
         var entries = response.data.data
-        entries.map(entry => {
-            // entry.state = HouseholdPetriNet.initFromConfig(entry.state)
-            return entry
-        })
         store.commit({ "type": 'init', "entries": entries })
-        // allAllowedActions(store, entries.map(entry => entry.id), true)
     }).catch(error => serverDefaultFailure(error, store))
 }
 
@@ -333,13 +312,9 @@ function serverCount(store) {
  * a successful update of its state
  */
 function addVersion(store, household) {
-    // var user = store.rootGetters['user/get']
-    // household[role] = user.uuid
 
     var i = store.state.items.findIndex(h => h.id === household.id)
     var element = store.state.items[i]
-
-    // var newState = changer(element.state)
 
     serverUpdate(element, household,
         (result) => {
@@ -347,7 +322,6 @@ function addVersion(store, household) {
                 "type": 'update',
                 "household": result
             })
-            // allAllowedActions(store, [element.id])
         },
         (error) => serverDefaultFailure(error, store)
     )
@@ -378,22 +352,6 @@ function executeStateAction(actionName, uuid, role, store, alternativeAction = n
     }).catch(error => serverDefaultFailure(error, store))
 }
 
-/**
- * Saves a map of UUIDs of household entries and their allowed actions.
- *
- * @author Johann Sell
- * @param uuids
- */
-// function allAllowedActions(store, uuids, truncate = false) {
-//     axios.post(
-//         '/backend/stream/household/state/action/all',
-//         { "ids": uuids },
-//         { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
-//     ).then(response => {
-//         store.commit({"type": 'saveAllowedActions', "actions": response.data.data, "truncate": truncate})
-//     }).catch(error => serverDefaultFailure(error, store))
-// }
-
 const actions = {
     init (store) {
         serverCount(store)
@@ -423,26 +381,16 @@ const actions = {
         serverGet(store)
     },
     add (store, household) {
-        // var user = store.rootGetters['user/get']
-        // household["author"] = user.uuid
-        // var s = HouseholdPetriNet.init(model.isComplete(household))
-        // if(household.request) {
-        //     s = s.execute("request")
-        // } else {
-        //     s = s.execute("apply")
-        // }
-
         var id = uuidv4()
-        // household["id"] = id
         var init = {
             "id": id,
-            "state": [], //s,
+            "state": [],
             "versions": [
                 household
             ]
         }
 
-        serverCreate(init, //init.state.getConfig(),
+        serverCreate(init,
             (result) => store.commit({ "type": 'push', "household": init }),
             (error) => serverDefaultFailure(error, store)
         )
@@ -452,33 +400,21 @@ const actions = {
     },
     isKnown(store, household) {
         executeStateAction("isKnown", household.id, "volunteerManager", store)
-        // addVersion(store, household, "volunteerManager", (state) => state.execute("isKnown"))
     },
     isUnknown(store, household) {
         executeStateAction("isUnknown", household.id, "volunteerManager", store)
-        // addVersion(store, household, "volunteerManager", (state) => state.execute("isUnknown"))
     },
     free(store, household) {
         executeStateAction("free", household.id, "employee", store, "approve")
-        // addVersion(store, household, "employee", (state) => {
-        //     var newState = state.execute("free")
-        //     if(state.equals(newState)) {
-        //         newState = state.execute("approve")
-        //     }
-        //     return newState
-        // })
     },
     block(store, household) {
         executeStateAction("block", household.id, "employee", store)
-        // addVersion(store, household, "employee", (state) => state.execute("block"))
     },
     requestRepayment(store, household) {
         executeStateAction("requestPayment", household.id, "employee", store)
-        // addVersion(store, household, "employee", (state) => state.execute("requestPayment"))
     },
     repay(store, household) {
         executeStateAction("repay", household.id, "employee", store)
-        // addVersion(store, household, "employee", (state) => state.execute("repay"))
     }
 
 }
@@ -503,16 +439,6 @@ const mutations = {
         state.items.push(pushHousehold.household)
     },
     update(state, container) {
-        // if(!container.dependsOnState) {
-        //     container.householdContainer.versions.push(container.version)
-        // }
-        // if(typeof container.state !== "undefined" && container.state !== null) {
-        //     container.householdContainer.state = container.state
-        //     if(container.dependsOnState) {
-        //         container.householdContainer.versions.push(container.version)
-        //     }
-        // }
-        // container.householdContainer.versions.push(container.version)
         state.items = state.items.map(entry => {
             var res = entry
             if(entry.id === container.household.id) {
@@ -530,20 +456,6 @@ const mutations = {
             return res
         })
     },
-    // saveAllowedActions(state, actions) {
-    //     if(actions.truncate) {
-    //         state.allowedActions = actions.actions
-    //     } else {
-    //         state.allowedActions = state.allowedActions.map(h => {
-    //             var res = h
-    //             var updated = actions.actions.find(uh => uh.id === h.id)
-    //             if(typeof updated !== "undefined" && updated !== null && updated !== -1) {
-    //                 res = updated
-    //             }
-    //             return res
-    //         })
-    //     }
-    // },
     setError(state, pushError) {
         state.error = pushError.error
     }
