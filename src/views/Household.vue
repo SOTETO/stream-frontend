@@ -2,11 +2,12 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('household.header.box.list')">
-                <Collapse :label="$t('household.filter.title')">
-                    <template slot="status">
-                        <div class="tags">
-                            <VcAFilterTag v-if="hasCrewTag" v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">
-                                <CrewPlainName :id="tag.value" />
+              <Collapse :label="$t('household.filter.title')">
+                                <template slot="status">
+                        <div  class="tags">
+                            <!--<VcAFilterTag v-if="hasCrewTag" v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">-->
+                          <VcAFilterTag v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">
+                              <CrewPlainName :id="tag.value" />
                             </VcAFilterTag>
                             <VcAFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" :key="tag.name" />
                         </div>
@@ -24,15 +25,31 @@
             </VcABox>
         </VcAColumn>
         <VcAColumn size="20%">
-            <VcABox :first="true" :title="$t('household.header.box.expense')">
-                <div slot="header" v-if="isEditState">
-                    <button class="vca-button-default" @click.prevent="addState">
+             <!--<VcABox      :first="true" :title="$t('household.header.box.expense')">
+              &lt;!&ndash;<el-checkbox  v-bind:class="[{ 'active': isChecked }]" v-on:click="changeColor()" v-model="expense.request" :disabled="!allowedRequestChange || !isEditable" style="float: right; padding: 3px 0" type="checkbox">make a request</el-checkbox>&ndash;&gt;
+               <slot name="header"> test </slot>
+              <div slot="header" v-if="isEditState" >
+
+                <el-checkbox  v-bind:class="[{ 'active': isChecked }]" v-on:click="changeColor()" style="float: right; padding: 3px 0" type="checkbox">make a request</el-checkbox>
+                <button class="vca-button-default" @click.prevent="addState">
                         {{ $t("household.buttons.cancel") }}
                     </button>
                 </div>
                 <ExpenseForm v-if="!isEditState" :key="editable.key" />
                 <ExpenseForm v-if="isEditState" :uuid="editable.key" :key="editable.key" @vca-expense-update="addState" />
-            </VcABox>
+            </VcABox>-->
+            <el-card :first="true" class="box-card">
+                     <div :class="[ isChecked ? 'background-grey' : 'background-white' ]">
+                       <el-switch v-model="isChecked" :inactive-text="$t('household.header.box.makearequest')" active-text="" :disabled="!allowedRequestChange" style="float: right; padding: 35px 0px">
+                       </el-switch>
+              <div slot="header" class="clearfix">
+                <span><h3>{{ $t('household.header.box.expense') }}</h3></span>
+              </div>
+
+              <ExpenseForm v-if="!isEditState" :key="editable.key" />
+              <ExpenseForm v-if="isEditState" :uuid="editable.key" :key="editable.key" @vca-expense-update="addState" />
+                     </div>
+            </el-card>
             <VcABox :title="$t('household.header.box.transitions')" v-if="isEditState">
                 <div slot="header" v-if="isEditState">
                     <button class="vca-button-default" @click.prevent="addState">
@@ -82,7 +99,8 @@
             }
             return {
                 "editableDefault" : editableDefault,
-                "editable": JSON.parse(JSON.stringify(editableDefault))
+                "editable": JSON.parse(JSON.stringify(editableDefault)),
+                isChecked: false,
             }
         },
         computed: {
@@ -143,7 +161,24 @@
 
                     return res
                 }, [])
+            },
+          allowedRequestChange () {
+            var res = true
+            if(this.isUpdate) {
+              var state = this.stateById(this.expense.id)
+              res = state.allowedTo("request") || state.allowedTo("apply")
             }
+            return res
+          },
+          isEditable () {
+            var res = true
+            if(this.isUpdate) {
+              var state = this.stateById(this.expense.id)
+              res = state.isEditable()
+            }
+            return res
+
+          }
         },
         methods: {
             ...mapActions('household', {
@@ -153,7 +188,7 @@
                 this.editable.value = this.byId(expense.id)
                 this.editable.key = expense.id
             },
-            addState (expense) {
+            addState () {
                 this.editable = JSON.parse(JSON.stringify(this.editableDefault))
             },
             pageDown () {
@@ -161,7 +196,10 @@
             },
             pageUp () {
                 this.page(false)
-            }
+            },
+          changeColor () {
+            this.isChecked = !this.isChecked
+          }
         }
     }
 </script>
@@ -182,5 +220,11 @@
         .inputElement();
         cursor: pointer;
         background: none;
+    }
+
+    .background-grey {
+      font-style: italic
+    }
+    .background-white {
     }
 </style>

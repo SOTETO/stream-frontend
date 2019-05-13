@@ -39,6 +39,7 @@
       "box": {
         "list": "Overview",
         "expense": "Expense",
+        "makearequest": "make a request",
         "transitions": "Process"
       },
       "table": {

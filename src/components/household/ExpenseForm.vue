@@ -1,54 +1,48 @@
 <template>
     <el-form
-            :model="expense"
-            :rules="rules">
-        <p v-html="$t('household.hints.expense')" />
+        :model="expense"
+        :rules="rules">
+      <p v-html="$t('household.hints.expense')" />
         <MoneyInput
-                v-model="expense.amount"
-                currency="EUR"
-                :label="$t('household.placeholder.amount')"
-                :required="true"
-                :disabled="!isEditable"
-                :key="expense.amount.amount"
+          v-model="expense.amount"
+          currency="EUR"
+          :label="$t('household.placeholder.amount')"
+          :required="true"
+          :disabled="!isEditable"
+          :key="expense.amount.amount"
         />
         <el-form-item
-                :required="true"
+          :required="true"
         >
-            <el-input v-model="expense.reason.what" :placeholder="$t('household.placeholder.what')" :disabled="!isEditable"></el-input>
+          <el-input v-model="expense.reason.what" :placeholder="$t('household.placeholder.what')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
-                :required="true"
+          :required="true"
         >
-            <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
+          <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
-                :required="false"
+          :required="false"
         >
-            <el-input v-model="expense.iban" :placeholder="$t('household.placeholder.iban')" :disabled="!isEditable"></el-input>
+          <el-input v-model="expense.iban" :placeholder="$t('household.placeholder.iban')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
-                :required="false"
+          :required="false"
         >
-            <el-input v-model="expense.bic" :placeholder="$t('household.placeholder.bic')" :disabled="!isEditable"></el-input>
-        </el-form-item>
-        <el-form-item
-                :label="$t('household.placeholder.request')"
-                :required="true"
-        >
-            <el-checkbox v-model="expense.request" :disabled="!allowedRequestChange || !isEditable"></el-checkbox>
+          <el-input v-model="expense.bic" :placeholder="$t('household.placeholder.bic')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <button
-                class="vca-button-primary vca-full-width"
-                :disabled="!isEditable"
-                @click.prevent="submitForm">
-            {{ $t("household.buttons.save") }}
+          class="vca-button-primary vca-full-width"
+          :disabled="!isEditable"
+          @click.prevent="submitForm">
+          {{ $t("household.buttons.save") }}
         </button>
-    </el-form>
+      </el-form>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex'
-    import { Form, Input, Checkbox, FormItem } from 'element-ui'
+    import { Form, Input, FormItem } from 'element-ui'
     import MoneyInput from '@/components/utils/MoneyInput'
 
     export default {
@@ -57,7 +51,6 @@
             "el-form": Form,
             "el-input": Input,
             "el-form-item": FormItem,
-            "el-checkbox": Checkbox,
             "MoneyInput": MoneyInput
         },
         props: {

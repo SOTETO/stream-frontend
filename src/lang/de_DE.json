@@ -39,6 +39,7 @@
       "box": {
         "list": "Übersicht",
         "expense": "Ausgabe",
+        "makearequest": "nur anfragen",
         "transitions": "Prozess"
       },
       "table": {
