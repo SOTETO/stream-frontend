@@ -71,7 +71,7 @@ const actions = {
                 case 401:
                     store.root.dispatch('user/logout')
                     break;
-                case _:
+                default:
                     store.commit({ "type": 'setError', error: error })
                     break;
             }
@@ -89,7 +89,7 @@ const actions = {
                 case 401:
                     store.root.dispatch('user/logout')
                     break;
-                case _:
+                default:
                     store.commit({ "type": 'setError', error: error })
                     break;
             }
