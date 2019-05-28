@@ -4,6 +4,7 @@
             <td>
                 <StateLight v-model="what" :color-disabled-on-no-error="true" :small="true" /><br />
                 <button
+                        v-if="hasEditAccess"
                         class="vca-button-inline"
                         @click="editState(expense)"
                 >{{ $t("household.buttons.edit") }}</button>
@@ -73,7 +74,10 @@
         },
         computed: {
             ...mapGetters('user', {
-                hasRole: 'is'
+                hasRole: 'is',
+                isEmployee: 'isEmployee',
+                isVolunteerManager: 'isVolunteerManager',
+                isAuthorOrEditor: 'isAuthorOrEditor'
             }),
             what () {
                 var res = { "name": this.expense.what, "state": 1 }
@@ -107,6 +111,11 @@
                     )
                 )
                 return res
+            },
+            hasEditAccess () {
+                var supporter = JSON.parse(JSON.stringify((this.expense.supporter)))
+                supporter.push( this.expense.author )
+                return this.isEmployee || this.isVolunteerManager || this.isAuthorOrEditor(supporter)
             }
         },
         methods: {

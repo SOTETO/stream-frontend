@@ -63,17 +63,12 @@
                 byId: 'byId'
             }),
             ...mapGetters('user', {
-                is: 'is',
-                same: 'same'
+                isEmployee: 'isEmployee',
+                isVolunteerManager: 'isVolunteerManager',
+                canRequestRepayment: 'isAuthorOrEditor'
             }),
-            isEmployee () {
-                return this.is(["Employee"])
-            },
-            isVolunteerManager () {
-                return this.is([{ "name": "VolunteerManager" }]) // Todo: consider Crew!
-            },
             isAuthorOrEditor () {
-                return this.same(this.expense.author) || this.same(this.expense.editor)
+                return this.canRequestRepayment([this.expense.author, this.expense.editor])
             },
             isApproved () {
                 return this.isApprovedState(this.uuid)

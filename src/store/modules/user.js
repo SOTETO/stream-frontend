@@ -42,6 +42,15 @@ const getters = {
     same: (state) => (userId) => {
         return state.user.id === userId
     },
+    isEmployee: (state, getters) => {
+        return getters.is(["Employee"])
+    },
+    isVolunteerManager: (state, getters) => {
+        return getters.is([{ "name": "VolunteerManager" }]) // Todo: consider Crew!
+    },
+    isAuthorOrEditor: (state, getters) => (userIds) => {
+        return userIds.reduce((acc, userId) => acc || getters.same(userId), false)
+    },
     isError: (state) => {
         return state.error !== null
     },
