@@ -1,37 +1,42 @@
 <template>
     <div>
         <button
-                v-if="isApproved"
+                v-if="isApproved && isAuthorOrEditor"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('requestPayment')"
                 @click="startRequestRepayment">
             {{ $t("household.transitions.Owner.requestPayment") }}
         </button>
         <button
+                v-if="isVolunteerManager"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('isKnown')"
                 @click="markAsKnown">
             {{ $t("household.transitions.VolunteerManager.knows") }}
         </button>
         <button
+                v-if="isVolunteerManager"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('isUnknown')"
                 @click="markAsUnknown">
             {{ $t("household.transitions.VolunteerManager.knowsNothing") }}
         </button>
         <button
+                v-if="isEmployee"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('free') && !allowedRequestChange('approve')"
                 @click="markAsFreed">
             {{ $t("household.transitions.Employee.free") }}
         </button>
         <button
+                v-if="isEmployee"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('block')"
                 @click="markAsBlocked">
             {{ $t("household.transitions.Employee.block") }}
         </button>
         <button
+                v-if="isEmployee"
                 class="vca-button-primary vca-full-width"
                 :disabled="!allowedRequestChange('repay')"
                 @click="markAsRepaid">
@@ -57,6 +62,19 @@
                 allowedAction: 'allowedAction',
                 byId: 'byId'
             }),
+            ...mapGetters('user', {
+                is: 'is',
+                same: 'same'
+            }),
+            isEmployee () {
+                return this.is(["Employee"])
+            },
+            isVolunteerManager () {
+                return this.is([{ "name": "VolunteerManager" }]) // Todo: consider Crew!
+            },
+            isAuthorOrEditor () {
+                return this.same(this.expense.author) || this.same(this.expense.editor)
+            },
             isApproved () {
                 return this.isApprovedState(this.uuid)
             },
