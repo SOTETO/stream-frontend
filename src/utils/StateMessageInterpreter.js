@@ -89,7 +89,7 @@ export default class StateMessageInterpreter {
     }
 
     /**
-     * Checks if the state described by given states is approved.
+     * Checks if the state described by given messages is approved.
      *
      * @author Johann Sell
      * @param messages
