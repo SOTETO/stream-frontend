@@ -2,7 +2,8 @@
   "defaults": {
     "support": "it@vivaconagua.org",
     "volunteerManager": "ASP",
-    "employee": "Hauptamt"
+    "employee": "Hauptamt",
+    "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
   },
   "errors": {
     "ajax": {
@@ -51,7 +52,7 @@
         "supporter": "Beteiligte",
         "state": "Status",
         "process": "Bearbeitung",
-        "created": "Eingetragungsdatum",
+        "created": "Eintragungsdatum",
         "updated": "Aktualisierungsdatum"
       }
     },
@@ -110,7 +111,7 @@
       }
     },
     "hints": {
-      "expense": "Hier kannst du alle Ausgaben hinzufügen.<br /><br />Beachte bitte, dass es passieren kann, dass eine Ausgabe nicht erstattet werden kann, etwa weil diese nicht dem Satzungszeck von VcA entspricht.<br /><br />Falls du dir unsicher bist oder eine größere Auslage tätigen willst, kannst du eine Ausgabe zuerst beantragen und erhälst gegebenenfalls eine Freigabe bevor du das Geld auslegst.",
+      "expense": "Hier kannst du alle Ausgaben für die Crewarbeit eintragen.<br /><br />In der Ausgabenliste siehst du, welche Kosten erstattet werden können bzw. vorher freigegeben werden müssen.<br /><br />Beachte bitte, dass zur Erstattung alle Belege im Original vorliegen müssen.",
       "dates": {
         "created": "{date} (eingetragen)",
         "updated": "{date} (aktualisiert)"
@@ -126,7 +127,7 @@
     },
     "states": {
       "Idle": "Undefinierter Zustand",
-      "Unknown": "Zustand kann nicht erkennt werden",
+      "Unknown": "Zustand kann nicht erkannt werden",
       "AppliedFor": "Auszahlung beantragt",
       "Requested": "Freigabe angefragt",
       "Approved": "Genehmigt",
@@ -200,7 +201,7 @@
     },
     "hints": {
       "deadline": {
-        "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte ein!",
+        "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
         "date": "bis spätestens {deadline}",
         "immediately": "umgehend"
       },
@@ -243,7 +244,7 @@
         "school": "Schule",
         "party": "Party",
         "streetFestivals": "Straßenfeste",
-        "karaoke": "Karaoke",
+        "karaoke": "Slam, Powerpoint-Karaoke & Co.",
         "kicker": "Kickerturniere"
       },
       "source": {
@@ -259,7 +260,7 @@
         "partner": {
           "label": "Wer überweist die Spende?",
           "name": "Location / Veranstalter",
-          "asp": "Ansprechpartner",
+          "asp": "Ansprechperson",
           "email": "Emailadresse",
           "address": "Postanschrift"
         }
