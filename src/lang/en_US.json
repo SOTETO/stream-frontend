@@ -138,6 +138,7 @@
       "NotEditable": "Not editable"
     },
     "transitions": {
+      "NothingToDo": "Currently, there is nothing to do. Possibly, this changes, if the @:household.process.VolunteerManager.RoleName or an @:household.process.Employee.RoleName edited the expense.",
       "VolunteerManager": {
         "knows": "I know it",
         "knowsNothing": "I don't know"

@@ -97,10 +97,7 @@ export default class StateMessageInterpreter {
      */
     static isApproved(messages) {
         var res = false
-        console.log(messages)
         var approved = messages.find(place => place.name === "Approved")
-        console.log(approved)
-        console.log(typeof approved)
         if(typeof approved !== "undefined" && approved !== null && approved !== -1) {
             res = approved.tokens > 0
         }

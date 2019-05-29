@@ -1,5 +1,8 @@
 <template>
     <div>
+        <p v-if="nothingToDo">
+            {{ $t("household.transitions.NothingToDo") }}
+        </p>
         <button
                 v-if="isApproved && isAuthorOrEditor"
                 class="vca-button-primary vca-full-width"
@@ -75,6 +78,9 @@
             },
             expense () {
                 return this.byId(this.uuid)
+            },
+            nothingToDo () {
+                return !(this.isApproved && this.isAuthorOrEditor) && !this.isEmployee && !this.isVolunteerManager
             }
         },
         methods: {
@@ -100,9 +106,6 @@
                 this.repay(this.expense)
             },
             allowedRequestChange (action) {
-                // var res = true
-                // var state = this.stateById(this.uuid)
-                // res = state.allowedTo(action)
                 return this.allowedAction(this.uuid, action)
             }
         }
