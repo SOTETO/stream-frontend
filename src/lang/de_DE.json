@@ -62,7 +62,8 @@
       "wherefor": "Wofür?",
       "iban": "IBAN",
       "bic": "BIC",
-      "request": "Nur eine Anfrage"
+      "request": "Auszahlung",
+      "appliedFor": "Freigabe"
     },
     "buttons": {
       "save": "Speichern",

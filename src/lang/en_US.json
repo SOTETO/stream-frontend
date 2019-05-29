@@ -61,7 +61,8 @@
       "wherefor": "Wherefor?",
       "iban": "IBAN",
       "bic": "BIC",
-      "request": "Only a request"
+      "request": "Payback",
+      "appliedFor": "Approval"
     },
     "buttons": {
       "save": "Save",
