@@ -35,7 +35,7 @@ const state = {
     countItems: 0,
     sorting: {
         field: "household.created",
-        dir: "ASC"
+        dir: "DESC"
     },
     filter: {
         'what': "",
@@ -219,6 +219,8 @@ function prepareAjax(copy, newVersion = null) {
         copy.versions.push(newVersion)
     }
 
+    copy.actions = [] // Todo?
+
     copy.versions.forEach((version) => {
         if(version.hasOwnProperty("id")) {
             delete version.id
@@ -391,7 +393,10 @@ const actions = {
         }
 
         serverCreate(init,
-            (result) => store.commit({ "type": 'push', "household": init }),
+            (result) => {
+                serverCount(store)
+                serverGet(store)
+            }, //store.commit({ "type": 'push', "household": result }),
             (error) => serverDefaultFailure(error, store)
         )
     },
