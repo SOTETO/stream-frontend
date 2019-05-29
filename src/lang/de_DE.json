@@ -139,6 +139,7 @@
       "NotEditable": "Unveränderbar"
     },
     "transitions": {
+      "NothingToDo": "Du kannst gerade nichts tun. Eventuell ändert sich dies, wenn ein @:household.process.VolunteerManager.RoleName oder das @:household.process.Employee.RoleName etwas verändert haben.",
       "VolunteerManager": {
         "knows": "Ich weiß davon",
         "knowsNothing": "Ich weiß davon nichts"

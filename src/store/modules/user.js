@@ -27,7 +27,10 @@ const getters = {
                 // The user has to be Volunteer Manager with a concrete pillar or for a concrete crew
                 has = supporterRoles.reduce((found, supporterRole) =>
                         (found || (supporterRole.name === role.name &&
-                            ((role.hasOwnProperty("crew") && supporterRole.crewName === role.crew) || !role.hasOwnProperty("crew")) &&
+                            ((role.hasOwnProperty("crew") && role.crew.hasOwnProperty("name") && supporterRole.crewName === role.crew.name) ||
+                                !role.hasOwnProperty("crew") || !role.crew.hasOwnProperty("name")) &&
+                            ((role.hasOwnProperty("crew") && role.crew.hasOwnProperty("id") && supporterRole.crewId === role.crew.id) ||
+                                !role.hasOwnProperty("crew") || !role.crew.hasOwnProperty("id")) &&
                             ((role.hasOwnProperty("pillar") && supporterRole.pillar === role.pillar) || !role.hasOwnProperty("pillar"))
                         )),
                     false
@@ -35,6 +38,18 @@ const getters = {
             }
             return fulfills || has
         }, false)
+    },
+    same: (state) => (userId) => {
+        return state.user.uuid === userId
+    },
+    isEmployee: (state, getters) => {
+        return getters.is(["Employee"])
+    },
+    isVolunteerManager: (state, getters) => {
+        return getters.is([{ "name": "VolunteerManager" }]) // Todo: consider Crew!
+    },
+    isAuthorOrEditor: (state, getters) => (userIds) => {
+        return userIds.reduce((acc, userId) => acc || getters.same(userId), false)
     },
     isError: (state) => {
         return state.error !== null

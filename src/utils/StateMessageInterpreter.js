@@ -99,7 +99,7 @@ export default class StateMessageInterpreter {
         var res = false
         var approved = messages.find(place => place.name === "Approved")
         if(typeof approved !== "undefined" && approved !== null && approved !== -1) {
-            res = approved > 0
+            res = approved.tokens > 0
         }
         return res
     }

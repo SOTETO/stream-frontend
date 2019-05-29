@@ -5,6 +5,21 @@ import store from './store'
 
 Vue.use(Router)
 
+/**
+ * All routes
+ * You can pass a "meta" parameter, that contains {{ 'roles' : [] }}. The content of `roles` can be a string of the values
+ * "Admin", "Employee" or "Supporter" or a complex JSON with the keys "name", "crew" and "pillar". For example (all
+ * attributes except "name" are optional):
+ * {{
+ *  "name": "VolunteerManager",
+ *  "pillar": "education", // "operation", "network", "finance"
+ *  "crew" : {
+ *    "name": "VcA Berlin",
+ *    "id": "<some UUID>"
+ *  }
+ * }}
+ * @type {VueRouter}
+ */
 var router = new Router({
   routes: [
     {
@@ -25,7 +40,7 @@ var router = new Router({
         name: 'donations',
         component: () => import('./views/Donations.vue'),
         meta: {
-          'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+          'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
         }
     },
     {
@@ -41,7 +56,7 @@ var router = new Router({
       name: 'household',
       component: () => import('./views/Household.vue'),
       meta: {
-        'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+        'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
       }
     }
   ]
