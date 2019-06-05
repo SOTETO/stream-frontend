@@ -1,4 +1,5 @@
 import axios from 'axios'
+import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 
 const uuidv4 = require('uuid/v4');
 
@@ -64,36 +65,24 @@ const getters = {
 
 const actions = {
     init (store) {
-        axios.get('/backend/stream/donations').then(response => {
-            store.commit({ "type": 'init', "donations": response.data.data })
-        }).catch(error => {
-            switch(error.response.code) {
-                case 401:
-                    store.root.dispatch('user/logout')
-                    break;
-                default:
-                    store.commit({ "type": 'setError', error: error })
-                    break;
-            }
-        })
+        var ajax = new DonationEndpoints(store)
+
+        var successHandler = (response) => store.commit({ "type": 'init', "donations": response.data.data })
+        var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+        var page = { "offset": 0, size: 10 }
+        var sort = { "field": "description", "dir": "ASC" }
+        ajax.get(successHandler, errorHandler, page, sort)
     },
     add (store, donation) {
         var user = store.rootGetters['user/get']
         donation["id"] = uuidv4()
         donation["author"] = user.uuid
         donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
-        axios.post('/backend/stream/donations/create', donation, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }).then(response => {
-            store.commit({ "type": 'push', "donation": response.data.data[0] })
-        }).catch(error => {
-            switch(error.response.code) {
-                case 401:
-                    store.root.dispatch('user/logout')
-                    break;
-                default:
-                    store.commit({ "type": 'setError', error: error })
-                    break;
-            }
-        })
+
+        var ajax = new DonationEndpoints(store)
+        var successHandler = (response) => store.commit({ "type": 'push', "donation": response.data.data[0] })
+        var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+        ajax.save(successHandler, errorHandler, donation)
     }
 }
 
