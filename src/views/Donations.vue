@@ -2,6 +2,9 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('donation.header.box.list')">
+                <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
+                    {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
+                </button>
                 <table class="donations">
                     <thead>
                         <tr>
@@ -34,6 +37,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
+                    {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
+                </button>
             </VcABox>
         </VcAColumn>
         <VcAColumn size="20%">
@@ -68,8 +74,15 @@
             ...mapGetters('donations', {
                 donations: 'overview',
                 isError: 'isError',
-                getErrorCode: 'getErrorCode'
-            })
+                getErrorCode: 'getErrorCode',
+                pageGet: 'page'
+            }),
+            hasPrevious () {
+                return this.pageGet.previous > 0
+            },
+            hasNext () {
+                return this.pageGet.next > 0
+            }
             // donations () {
             //     return this.$store.state.donations.items
             // }
@@ -98,7 +111,14 @@
         methods: {
             ...mapActions('donations', [
                 'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
+                'page'
             ]),
+            pageDown () {
+                this.page(true)
+            },
+            pageUp () {
+                this.page(false)
+            },
             formatAmount(amount) {
                 var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
                 return formatter.localize()

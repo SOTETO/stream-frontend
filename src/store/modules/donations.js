@@ -27,6 +27,15 @@ const uuidv4 = require('uuid/v4');
 //         }]
 const state = {
     items: [],
+    page: {
+        size: 10,
+        offset: 0
+    },
+    countItems: 0,
+    sorting: {
+        field: "donation.created",
+        dir: "DESC"
+    },
     error: null
 }
 
@@ -59,19 +68,56 @@ const getters = {
             res = state.error.response.code
         }
         return res
+    },
+    page: (state) => {
+        return {
+            "previous": state.page.offset,
+            "next": state.countItems - (state.page.offset + state.page.size)
+        }
+    },
+    sort: (state) => {
+        return state.sorting
     }
 }
-
 
 const actions = {
     init (store) {
         var ajax = new DonationEndpoints(store)
 
-        var successHandler = (response) => store.commit({ "type": 'init', "donations": response.data.data })
-        var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-        var page = { "offset": 0, size: 10 }
-        var sort = { "field": "description", "dir": "ASC" }
-        ajax.get(successHandler, errorHandler, page, sort)
+        var count = (store) => {
+            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
+            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            var page = store.state.page
+            var sort = store.state.sorting
+            ajax.count(successHandler, errorHandler, page, sort)
+        }
+        
+        var get = (store) => {
+            var successHandler = (response) => store.commit({ "type": 'init', "donations": response.data.data })
+            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            var page = store.state.page
+            var sort = store.state.sorting
+            ajax.get(successHandler, errorHandler, page, sort)
+        }
+        
+        get(store)
+        count(store)
+    },
+    page (store, down) {
+        var offset = store.state.page.offset - store.state.page.size
+        var valid = offset >= 0
+        if(!down) {
+            offset = store.state.page.offset + store.state.page.size
+            valid = offset < store.state.countItems
+        }
+        if(valid) {
+            store.commit({ "type": 'page', "offset": offset })
+            store.dispatch('init')
+        }
+    },
+    sort (store, sorting) {
+        store.commit({ "type": "sort", "sort": sorting })
+        store.dispatch('init')
     },
     add (store, donation) {
         var user = store.rootGetters['user/get']
@@ -89,6 +135,15 @@ const actions = {
 const mutations = {
     init(state, pushDonations) {
         state.items = pushDonations.donations
+    },
+    sort(state, sort) {
+        state.sorting = sort.sort
+    },
+    count(state, count) {
+        state.countItems = count.count.count
+    },
+    page(state, offset) {
+        state.page.offset = offset.offset
     },
     push(state, pushDonation) {
         state.items.push(pushDonation.donation)

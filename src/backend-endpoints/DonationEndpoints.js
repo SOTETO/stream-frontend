@@ -26,6 +26,16 @@ export default class DonationEndpoints {
         .then(response => successHandler(response))
         .catch(error => defaultErrorHandler(error, errorHandler))
     }
+    
+    count(successHandler, errorHandler, page, sort) {
+        axios.post(
+            "/backend/stream/donations/count",
+            { "page": page, "sort": sort },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+        )
+        .then(response => successHandler(response))
+        .catch(error => defaultErrorHandler(error, errorHandler))
+    }
 
     save(successHandler, errorHandler, donation) {
         axios.post(
