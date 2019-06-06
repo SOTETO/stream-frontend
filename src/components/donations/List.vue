@@ -11,9 +11,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="donation in donations" :key="donation.id">
+        <tr v-for="donation in donations" :key="donation.id" class="donation">
             <td>{{ donation.name }}</td>
-            <td><Tag :uuid="donation.author" :crew="true" /></td>
+            <td class="crew"><Tag :uuid="donation.author" :crew="true" /></td>
             <td>{{ formatAmount(donation.amount) }}</td>
             <td>{{ donation.deposited }}</td>
             <td>
@@ -24,8 +24,8 @@
             </td>
             <td>
                 <div class="supporter">
-                    <Tag :uuid="donation.author" :key="donation.author" />
-                    <Tag v-for="uuid in supporter(donation)" :uuid="uuid" :key="'sup-' + uuid" />
+                    <Tag v-for="uuid in teaserSupporter(donation)" :uuid="uuid" :key="'sup-' + uuid" />
+                    <span v-if="hasAddtionalSupporter(donation)">...</span>
                 </div>
             </td>
         </tr>
@@ -53,7 +53,10 @@
                 donations: 'overview',
                 isError: 'isError',
                 getErrorCode: 'getErrorCode',
-            })
+            }),
+            maximumTags () {
+                return 2;
+            }
         },
         created () {
             if(this.isError) {
@@ -89,9 +92,14 @@
                 return this.$d(d, 'short')
             },
             supporter (donation) {
-                return donation.supporter
-                    .filter(supporter => supporter !== donation.author)
+                return [donation.author].concat(donation.supporter)
                     .filter((value, index, self) => self.indexOf(value) === index)
+            },
+            teaserSupporter (donation) {
+                return this.supporter(donation).slice(0, this.maximumTags)
+            },
+            hasAddtionalSupporter (donation) {
+                return this.supporter(donation).length > this.maximumTags
             },
             open(title, message, type) {
                 Notification({
@@ -105,18 +113,49 @@
 </script>
 
 <style scoped lang="less">
+    @import '../../assets/less/general.less';
+
     .donations {
         width: 100%;
+
+        & .donation:nth-child(even) {
+            background-color: #colors[primaryDeactivated];
+        }
+
+        & th {
+            .colorProfilePrimary();
+            font-weight: bold;
+            padding: 0.25em 0;
+            &:first-child {
+                padding-left: 0.5em;
+            }
+            &:last-child {
+                padding-right: 0.5em;
+            }
+        }
     }
+
+    .donation {
+        & tr {
+            padding: 0.5em 0.5em 0 0.15em;
+        }
+        & td {
+            padding: 0.5em 0.5em 0.5em 0.5em;
+            vertical-align: top;
+        }
+    }
+
     .dates {
         display: flex;
         flex-direction: column;
+        padding: 0.2em;
+        font-size: 0.8em;
     }
-    .supporter {
+    .crew, .supporter {
         display: flex;
         flex-direction: row;
-        & /deep/ .user-role-wrapper:not(:first-child) {
-            margin-left: 0.2em;
+        & /deep/ .tag {
+            margin-right: 0.5em;
         }
     }
 </style>
