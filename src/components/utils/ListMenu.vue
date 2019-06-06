@@ -15,46 +15,25 @@
     export default {
         name: "ListMenu",
         components: { vSelect },
+        props: {
+            "fields": {
+                "type": Array,
+                "required": true
+            },
+            "store": {
+                "type": String,
+                "required": true
+            }
+        },
         data () {
             return {
-                "field": {
-                    "value": "household.created",
-                    "label": this.$t("household.header.table.created")
-                },
+                "field": null,
                 "dir": "ASC"
             }
         },
         computed: {
-            ...mapGetters('household', {
-                sort: "sort"
-            }),
-            fields () {
-                return [
-                    {
-                        "value": "household.what",
-                        "label": this.$t("household.header.table.what")
-                    },
-                    {
-                        "value": "household.wherefor",
-                        "label": this.$t("household.header.table.wherefor")
-                    },
-                    {
-                        "value": "household.crew",
-                        "label": this.$t("household.header.table.crew")
-                    },
-                    {
-                        "value": "household.amount",
-                        "label": this.$t("household.header.table.amount")
-                    },
-                    {
-                        "value": "household.created",
-                        "label": this.$t("household.header.table.created")
-                    },
-                    {
-                        "value": "household.updated",
-                        "label": this.$t("household.header.table.updated")
-                    }
-                ]
+            sort () {
+                return this.$store.getters[this.store + "/sort"]
             },
             isASC () {
                 return this.sort.dir === "ASC"
@@ -68,9 +47,9 @@
             this.dir = this.sort.dir
         },
         methods: {
-            ...mapActions("household", {
-                sortAction: "sort"
-            }),
+            sortAction (sorting) {
+                this.$store.dispatch(this.store + '/sort', sorting)
+            },
             commit: function (event) {
                 this.field = event
                 var sorting = {

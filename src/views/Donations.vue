@@ -2,6 +2,7 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('donation.header.box.list')">
+                <ListMenu :fields="sortFields" store="donations" />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
                     {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
                 </button>
@@ -21,6 +22,7 @@
 
 <script>
     import List from '@/components/donations/List'
+    import ListMenu from '../components/utils/ListMenu'
     import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
@@ -28,7 +30,7 @@
     export default {
         name: "donations",
         components: {
-            VcAFrame, VcAColumn, VcABox, List
+            VcAFrame, VcAColumn, VcABox, List, ListMenu
         },
         computed: {
             ...mapGetters('donations', {
@@ -39,6 +41,18 @@
             },
             hasNext () {
                 return this.pageGet.next > 0
+            },
+            sortFields() {
+                return [
+                    {
+                        "value": "donation.description",
+                        "label": this.$t("donation.header.table.title")
+                    },
+                    {
+                        "value": "donation.created",
+                        "label": this.$t("donation.header.table.date")
+                    }
+                ]
             }
         },
         methods: {
