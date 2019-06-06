@@ -70,5 +70,13 @@
 </script>
 
 <style scoped lang="less">
+    @import '../assets/less/general.less';
 
+    .paginate {
+        width: 100%;
+        height: 2.5em;
+        .inputElement();
+        cursor: pointer;
+        background: none;
+    }
 </style>
