@@ -1,4 +1,5 @@
 import axios from 'axios'
+import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 
 const uuidv4 = require('uuid/v4');
 
@@ -26,6 +27,15 @@ const uuidv4 = require('uuid/v4');
 //         }]
 const state = {
     items: [],
+    page: {
+        size: 10,
+        offset: 0
+    },
+    countItems: 0,
+    sorting: {
+        field: "donation.created",
+        dir: "DESC"
+    },
     error: null
 }
 
@@ -58,48 +68,82 @@ const getters = {
             res = state.error.response.code
         }
         return res
+    },
+    page: (state) => {
+        return {
+            "previous": state.page.offset,
+            "next": state.countItems - (state.page.offset + state.page.size)
+        }
+    },
+    sort: (state) => {
+        return state.sorting
     }
 }
 
-
 const actions = {
     init (store) {
-        axios.get('/backend/stream/donations').then(response => {
-            store.commit({ "type": 'init', "donations": response.data.data })
-        }).catch(error => {
-            switch(error.response.code) {
-                case 401:
-                    store.root.dispatch('user/logout')
-                    break;
-                default:
-                    store.commit({ "type": 'setError', error: error })
-                    break;
-            }
-        })
+        var ajax = new DonationEndpoints(store)
+
+        var count = (store) => {
+            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
+            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            var page = store.state.page
+            var sort = store.state.sorting
+            ajax.count(successHandler, errorHandler, page, sort)
+        }
+        
+        var get = (store) => {
+            var successHandler = (response) => store.commit({ "type": 'init', "donations": response.data.data })
+            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            var page = store.state.page
+            var sort = store.state.sorting
+            ajax.get(successHandler, errorHandler, page, sort)
+        }
+        
+        get(store)
+        count(store)
+    },
+    page (store, down) {
+        var offset = store.state.page.offset - store.state.page.size
+        var valid = offset >= 0
+        if(!down) {
+            offset = store.state.page.offset + store.state.page.size
+            valid = offset < store.state.countItems
+        }
+        if(valid) {
+            store.commit({ "type": 'page', "offset": offset })
+            store.dispatch('init')
+        }
+    },
+    sort (store, sorting) {
+        store.commit({ "type": "sort", "sort": sorting })
+        store.dispatch('init')
     },
     add (store, donation) {
         var user = store.rootGetters['user/get']
         donation["id"] = uuidv4()
         donation["author"] = user.uuid
         donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
-        axios.post('/backend/stream/donations/create', donation, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }).then(response => {
-            store.commit({ "type": 'push', "donation": response.data.data[0] })
-        }).catch(error => {
-            switch(error.response.code) {
-                case 401:
-                    store.root.dispatch('user/logout')
-                    break;
-                default:
-                    store.commit({ "type": 'setError', error: error })
-                    break;
-            }
-        })
+
+        var ajax = new DonationEndpoints(store)
+        var successHandler = (response) => store.commit({ "type": 'push', "donation": response.data.data[0] })
+        var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+        ajax.save(successHandler, errorHandler, donation)
     }
 }
 
 const mutations = {
     init(state, pushDonations) {
         state.items = pushDonations.donations
+    },
+    sort(state, sort) {
+        state.sorting = sort.sort
+    },
+    count(state, count) {
+        state.countItems = count.count.count
+    },
+    page(state, offset) {
+        state.page.offset = offset.offset
     },
     push(state, pushDonation) {
         state.items.push(pushDonation.donation)

@@ -14,7 +14,7 @@
                     </template>
                     <HouseholdFilter @vca-filter-updated="addState" />
                 </Collapse>
-                <ListMenu />
+                <ListMenu :fields="sortFields" store="household" />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
                     {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
                 </button>
@@ -104,6 +104,34 @@
             },
             hasCrewTag() {
                 return this.taggableFilter.filter(field => field.name === "crew").length > 0
+            },
+            sortFields() {
+                return [
+                    {
+                        "value": "household.what",
+                        "label": this.$t("household.header.table.what")
+                    },
+                    {
+                        "value": "household.wherefor",
+                        "label": this.$t("household.header.table.wherefor")
+                    },
+                    {
+                        "value": "household.crew",
+                        "label": this.$t("household.header.table.crew")
+                    },
+                    {
+                        "value": "household.amount",
+                        "label": this.$t("household.header.table.amount")
+                    },
+                    {
+                        "value": "household.created",
+                        "label": this.$t("household.header.table.created")
+                    },
+                    {
+                        "value": "household.updated",
+                        "label": this.$t("household.header.table.updated")
+                    }
+                ]
             },
             filterCrewTag () {
                 return JSON.parse(JSON.stringify(this.taggableFilter.filter(field => field.name === "crew"))).map(crewTag => {
