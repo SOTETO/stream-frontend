@@ -25,7 +25,7 @@
             <td>
                 <div class="supporter">
                     <Tag :uuid="donation.author" :key="donation.author" />
-                    <Tag v-for="uuid in donation.supporter" :uuid="uuid" :key="uuid" />
+                    <Tag v-for="uuid in supporter(donation)" :uuid="uuid" :key="'sup-' + uuid" />
                 </div>
             </td>
         </tr>
@@ -53,7 +53,7 @@
                 donations: 'overview',
                 isError: 'isError',
                 getErrorCode: 'getErrorCode',
-            }),
+            })
         },
         created () {
             if(this.isError) {
@@ -87,6 +87,11 @@
             formatDate(date) {
                 var d = new Date(date)
                 return this.$d(d, 'short')
+            },
+            supporter (donation) {
+                return donation.supporter
+                    .filter(supporter => supporter !== donation.author)
+                    .filter((value, index, self) => self.indexOf(value) === index)
             },
             open(title, message, type) {
                 Notification({
