@@ -16,6 +16,7 @@ const uuidv4 = require('uuid/v4');
 //                 "receipt": false,
 //                 "partner": {}
 //             },
+//             "depositUnits": [],
 //             "amount": {
 //                 "received": Date.now(),
 //                 "sources": [{"category", "amount", "currency", "type"}],
@@ -124,6 +125,7 @@ const actions = {
         donation["id"] = uuidv4()
         donation["author"] = user.uuid
         donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
+        donation["depositUnits"] = []
 
         var ajax = new DonationEndpoints(store)
         var successHandler = (response) => store.commit({ "type": 'push', "donation": response.data.data[0] })
