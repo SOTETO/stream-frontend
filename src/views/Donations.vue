@@ -16,6 +16,9 @@
             <VcABox :first="true" :title="$t('donation.header.box.list-methods')">
                 <router-link class="vca-button-primary vca-full-width" to="/donations/add">{{ $t('donation.buttons.add') }}</router-link>
             </VcABox>
+            <VcABox :title="$t('donation.header.box.deposit')">
+              <DonationDeposit donations="donations" ></DonationDeposit>
+            </VcAbox>
         </VcAColumn>
     </VcAFrame>
 </template>
@@ -26,11 +29,11 @@
     import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
-
+    import DonationDeposit from '@/components/DonationDeposit' 
     export default {
         name: "donations",
         components: {
-            VcAFrame, VcAColumn, VcABox, List, ListMenu
+            VcAFrame, VcAColumn, VcABox, List, ListMenu, DonationDeposit
         },
         computed: {
             ...mapGetters('donations', {
