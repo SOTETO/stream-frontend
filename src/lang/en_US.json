@@ -181,7 +181,8 @@
         "save": "Save",
         "amount": "Donations amount",
         "externalTransactions": "Details external transaction",
-        "action": "Event"
+        "action": "Event",
+        "deposit": "Enter deposit"
       },
       "donationSource": {
         "sourceSelect": "What type of donation?",
@@ -265,6 +266,23 @@
           "email": "Email address",
           "address": "Postal address"
         }
+      }
+    },
+    "deposit": {
+      "placeholder": {
+        "amount": "Deposited amount",
+        "dateOfDeposit": "When?",
+        "searchDonation": "Select a donation"
+      },
+      "buttons": {
+        "save": "Save"
+      },
+      "hint": {
+        "openDeposit": "{amount} are not assigned to a donation."
+      },
+      "errors": {
+        "noValueForAssignedDonation": "Missing amount...",
+        "valueForAssignedDonationOutOfRange": "Out of range..."
       }
     },
     "currencies": {

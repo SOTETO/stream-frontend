@@ -27,6 +27,30 @@ export default class DonationEndpoints {
         .catch(error => defaultErrorHandler(error, errorHandler))
     }
     
+    getByQuery(successHandler, errorHandler,searchKey) {
+        axios.post(
+            '/backend/stream/donations',
+            { "filter": { "name": searchKey } },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+        )
+        .then(response => successHandler(response))
+        .catch(error => defaultErrorHandler(error, errorHandler))
+    }
+
+    /**
+     * TODO!
+     * @param successHandler
+     * @param errorHandler
+     * @param id
+     */
+    getById(successHandler, errorHandler, id) {
+        axios.post(
+            '/backend/stream/donations',
+            { },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+        )
+    }
+    
     count(successHandler, errorHandler, page, sort) {
         axios.post(
             "/backend/stream/donations/count",

@@ -51,6 +51,14 @@ const getters = {
     isAuthorOrEditor: (state, getters) => (userIds) => {
         return userIds.reduce((acc, userId) => acc || getters.same(userId), false)
     },
+    getCrew: (state, getters) => {
+        var crewRole = state.user.roles.find(role => role.hasOwnProperty("crewId"))
+        var res = null
+        if(typeof crewRole !== "undefined") {
+            res = crewRole.crewId
+        }
+        return res
+    },
     isError: (state) => {
         return state.error !== null
     },

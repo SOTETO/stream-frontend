@@ -1,7 +1,24 @@
-import axios from 'axios'
+import DepositEndpoints from '@/backend-endpoints/DepositEndpoints'
 
-//const uuidv4 = require('uuid/v4')
+const uuidv4 = require('uuid/v4');
 
+// initial state
+// shape: [{
+//             "publicId": UUID
+//             "confirmed": Long,
+//             "crew": UUID,
+//             "supporter": UUID,
+//             "created": Long,
+//             "updated": Long,
+//             "dateOfDeposit": Long,
+//             "amount": [{
+//                  "publicId": UUID,
+//                  "confirmed": Long,
+//                  "donationId": UUID,
+//                  "amount": Double,
+//                  "created": Long
+//             }]
+//         }]
 const state = {
   items: [],
   error: null
@@ -40,41 +57,37 @@ const getters = {
 
 const actions = {
   init (store) {
-    axios.get('/backend/stream/deposits').then(response =>{
-      store.commit({"type": 'inti', "deposits": response.data.data })
-    }).catch(error => {
-      switch(error.response.code) {
-        case 401:
-          store.root.dispatch('user/logout')
-          break;
-        default:
-          store.commit({ "type": 'setError', error: error})
-          break;
-      }
-    })
+      var ajax = new DepositEndpoints(store)
+      var successHandler = (response) => store.commit({ "type": 'init', "donations": response.data.data })
+      var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+      ajax.get(successHandler, errorHandler)
   },
   add (store, deposit) {
     //get the current user
     var user = store.rootGetters['user/get']
-    //set author
-    deposit["author"] = user.uuid
-    //post deposit 
-    axios.post('/backend/stream/deposit/create', deposit)
-      .then(response => { 
-        //store response into store
-        store.commit({ "type": 'push', "deposit": response.data })
-      })
-        //catch error
-      .catch(error => {
-        switch(error.response.code) {
-          case 401:
-            store.root.dispatch('user/logout')
-            break;
-          default:
-            store.commit({ "type": 'setError', error: error})
-            break;
+    var crew = store.rootGetters['user/getCrew']
+    deposit["publicId"] = uuidv4()
+    deposit["crew"] = crew // hopefully not undefined
+    deposit["supporter"] = user.uuid
+    deposit["created"] = Date.now()
+    deposit["updated"] = Date.now()
+
+    var amount = deposit.depositUnits.map((unit) => {
+        return {
+            "publicId": uuidv4(),
+            "donationId": unit.donation,
+            "amount": unit.deposit.amount,
+            "created": Date.now()
         }
-      })
+    })
+    deposit["amount"] = JSON.parse(JSON.stringify(amount))
+    delete deposit.depositUnits
+      
+    //post deposit
+      var ajax = new DepositEndpoints(store)
+      var successHandler = (response) => store.commit({ "type": 'push', "deposit": response.data })
+      var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+      ajax.save(successHandler, errorHandler, deposit)
   }
   //add (store, deposit) {
   //  "TODO"

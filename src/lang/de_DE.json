@@ -182,7 +182,8 @@
         "save": "Speichern",
         "amount": "Spendenbetrag",
         "externalTransactions": "Details externer Überweiser",
-        "action": "Aktion"
+        "action": "Aktion",
+        "deposit": "Einzahlung vermerken"
       },
       "donationSource": {
         "sourceSelect": "Woher kommt die Spende?",
@@ -267,6 +268,23 @@
           "address": "Postanschrift"
         }
       }
+    }
+  },
+  "deposit": {
+    "placeholder": {
+      "amount": "Eingezahlte Summe",
+      "dateOfDeposit": "Wann wurde eingezahlt?",
+      "searchDonation": "Wähle eine Spende"
+    },
+    "buttons": {
+      "save": "Speichern"
+    },
+    "hint": {
+      "openDeposit": "Noch {amount} sind keiner Spende zugeordnet."
+    },
+    "errors": {
+      "noValueForAssignedDonation": "Der Anteil fehlt...",
+      "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe..."
     }
   },
   "currencies": {

@@ -28,6 +28,7 @@ const uuidv4 = require('uuid/v4');
 //         }]
 const state = {
     items: [],
+    specialRequests: [],
     page: {
         size: 10,
         offset: 0
@@ -59,6 +60,9 @@ const getters = {
                 "supporter":  donation.amount.involvedSupporter
             }
         })
+    },
+    getById: (state) => (id) => {
+        return state.specialRequests.find(item => item.id === id)
     },
     isError: (state, getters) => {
         return state.error !== null
@@ -131,12 +135,22 @@ const actions = {
         var successHandler = (response) => store.commit({ "type": 'push', "donation": response.data.data[0] })
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
         ajax.save(successHandler, errorHandler, donation)
+    },
+    getById (store, id) {
+        // TODO: Use Ajax query!
+        var item = store.state.items.find(item => item.id === id)
+        if(typeof item !== "undefined") {
+            store.commit({ "type": "getById", "donation": item })
+        }
     }
 }
 
 const mutations = {
     init(state, pushDonations) {
         state.items = pushDonations.donations
+    },
+    getById(state, newSpecial) {
+        state.specialRequests.push(newSpecial.donation)
     },
     sort(state, sort) {
         state.sorting = sort.sort

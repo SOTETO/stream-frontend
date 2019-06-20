@@ -7,7 +7,7 @@
                 v-if="amountErrorState"
                 class="el-form-item__error"
             >
-            {{ $t('donation.hints.error.amount.pattern') }}
+            {{ errorMsg }}
         </div>
     </el-form-item>
 </template>
@@ -50,6 +50,13 @@
             "disabled": {
                 "type": Boolean,
                 "default": false
+            },
+            "rules": {
+                "type": Array,
+                "default": () => [{
+                    "validator": (numericValue) => false,
+                    "msg": ""
+                }]
             }
         },
         data () {
@@ -64,7 +71,8 @@
             return {
                 "amount": amount,
                 "numericAmount": numericAmount,
-                "amountErrorState": false
+                "amountErrorState": false,
+                "errorMsg": this.$t('donation.hints.error.amount.pattern')
             }
         },
         created: function () {
@@ -92,12 +100,30 @@
                     this.$emit('vca-money-validationError')
                 }
             },
+            internalValidation(numeric) {
+               return this.rules.reduce((acc, rule) => {
+                   var res = acc
+                   if(rule.validator(numeric)) {
+                      res = {
+                          "valid": false,
+                          "msg": rule.msg
+                      }
+                   }
+                   return res
+               }, {
+                   "valid": true
+               })
+            },
             validate(value) {
                 var formatter = new CurrencyFormatter(this.currency, value)
-                if (formatter.match()) {
+                var internal = this.internalValidation(formatter.getNumeric())
+                if (formatter.match() && internal.valid) {
                     this.amount = formatter.localize()
                     this.numericAmount = formatter.getNumeric()
                     this.amountErrorState = false
+                } else if(!internal.valid) {
+                    this.amountErrorState = true
+                    this.errorMsg = internal.msg
                 } else {
                     this.amountErrorState = true
                 }
