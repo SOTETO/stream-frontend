@@ -5,6 +5,10 @@ const uuidv4 = require('uuid/v4');
 // initial state
 // shape: [{
 //             "publicId": UUID
+//             "full": {
+//                  "amount": Double,
+//                  "currency": String
+//             },
 //             "confirmed": Long,
 //             "crew": UUID,
 //             "supporter": UUID,
@@ -77,6 +81,7 @@ const actions = {
             "publicId": uuidv4(),
             "donationId": unit.donation,
             "amount": unit.deposit.amount,
+            "currency": unit.deposit.currency,  
             "created": Date.now()
         }
     })
