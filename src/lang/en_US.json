@@ -211,6 +211,11 @@
         "received": "Received: {date}",
         "created": "Recorded: {date}"
       },
+      "deposit": {
+        "confirmed": "Confirmed: {amount}",
+        "unconfirmed": "Unconfirmed: {amount}",
+        "open": "Open: {amount}"
+      },
       "total": {
         "cash": "Total (cash): {total}",
         "extern": "Total (external transaction): {total}",

@@ -15,7 +15,9 @@
             <td>{{ donation.name }}</td>
             <td class="crew"><Tag :uuid="donation.author" :crew="true" /></td>
             <td>{{ formatAmount(donation.amount) }}</td>
-            <td>{{ donation.deposited }}</td>
+            <td>
+                <DepositLights :donation="donation" />
+            </td>
             <td>
                 <div class="dates">
                     <span>{{ $t("donation.hints.dates.received", { "date":  formatDate(donation.date.received) }) }}</span>
@@ -38,6 +40,7 @@
     import { mapGetters, mapActions } from 'vuex'
     import { Tag } from 'vca-widget-user'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+    import DepositLights from '@/components/donations/DepositLights'
     import { Notification } from 'element-ui'
 
     Vue.use(Notification)
@@ -46,7 +49,7 @@
     export default {
         name: "List",
         components: {
-            Tag
+            Tag, DepositLights
         },
         computed: {
             ...mapGetters('donations', {
@@ -145,7 +148,7 @@
         }
     }
 
-    .dates {
+    .dates, .deposit {
         display: flex;
         flex-direction: column;
         padding: 0.2em;

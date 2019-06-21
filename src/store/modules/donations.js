@@ -51,7 +51,20 @@ const getters = {
                 "id": donation.id,
                 "name": donation.context.description,
                 "amount": donation.amount.sources.reduce((amount, source) => amount + source.amount, 0),
-                "deposited": "TODO", // Todo: add deposition information
+                "deposited": donation.depositUnits.reduce((categories, unit) => {
+                    if(unit.hasOwnProperty("confirmed")) {
+                        if(!categories.confirmed.hasOwnProperty(unit.currency)) {
+                            categories.confirmed[unit.currency] = 0
+                        }
+                        categories.confirmed[unit.currency] += unit.amount
+                    } else {
+                        if(!categories.unconfirmed.hasOwnProperty(unit.currency)) {
+                            categories.unconfirmed[unit.currency] = 0
+                        }
+                        categories.unconfirmed[unit.currency] += unit.amount
+                    }
+                    return categories
+                }, { "confirmed": {}, "unconfirmed": {} }),
                 "date": {
                     "received": donation.amount.received,
                     "created": donation.created
