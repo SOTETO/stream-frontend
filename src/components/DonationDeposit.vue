@@ -14,9 +14,10 @@
             :id="donation.value"
             :label="donation.label"
             :currency="deposit.full.currency"
-            :max="deposit.full.amount"
+            :max="unassignedDeposit.numeric()"
             @vca-add-depositUnit="addDepositUnit"
-            @vca-remove-depositUnit="removeDepositUnit"
+            @vca-assignment-error-state="setErrorState"
+            @vca-assignment-no-error-state="removeErrorState"
     />
     <el-form-item
       class="vca-form"
@@ -31,6 +32,7 @@
       </el-date-picker>
     </el-form-item>
     <button
+            :disabled="inErrorState"
             class="vca-button-primary vca-full-width"
             @click.prevent="commit">
       {{ $t("deposit.buttons.save") }}
@@ -69,7 +71,8 @@
             "dateOfDeposit": null
         },
         "donations": [],
-        "rules": {}
+        "rules": {},
+        "errorState": []
       }
     },
     computed: {
@@ -80,6 +83,9 @@
         },
         visibleUnassignedDeposit () {
             return this.deposit.full.amount > 0 && this.unassignedDeposit.numeric() > 0
+        },
+        inErrorState () {
+            return this.errorState.length > 0
         }
     },
     methods: {
@@ -109,6 +115,12 @@
               },
               "donation": donation.value
           })
+      },
+      setErrorState (donationId) {
+          this.errorState.push(donationId)
+      },
+      removeErrorState (donationId) {
+          this.errorState = this.errorState.filter(id => id !== donationId)
       },
       reset () {
           Object.assign(this.$data, this.$options.data.apply(this))

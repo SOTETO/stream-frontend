@@ -53,7 +53,7 @@
                     "amount": [
                         {
                             "validator": (numericValue) =>
-                                numericValue === null || (typeof numericValue === "undefined") || numericValue === 0,
+                                numericValue === null || (typeof numericValue === "undefined") || numericValue == 0,
                             "msg": this.$t("deposit.errors.noValueForAssignedDonation")
                         },
                         {
@@ -72,9 +72,10 @@
                     "deposit": this.amount,
                     "donation": this.id
                 })
+                this.$emit('vca-assignment-no-error-state', this.id)
             },
             onError() {
-                this.$emit('vca-remove-depositUnit', this.amount)
+                this.$emit('vca-assignment-error-state', this.id)
             }
         }
     }

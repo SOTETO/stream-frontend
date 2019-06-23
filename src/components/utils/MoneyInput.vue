@@ -1,12 +1,14 @@
 <template>
     <el-form-item
         :required="required"
+        class="vca-money-wrapper"
+        :class="amountErrorState ? 'vca-error' : ''"
     >
         <el-input class="vca-input" v-model="amount" @change="validate" :placeholder="label" :disabled="disabled" />
-            <div
+        <div
                 v-if="amountErrorState"
                 class="el-form-item__error"
-            >
+        >
             {{ errorMsg }}
         </div>
     </el-form-item>
@@ -121,13 +123,13 @@
                     this.amount = formatter.localize()
                     this.numericAmount = formatter.getNumeric()
                     this.amountErrorState = false
+                    this.$emit("change")
+                } else if(!formatter.match()) {
+                    this.amountErrorState = true
                 } else if(!internal.valid) {
                     this.amountErrorState = true
                     this.errorMsg = internal.msg
-                } else {
-                    this.amountErrorState = true
                 }
-                this.$emit("change")
                 this.commit()
             }
         }
@@ -135,5 +137,8 @@
 </script>
 
 <style scoped>
+    .vca-money-wrapper.vca-error {
+        margin-bottom: 2em;
+    }
 
 </style>
