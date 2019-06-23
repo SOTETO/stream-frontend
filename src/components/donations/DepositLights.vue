@@ -45,9 +45,19 @@
             showOpen () {
                 return this.open > 0
             },
+            /**
+             * Calculates the state of the confirmed amount. It's "red", if there is no confirmed amount and "green", if
+             * the confiremd amount is equal to the donations amount. It has a "yellow" state, if there is some confirmed
+             * amount, but some percentage is missing AND also if the confirmed deposit amount is bigger than the amount
+             * of the donation. The last case happens, if the supporter has made an error during counting the donation by
+             * hand. It indicates, that the supporter should edit the donations amount.
+             *
+             * @author Johann Sell
+             * @returns {string}
+             */
             stateConfirmed () {
                 var state = "red"
-                if(this.confirmed > 0 && this.confirmed < this.donation.amount) {
+                if(this.confirmed > 0 && this.confirmed !== this.donation.amount) {
                     state = "yellow"
                 } else if(this.confirmed === this.donation.amount) {
                     state = "green"
