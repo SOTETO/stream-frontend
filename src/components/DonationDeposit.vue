@@ -3,7 +3,7 @@
     :model="deposit"
     :rules="rules"
     :key="reloadKey">
-    <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('deposit.placeholder.amount')" />
+    <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('deposit.placeholder.amount')" @vca-money-validationError="setErrorState('general')" @input="removeErrorState('general')" />
     <div>
       <span v-if="visibleUnassignedDeposit">{{ $t("deposit.hint.openDeposit", { "amount": unassignedDeposit.localize() }) }}</span>
     </div>
