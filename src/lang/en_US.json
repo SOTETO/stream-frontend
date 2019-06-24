@@ -279,6 +279,7 @@
       },
       "table": {
         "head": {
+          "created": "Created",
           "date": "Date of deposit",
           "crew": "Crew",
           "amount": "Amount",
