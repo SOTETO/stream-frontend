@@ -276,6 +276,19 @@
     }
   },
   "deposit": {
+    "header": {
+      "box": "Einzahlungen"
+    },
+    "table": {
+      "head": {
+        "date": "Datum der Einzahlung",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "donations": "Zugeordnete Spenden",
+        "supporter": "Beteiligte Supporter",
+        "state": "Status"
+      }
+    },
     "placeholder": {
       "amount": "Eingezahlte Summe",
       "dateOfDeposit": "Wann wurde eingezahlt?",
@@ -285,11 +298,22 @@
       "save": "Speichern"
     },
     "hint": {
-      "openDeposit": "Noch {amount} sind keiner Spende zugeordnet."
+      "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
+      "dates": {
+        "received": "Eingezahlt: {date}",
+        "created": "Eingetragen: {date}",
+        "confirmed": "Bestätigt: {date}",
+        "unconfirmed": "Nicht bestätigt"
+      }
     },
     "errors": {
       "noValueForAssignedDonation": "Der Anteil fehlt...",
-      "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe..."
+      "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
+      "donationNotFound": "Kein Name der Spende",
+      "donationBackendError": {
+        "title": "Serverfehler",
+        "msg": "Leider konnten keine Spenden gefunden werden."
+      }
     }
   },
   "currencies": {

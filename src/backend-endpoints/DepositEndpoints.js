@@ -5,7 +5,8 @@ export default class DepositEndpoints {
     constructor(store) {
         this.store = store
 
-        var defaultErrorHandler = function (error, errorHandler) {
+        this.defaultErrorHandler = function (error, errorHandler) {
+            console.log(error)
             switch (error.response.code) {
                 case 401:
                     this.store.root.dispatch('user/logout')
@@ -17,22 +18,33 @@ export default class DepositEndpoints {
         }
     }
 
-    get(successHandler, errorHandler) {
-        axios.get(
+    get(successHandler, errorHandler, page, sort) {
+        axios.post(
             '/backend/stream/deposits',
-           // { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+            { "page": page, "sort": sort },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
             .then(response => successHandler(response))
-            .catch(error => defaultErrorHandler(error, errorHandler))
+            .catch(error => this.defaultErrorHandler(error, errorHandler))
+    }
+
+    count(successHandler, errorHandler, page, sort) {
+        axios.post(
+            "/backend/stream/deposits/count",
+            { "page": page, "sort": sort },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+        )
+            .then(response => successHandler(response))
+            .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
 
     save(successHandler, errorHandler, deposit) {
         axios.post(
-            '/backend/stream/deposit/create',
+            '/backend/stream/deposits/create',
             deposit,
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
             .then(response => successHandler(response))
-            .catch(error => defaultErrorHandler(error, errorHandler))
+            .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
 }

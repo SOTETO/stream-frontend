@@ -1,7 +1,7 @@
 <template>
   <VcAFrame>
     <VcAColumn size="90%">
-      <VcABox>
+      <VcABox :first="true"  :title="$t('deposit.header.box')">
         <DepositList/>
       </VcABox>
     </VcAColumn>

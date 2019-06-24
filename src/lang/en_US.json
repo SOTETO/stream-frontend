@@ -274,6 +274,19 @@
       }
     },
     "deposit": {
+      "header": {
+        "box": "Deposits"
+      },
+      "table": {
+        "head": {
+          "date": "Date of deposit",
+          "crew": "Crew",
+          "amount": "Amount",
+          "donations": "Associated donations",
+          "supporter": "Involved supporter",
+          "state": "State"
+        }
+      },
       "placeholder": {
         "amount": "Deposited amount",
         "dateOfDeposit": "When?",
@@ -283,11 +296,22 @@
         "save": "Save"
       },
       "hint": {
-        "openDeposit": "{amount} are not assigned to a donation."
+        "openDeposit": "{amount} are not assigned to a donation.",
+        "dates": {
+          "received": "Date of deposit: {date}",
+          "created": "Created: {date}",
+          "confirmed": "Confirmed: {date}",
+          "unconfirmed": "Not confirmed"
+        }
       },
       "errors": {
         "noValueForAssignedDonation": "Missing amount...",
-        "valueForAssignedDonationOutOfRange": "Out of range..."
+        "valueForAssignedDonationOutOfRange": "Out of range...",
+        "donationNotFound": "No donation name",
+        "donationBackendError": {
+          "title": "Internal error",
+          "msg": "No donation has been found."
+        }
       }
     },
     "currencies": {

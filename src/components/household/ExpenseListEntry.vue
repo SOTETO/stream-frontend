@@ -59,7 +59,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { Tag } from 'vca-widget-user'
-    import StateLight from './StateLight'
+    import StateLight from '@/components/utils/StateLight'
     import RoleDependentStateLight from './RoleDependentStateLight'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
