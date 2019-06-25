@@ -165,7 +165,7 @@ const actions = {
       var ajax = new DepositEndpoints(store)
       var successHandler = (response) => {
         store.commit({ "type": 'push', "deposit": response.data })
-        store.dispatch('init')
+        store.dispatch('donations/init', null, { root: true })
       }
       var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
       ajax.save(successHandler, errorHandler, deposit)
