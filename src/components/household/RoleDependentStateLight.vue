@@ -4,7 +4,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import StateLight from './StateLight'
+    import StateLight from '@/components/utils/StateLight'
 
     export default {
         name: "RoleDependentStateLight",

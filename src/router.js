@@ -58,7 +58,15 @@ var router = new Router({
       meta: {
         'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
       }
-    }
+    },
+      {
+          path: '/deposits',
+          name: 'deposits',
+          component: () => import('./views/Deposit.vue'),
+          meta: {
+              'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+          }
+      }
   ]
 })
 

@@ -181,7 +181,8 @@
         "save": "Save",
         "amount": "Donations amount",
         "externalTransactions": "Details external transaction",
-        "action": "Event"
+        "action": "Event",
+        "deposit": "Enter deposit"
       },
       "donationSource": {
         "sourceSelect": "What type of donation?",
@@ -209,6 +210,11 @@
       "dates": {
         "received": "Received: {date}",
         "created": "Recorded: {date}"
+      },
+      "deposit": {
+        "confirmed": "Confirmed: {amount}",
+        "unconfirmed": "Unconfirmed: {amount}",
+        "open": "Open: {amount}"
       },
       "total": {
         "cash": "Total (cash): {total}",
@@ -264,6 +270,48 @@
           "asp": "Contact person",
           "email": "Email address",
           "address": "Postal address"
+        }
+      }
+    },
+    "deposit": {
+      "header": {
+        "box": "Deposits"
+      },
+      "table": {
+        "head": {
+          "created": "Created",
+          "date": "Date of deposit",
+          "crew": "Crew",
+          "amount": "Amount",
+          "donations": "Associated donations",
+          "supporter": "Involved supporter",
+          "state": "State"
+        }
+      },
+      "placeholder": {
+        "amount": "Deposited amount",
+        "dateOfDeposit": "When?",
+        "searchDonation": "Select a donation"
+      },
+      "buttons": {
+        "save": "Save"
+      },
+      "hint": {
+        "openDeposit": "{amount} are not assigned to a donation.",
+        "dates": {
+          "received": "Date of deposit: {date}",
+          "created": "Created: {date}",
+          "confirmed": "Confirmed: {date}",
+          "unconfirmed": "Not confirmed"
+        }
+      },
+      "errors": {
+        "noValueForAssignedDonation": "Missing amount...",
+        "valueForAssignedDonationOutOfRange": "Out of range...",
+        "donationNotFound": "No donation name",
+        "donationBackendError": {
+          "title": "Internal error",
+          "msg": "No donation has been found."
         }
       }
     },

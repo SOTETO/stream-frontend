@@ -5,7 +5,7 @@ export default class DonationEndpoints {
     constructor(store) {
         this.store = store
 
-        var defaultErrorHandler = function(error, errorHandler) {
+        this.defaultErrorHandler = function(error, errorHandler) {
             switch(error.response.code) {
                 case 401:
                     this.store.root.dispatch('user/logout')
@@ -24,7 +24,27 @@ export default class DonationEndpoints {
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
         .then(response => successHandler(response))
-        .catch(error => defaultErrorHandler(error, errorHandler))
+        .catch(error => this.defaultErrorHandler(error, errorHandler))
+    }
+    
+    getByQuery(successHandler, errorHandler, searchKey) {
+        axios.post(
+            '/backend/stream/donations',
+            { "filter": { "name": searchKey } },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+        )
+        .then(response => successHandler(response))
+        .catch(error => this.defaultErrorHandler(error, errorHandler))
+    }
+    
+    getByIds(successHandler, errorHandler, ids) {
+        axios.post(
+            '/backend/stream/donations',
+            { "filter": { "publicId": ids } },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+        )
+        .then(response => successHandler(response))
+        .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
     
     count(successHandler, errorHandler, page, sort) {
@@ -34,7 +54,7 @@ export default class DonationEndpoints {
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
         )
         .then(response => successHandler(response))
-        .catch(error => defaultErrorHandler(error, errorHandler))
+        .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
 
     save(successHandler, errorHandler, donation) {
@@ -44,6 +64,6 @@ export default class DonationEndpoints {
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
         .then(response => successHandler(response))
-        .catch(error => defaultErrorHandler(error, errorHandler))
+        .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
 }

@@ -182,7 +182,8 @@
         "save": "Speichern",
         "amount": "Spendenbetrag",
         "externalTransactions": "Details externer Überweiser",
-        "action": "Aktion"
+        "action": "Aktion",
+        "deposit": "Einzahlung vermerken"
       },
       "donationSource": {
         "sourceSelect": "Woher kommt die Spende?",
@@ -210,6 +211,11 @@
       "dates": {
         "received": "Erhalten: {date}",
         "created": "Eingetragen: {date}"
+      },
+      "deposit": {
+        "confirmed": "Bestätigt: {amount}",
+        "unconfirmed": "Unbestätigt: {amount}",
+        "open": "Offen: {amount}"
       },
       "total": {
         "cash": "Summe Barspende: {total}",
@@ -266,6 +272,48 @@
           "email": "Emailadresse",
           "address": "Postanschrift"
         }
+      }
+    }
+  },
+  "deposit": {
+    "header": {
+      "box": "Einzahlungen"
+    },
+    "table": {
+      "head": {
+        "created": "Eingetragen",
+        "date": "Datum der Einzahlung",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "donations": "Zugeordnete Spenden",
+        "supporter": "Beteiligte Supporter",
+        "state": "Status"
+      }
+    },
+    "placeholder": {
+      "amount": "Eingezahlte Summe",
+      "dateOfDeposit": "Wann wurde eingezahlt?",
+      "searchDonation": "Wähle eine Spende"
+    },
+    "buttons": {
+      "save": "Speichern"
+    },
+    "hint": {
+      "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
+      "dates": {
+        "received": "Eingezahlt: {date}",
+        "created": "Eingetragen: {date}",
+        "confirmed": "Bestätigt: {date}",
+        "unconfirmed": "Nicht bestätigt"
+      }
+    },
+    "errors": {
+      "noValueForAssignedDonation": "Der Anteil fehlt...",
+      "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
+      "donationNotFound": "Kein Name der Spende",
+      "donationBackendError": {
+        "title": "Serverfehler",
+        "msg": "Leider konnten keine Spenden gefunden werden."
       }
     }
   },

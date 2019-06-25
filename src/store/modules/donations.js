@@ -28,6 +28,7 @@ const uuidv4 = require('uuid/v4');
 //         }]
 const state = {
     items: [],
+    specialRequests: [],
     page: {
         size: 10,
         offset: 0
@@ -50,7 +51,20 @@ const getters = {
                 "id": donation.id,
                 "name": donation.context.description,
                 "amount": donation.amount.sources.reduce((amount, source) => amount + source.amount, 0),
-                "deposited": "TODO", // Todo: add deposition information
+                "deposited": donation.depositUnits.reduce((categories, unit) => {
+                    if(unit.hasOwnProperty("confirmed")) {
+                        if(!categories.confirmed.hasOwnProperty(unit.currency)) {
+                            categories.confirmed[unit.currency] = 0
+                        }
+                        categories.confirmed[unit.currency] += unit.amount
+                    } else {
+                        if(!categories.unconfirmed.hasOwnProperty(unit.currency)) {
+                            categories.unconfirmed[unit.currency] = 0
+                        }
+                        categories.unconfirmed[unit.currency] += unit.amount
+                    }
+                    return categories
+                }, { "confirmed": {}, "unconfirmed": {} }),
                 "date": {
                     "received": donation.amount.received,
                     "created": donation.created
@@ -59,6 +73,9 @@ const getters = {
                 "supporter":  donation.amount.involvedSupporter
             }
         })
+    },
+    getById: (state) => (id) => {
+        return state.specialRequests.find(item => item.id === id)
     },
     isError: (state, getters) => {
         return state.error !== null
@@ -131,12 +148,22 @@ const actions = {
         var successHandler = (response) => store.commit({ "type": 'push', "donation": response.data.data[0] })
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
         ajax.save(successHandler, errorHandler, donation)
+    },
+    getById (store, id) {
+        // TODO: Use Ajax query!
+        var item = store.state.items.find(item => item.id === id)
+        if(typeof item !== "undefined") {
+            store.commit({ "type": "getById", "donation": item })
+        }
     }
 }
 
 const mutations = {
     init(state, pushDonations) {
         state.items = pushDonations.donations
+    },
+    getById(state, newSpecial) {
+        state.specialRequests.push(newSpecial.donation)
     },
     sort(state, sort) {
         state.sorting = sort.sort
