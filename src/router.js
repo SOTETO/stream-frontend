@@ -52,6 +52,22 @@ var router = new Router({
         }
     },
     {
+      path: '/takings',
+      name: 'takings',
+      component: () => import('./views/Takings.vue'),
+      meta: {
+        'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
+      }
+    },
+    {
+      path: '/takings/add',
+      name: 'takings-add',
+      component: () => import('./views/TakingsAdd.vue'),
+      meta: {
+        'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+      }
+    },
+    {
       path: '/household',
       name: 'household',
       component: () => import('./views/Household.vue'),
@@ -64,6 +80,7 @@ var router = new Router({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.hasOwnProperty("roles"))) {
+// eslint-disable-next-line no-inner-declarations
         function checker () {
             // Now, check the roles for the given entry!
             if(!store.getters['user/isError']) {
