@@ -45,6 +45,9 @@ const getters = {
     isEmployee: (state, getters) => {
         return getters.is(["Employee"])
     },
+    isAdmin: (state, getters) => {
+        return getters.is(["Admin"])
+    },
     isVolunteerManager: (state, getters) => {
         return getters.is([{ "name": "VolunteerManager" }]) // Todo: consider Crew!
     },

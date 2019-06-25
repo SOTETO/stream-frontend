@@ -58,11 +58,15 @@
         isError: 'isError',
         getErrorCode: 'getErrorCode'
       }),
+      ...mapGetters('user', {
+          isEmployee: 'isEmployee',
+          isAdmin: 'isAdmin'
+      }),
       maximumTags () {
           return 2;
       },
       allowedToConfirm () {
-        return true // Todo: Replace by check for users roles!
+        return this.isEmployee || this.isAdmin
       }
     },
     data () {
