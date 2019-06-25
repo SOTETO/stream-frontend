@@ -35,7 +35,8 @@
           </div>
         </td>
         <td>
-          <StateLight v-if="deposit.status === 'unconfirmed'" :value="{ 'name': $t('deposit.hint.dates.unconfirmed'), 'state': 0 }" />
+          <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">Confirm</button>
+          <StateLight v-else-if="!confirmed(deposit) && !allowedToConfirm" :value="{ 'name': $t('deposit.hint.dates.unconfirmed'), 'state': 0 }" />
           <StateLight v-else :value="{ 'name': $t('deposit.hint.dates.confirmed', { 'date':  formatDate(deposit.status) }), 'state': 1  }" />
         </td>
       </tr>
@@ -59,6 +60,9 @@
       }),
       maximumTags () {
           return 2;
+      },
+      allowedToConfirm () {
+        return true // Todo: Replace by check for users roles!
       }
     },
     data () {
@@ -72,6 +76,7 @@
     methods: {
       ...mapActions('deposits', [
         'init', // map `this.init()` to `this.$store.dispatch('deposits/init')`
+        'confirm'
       ]),
       formatAmount(amount) {
         var formatter = CurrencyFormatter.getFromNumeric(amount.currency, amount.amount)
@@ -97,6 +102,9 @@
               name = this.$t('deposit.errors.donationNotFound')
           }
           return name
+        },
+        confirmed(deposit) {
+          return deposit.status !== "unconfirmed"
         },
       open(title, message, type) {
         Notification({
@@ -166,5 +174,10 @@
     & /deep/ .tag {
       margin-right: 0.5em;
     }
+  }
+
+  .padding {
+    padding-left: 1em;
+    padding-right: 1em;
   }
 </style>

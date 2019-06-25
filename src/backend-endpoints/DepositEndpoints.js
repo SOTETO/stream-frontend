@@ -47,4 +47,14 @@ export default class DepositEndpoints {
             .then(response => successHandler(response))
             .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
+    
+    confirm(successHandler, errorHandler, deposit) {
+        axios.post(
+            "/backend/stream/deposits/confirm",
+            { "id": deposit.id, "date": Date.now() },
+            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+        )
+            .then(response => successHandler(response))
+            .catch(error => this.defaultErrorHandler(error, errorHandler))
+    }
 }

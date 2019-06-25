@@ -163,10 +163,19 @@ const actions = {
       
     //post deposit
       var ajax = new DepositEndpoints(store)
-      var successHandler = (response) => store.commit({ "type": 'push', "deposit": response.data })
+      var successHandler = (response) => {
+        store.commit({ "type": 'push', "deposit": response.data })
+        store.dispatch('init')
+      }
       var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
       ajax.save(successHandler, errorHandler, deposit)
-  }
+  },
+    confirm (store, deposit) {
+        var ajax = new DepositEndpoints(store)
+        var successHandler = (response) => store.dispatch('init')
+        var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+        ajax.confirm(successHandler, errorHandler, deposit)
+    }
 }
 
 const mutations = {
