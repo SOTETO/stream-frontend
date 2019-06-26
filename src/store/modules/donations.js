@@ -23,6 +23,7 @@ const uuidv4 = require('uuid/v4');
 //                 "involvedSupporter": []
 //             },
 //             "author": "some-uuid",
+//             "crew": "some-uuid",
 //             "created": Date.now(),
 //             "updated": Date.now()
 //         }]
@@ -70,6 +71,7 @@ const getters = {
                     "created": donation.created
                 },
                 "author": donation.author,
+                "crew": donation.crew,
                 "supporter":  donation.amount.involvedSupporter
             }
         })
@@ -141,6 +143,7 @@ const actions = {
         var user = store.rootGetters['user/get']
         donation["id"] = uuidv4()
         donation["author"] = user.uuid
+        donation["crew"] = store.rootGetters['user/getCrew']
         donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
         donation["depositUnits"] = []
 

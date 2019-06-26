@@ -13,7 +13,7 @@
         <tbody>
         <tr v-for="donation in donations" :key="donation.id" class="donation">
             <td>{{ donation.name }}</td>
-            <td class="crew"><Tag :uuid="donation.author" :crew="true" /></td>
+            <td class="crew"><CrewPlainName :id="donation.crew" /></td>
             <td>{{ formatAmount(donation.amount) }}</td>
             <td>
                 <DepositLights :donation="donation" />
@@ -38,7 +38,7 @@
 <script>
     import Vue from 'vue'
     import { mapGetters, mapActions } from 'vuex'
-    import { Tag } from 'vca-widget-user'
+    import { Tag, CrewPlainName } from 'vca-widget-user'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
     import DepositLights from '@/components/donations/DepositLights'
     import { Notification } from 'element-ui'
@@ -49,7 +49,7 @@
     export default {
         name: "List",
         components: {
-            Tag, DepositLights
+            Tag, CrewPlainName, DepositLights
         },
         computed: {
             ...mapGetters('donations', {
