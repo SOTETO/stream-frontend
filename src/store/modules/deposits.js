@@ -58,6 +58,7 @@ const getters = {
           "created": deposit.created,
         },
         "actions": deposit.amount,
+        "crew": deposit.crew,
         "supporter": [deposit.supporter],
         "status": status
       }

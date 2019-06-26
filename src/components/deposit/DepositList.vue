@@ -18,7 +18,7 @@
             <span>{{ $t("deposit.hint.dates.created", { "date":  formatDate(deposit.date.created) }) }}</span>
           </div>
         </td>
-        <td class="crew"><Tag :uuid="deposit.supporter[0]" :crew="true" /></td>
+        <td class="crew"><CrewPlainName :id="deposit.crew" /></td>
         <td>{{ formatAmount(deposit.amount) }}</td>
         <td>
           <ul class="actions">
@@ -45,12 +45,12 @@
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import { Tag } from 'vca-widget-user'
+  import { CrewPlainName, Tag } from 'vca-widget-user'
   import StateLight from '@/components/utils/StateLight'
   import CurrencyFormatter from '@/utils/CurrencyFormatter'
   export default {
     name: "DepositList",
-    components: { Tag, StateLight },
+    components: { CrewPlainName, Tag, StateLight },
     computed: {
       ...mapGetters('deposits', {
         depositItems: 'overview',
