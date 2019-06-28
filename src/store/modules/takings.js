@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 //import axios from 'axios'
-//import TakingsEndpoints from  '@/backend-endpoints/TakingsEndpoints'
+import TakingEndpoints from  '@/backend-endpoints/TakingEndpoints'
 
 const uuidv4 = require('uuid/v4');
 
@@ -84,7 +84,7 @@ const getters = {
 
 const actions = {
     init (store) {
-        var ajax = new TakingsEndpoints(store)
+        var ajax = new TakingEndpoints(store)
 
         var count = (store) => {
             var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
