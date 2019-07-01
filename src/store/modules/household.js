@@ -216,6 +216,9 @@ function serverDefaultFailure(error, store) {
 function prepareAjax(copy, newVersion = null) {
 
     if(newVersion !== null) {
+        if(newVersion.hasOwnProperty("publicId")) {
+            delete newVersion.publicId
+        }
         copy.versions.push(newVersion)
     }
 
