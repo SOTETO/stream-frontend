@@ -34,7 +34,7 @@ const state = {
     },
     countItems: 0,
     sorting: {
-        field: "household.created",
+        field: "household_version.created",
         dir: "DESC"
     },
     filter: {

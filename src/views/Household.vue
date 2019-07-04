@@ -108,27 +108,27 @@
             sortFields() {
                 return [
                     {
-                        "value": "household.what",
+                        "value": "household_version.reason_what",
                         "label": this.$t("household.header.table.what")
                     },
                     {
-                        "value": "household.wherefor",
+                        "value": "household_version.reason_wherefor",
                         "label": this.$t("household.header.table.wherefor")
                     },
                     {
-                        "value": "household.crew",
+                        "value": "household_version.crew",
                         "label": this.$t("household.header.table.crew")
                     },
                     {
-                        "value": "household.amount",
+                        "value": "household_version.amount",
                         "label": this.$t("household.header.table.amount")
                     },
                     {
-                        "value": "household.created",
+                        "value": "household_version.created",
                         "label": this.$t("household.header.table.created")
                     },
                     {
-                        "value": "household.updated",
+                        "value": "household_version.updated",
                         "label": this.$t("household.header.table.updated")
                     }
                 ]
