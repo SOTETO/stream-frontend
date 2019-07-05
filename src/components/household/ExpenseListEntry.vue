@@ -10,7 +10,7 @@
                 >{{ $t("household.buttons.edit") }}</button>
             </td>
             <td><StateLight v-model="wherefor" :color-disabled-on-no-error="true" :small="true" /></td>
-            <td><Tag :crew="true" :uuid="expense.author" /></td>
+            <td><CrewPlainName :id="expense.crewId" /></td>
             <td  class="vca-amount-wrapper">
                     <span class="vca-amount">
                         {{ formatAmount(expense.amount[expense.amount.length - 1]) }}
@@ -58,14 +58,14 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { Tag } from 'vca-widget-user'
+    import { Tag, CrewPlainName } from 'vca-widget-user'
     import StateLight from '@/components/utils/StateLight'
     import RoleDependentStateLight from './RoleDependentStateLight'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
         name: "ExpenseListEntry",
-        components: { Tag, StateLight, RoleDependentStateLight },
+        components: { Tag, CrewPlainName, StateLight, RoleDependentStateLight },
         props: {
             "expense": {
                 "type": Object,

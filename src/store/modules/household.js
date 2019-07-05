@@ -17,6 +17,7 @@ const uuidv4 = require('uuid/v4');
 //                  },
 //                  "iban": "",
 //                  "bic": "",
+//                  "crewId": "",
 //                  "request": false,
 //                  "created": Date,
 //                  "updated": Date,
@@ -73,6 +74,7 @@ const getters = {
                 "author": household.versions
                     .filter(version => version.hasOwnProperty("author"))    // get the author (usually one!)
                     .map(version => version.author).pop(),
+                "crewId": first.crewId,
                 "amount": household.versions.reduce((amounts, version) => {
                     if(amounts.length === 0 || amounts[amounts.length - 1].amount !== version.amount.amount) {
                         amounts.push(version.amount)
@@ -387,6 +389,8 @@ const actions = {
     },
     add (store, household) {
         var id = uuidv4()
+        var user = store.rootGetters['user/get']
+        household["crewId"] = store.rootGetters['user/getCrew']
         var init = {
             "id": id,
             "state": [],

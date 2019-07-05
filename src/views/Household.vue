@@ -116,7 +116,7 @@
                         "label": this.$t("household.header.table.wherefor")
                     },
                     {
-                        "value": "household_version.crew",
+                        "value": "household_version.crew_id",
                         "label": this.$t("household.header.table.crew")
                     },
                     {
