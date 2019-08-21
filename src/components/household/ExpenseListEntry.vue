@@ -1,57 +1,98 @@
 <template>
     <tbody class="expense">
         <tr class="details-table">
-            <td>
-                <StateLight v-model="what" :color-disabled-on-no-error="true" :small="true" /><br />
-                <button
-                        v-if="hasEditAccess"
-                        class="vca-button-inline"
-                        @click="editState(expense)"
-                >{{ $t("household.buttons.edit") }}</button>
-            </td>
-            <td><StateLight v-model="wherefor" :color-disabled-on-no-error="true" :small="true" /></td>
-            <td><Tag :crew="true" :uuid="expense.author" /></td>
-            <td  class="vca-amount-wrapper">
-                    <span class="vca-amount">
-                        {{ formatAmount(expense.amount[expense.amount.length - 1]) }}
-                    </span>
-                <div class="vca-amount-previous">
-                        <span v-if="expense.amount.length > 1" class="vca-amount">
-                            {{ formatAmount(expense.amount[expense.amount.length - 2]) }}
-                        </span>
-                    <span v-if="expense.amount.length > 2" class="vca-amount">...</span>
-                </div>
-            </td>
-            <td><Tag v-for="uuid in expense.supporter" :key="uuid" :uuid="uuid" /></td>
-            <td>
-                <div class="states">
-                    <RoleDependentStateLight v-for="state in cleanStates" :key="'exp.' + state.name" :value="formatStateNames('household.states.', state)" />
-                </div>
-            </td>
-            <td class="process">
-                <div class="labeled">
-                    <span class="process-label">{{ $t("household.process.VolunteerManager.RoleName") }}</span>
-                    <div class="states">
-                        <RoleDependentStateLight v-for="state in expense.processing.VolunteerManager" :key="'vm.' + state.name" :value="formatStateNames('household.process.VolunteerManager.', state)" />
-                    </div>
-                </div>
-                <div class="labeled">
-                    <span class="process-label">{{ $t("household.process.Employee.RoleName") }}</span>
-                    <div class="states">
-                        <RoleDependentStateLight v-for="state in expense.processing.Employee" :key="'em.' + state.name" :value="formatStateNames('household.process.Employee.', state)" />
-                    </div>
-                </div>
-            </td>
+
+          <td>
+            <StateLight v-model="what" :color-disabled-on-no-error="true" :small="true" /><br />
+          </td>
+
+          <td>
+            <StateLight v-model="wherefor" :color-disabled-on-no-error="true" :small="true" />
+          </td>
+
+          <td  class="vca-amount-wrapper">
+            <span class="vca-amount">
+              {{ formatAmount(expense.amount[expense.amount.length - 1]) }}
+            </span>
+            <div class="vca-amount-previous">
+              <span v-if="expense.amount.length > 1" class="vca-amount">
+                {{ formatAmount(expense.amount[expense.amount.length - 2]) }}
+              </span>
+              <span v-if="expense.amount.length > 2" class="vca-amount">...</span>
+            </div>
+          </td>
+
+          <td>
+            <Tag :crew="true" :uuid="expense.author" />
+          </td>
+
+          <td>
+            <div class="states">
+              <RoleDependentStateLight v-for="state in cleanStates" :key="'exp.' + state.name" :value="formatStateNames('household.states.', state)" />
+            </div>
+          </td>
+
+          <td class="process">
+            <div class="labeled">
+              <span class="process-label">{{ $t("household.process.VolunteerManager.RoleName")+ ": " }}</span>
+              <div class="states">
+                <RoleDependentStateLight v-for="state in expense.processing.VolunteerManager" :key="'vm.' + state.name" :value="formatStateNames('household.process.VolunteerManager.', state)" />
+              </div>
+            </div>
+            <div class="labeled">
+              <span class="process-label">{{ $t("household.process.Employee.RoleName")+ ": " }}</span>
+              <div class="states">
+                <RoleDependentStateLight v-for="state in expense.processing.Employee" :key="'em.' + state.name" :value="formatStateNames('household.process.Employee.', state)" />
+              </div>
+            </div>
+          </td>
+
+          <td class="more">
+            <div class="more">
+             <!--
+              <el-button icon="el-icon-edit" @click="editState(expense)" circle></el-button>
+             -->
+              <el-button icon="el-icon-edit" @click="detailsState(expense)" circle></el-button>
+              <pdf-gen :expense="expense"/>
+
+              <el-button icon="el-icon-more" @click="details = !details" circle></el-button>
+             </div>
+          </td>
+
         </tr>
+
+        <!-- DETAILS VIEW POPUP -->
+
+        <el-dialog :title="$t('household.details.title')" :expense="expense" :visible.sync="dialogFormVisible">
+
+          <detail-modal :expense="expense"/>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">{{ $t('household.buttons.cancel') }}</el-button>
+            <pdf-gen-refund :expense="expense"/>
+            <el-button type="primary" @click="dialogFormVisible = false">{{ $t('household.buttons.save') }}</el-button>
+          </span>
+        </el-dialog>
+
+        <!-- END DETAILS VIEW DIALOG -->
+
+        <tr v-if="details">
+          <td colspan="2">
+            <!-- <Tag v-for="uuid in expense.supporter" :key="uuid" :uuid="uuid" /> -->
+            {{ this.expense }}
+
+          </td>
+        </tr>
+
         <tr class="details-row">
-            <td colspan="7">
-                <div class="dates">
-                    <span>{{ $t("household.hints.dates.created", { "date":  $d(new Date(expense.date.created), "short") }) }}</span>
-                    <span v-if="expense.date.created !== expense.date.updated">
+          <td colspan="7">
+            <div class="dates">
+              <span>{{ $t("household.hints.dates.created", { "date":  $d(new Date(expense.date.created), "short") }) }}</span>
+              <span v-if="expense.date.created !== expense.date.updated">
                             {{ $t("household.hints.dates.updated", { "date":  $d(new Date(expense.date.created), "short") }) }}
                         </span>
-                </div>
-            </td>
+            </div>
+          </td>
         </tr>
     </tbody>
 </template>
@@ -62,15 +103,34 @@
     import StateLight from './StateLight'
     import RoleDependentStateLight from './RoleDependentStateLight'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+    import PdfGenRefund from "../pdfGenRefund";
+    import DetailModal from "./detailModal";
 
     export default {
         name: "ExpenseListEntry",
-        components: { Tag, StateLight, RoleDependentStateLight },
+        components: {DetailModal, PdfGenRefund, Tag, StateLight, RoleDependentStateLight },
         props: {
             "expense": {
                 "type": Object,
                 "required": true
             }
+        },
+        data () {
+          return {
+            dialogFormVisible: false,
+            form: {
+              name: '',
+              region: '',
+              date1: '',
+              date2: '',
+              delivery: false,
+              type: [],
+              resource: '',
+              desc: ''
+            },
+            edit: false,
+            details: false
+          }
         },
         computed: {
             ...mapGetters('user', {
@@ -130,15 +190,22 @@
             },
             editState (expense) {
                 this.$emit("vca-edit-expense", expense)
+            },
+            detailsState(expense) {
+              this.dialogFormVisible = true;
+              this.$emit('vca-edit-expense', expense)
             }
         }
     }
 </script>
 
 <style scoped lang="less">
-    .expense {
+  @import "../../assets/less/general";
+
+  .expense {
         & .details-table td {
-            padding: 0.5em 0.15em 0 0.15em;
+          border-bottom: 1px dotted #vcaColors[vcaDarkGrey10];
+          padding: 0.5em 0.15em 0 0.15em;
         }
         & .details-table td:first-child {
             padding: 0.5em 0.15em 0 0.5em;
@@ -172,38 +239,40 @@
         }
     }
 
-    .process {
-        .labeled {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
+  .process {
+    .labeled {
+      //display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
 
-            & .states {
-                width: 60%;
-                &:not(:last-child) {
-                    margin-bottom: 0.3em;
-                }
-            }
-            &:not(:last-child) {
-                margin-bottom: 0.3em;
-            }
-
-            & .process-label {
-                font-size: 0.8em;
-                font-style: italic;
-                padding-right: 0.3em;
-            }
+      & .states {
+        width: 90%;
+        &:not(:last-child) {
+          margin-bottom: 0.3em;
         }
-    }
+      }
+      &:not(:last-child) {
+        margin-bottom: 0.3em;
+      }
 
-    .states {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        & /deep/ span:not(:last-child) {
-            margin-bottom: 0.3em;
-        }
+      & .process-label {
+        font-size: 0.8em;
+        font-style: italic;
+        text-align: center;
+        padding-right: 0.3em;
+        padding-top: 0em;
+      }
     }
+  }
+
+  .states {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & /deep/ span:not(:last-child) {
+      margin-bottom: 0.3em;
+    }
+  }
 </style>

@@ -4,11 +4,11 @@
             <tr>
                 <th>{{ $t("household.header.table.what") }}</th>
                 <th>{{ $t("household.header.table.wherefor") }}</th>
-                <th>{{ $t("household.header.table.crew") }}</th>
-                <th>{{ $t("household.header.table.amount") }}</th>
-                <th>{{ $t("household.header.table.supporter") }}</th>
+              <th>{{ $t("household.header.table.amount") }}</th>
+              <th>{{ $t("household.header.table.crew") }}</th>
                 <th>{{ $t("household.header.table.state") }}</th>
                 <th>{{ $t("household.header.table.process") }}</th>
+              <th>{{ $t("household.header.table.actions")}}</th>
             </tr>
         </thead>
         <ExpenseListEntry v-for="expense in expenses" :key="expense.id" :expense="expense" @vca-edit-expense="editState" />
@@ -47,22 +47,33 @@
     @import "../../assets/less/general";
 
     .expenses {
-        width: 100%;
+      width: 100%;
+      border: 1px solid #vcaColors[vcaDarkGrey25];
+      border-radius: 5px 5px 0px 0px;
 
-        & .expense:nth-child(even) {
-            background-color: #colors[primaryDeactivated];
-        }
+      & .expense:nth-child(n) {
+        border-bottom: 1px solid #vcaColors[vcaDarkGrey50];
+      }
 
-        & th {
-            .colorProfilePrimary();
-            font-weight: bold;
-            padding: 0.25em 0;
-            &:first-child {
-                padding-left: 0.5em;
-            }
-            &:last-child {
-                padding-right: 0.5em;
-            }
+      & .expense:nth-child(even) {
+        background-color: #vcaColors[vcaBlue10];
+
+      }
+
+      & th {
+        //.colorProfilePrimary();
+        .vcaColorPrimary();
+        font-weight: bold;
+        padding: 0.8em 0.3em;
+        border-bottom: 1px solid #vcaColors[vcaDarkGrey50];
+
+        &:first-child {
+          padding-left: 0.5em;
+
         }
+        &:last-child {
+          padding-right: 0.5em;
+        }
+      }
     }
 </style>

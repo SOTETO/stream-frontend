@@ -7,6 +7,7 @@ const state = {
 }
 
 const getters = {
+// eslint-disable-next-line no-unused-vars
     get: (state, getters) => {
         return state.user
     },

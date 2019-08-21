@@ -19,6 +19,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
 import 'vca-widget-base/dist/vca-widget-base.css'
 
+
 export default {
   name: 'home',
   components: {

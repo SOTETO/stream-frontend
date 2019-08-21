@@ -3,7 +3,11 @@
         :model="expense"
         :rules="rules">
       <p v-html="$t('household.hints.expense')" />
-        <MoneyInput
+      <el-radio-group v-model="expense.request">
+        <el-radio-button :label="false">{{ $t('household.placeholder.request') }}</el-radio-button>
+        <el-radio-button :label="true">{{ $t('household.placeholder.appliedFor') }}</el-radio-button>
+      </el-radio-group>
+      <MoneyInput
           v-model="expense.amount"
           currency="EUR"
           :label="$t('household.placeholder.amount')"
@@ -31,10 +35,6 @@
         >
           <el-input v-model="expense.bic" :placeholder="$t('household.placeholder.bic')" :disabled="!isEditable"></el-input>
         </el-form-item>
-        <el-radio-group v-model="expense.request">
-          <el-radio-button :label="false">{{ $t('household.placeholder.request') }}</el-radio-button>
-          <el-radio-button :label="true">{{ $t('household.placeholder.appliedFor') }}</el-radio-button>
-        </el-radio-group>
         <button
           class="vca-button-primary vca-full-width"
           :disabled="!isEditable"

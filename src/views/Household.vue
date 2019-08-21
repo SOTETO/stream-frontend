@@ -53,6 +53,7 @@
     import ExpenseForm from '../components/household/ExpenseForm'
     import ExpenseStateTransition from '../components/household/ExpenseStateTransition'
     import ExpenseList from '../components/household/ExpenseList'
+    // import DetailModal from '../components/household/detailModal'
     import ListMenu from '../components/utils/ListMenu'
     import HouseholdFilter from "../components/household/HouseholdFilter";
     import Collapse from "../components/utils/Collapse";
@@ -73,6 +74,7 @@
             "ExpenseForm": ExpenseForm,
             "ExpenseStateTransition": ExpenseStateTransition,
             "ExpenseList": ExpenseList,
+            //"DetailModal": DetailModal,
             "ListMenu": ListMenu,
             "VcAFilterTag": VcAFilterTag,
             "CrewPlainName": CrewPlainName

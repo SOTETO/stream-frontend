@@ -52,7 +52,8 @@
         "state": "State",
         "process": "Process",
         "created": "Creation date",
-        "updated": "Update"
+        "updated": "Update",
+        "actions": "Actions"
       }
     },
     "placeholder": {
@@ -71,7 +72,8 @@
       "sorting": {
         "ASC": "Ascending",
         "DESC": "Descending"
-      }
+      },
+      "download": "Download"
     },
     "filter": {
       "title": "Filter..",
@@ -168,6 +170,29 @@
         "Free": "@:household.process.Employee.Freed",
         "Refused": "@:household.process.Employee.Blocked"
       }
+    },
+    "details": {
+      "title": "Details: ",
+      "name": "Name; ",
+      "address": "Address: ",
+      "organization": "Organization ",
+      "date": "Date: ",
+      "crew": "Crew: ",
+      "event": "Event: ",
+      "what": "What: ",
+      "iban": "IBAN: ",
+      "rules": {
+        "amount": "a",
+        "supporter": "b",
+        "date": "c",
+        "what": "d",
+        "wherefor": "e",
+        "iban": "f"
+      }
+    },
+    "pdfGenRefund": {
+
+
     }
   },
   "donation": {

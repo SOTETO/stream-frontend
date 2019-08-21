@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios'
 import StateMessageInterpreter from "../../utils/StateMessageInterpreter";
 const uuidv4 = require('uuid/v4');
