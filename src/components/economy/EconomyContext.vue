@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <VcABox :first="first" :title="$t('takings.header.box.amount')">
         <template slot="header">
             <el-select v-model="currency" size="small">
                 <el-option
                         v-for="c in currencyOptions"
                         :key="c"
-                        :label="$t('currencies.label.' + c)"
+                        :label="$t('takings.currencies.label.' + c)"
                         :value="c">
                 </el-option>
             </el-select>
@@ -14,10 +14,10 @@
             <el-form-item
                 class="vca-form user-select"
                 :required="false"
-                :label="$t('donation.placeholder.involved.label')"
+                :label="$t('takings.placeholder.involved.label')"
                 >
                 <WidgetUserAutocomplete
-                        :placeholder="$t('donation.placeholder.involved.indicator')"
+                        :placeholder="$t('takings.placeholder.involved.indicator')"
                         :preselection="involvedSupporter"
                         @vca-user-selection="selectSupporter"
                 />
@@ -25,11 +25,11 @@
             <el-form-item
                 class="vca-form"
                 :required="true"
-                :label="$t('donation.placeholder.received')">
+                :label="$t('takings.placeholder.received')">
                 <el-date-picker
                     v-model="received"
                     type="date"
-                    :placeholder="$t('donation.placeholder.received')"
+                    :placeholder="$t('takings.placeholder.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
                     :clearable="false"
@@ -40,14 +40,14 @@
             <table class="sources">
                 <thead>
                     <tr>
-                        <th>{{ $t('donation.header.donationSource.sourceSelect') }}</th>
-                        <th>{{ $t('donation.header.donationSource.sum') }}</th>
-                        <th>{{ $t('donation.header.donationSource.sourceType.cash') }}</th>
-                        <th>{{ $t('donation.header.donationSource.sourceType.extern') }}</th>
+                        <th>{{ $t('takings.header.source.sourceSelect') }}</th>
+                        <th>{{ $t('takings.header.source.sum') }}</th>
+                        <th>{{ $t('takings.header.source.sourceType.cash') }}</th>
+                        <th>{{ $t('takings.header.source.sourceType.extern') }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <DonationSource
+                    <TakingsSource
                         v-for="t in sourceTypes"
                         :category="t.category"
                         :currency="currency"
@@ -64,11 +64,11 @@
             </table>
         </div>
         <div class="evaluation">
-            <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
-            <span class="part">{{ $t('donation.hints.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
-            <span class="all">{{ $t('donation.hints.total.all', { 'total': getTotalAll.localize() }) }}</span>
+            <span class="part">{{ $t('takings.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
+            <span class="part">{{ $t('takings.hints.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
+            <span class="all">{{ $t('takings.hints.total.all', { 'total': getTotalAll.localize() }) }}</span>
         </div>
-    </div>
+    </VcABox>
 </template>
 
 <script>
@@ -77,17 +77,16 @@
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
-    import DonationSource from '@/components/DonationSource.vue'
+    import TakingsSource from '@/components/economy/TakingsSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
-
     export default {
-        name: "DonationCalculator",
+        name: "TakingsCalculator",
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
-            "DonationSource": DonationSource,
+            "TakingsSource": TakingsSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
             "VcABox": VcABox
         },
@@ -125,8 +124,6 @@
                 "sourceTypes": [
                     { "category": "unknown", "desc": false},
                     { "category": "can", "desc": false},
-                    { "category": "box", "desc": false},
-                    { "category": "gl", "desc": false},
                     { "category": "other", "desc": true}
                 ],
                 "currency": this.$t("currencies.default"),
@@ -237,22 +234,18 @@
     .vca-form .el-input {
         width: 100%;
     }
-
     .user-select /deep/ .small {
         font-size: 100%;
     }
-
     .sources {
         width: 100%;
         & /deep/ th:not(:first-child), & /deep/ td:not(:first-child) {
             padding-left: 1em;
         }
-
         thead tr th {
             padding-bottom: 1em;
         }
     }
-
     .evaluation {
         border-top: 1px solid rgb(220, 223, 230);
         display: flex;
@@ -260,12 +253,10 @@
         padding-top: 1em;
         margin-top: 1em;
         .part {
-
         }
         .all {
             font-weight: bold;
             font-size: 1.2em;
         }
     }
-
 </style>

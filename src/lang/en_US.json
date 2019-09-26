@@ -329,5 +329,110 @@
         "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
     }
+  },
+  "takings": {
+    "header": {
+      "frame": {
+        "create": "Add takings"
+      },
+      "box": {
+        "list": "All takings",
+        "list-methods": "Edit",
+        "save": "Save",
+        "amount": "Takings amount",
+        "externalTransactions": "Details external transaction",
+        "action": "Event"
+      },
+      "source": {
+        "sourceSelect": "What type of taking?",
+        "sum": "Sum",
+        "sourceType": {
+          "cash": "Cash",
+          "extern": "external transaction"
+        }
+      },
+      "table": {
+        "title": "Name / Event",
+        "crew": "Crew",
+        "amount": "Amount",
+        "deposited": "Deposited",
+        "date": "Date",
+        "supporter": "Supporter"
+      }
+    },
+    "hints": {
+      "deadline": {
+        "prefix": "Please deposit the money, using the banking card {0}!",
+        "date": "until {deadline}",
+        "immediately": "immediately"
+      },
+      "dates": {
+        "received": "Received: {date}",
+        "created": "Recorded: {date}"
+      },
+      "total": {
+        "cash": "Total (cash): {total}",
+        "extern": "Total (external transaction): {total}",
+        "all": "Total takings: {total}"
+      },
+      "error": {
+        "amount": {
+          "pattern": "Wrong money format (e.g. $37.50)"
+        }
+      }
+    },
+    "buttons": {
+      "add": "Add taking",
+      "save": "Save"
+    },
+    "placeholder": {
+      "comment": "Comment / Question",
+      "received": "When did you received the takings?",
+      "involved": {
+        "label": "Who has given the takings to you?",
+        "indicator": "Jane Doe of your crew..."
+      },
+      "context": {
+        "label": "Where was the taking collected?",
+        "indicator": "e.g. Hurricane 2019"
+      },
+      "category": "Category",
+      "categories": {
+        "selling": "Selling (Merch / Etc.)",
+        "service": "Service (Bar / Etc.)",
+        "other": "Other",
+        "description": "Description..."
+      },
+      "source": {
+        "unknown": "I don't know",
+        "can": "Box",
+        "other": "Other",
+        "description": "Description..."
+      },
+      "externalDetails": {
+        "partner": {
+          "label": "Who transfers the taking?",
+          "name": "Location / Organizer",
+          "asp": "Contact person",
+          "email": "Email address",
+          "address": "Postal address"
+        }
+      }
+    },
+    "currencies": {
+      "default": "USD",
+      "label": {
+        "EUR": "EUR €",
+        "CHF": "Fr.",
+        "USD": "$ USD"
+      }
+    },
+    "externalTransaction": {
+      "reasonForPayment": "Reason for payment",
+      "label": {
+        "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
+      }
+    }
   }
+
 }

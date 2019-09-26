@@ -8,16 +8,19 @@
                 <VcABox :first="true" :title="$t('donation.header.box.action')">
                     <DonationContext v-model="donation.context" />
                 </VcABox>
-                <DonationCalculator v-if="showCalculator" :first="false" v-model="donation.amount" />
+                <VcABox v-if="showCalculator" :first="false" :title="labelCalculator">
+                  <TakingsCalculator v-if="showEconomy" :first="false" v-model="donation.amount"/>
+                  <DonationCalculator v-if="showDonation" :first="false" v-model="donation.amount" />
+                </VcABox>
             </VcAColumn>
             <VcAColumn>
                 <VcABox :title="$t('donation.header.box.norms')" :first="true">
                   <TakingsSelect v-model="donation.norms"/>
                 </VcABox>
-                <VcABox v-if="showExternalTransactions" :first="showExternalTransactions" :title="$t('donation.header.box.externalTransactions')">
+                <VcABox v-if="showExternalTransactions" :first="true" :title="$t('donation.header.box.externalTransactions')">
                     <ExternalTransactionDetails v-model="donation.details" />
                 </VcABox>
-                <VcABox :first="!showExternalTransactions" :title="$t('donation.header.box.save')">
+                <VcABox :first="false" :title="$t('donation.header.box.save')">
                     <DonationDeadline :received="donation.amount.received" />
                     <el-input
                             type="textarea"
@@ -47,10 +50,12 @@
     import DonationDeadline from '@/components/DonationDeadline.vue'
     import DonationContext from '@/components/DonationContext.vue'
     import TakingsSelect from '@/components/TakingsSelect.vue'
+    import TakingsCalculator from '@/components/economy/TakingsCalculator.vue'
 
     export default {
         name: "DonationsAdd",
         components: {
+            'TakingsCalculator': TakingsCalculator,
             'DonationCalculator': DonationCalculator,
             'ExternalTransactionDetails': ExternalTransactionDetails,
             'DonationDeadline': DonationDeadline,
@@ -91,12 +96,31 @@
             showExternalTransactions () {
                 return this.donation.amount.sources.filter(s => s.type === "extern").length > 0
             },
+            showEconomy () {
+              return this.donation.hasOwnProperty("norms") && this.donation.norms === "ECONOMY"
+            },
+            showDonation () {
+              return this.donation.hasOwnProperty("norms") && this.donation.norms === "DONATION"
+            },
             showCalculator () {
                 return this.donation.context.hasOwnProperty("category") && this.donation.context.category !== "" &&
-                    this.donation.context.hasOwnProperty("description") && this.donation.context.description !== ""
+                    this.donation.context.hasOwnProperty("description") && this.donation.context.description !== "" &&
+                    this.donation.hasOwnProperty("norms") && this.donation.norms !== ""
             },
             validDonation () {
                 return this.showCalculator && this.donation.amount.sources.length > 0
+            },
+            labelCalculator () {
+              if (this.donation.hasOwnProperty("norms") && this.donation.norms === "DONATION"
+) {
+                return this.$t('donation.header.box.amount')
+              } else if (this.donation.hasOwnProperty("norms") && this.donation.norms === "ECONOMY"
+) {
+                return this.$t('takings.header.box.amount')
+              } else {
+                return ""
+              }
+
             }
         },
         methods: {
