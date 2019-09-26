@@ -19,7 +19,7 @@
         <el-form-item
           :required="true"
         >
-          <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
+        <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
           :required="false"
@@ -80,7 +80,6 @@
                 "created": now,
                 "updated": now
             }
-
             return {
                 "expense": JSON.parse(JSON.stringify(defaultExpense)),
                 "default": defaultExpense,

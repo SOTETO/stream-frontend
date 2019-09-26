@@ -11,6 +11,9 @@
                 <DonationCalculator v-if="showCalculator" :first="false" v-model="donation.amount" />
             </VcAColumn>
             <VcAColumn>
+                <VcABox :title="$t('donation.header.box.norms')" :first="true">
+                  <TakingsSelect v-model="donation.norms"/>
+                </VcABox>
                 <VcABox v-if="showExternalTransactions" :first="showExternalTransactions" :title="$t('donation.header.box.externalTransactions')">
                     <ExternalTransactionDetails v-model="donation.details" />
                 </VcABox>
@@ -43,6 +46,7 @@
     import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
     import DonationDeadline from '@/components/DonationDeadline.vue'
     import DonationContext from '@/components/DonationContext.vue'
+    import TakingsSelect from '@/components/TakingsSelect.vue'
 
     export default {
         name: "DonationsAdd",
@@ -55,7 +59,8 @@
             'VcAColumn': VcAColumn,
             'VcABox': VcABox,
             'el-input': Input,
-            'el-form': Form
+            'el-form': Form,
+            'TakingsSelect': TakingsSelect
         },
         data () {
             return {
@@ -76,7 +81,8 @@
                         "involvedSupporter": []
                     },
                     "created": Date.now(),
-                    "updated": Date.now()
+                    "updated": Date.now(),
+                    "norms": ""
                 },
                 rules: {},
             }

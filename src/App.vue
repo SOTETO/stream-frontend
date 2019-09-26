@@ -10,7 +10,6 @@
 
 <script>
     import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation'
-
     export default {
         name: 'App',
         components: { WidgetTopNavigation, WidgetBottomNavigation }

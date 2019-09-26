@@ -238,7 +238,7 @@ function serverCreate(container, onSuccess, onFailure, update = false) {
     var copy = JSON.parse(JSON.stringify(container))
 
     copy = prepareAjax(copy)
-
+    console.log(copy)
     axios.post("/backend/stream/household/create", copy, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => onSuccess(response.data.data[0]))
         .catch(error => onFailure(error))
@@ -390,7 +390,9 @@ const actions = {
     add (store, household) {
         var id = uuidv4()
         var user = store.rootGetters['user/get']
+        console.log(user)
         household["crewId"] = store.rootGetters['user/getCrew']
+        console.log(household["crewId"])
         var init = {
             "id": id,
             "state": [],
