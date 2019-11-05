@@ -5,7 +5,7 @@
                 <el-option
                         v-for="c in currencyOptions"
                         :key="c"
-                        :label="$t('takings.currencies.label.' + c)"
+                        :label="$t('economic-calculator.header.label.' + c)"
                         :value="c">
                 </el-option>
             </el-select>
@@ -14,10 +14,10 @@
             <el-form-item
                 class="vca-form user-select"
                 :required="false"
-                :label="$t('takings.placeholder.involved.label')"
+                :label="$t('economic-calculator.involved.label')"
                 >
                 <WidgetUserAutocomplete
-                        :placeholder="$t('takings.placeholder.involved.indicator')"
+                        :placeholder="$t('economic-calculator.involved.indicator')"
                         :preselection="involvedSupporter"
                         @vca-user-selection="selectSupporter"
                 />
@@ -25,11 +25,11 @@
             <el-form-item
                 class="vca-form"
                 :required="true"
-                :label="$t('takings.placeholder.received')">
+                :label="$t('economic-calculator.received')">
                 <el-date-picker
                     v-model="received"
                     type="date"
-                    :placeholder="$t('takings.placeholder.received')"
+                    :placeholder="$t('economic-calculator.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
                     :clearable="false"
@@ -40,14 +40,14 @@
             <table class="sources">
                 <thead>
                     <tr>
-                        <th>{{ $t('takings.header.source.sourceSelect') }}</th>
-                        <th>{{ $t('takings.header.source.sum') }}</th>
-                        <th>{{ $t('takings.header.source.sourceType.cash') }}</th>
-                        <th>{{ $t('takings.header.source.sourceType.extern') }}</th>
+                        <th>{{ $t('economic-calculator.source.label.sourceSelect') }}</th>
+                        <th>{{ $t('economic-calculator.source.label.sum') }}</th>
+                        <th>{{ $t('economic-calculator.source.label.sourceType.cash') }}</th>
+                        <th>{{ $t('economic-calculator.source.label.sourceType.extern') }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <TakingsSource
+                    <EconomicSource
                         v-for="t in sourceTypes"
                         :category="t.category"
                         :currency="currency"
@@ -64,9 +64,9 @@
             </table>
         </div>
         <div class="evaluation">
-            <span class="part">{{ $t('takings.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
-            <span class="part">{{ $t('takings.hints.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
-            <span class="all">{{ $t('takings.hints.total.all', { 'total': getTotalAll.localize() }) }}</span>
+            <span class="part">{{ $t('economic-calculator.total.cash', { 'total': getTotalCash.localize() }) }}</span>
+            <span class="part">{{ $t('economic-calculator.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
+            <span class="all">{{ $t('economic-calculator.total.all', { 'total': getTotalAll.localize() }) }}</span>
         </div>
   </div>
 </template>
@@ -77,16 +77,16 @@
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
-    import TakingsSource from '@/components/economy/TakingsSource.vue'
+    import EconomicSource from '@/components/economy/EconomicSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
     export default {
-        name: "TakingsCalculator",
+        name: "EconomicCalculator",
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
-            "TakingsSource": TakingsSource,
+            "EconomicSource": EconomicSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete
             //"VcABox": VcABox
         },

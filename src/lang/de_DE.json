@@ -332,10 +332,98 @@
     }
   },
   "takings": {
-    "header": {
-      "frame": {
-        "create": "Wirtschaftsgeld hinzufügen"
+    "takings-list":{
+      "head": "Alle Einnahmen"
+    },
+    "add-takings": {
+      "head": "Einnahme Hinzufügen",
+      "donation-button": "Spende Hinzufügen",
+      "economic-button": "Wirtschaftsgeld Hinzufügen"
+    },
+    "add-deposit": {
+      "head": "Einzahlung vermerken"
+    }
+  },
+  
+  "economic-add": {
+    "header": "Wirtschaftsgeld hinzufügen",
+    "box": {
+      "list": "Alle Wirtschafstsgelder",
+      "list-methods": "Editieren",
+      "save": "Speichern",
+      "amount": "Summe",
+      "externalTransactions": "Details externer Überweiser",
+      "action": "Aktion"
+    },
+    "comment": "Bemerkung / Frage",
+    "buttons": {
+      "add": "Wirtschaftsgeld hinzufügen",
+      "save": "Speichern"
+    }
+  },
+    
+  "economic-context": {
+    "description": {
+      "label": "Wo ist das Wirtschaftsgeld entstanden?",
+      "indicator": "z.B. Hurricane 2019"
+    },
+    "category": {
+      "label": "Kategorie",
+      "categories": {
+        "selling": "Verkauf (Merch / etc.)",
+        "service": "Dienstleistung (Barschicht / etc.)",
+        "other": "Anderes",
+        "description": "Beschreibung.."
+      }
+    }
+  },
+  "economic-calculator":{
+    "header": {     
+      "label": {
+        "EUR": "EUR €",
+        "CHF": "Fr.",
+        "USD": "$ USD"
+      }
+    },
+    "involved": {
+      "label": "Von wem hast du das Geld erhalten?",
+      "indicator": "Max Mustermann aus deiner Crew..."
+    },
+    "received": "Wann hast du das Wirtschaftsgeld erhalten?",
+    "source": {
+      "label": {
+        "sourceSelect": "Woher kommt das Wirtschaftsgeld?",
+        "sum": "Summe",
+        "sourceType": {
+          "cash": "Bar",
+          "extern": "externe Überweisung"
+        }
       },
+      "categories": {
+        "unknown": "Kann ich nicht zuordnen",
+        "can": "Kasse",
+        "other": "Sonstiges"
+      },
+      "description": "Beschreibung...",
+      "total": {
+          "cash": "Summe (Bar): {total}",
+        "extern": "Summe (durch externe Überweisung): {total}",
+        "all": "Summe Wirtschaftsgeld: {total}"
+      }
+    },
+    "total": {
+      "cash": "Summe (Bar): {total}",
+      "extern": "Summe (durch externe Überweisung): {total}",
+      "all": "Summe Wirtschaftsgeld: {total}"
+    }
+  },
+  "economic-deadline": {
+    "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
+    "date": "bis spätestens {deadline}",
+    "immediately": "umgehend"
+  },
+  "trash": {
+    "trash": {
       "box": {
         "list": "Alle Wirtschafstsgelder",
         "list-methods": "Editieren",

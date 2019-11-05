@@ -4,10 +4,10 @@
         <td>
             <div class="category">
                 <el-form-item>
-                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("takings.placeholder.source." + category) }}</el-checkbox>
+                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("economic-calculator.source.categories." + category) }}</el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="description">
-                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('takings.placeholder.source.description')"></el-input>
+                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('economic-calculator.source.description')"></el-input>
                 </el-form-item>
             </div>
         </td>
@@ -39,7 +39,7 @@
     import MoneyInput from '@/components/utils/MoneyInput'
     // Todo: Should use new component utils.MoneyInput!
     export default {
-        name: "TakingsSource",
+        name: "EconomicSource",
         components: {
             "el-input": Input,
             "el-checkbox": Checkbox,

@@ -36,9 +36,9 @@ var router = new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-        path: '/donations',
-        name: 'donations',
-        component: () => import('./views/Donations.vue'),
+        path: '/takings',
+        name: 'takings',
+        component: () => import('./views/Takings.vue'),
         meta: {
           'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
         }
@@ -47,6 +47,14 @@ var router = new Router({
         path: '/donations/add',
         name: 'donations-add',
         component: () => import('./views/DonationsAdd.vue'),
+        meta: {
+          'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+        }
+    },
+    {
+        path: '/economic/add',
+        name: 'economic-add',
+        component: () => import('./views/EconomicAdd.vue'),
         meta: {
           'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
         }
@@ -70,9 +78,13 @@ var router = new Router({
   ]
 })
 
+
+
+
+
+
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.hasOwnProperty("roles"))) {
-        function checker () {
+     function checker () {
             // Now, check the roles for the given entry!
             if(!store.getters['user/isError']) {
                 var records = to.matched.filter(record => record.meta.hasOwnProperty("roles"))
@@ -106,6 +118,7 @@ router.beforeEach((to, from, next) => {
                 }
             }
         }
+    if (to.matched.some(record => record.meta.hasOwnProperty("roles"))) {
         // only for init - checks if there is already a user, initiates OAuth handshake otherwise
         var u = store.getters['user/get']
         if(u === null) {

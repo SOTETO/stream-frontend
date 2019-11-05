@@ -30,6 +30,7 @@
   }
   #content {
     flex-grow: 1;
+    flex-shrink: 0;	
     display: flex;
     overflow: auto;
   }
