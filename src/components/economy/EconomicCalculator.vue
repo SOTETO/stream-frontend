@@ -5,7 +5,7 @@
                 <el-option
                         v-for="c in currencyOptions"
                         :key="c"
-                        :label="$t('economic-calculator.header.label.' + c)"
+                        :label="$t('economic-add.calculator.header.label.' + c)"
                         :value="c">
                 </el-option>
             </el-select>
@@ -14,10 +14,10 @@
             <el-form-item
                 class="vca-form user-select"
                 :required="false"
-                :label="$t('economic-calculator.involved.label')"
+                :label="$t('economic-add.calculator.involved.label')"
                 >
                 <WidgetUserAutocomplete
-                        :placeholder="$t('economic-calculator.involved.indicator')"
+                        :placeholder="$t('economic-add.calculator.involved.indicator')"
                         :preselection="involvedSupporter"
                         @vca-user-selection="selectSupporter"
                 />
@@ -25,11 +25,11 @@
             <el-form-item
                 class="vca-form"
                 :required="true"
-                :label="$t('economic-calculator.received')">
+                :label="$t('economic-add.calculator.received')">
                 <el-date-picker
                     v-model="received"
                     type="date"
-                    :placeholder="$t('economic-calculator.received')"
+                    :placeholder="$t('economic-add.calculator.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
                     :clearable="false"
@@ -40,10 +40,10 @@
             <table class="sources">
                 <thead>
                     <tr>
-                        <th>{{ $t('economic-calculator.source.label.sourceSelect') }}</th>
-                        <th>{{ $t('economic-calculator.source.label.sum') }}</th>
-                        <th>{{ $t('economic-calculator.source.label.sourceType.cash') }}</th>
-                        <th>{{ $t('economic-calculator.source.label.sourceType.extern') }}</th>
+                        <th>{{ $t('economic-add.calculator.source.label.sourceSelect') }}</th>
+                        <th>{{ $t('economic-add.calculator.source.label.sum') }}</th>
+                        <th>{{ $t('economic-add.calculator.source.label.sourceType.cash') }}</th>
+                        <th>{{ $t('economic-add.calculator.source.label.sourceType.extern') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,9 +64,9 @@
             </table>
         </div>
         <div class="evaluation">
-            <span class="part">{{ $t('economic-calculator.total.cash', { 'total': getTotalCash.localize() }) }}</span>
-            <span class="part">{{ $t('economic-calculator.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
-            <span class="all">{{ $t('economic-calculator.total.all', { 'total': getTotalAll.localize() }) }}</span>
+            <span class="part">{{ $t('economic-add.calculator.total.cash', { 'total': getTotalCash.localize() }) }}</span>
+            <span class="part">{{ $t('economic-add.calculator.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
+            <span class="all">{{ $t('economic-add.calculator.total.all', { 'total': getTotalAll.localize() }) }}</span>
         </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <VcAFrame>
         <VcAColumn size="70%">
-            <VcABox :first="true" :title="$t('takings.takings-list.head')">
+            <VcABox :first="true" :title="$t('takings.head.table')">
                 <ListMenu :fields="sortFields" store="donations" />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
                     {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
@@ -13,15 +13,15 @@
             </VcABox>
         </VcAColumn>
         <VcAColumn size="20%">
-            <VcABox :first="true" :title="$t('takings.add-takings.head')">
+            <VcABox :first="true" :title="$t('takings.head.add')">
                 <router-link class="vca-button-primary vca-full-width" to="/donations/add">
-                  {{ $t('takings.add-takings.donation-button') }}
+                  {{ $t('takings.buttons.donation') }}
                 </router-link>
                 <router-link class="vca-button-primary vca-full-width" to="/economic/add">
-                  {{ $t('takings.add-takings.economic-button') }}
+                  {{ $t('takings.buttons.economic') }}
                 </router-link>
             </VcABox>
-            <VcABox :title="$t('takings.add-deposit.head')">
+            <VcABox :title="$t('takings.head.deposit')">
               <DonationDeposit donations="donations" ></DonationDeposit>
             </VcAbox>
         </VcAColumn>

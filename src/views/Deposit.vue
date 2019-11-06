@@ -27,7 +27,7 @@
       VcAFrame, VcAColumn, VcABox, DepositList, ListMenu
     },
     computed: {
-        ...mapGetters('donations', {
+        ...mapGetters('deposits', {
             pageGet: 'page'
         }),
         hasPrevious () {
@@ -62,7 +62,7 @@
         }
     },
     methods: {
-        ...mapActions('donations', [
+        ...mapActions('deposits', [
             'page'
         ]),
         pageDown () {

@@ -4,10 +4,10 @@
         <td>
             <div class="category">
                 <el-form-item>
-                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("economic-calculator.source.categories." + category) }}</el-checkbox>
+                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("economic-add.calculator.source.categories." + category) }}</el-checkbox>
                 </el-form-item>
                 <el-form-item v-if="description">
-                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('economic-calculator.source.description')"></el-input>
+                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('economic-add.calculator.source.description')"></el-input>
                 </el-form-item>
             </div>
         </td>

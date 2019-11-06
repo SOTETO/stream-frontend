@@ -1,9 +1,9 @@
 <template>
     <div class="context-form">
-        <el-form-item :label="$t('economic-context.description.label')" :required="true">
-            <el-input :placeholder="$t('economic-context.description.indicator')" v-model="description" @change="commit"></el-input>
+        <el-form-item :label="$t('economic-add.context.description.label')" :required="true">
+            <el-input :placeholder="$t('economic-add.context.description.indicator')" v-model="description" @change="commit"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('economic-context.category.label')" :required="true" class="vca-categories">
+        <el-form-item :label="$t('economic-add.context.category.label')" :required="true" class="vca-categories">
             <table class="categoryChooser">
                 <tr v-for="(group, i) in categories" class="vca-group" :key="i">
                     <td v-for="cat in group"  :key="cat">
@@ -12,7 +12,7 @@
                                 :label="cat"
                                 @change="commit"
                         >
-                            {{ $t("economic-context.category.categories." + cat) }}
+                            {{ $t("economic-add.context.category.categories." + cat) }}
                         </el-radio>
                     </td>
                 </tr>

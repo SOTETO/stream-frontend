@@ -1,10 +1,10 @@
 <template>
     <span>
-        <i18n v-if="immediately" path="economic-deadline.prefix" tag="span" for="economic-deadline.date">
-            <span class="deadline">{{ $t('economic-deadline.immediately') }}</span>
+        <i18n v-if="immediately" path="economic-add.deadline.prefix" tag="span" for="economic-add.deadline.date">
+            <span class="deadline">{{ $t('economic-add.deadline.immediately') }}</span>
         </i18n>
-        <i18n v-else path="economic-deadline.prefix" tag="span" for="economic-deadline.date">
-            <span class="deadline">{{ $t('economic-deadline.date', { "deadline": deadline }) }}</span>
+        <i18n v-else path="economic-add.deadline.prefix" tag="span" for="economic-add.deadline.date">
+            <span class="deadline">{{ $t('economic-add.deadline.date', { "deadline": deadline }) }}</span>
         </i18n>
     </span>
 </template>

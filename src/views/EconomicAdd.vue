@@ -78,7 +78,7 @@
 
                     "created": Date.now(),
                     "updated": Date.now(),
-                    "norms": ""
+                    "norms": "ECONOMY"
                 },
                     
               categories: {
@@ -102,25 +102,13 @@
             validDonation () {
                 return this.showCalculator && this.taking.amount.sources.length > 0
             },
-            labelCalculator () {
-              if (this.taking.hasOwnProperty("norms") && this.taking.norms === "DONATION"
-) {
-                return this.$t('economic-add.box.amount')
-              } else if (this.taking.hasOwnProperty("norms") && this.taking.norms === "ECONOMY"
-) {
-                return this.$t('economic-add.box.amount')
-              } else {
-                return ""
-              }
-
-            }
         },
         methods: {
             ...mapActions('donations', [
                 'add', // -> this.foo()
             ]),
             submitForm () {
-                this.add(this.donation)
+                this.add(this.taking)
                 this.$router.push('/donations')
             }
         }

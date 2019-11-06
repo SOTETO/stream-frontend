@@ -1,33 +1,35 @@
 <template>
-    <table class="donations">
+    <table class="takings">
         <thead>
         <tr>
-            <th>{{ $t("donation.header.table.title") }}</th>
-            <th>{{ $t("donation.header.table.crew") }}</th>
-            <th>{{ $t("donation.header.table.amount") }}</th>
-            <th>{{ $t("donation.header.table.deposited") }}</th>
-            <th>{{ $t("donation.header.table.date") }}</th>
-            <th>{{ $t("donation.header.table.supporter") }}</th>
+            <th>{{ $t("takings.table.head.norms") }}
+            <th>{{ $t("takings.table.head.title") }}</th>
+            <th>{{ $t("takings.table.head.crew") }}</th>
+            <th>{{ $t("takings.table.head.amount") }}</th>
+            <th>{{ $t("takings.table.head.deposited") }}</th>
+            <th>{{ $t("takings.table.head.date") }}</th>
+            <th>{{ $t("takings.table.head.supporter") }}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="donation in donations" :key="donation.id" class="donation">
-            <td>{{ donation.name }}</td>
-            <td class="crew"><CrewPlainName :id="donation.crew" /></td>
-            <td>{{ formatAmount(donation.amount) }}</td>
+        <tr v-for="taking in takings" :key="taking.id" class="taking">
+            <td>{{ formatNorms(taking.norms) }}</td>
+            <td>{{ taking.name }}</td>
+            <td class="crew"><CrewPlainName :id="taking.crew" /></td>
+            <td>{{ formatAmount(taking.amount) }}</td>
             <td>
-                <DepositLights :donation="donation" />
+                <DepositLights :donation="taking" />
             </td>
             <td>
                 <div class="dates">
-                    <span>{{ $t("donation.hints.dates.received", { "date":  formatDate(donation.date.received) }) }}</span>
-                    <span>{{ $t("donation.hints.dates.created", { "date":  formatDate(donation.date.created) }) }}</span>
+                    <span>{{ $t("takings.table.dates.received", { "date":  formatDate(taking.date.received) }) }}</span>
+                    <span>{{ $t("takings.table.dates.created", { "date":  formatDate(taking.date.created) }) }}</span>
                 </div>
             </td>
             <td>
                 <div class="supporter">
-                    <Tag v-for="uuid in teaserSupporter(donation)" :uuid="uuid" :key="'sup-' + uuid" />
-                    <span v-if="hasAddtionalSupporter(donation)">...</span>
+                    <Tag v-for="uuid in teaserSupporter(taking)" :uuid="uuid" :key="'sup-' + uuid" />
+                    <span v-if="hasAddtionalSupporter(taking)">...</span>
                 </div>
             </td>
         </tr>
@@ -53,7 +55,7 @@
         },
         computed: {
             ...mapGetters('donations', {
-                donations: 'overview',
+                takings: 'overview',
                 isError: 'isError',
                 getErrorCode: 'getErrorCode',
             }),
@@ -94,6 +96,13 @@
                 var d = new Date(date)
                 return this.$d(d, 'short')
             },
+            formatNorms(norms) {
+              if (norms === "ECONOMY") {
+                return "W"
+              } else {
+                return "D"
+              }
+            },
             supporter (donation) {
                 return [donation.author].concat(donation.supporter)
                     .filter((value, index, self) => self.indexOf(value) === index)
@@ -118,10 +127,10 @@
 <style scoped lang="less">
     @import '../../assets/less/general.less';
 
-    .donations {
+    .takings {
         width: 100%;
 
-        & .donation:nth-child(even) {
+        & .takings:nth-child(even) {
             background-color: #colors[primaryDeactivated];
         }
 
@@ -138,7 +147,7 @@
         }
     }
 
-    .donation {
+    .taking {
         & tr {
             padding: 0.5em 0.5em 0 0.15em;
         }
