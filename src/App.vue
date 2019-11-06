@@ -10,7 +10,6 @@
 
 <script>
     import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation'
-
     export default {
         name: 'App',
         components: { WidgetTopNavigation, WidgetBottomNavigation }
@@ -31,6 +30,7 @@
   }
   #content {
     flex-grow: 1;
+    flex-shrink: 0;	
     display: flex;
     overflow: auto;
   }

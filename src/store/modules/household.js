@@ -17,6 +17,7 @@ const uuidv4 = require('uuid/v4');
 //                  },
 //                  "iban": "",
 //                  "bic": "",
+//                  "crewId": "",
 //                  "request": false,
 //                  "created": Date,
 //                  "updated": Date,
@@ -34,7 +35,7 @@ const state = {
     },
     countItems: 0,
     sorting: {
-        field: "household.created",
+        field: "household_version.created",
         dir: "DESC"
     },
     filter: {
@@ -73,6 +74,7 @@ const getters = {
                 "author": household.versions
                     .filter(version => version.hasOwnProperty("author"))    // get the author (usually one!)
                     .map(version => version.author).pop(),
+                "crewId": first.crewId,
                 "amount": household.versions.reduce((amounts, version) => {
                     if(amounts.length === 0 || amounts[amounts.length - 1].amount !== version.amount.amount) {
                         amounts.push(version.amount)
@@ -216,6 +218,9 @@ function serverDefaultFailure(error, store) {
 function prepareAjax(copy, newVersion = null) {
 
     if(newVersion !== null) {
+        if(newVersion.hasOwnProperty("publicId")) {
+            delete newVersion.publicId
+        }
         copy.versions.push(newVersion)
     }
 
@@ -233,7 +238,7 @@ function serverCreate(container, onSuccess, onFailure, update = false) {
     var copy = JSON.parse(JSON.stringify(container))
 
     copy = prepareAjax(copy)
-
+    console.log(copy)
     axios.post("/backend/stream/household/create", copy, { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => onSuccess(response.data.data[0]))
         .catch(error => onFailure(error))
@@ -384,6 +389,10 @@ const actions = {
     },
     add (store, household) {
         var id = uuidv4()
+        var user = store.rootGetters['user/get']
+        console.log(user)
+        household["crewId"] = store.rootGetters['user/getCrew']
+        console.log(household["crewId"])
         var init = {
             "id": id,
             "state": [],

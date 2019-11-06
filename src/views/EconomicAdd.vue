@@ -1,32 +1,32 @@
 <template>
-    <VcAFrame :title="$t('donation.header.frame.create')" hasContainer="true">
+    <VcAFrame :title="$t('economic-add.header')" hasContainer="true">
         <el-form
-                :model="donation"
+                :model="taking"
                 :rules="rules"
                 class="columns-container">
             <VcAColumn size="40%">
-                <VcABox :first="true" :title="$t('donation.header.box.action')">
-                    <DonationContext v-model="donation.context" />
+                <VcABox :first="true" :title="$t('economic-add.box.action')">
+                    <EconomicContext v-model="taking.context" v-bind:categories="categories.list" />
                 </VcABox>
                 <VcABox v-if="showCalculator" :first="false" :title="labelCalculator">
-                  <DonationCalculator :first="false" v-model="donation.amount" />
+                  <EconomicCalculator :first="false" v-model="taking.amount" />
                 </VcABox>
-                <VcABox v-if="showExternalTransactions" :first="false" :title="$t('donation.header.box.externalTransactions')">
-                    <ExternalTransactionDetails v-model="donation.details" />
+                <VcABox v-if="showExternalTransactions" :first="false" :title="$t('economic-add.box.externalTransactions')">
+                    <ExternalTransactionDetails v-model="taking.details" />
                 </VcABox>
-                <VcABox :first="false" :title="$t('donation.header.box.save')">
-                    <DonationDeadline :received="donation.amount.received" />
+                <VcABox :first="false" :title="$t('economic-add.box.save')">
+                    <EconomicDeadline :received="taking.amount.received" />
                     <el-input
                             type="textarea"
                             :rows="4"
-                            :placeholder="$t('donation.placeholder.comment')"
-                            v-model="donation.comment">
+                            :placeholder="$t('economic-add.comment')"
+                            v-model="taking.comment">
                     </el-input>
                     <button
                             :disabled="!validDonation"
                             class="vca-button-primary vca-full-width"
                             @click.prevent="submitForm">
-                        {{ $t("donation.buttons.save") }}
+                        {{ $t("economic-add.buttons.save") }}
                     </button>
                 </VcABox>
             </VcAColumn>
@@ -39,18 +39,18 @@
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { Input, Form } from 'element-ui'
-    import DonationCalculator from '@/components/DonationCalculator.vue'
+    import EconomicCalculator from '@/components/economy/EconomicCalculator.vue'
     import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
-    import DonationDeadline from '@/components/DonationDeadline.vue'
-    import DonationContext from '@/components/DonationContext.vue'
+    import EconomicDeadline from '@/components/economy/EconomicDeadline.vue'
+    import EconomicContext from '@/components/economy/EconomicContext.vue'
 
     export default {
         name: "DonationsAdd",
         components: {
-            'DonationCalculator': DonationCalculator,
+            'EconomicCalculator': EconomicCalculator,
             'ExternalTransactionDetails': ExternalTransactionDetails,
-            'DonationDeadline': DonationDeadline,
-            'DonationContext': DonationContext,
+            'EconomicDeadline': EconomicDeadline,
+            'EconomicContext': EconomicContext,
             'VcAFrame': VcAFrame,
             'VcAColumn': VcAColumn,
             'VcABox': VcABox,
@@ -59,7 +59,7 @@
         },
         data () {
             return {
-                donation: {
+                taking: {
                     "context": {
                         "description": "",
                         "category": ""
@@ -75,43 +75,40 @@
                         "sources": [],
                         "involvedSupporter": []
                     },
+
                     "created": Date.now(),
                     "updated": Date.now(),
-                    "norms": ""
+                    "norms": "ECONOMY"
                 },
-                rules: {},
+                    
+              categories: {
+                "list": [
+                    ["concert", "run4wash", "streetFestivals"],
+                    ["festival", "school", "karaoke"],
+                    ["stadium", "party", "kicker"]
+                ]
+              },
+              rules: {},
             }
         },
         computed: {
             showExternalTransactions () {
-                return this.donation.amount.sources.filter(s => s.type === "extern").length > 0
+                return this.taking.amount.sources.filter(s => s.type === "extern").length > 0
             },
             showCalculator () {
-                return this.donation.context.hasOwnProperty("category") && this.donation.context.category !== "" &&
-                    this.donation.context.hasOwnProperty("description") && this.donation.context.description !== "" 
+                return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
+                    this.taking.context.hasOwnProperty("description") && this.taking.context.description !== "" 
             },
             validDonation () {
-                return this.showCalculator && this.donation.amount.sources.length > 0
+                return this.showCalculator && this.taking.amount.sources.length > 0
             },
-            labelCalculator () {
-              if (this.donation.hasOwnProperty("norms") && this.donation.norms === "DONATION"
-) {
-                return this.$t('donation.header.box.amount')
-              } else if (this.donation.hasOwnProperty("norms") && this.donation.norms === "ECONOMY"
-) {
-                return this.$t('takings.header.box.amount')
-              } else {
-                return ""
-              }
-
-            }
         },
         methods: {
             ...mapActions('donations', [
                 'add', // -> this.foo()
             ]),
             submitForm () {
-                this.add(this.donation)
+                this.add(this.taking)
                 this.$router.push('/donations')
             }
         }

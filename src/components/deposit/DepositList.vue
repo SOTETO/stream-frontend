@@ -2,23 +2,23 @@
   <table class="deposits">
     <thead>
       <tr>
-        <th>{{ $t("deposit.table.head.date") }}</th>
-        <th>{{ $t("deposit.table.head.crew") }}</th>
-        <th>{{ $t("deposit.table.head.amount") }}</th>
-        <th>{{ $t("deposit.table.head.donations") }}</th>
-        <th>{{ $t("deposit.table.head.supporter") }}</th>
-        <th>{{ $t("deposit.table.head.state") }}</th>
+        <th>{{ $t("deposits.table.head.date") }}</th>
+        <th>{{ $t("deposits.table.head.crew") }}</th>
+        <th>{{ $t("deposits.table.head.amount") }}</th>
+        <th>{{ $t("deposits.table.head.donations") }}</th>
+        <th>{{ $t("deposits.table.head.supporter") }}</th>
+        <th>{{ $t("deposits.table.head.state") }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="deposit in depositItems" :key="deposit.id" class="deposit">
         <td>
           <div class="dates">
-            <span>{{ $t("deposit.hint.dates.received", { "date":  formatDate(deposit.date.received) }) }}</span>
-            <span>{{ $t("deposit.hint.dates.created", { "date":  formatDate(deposit.date.created) }) }}</span>
+            <span>{{ $t("deposits.table.hint.dates.received", { "date":  formatDate(deposit.date.received) }) }}</span>
+            <span>{{ $t("deposits.table.hint.dates.created", { "date":  formatDate(deposit.date.created) }) }}</span>
           </div>
         </td>
-        <td class="crew"><Tag :uuid="deposit.supporter[0]" :crew="true" /></td>
+        <td class="crew"><CrewPlainName :id="deposit.crew" /></td>
         <td>{{ formatAmount(deposit.amount) }}</td>
         <td>
           <ul class="actions">
@@ -36,8 +36,8 @@
         </td>
         <td>
           <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">Confirm</button>
-          <StateLight v-else-if="!confirmed(deposit) && !allowedToConfirm" :value="{ 'name': $t('deposit.hint.dates.unconfirmed'), 'state': 0 }" />
-          <StateLight v-else :value="{ 'name': $t('deposit.hint.dates.confirmed', { 'date':  formatDate(deposit.status) }), 'state': 1  }" />
+          <StateLight v-else-if="!confirmed(deposit) && !allowedToConfirm" :value="{ 'name': $t('deposits.table.hint.dates.unconfirmed'), 'state': 0 }" />
+          <StateLight v-else :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(deposit.status) }), 'state': 1  }" />
         </td>
       </tr>
     </tbody>
@@ -45,12 +45,12 @@
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import { Tag } from 'vca-widget-user'
+  import { CrewPlainName, Tag } from 'vca-widget-user'
   import StateLight from '@/components/utils/StateLight'
   import CurrencyFormatter from '@/utils/CurrencyFormatter'
   export default {
     name: "DepositList",
-    components: { Tag, StateLight },
+    components: { CrewPlainName, Tag, StateLight },
     computed: {
       ...mapGetters('deposits', {
         depositItems: 'overview',
@@ -103,7 +103,7 @@
         donation (donationId) {
           var name = this.donationName(donationId)
           if(name === null) {
-              name = this.$t('deposit.errors.donationNotFound')
+              name = this.$t('deposits.errors.takingsNotFound')
           }
           return name
         },

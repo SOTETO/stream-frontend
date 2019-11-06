@@ -1,7 +1,7 @@
 <template>
   <VcAFrame>
     <VcAColumn size="90%">
-      <VcABox :first="true"  :title="$t('deposit.header.box')">
+      <VcABox :first="true"  :title="$t('deposits.header.box')">
         <ListMenu :fields="sortFields" store="deposits" />
         <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
           {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
@@ -27,7 +27,7 @@
       VcAFrame, VcAColumn, VcABox, DepositList, ListMenu
     },
     computed: {
-        ...mapGetters('donations', {
+        ...mapGetters('deposits', {
             pageGet: 'page'
         }),
         hasPrevious () {
@@ -40,29 +40,29 @@
             return [
                 {
                     "value": "deposit.created",
-                    "label": this.$t("deposit.table.head.created")
+                    "label": this.$t("deposits.table.head.created")
                 },
                 {
                     "value": "deposit.date_of_deposit",
-                    "label": this.$t("deposit.table.head.date")
+                    "label": this.$t("deposits.table.head.date")
                 },
                 {
                     "value": "deposit.full_amount",
-                    "label": this.$t("deposit.table.head.amount")
+                    "label": this.$t("deposits.table.head.amount")
                 },
                 {
                     "value": "deposit.confirmed",
-                    "label": this.$t("deposit.table.head.state")
+                    "label": this.$t("deposits.table.head.state")
                 },
                 {
                     "value": "deposit.crew",
-                    "label": this.$t("deposit.table.head.crew")
+                    "label": this.$t("deposits.table.head.crew")
                 }
             ]
         }
     },
     methods: {
-        ...mapActions('donations', [
+        ...mapActions('deposits', [
             'page'
         ]),
         pageDown () {

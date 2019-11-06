@@ -1,4 +1,3 @@
-import axios from 'axios'
 import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 
 const uuidv4 = require('uuid/v4');
@@ -23,6 +22,7 @@ const uuidv4 = require('uuid/v4');
 //                 "involvedSupporter": []
 //             },
 //             "author": "some-uuid",
+//             "crew": "some-uuid",
 //             "created": Date.now(),
 //             "updated": Date.now()
 //         }]
@@ -42,14 +42,15 @@ const state = {
 }
 
 const getters = {
-    all: (state, getters) => {
+    all: (state) => {
         return state.items
     },
-    overview: (state, getters) => {
+    overview: (state) => {
         return state.items.map((donation) => {
             return {
                 "id": donation.id,
                 "name": donation.context.description,
+                "norms": donation.norms,
                 "amount": donation.amount.sources.reduce((amount, source) => amount + source.amount, 0),
                 "deposited": donation.depositUnits.reduce((categories, unit) => {
                     if(unit.hasOwnProperty("confirmed")) {
@@ -70,6 +71,7 @@ const getters = {
                     "created": donation.created
                 },
                 "author": donation.author,
+                "crew": donation.crew,
                 "supporter":  donation.amount.involvedSupporter
             }
         })
@@ -77,10 +79,10 @@ const getters = {
     getById: (state) => (id) => {
         return state.specialRequests.find(item => item.id === id)
     },
-    isError: (state, getters) => {
+    isError: (state) => {
         return state.error !== null
     },
-    getErrorCode: (state, getters) => {
+    getErrorCode: (state) => {
         var res = null
         if(state.error !== null && typeof state.error !== "undefined" && state.error.hasOwnProperty("response")) {
             res = state.error.response.code
@@ -141,6 +143,8 @@ const actions = {
         var user = store.rootGetters['user/get']
         donation["id"] = uuidv4()
         donation["author"] = user.uuid
+        //donation["norms"] = "Donation"
+        donation["crew"] = store.rootGetters['user/getCrew']
         donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
         donation["depositUnits"] = []
 

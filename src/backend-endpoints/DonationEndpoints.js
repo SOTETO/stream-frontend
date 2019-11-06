@@ -19,7 +19,7 @@ export default class DonationEndpoints {
 
     get(successHandler, errorHandler, page, sort) {
         axios.post(
-            '/backend/stream/donations',
+            '/backend/stream/takings',
             { "page": page, "sort": sort },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
@@ -29,7 +29,7 @@ export default class DonationEndpoints {
     
     getByQuery(successHandler, errorHandler, searchKey) {
         axios.post(
-            '/backend/stream/donations',
+            '/backend/stream/takings',
             { "filter": { "name": searchKey } },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
@@ -39,7 +39,7 @@ export default class DonationEndpoints {
     
     getByIds(successHandler, errorHandler, ids) {
         axios.post(
-            '/backend/stream/donations',
+            '/backend/stream/takings',
             { "filter": { "publicId": ids } },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
@@ -49,7 +49,7 @@ export default class DonationEndpoints {
     
     count(successHandler, errorHandler, page, sort) {
         axios.post(
-            "/backend/stream/donations/count",
+            "/backend/stream/takings/count",
             { "page": page, "sort": sort },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
         )
@@ -59,7 +59,7 @@ export default class DonationEndpoints {
 
     save(successHandler, errorHandler, donation) {
         axios.post(
-            '/backend/stream/donations/create',
+            '/backend/stream/takings/create',
             donation,
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )

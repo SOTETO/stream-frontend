@@ -7,7 +7,7 @@
                 filterable
                 remote
                 reserve-keyword
-                :placeholder="$t('deposit.placeholder.searchDonation')"
+                :placeholder="$t('takings.placeholder.searchDonation')"
                 :remote-method="callOptions"
                 :loading="donations.loading"
                 @input="commit"

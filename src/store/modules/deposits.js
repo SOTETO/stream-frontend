@@ -58,6 +58,7 @@ const getters = {
           "created": deposit.created,
         },
         "actions": deposit.amount,
+        "crew": deposit.crew,
         "supporter": [deposit.supporter],
         "status": status
       }
@@ -152,7 +153,7 @@ const actions = {
     var amount = deposit.depositUnits.map((unit) => {
         return {
             "publicId": uuidv4(),
-            "donationId": unit.donation,
+            "takingId": unit.donation,
             "amount": unit.deposit.amount,
             "currency": unit.deposit.currency,  
             "created": Date.now()
