@@ -3,9 +3,9 @@
     :model="deposit"
     :rules="rules"
     :key="reloadKey">
-    <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('deposit.placeholder.amount')" @vca-money-validationError="setErrorState('general')" @input="removeErrorState('general')" />
+    <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('takings.placeholder.amount')" @vca-money-validationError="setErrorState('general')" @input="removeErrorState('general')" />
     <div>
-      <span v-if="visibleUnassignedDeposit">{{ $t("deposit.hint.openDeposit", { "amount": unassignedDeposit.localize() }) }}</span>
+      <span v-if="visibleUnassignedDeposit">{{ $t("deposits.table.hint.openDeposit", { "amount": unassignedDeposit.localize() }) }}</span>
     </div>
     <DonationSelect @vca-select-donation="selectDonation" @vca-deselect-donation="removeDepositUnit" />
     <DonationDepositAssignment
@@ -25,7 +25,7 @@
       <el-date-picker
         v-model="deposit.dateOfDeposit"
         type="date"
-        :placeholder="$t('deposit.placeholder.dateOfDeposit')"
+        :placeholder="$t('takings.placeholder.dateOfDeposit')"
         format="dd. MMM. yyyy"
         value-format="timestamp"
         :clearable="false">

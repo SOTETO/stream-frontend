@@ -273,7 +273,7 @@
         }
       }
     },
-    "deposit": {
+    "deposits": {
       "header": {
         "box": "Deposits"
       },
@@ -286,6 +286,16 @@
           "donations": "Associated donations",
           "supporter": "Involved supporter",
           "state": "State"
+        },
+      
+        "hint": {
+          "openDeposit": "{amount} are not assigned to a donation.",
+          "dates": {
+            "received": "Date of deposit: {date}",
+            "created": "Created: {date}",
+            "confirmed": "Confirmed: {date}",
+            "unconfirmed": "Not confirmed"
+          }
         }
       },
       "placeholder": {
@@ -293,25 +303,13 @@
         "dateOfDeposit": "When?",
         "searchDonation": "Select a donation"
       },
-      "buttons": {
-        "save": "Save"
-      },
-      "hint": {
-        "openDeposit": "{amount} are not assigned to a donation.",
-        "dates": {
-          "received": "Date of deposit: {date}",
-          "created": "Created: {date}",
-          "confirmed": "Confirmed: {date}",
-          "unconfirmed": "Not confirmed"
-        }
-      },
       "errors": {
         "noValueForAssignedDonation": "Missing amount...",
         "valueForAssignedDonationOutOfRange": "Out of range...",
-        "donationNotFound": "No donation name",
-        "donationBackendError": {
+        "takingsNotFound": "No takings name",
+        "takingsBackendError": {
           "title": "Internal error",
-          "msg": "No donation has been found."
+          "msg": "No taking has been found."
         }
       }
     },
@@ -345,9 +343,15 @@
       "date": "Date",
       "supporter": "Supporter"
     },
+    "placeholder": {
+        "amount": "Deposited amount",
+        "dateOfDeposit": "When?",
+        "searchDonation": "Select a donation"
+      },
     "buttons": {
       "donation": "add donation",
-      "economic": "add economic money"
+      "economic": "add economic money",
+      "depositAdd": "save"
     }
   },
   "economic-add": {

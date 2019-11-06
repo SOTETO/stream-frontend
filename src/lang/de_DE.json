@@ -171,7 +171,7 @@
       }
     }
   },
-  "donation": {
+  "donations": {
     "header": {
       "frame": {
         "create": "Spende hinzufügen"
@@ -275,7 +275,7 @@
       }
     }
   },
-  "deposit": {
+  "deposits": {
     "header": {
       "box": "Einzahlungen"
     },
@@ -288,32 +288,24 @@
         "donations": "Zugeordnete Spenden",
         "supporter": "Beteiligte Supporter",
         "state": "Status"
-      }
-    },
-    "placeholder": {
-      "amount": "Eingezahlte Summe",
-      "dateOfDeposit": "Wann wurde eingezahlt?",
-      "searchDonation": "Wähle eine Spende"
-    },
-    "buttons": {
-      "save": "Speichern"
-    },
-    "hint": {
-      "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
-      "dates": {
-        "received": "Eingezahlt: {date}",
-        "created": "Eingetragen: {date}",
-        "confirmed": "Bestätigt: {date}",
-        "unconfirmed": "Nicht bestätigt"
+      },
+      "hint": {
+        "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
+        "dates": {
+          "received": "Eingezahlt: {date}",
+          "created": "Eingetragen: {date}",
+          "confirmed": "Bestätigt: {date}",
+          "unconfirmed": "Nicht bestätigt"
+        }
       }
     },
     "errors": {
       "noValueForAssignedDonation": "Der Anteil fehlt...",
       "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
-      "donationNotFound": "Kein Name der Spende",
-      "donationBackendError": {
+      "takingsNotFound": "Kein Name der Einzahlung",
+      "takingsBackendError": {
         "title": "Serverfehler",
-        "msg": "Leider konnten keine Spenden gefunden werden."
+        "msg": "Leider konnten keine Einzahlung gefunden werden."
       }
     }
   },
@@ -352,9 +344,15 @@
         "created": "Eingetragen: {date}"
       }
     },
+    "placeholder": {
+      "amount": "Eingezahlte Summe",
+      "dateOfDeposit": "Wann wurde eingezahlt?",
+      "searchDonation": "Wähle eine Spende"
+    },
     "buttons": {
       "donation": "Spende Hinzufügen",
-      "economic": "Wirtschaftsgeld Hinzufügen"
+      "economic": "Wirtschaftsgeld Hinzufügen",
+      "depositAdd": "Speichern"
     }
   },
   
