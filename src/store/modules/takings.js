@@ -35,7 +35,7 @@ const state = {
     },
     countItems: 0,
     sorting: {
-        field: "donation.created",
+        field: "taking.created",
         dir: "DESC"
     },
     error: null
@@ -46,13 +46,13 @@ const getters = {
         return state.items
     },
     overview: (state) => {
-        return state.items.map((donation) => {
+        return state.items.map((taking) => {
             return {
-                "id": donation.id,
-                "name": donation.context.description,
-                "norms": donation.norms,
-                "amount": donation.amount.sources.reduce((amount, source) => amount + source.amount, 0),
-                "deposited": donation.depositUnits.reduce((categories, unit) => {
+                "id": taking.id,
+                "name": taking.context.description,
+                "norms": taking.norms,
+                "amount": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                "deposited": taking.depositUnits.reduce((categories, unit) => {
                     if(unit.hasOwnProperty("confirmed")) {
                         if(!categories.confirmed.hasOwnProperty(unit.currency)) {
                             categories.confirmed[unit.currency] = 0
@@ -67,12 +67,12 @@ const getters = {
                     return categories
                 }, { "confirmed": {}, "unconfirmed": {} }),
                 "date": {
-                    "received": donation.amount.received,
-                    "created": donation.created
+                    "received": taking.amount.received,
+                    "created": taking.created
                 },
-                "author": donation.author,
-                "crew": donation.crew,
-                "supporter":  donation.amount.involvedSupporter
+                "author": taking.author,
+                "crew": taking.crew,
+                "supporter":  taking.amount.involvedSupporter
             }
         })
     },
@@ -105,7 +105,7 @@ const actions = {
         var ajax = new DonationEndpoints(store)
 
         var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
+            var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
             var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
             var page = store.state.page
             var sort = store.state.sorting
@@ -113,7 +113,7 @@ const actions = {
         }
         
         var get = (store) => {
-            var successHandler = (response) => store.commit({ "type": 'init', "donations": response.data.data })
+            var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
             var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
             var page = store.state.page
             var sort = store.state.sorting
@@ -139,35 +139,35 @@ const actions = {
         store.commit({ "type": "sort", "sort": sorting })
         store.dispatch('init')
     },
-    add (store, donation) {
+    add (store, taking) {
         var user = store.rootGetters['user/get']
-        donation["id"] = uuidv4()
-        donation["author"] = user.uuid
-        //donation["norms"] = "Donation"
-        donation["crew"] = store.rootGetters['user/getCrew']
-        donation.amount.involvedSupporter = donation.amount.involvedSupporter.map(supporter => supporter.id)
-        donation["depositUnits"] = []
+        taking["id"] = uuidv4()
+        taking["author"] = user.uuid
+        //taking["norms"] = "Donation"
+        taking["crew"] = store.rootGetters['user/getCrew']
+        taking.amount.involvedSupporter = taking.amount.involvedSupporter.map(supporter => supporter.id)
+        taking["depositUnits"] = []
 
         var ajax = new DonationEndpoints(store)
-        var successHandler = (response) => store.commit({ "type": 'push', "donation": response.data.data[0] })
+        var successHandler = (response) => store.commit({ "type": 'push', "taking": response.data.data[0] })
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-        ajax.save(successHandler, errorHandler, donation)
+        ajax.save(successHandler, errorHandler, taking)
     },
     getById (store, id) {
         // TODO: Use Ajax query!
         var item = store.state.items.find(item => item.id === id)
         if(typeof item !== "undefined") {
-            store.commit({ "type": "getById", "donation": item })
+            store.commit({ "type": "getById", "taking": item })
         }
     }
 }
 
 const mutations = {
     init(state, pushDonations) {
-        state.items = pushDonations.donations
+        state.items = pushDonations.takings
     },
     getById(state, newSpecial) {
-        state.specialRequests.push(newSpecial.donation)
+        state.specialRequests.push(newSpecial.taking)
     },
     sort(state, sort) {
         state.sorting = sort.sort
@@ -179,7 +179,7 @@ const mutations = {
         state.page.offset = offset.offset
     },
     push(state, pushDonation) {
-        state.items.push(pushDonation.donation)
+        state.items.push(pushDonation.taking)
     },
     setError(state, pushError) {
         state.error = pushError.error

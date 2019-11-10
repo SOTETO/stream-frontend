@@ -2,7 +2,7 @@
     <VcAFrame>
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('takings.head.table')">
-                <ListMenu :fields="sortFields" store="donations" />
+                <ListMenu :fields="sortFields" store="takings" />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
                     {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
                 </button>
@@ -14,7 +14,7 @@
         </VcAColumn>
         <VcAColumn size="20%">
             <VcABox :first="true" :title="$t('takings.head.add')">
-                <router-link class="vca-button-primary vca-full-width" to="/donations/add">
+                <router-link class="vca-button-primary vca-full-width" to="/takings/add">
                   {{ $t('takings.buttons.donation') }}
                 </router-link>
                 <router-link class="vca-button-primary vca-full-width" to="/economic/add">
@@ -22,26 +22,26 @@
                 </router-link>
             </VcABox>
             <VcABox :title="$t('takings.head.deposit')">
-              <DonationDeposit donations="donations" ></DonationDeposit>
+              <TakingDeposit takings="takings" ></TakingDeposit>
             </VcAbox>
         </VcAColumn>
     </VcAFrame>
 </template>
 
 <script>
-    import List from '@/components/donations/List'
+    import List from '@/components/takings/List'
     import ListMenu from '../components/utils/ListMenu'
     import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
-    import DonationDeposit from '@/components/DonationDeposit' 
+    import TakingDeposit from '@/components/takings/TakingDeposit' 
     export default {
-        name: "donations",
+        name: "takings",
         components: {
-            VcAFrame, VcAColumn, VcABox, List, ListMenu, DonationDeposit
+            VcAFrame, VcAColumn, VcABox, List, ListMenu, TakingDeposit
         },
         computed: {
-            ...mapGetters('donations', {
+            ...mapGetters('takings', {
                 pageGet: 'page'
             }),
             hasPrevious () {
@@ -53,18 +53,18 @@
             sortFields() {
                 return [
                     {
-                        "value": "donation.description",
-                        "label": this.$t("donation.header.table.title")
+                        "value": "taking.description",
+                        "label": this.$t("taking.header.table.title")
                     },
                     {
-                        "value": "donation.created",
-                        "label": this.$t("donation.header.table.date")
+                        "value": "taking.created",
+                        "label": this.$t("taking.header.table.date")
                     }
                 ]
             }
         },
         methods: {
-            ...mapActions('donations', [
+            ...mapActions('takings', [
                 'page'
             ]),
             pageDown () {
