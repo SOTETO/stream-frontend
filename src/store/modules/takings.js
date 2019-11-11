@@ -38,6 +38,12 @@ const state = {
         field: "taking.created",
         dir: "DESC"
     },
+    filter: {
+      'publicId': null,
+      'crew': null,
+      'name': null,
+      'norms': null
+    },
     error: null
 }
 
@@ -97,7 +103,53 @@ const getters = {
     },
     sort: (state) => {
         return state.sorting
+    },
+    filter: (state) => {
+        return JSON.parse(JSON.stringify(state.filter))
+    },
+    taggableFilter: (state) => {
+        var res = []
+        function check(obj, attr) {
+            return obj.hasOwnProperty(attr) && (typeof obj[attr] !== "undefined") && obj[attr] !== null &&
+                (obj[attr] !== "" || typeof obj[attr] !== "string") &&
+                (obj[attr] !== 0.0 || typeof obj[attr] !== "number") &&
+                ((Array.isArray(obj[attr]) && obj[attr].length !== 0) || !Array.isArray(obj[attr]))
+        }
+        var fields = [
+            {
+                "obj": state.filter,
+                "attr": "publicId"
+            },
+            {
+                "obj": state.filter,
+                "attr": "crew"
+            },
+            {
+                "obj": state.filter,
+                "attr": "name"
+            },
+            {
+                "obj": state.filter.state,
+                "attr": "norms"
+            }
+        ]
+        for(var field of fields) {
+            if(check(field.obj, field.attr)) {
+                res.push({
+                    "name": field.attr,
+                    "value": field.obj[field.attr]
+                })
+            }
+        }
+        if(check(state.filter.amount, "amount")) {
+            res.push({
+                "name": "amount",
+                "value": state.filter.amount
+            })
+        }
+        return res
     }
+
 }
 
 const actions = {
@@ -107,17 +159,13 @@ const actions = {
         var count = (store) => {
             var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
             var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.count(successHandler, errorHandler, page, sort)
+            ajax.count(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
         }
         
         var get = (store) => {
             var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
             var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.get(successHandler, errorHandler, page, sort)
+            ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
         }
         
         get(store)
@@ -134,6 +182,24 @@ const actions = {
             store.commit({ "type": 'page', "offset": offset })
             store.dispatch('init')
         }
+    },
+    filter (store, filter) {
+        store.commit({ "type": "filter", "filter": filter })
+        var ajax = new DonationEndpoints(store)
+
+        var count = (store) => {
+            var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
+            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            ajax.count(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
+        }
+        
+        var get = (store) => {
+            var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
+            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
+        }
+        count(store)
+        get(store)
     },
     sort (store, sorting) {
         store.commit({ "type": "sort", "sort": sorting })
@@ -159,12 +225,16 @@ const actions = {
         if(typeof item !== "undefined") {
             store.commit({ "type": "getById", "taking": item })
         }
-    }
+    },
+    
 }
 
 const mutations = {
     init(state, pushDonations) {
         state.items = pushDonations.takings
+    },
+    filter(state, filter) {
+        state.filter = filter.filter
     },
     getById(state, newSpecial) {
         state.specialRequests.push(newSpecial.taking)

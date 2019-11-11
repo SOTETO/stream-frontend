@@ -35,7 +35,7 @@
             :disabled="inErrorState"
             class="vca-button-primary vca-full-width"
             @click.prevent="commit">
-      {{ $t("deposit.buttons.save") }}
+      {{ $t("takings.buttons.depositAdd") }}
     </button>
   </el-form>
 </template>

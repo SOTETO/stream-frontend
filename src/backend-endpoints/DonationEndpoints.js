@@ -17,10 +17,10 @@ export default class DonationEndpoints {
         }
     }
 
-    get(successHandler, errorHandler, page, sort) {
+    get(successHandler, errorHandler, page, sort, filter) {
         axios.post(
             '/backend/stream/takings',
-            { "page": page, "sort": sort },
+            { "page": page, "sort": sort, "filter": filter },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
         .then(response => successHandler(response))
@@ -47,10 +47,10 @@ export default class DonationEndpoints {
         .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
     
-    count(successHandler, errorHandler, page, sort) {
+    count(successHandler, errorHandler, page, sort, filter) {
         axios.post(
             "/backend/stream/takings/count",
-            { "page": page, "sort": sort },
+            { "page": page, "sort": sort, 'filter': filter },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
         )
         .then(response => successHandler(response))
