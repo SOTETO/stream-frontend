@@ -37,6 +37,7 @@
                     @change="commit">
                 </el-date-picker>
             </el-form-item>
+            <TakingSelectSource v-on:input="addSourceType($event)"/>
             <table class="sources">
                 <thead>
                     <tr>
@@ -48,7 +49,7 @@
                 </thead>
                 <tbody>
                     <DonationSource
-                        v-for="t in sourceTypes"
+                        v-for="t in currentSourceType"
                         :category="t.category"
                         :currency="currency"
                         :checked="getCheckedSource(t.category)"
@@ -77,6 +78,7 @@
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
+    import TakingSelectSource from '@/components/takings/TakingSelectSource'
     import DonationSource from '@/components/DonationSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
@@ -89,7 +91,8 @@
             "el-option": Option,
             "DonationSource": DonationSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
-            "VcABox": VcABox
+            "VcABox": VcABox,
+            "TakingSelectSource": TakingSelectSource
         },
         props: {
             "first": {
@@ -117,17 +120,22 @@
                 }
             }
             return {
+                "value": '',
                 "datePickerOptions": {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     }
                 },
+
                 "sourceTypes": [
                     { "category": "unknown", "desc": false},
                     { "category": "can", "desc": false},
                     { "category": "box", "desc": false},
                     { "category": "gl", "desc": false},
                     { "category": "other", "desc": true}
+                ],
+                "currentSourceType": [
+
                 ],
                 "currency": this.$t("currencies.default"),
                 "currencyOptions": [
@@ -164,6 +172,9 @@
             this.commit()
         },
         methods: {
+            addSourceType(value) {
+              this.currentSourceType.push(value)
+            },
             changeDonation(source) {
                 var copy = this.sources.slice(0)
                 copy = copy.filter(s => source.category !== s.category)

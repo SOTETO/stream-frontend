@@ -9,7 +9,9 @@
               +  
             </button>
         <el-input v-model="input.name"></el-input>
+        <div class="tags">
         <FilterTag v-for="tag in filter.name" :field="'name'" :value="tag" :key="tag.name" v-on:delete="deleteName($event)" />
+        </div>
         </el-form-item>
         <el-form-item :label="$t('household.filter.wherefor')" required>
             <el-input v-model="input.norms" @input="commitNorms"></el-input>
@@ -119,5 +121,10 @@
 </script>
 
 <style scoped>
-
+    .tags {
+        margin: 0 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
 </style>
