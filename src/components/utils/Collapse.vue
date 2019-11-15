@@ -1,7 +1,7 @@
 <template>
     <div ref="collapse" class="vca-collapse collapsed">
         <div class="state">
-            <span>{{ label }}</span>
+            <span>{{ $t('household.filter.title') }}</span>
             <div class="status-bar">
                 <slot name="status"></slot>
             </div>

@@ -1,22 +1,25 @@
 <template>
+  <div ref="collapse" class="vca-collapse collapsed">
+    <div class="state">
+       <span>{{ $t('household.filter.title') }}</span>
+       <div class="status-bar">
+         <slot name="status"></slot>
+       </div>
+       <button @click="collapse">{{ buttonLabel }}</button>
+    </div>
+    <div class="content">
+      <slot>
     <el-form
         :model="input"
         label-position="left"
-        label-width="8em"
-    >
-        <el-form-item :label="$t('household.filter.what')" required>
-            <button v-on:click="commitName()" class="paginate">
-              +  
-            </button>
-        <el-input v-model="input.name"></el-input>
-        <div class="tags">
-        <FilterTag v-for="tag in filter.name" :field="'name'" :value="tag" :key="tag.name" v-on:delete="deleteName($event)" />
-        </div>
-        </el-form-item>
-        <el-form-item :label="$t('household.filter.wherefor')" required>
-            <el-input v-model="input.norms" @input="commitNorms"></el-input>
+        label-width="8em">
+        <el-form-item  class="filter" :label="$t('takings.filter.name')" required>
+            <FilterTags v-on:commit="commitName($event)" v-on:delete="deleteName($event)" />
         </el-form-item>
     </el-form>
+    </slot>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -24,7 +27,7 @@
     import { Input, InputNumber, Form, FormItem } from 'element-ui'
     import MoneyInput from "../utils/MoneyInput"
     import { CrewSelect } from 'vca-widget-user'
-    import FilterTag from '@/utils/FilterTag'
+    import FilterTags from '@/components/utils/FilterTags'
 
     export default {
         name: "TakingFilter",
@@ -35,7 +38,7 @@
             'el-form-item': FormItem,
             'el-form': Form,
             CrewSelect,
-            FilterTag
+            FilterTags
         },
         props: {
             'currency': {
@@ -66,7 +69,9 @@
               'input': {
                     'name': "",
                     'norms': "",
-              }
+              },
+              'buttonLabel': this.$t('collapse.button.show')
+
             }
         },
         created() {
@@ -76,16 +81,26 @@
             ...mapActions("takings", {
                 setFilter: 'filter'
             }),
-            commitName() {
+            collapse() {
+                if(this.$refs.collapse.classList.contains("collapsed")) {
+                    this.$refs.collapse.classList.remove("collapsed")
+                    this.$refs.collapse.classList.add("non-collapsed")
+                    this.buttonLabel = this.$t("collapse.button.hide")
+                } else if(this.$refs.collapse.classList.contains("non-collapsed")) {
+                    this.$refs.collapse.classList.remove("non-collapsed")
+                    this.$refs.collapse.classList.add("collapsed")
+                    this.buttonLabel = this.$t("collapse.button.show")
+                }
+            },
+            commitName(value) {
               if(this.filter.name !== null) {
-                this.filter.name.push(this.input.name)
+                this.filter.name.push(value)
               } else {
-                this.filter.name = [this.input.name]
+                this.filter.name = [value]
               }
               this.commit()
             },
             deleteName(value) {
-              console.log(value)
               var index = this.filter.name.indexOf(value);
               if (this.filter.name.length === 1) {
                 this.filter.name = null
@@ -105,26 +120,63 @@
                 }
                 this.setFilter(JSON.parse(JSON.stringify(this.filter)))
                 this.$emit("vca-filter-updated")
-            },
-            removeA(arr) {
-              var what, a = arguments, L = a.length, ax;
-              while (L > 1 && arr.length) {
-                what = a[--L];
-                while ((ax= arr.indexOf(what)) !== -1) {
-                  arr.splice(ax, 1);
-                }
-              }
-              return arr;
             }
         }
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+    .filter {
+      display: inline;
+    }
     .tags {
         margin: 0 1em;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
     }
+    .vca-collapse {
+        margin-bottom: 1em;
+        padding: 0.4em 1em;
+        border-radius: 0.4em;
+        background-color: #efefef;
+    }
+
+    .state {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 2.5em;
+
+        span {
+            font-weight: bold;
+        }
+        .status-bar {
+            flex-grow: 1;
+        }
+        button {
+            border: 1px solid rgba(60, 60, 60, 0.26);
+            border-radius: 4px;
+            margin-left: 1em;
+            background: none;
+        }
+    }
+
+    .content {
+        padding-top: 0.4em;
+    }
+
+    .collapsed {
+        .content {
+            display: none;
+        }
+    }
+
+    .non-collapsed {
+        .content {
+            display: block;
+        }
+    }
+
 </style>

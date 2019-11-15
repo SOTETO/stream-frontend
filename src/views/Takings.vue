@@ -3,18 +3,7 @@
         <VcAColumn size="70%">
             <VcABox :first="true" :title="$t('takings.head.table')">
 
-              <Collapse :label="$t('household.filter.title')">
-                  <template slot="status">
-                        <div  class="tags">
-                            <!--<VcAFilterTag v-if="hasCrewTag" v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">-->
-                          <VcAFilterTag v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">
-                              <CrewPlainName :id="tag.value" />
-                            </VcAFilterTag>
-                            <VcAFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" :key="tag.name" v-on:delete="deleteTag($event)" />
-                        </div>
-                    </template>
                     <TakingFilter @vca-filter-updated="addState" />
-                </Collapse>
 
                 <ListMenu :fields="sortFields" store="takings" />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">

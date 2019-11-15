@@ -361,6 +361,9 @@
       "donation": "Spende Hinzufügen",
       "economic": "Wirtschaftsgeld Hinzufügen",
       "depositAdd": "Speichern"
+    },
+    "filter": {
+      "name": "Name"
     }
   },
   

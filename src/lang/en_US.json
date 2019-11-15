@@ -366,6 +366,9 @@
       "donation": "add donation",
       "economic": "add economic money",
       "depositAdd": "save"
+    },
+    "filter":{
+      "name": "name"
     }
   },
   "economic-add": {
