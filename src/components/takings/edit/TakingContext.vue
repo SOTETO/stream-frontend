@@ -1,7 +1,7 @@
 <template>
     <div class="context-form">
         <el-form-item :label="$t('donation.placeholder.context.label')" :required="true">
-            <el-input :placeholder="$t('donation.placeholder.context.indicator')" v-model="context.description" @change="commit"></el-input>
+            <el-input :placeholder="$t('donation.placeholder.context.indicator')" v-model="context.description"></el-input>
         </el-form-item>
         <el-form-item :label="$t('donation.placeholder.category')" :required="true" class="vca-categories">
             <table class="categoryChooser">

@@ -2,19 +2,16 @@
     <tr class="source">
         <td>
             <div class="category">
+                  <span> {{$t("donation.placeholder.source." + source.category) }}</span>
                 <el-form-item>
-                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("donation.placeholder.source." + source.category) }}</el-checkbox>
-                </el-form-item>
-                <el-form-item v-if="description">
-                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('donation.placeholder.source.description')"></el-input>
+                    <el-input v-model="descriptionTextVar" :placeholder="$t('donation.placeholder.source.description')"></el-input>
                 </el-form-item>
             </div>
         </td>
         <td>
             <MoneyInput
-                    v-model="source.amount.amount"
-                    :currency="currency"
-                    @input="commit"
+                    v-model="source.amount"
+                    v-bind:amount="source.amount"
                     @vca-money-validationError="invalid"
             />
         </td>
@@ -34,7 +31,7 @@
 <script>
     import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
-    import MoneyInput from '@/components/utils/MoneyInput'
+    import MoneyInput from '@/components/takings/edit/MoneyInput'
 
     // Todo: Should use new component utils.MoneyInput!
     export default {
@@ -53,52 +50,16 @@
               return {
                 "amount": {
                   "amount": 0,
-                  "currency": ""
+                  "currency": "EUR"
                 },
                 "category": "",
                 "typeOfSource": ""
               }
             }
           },
-            "category": {
-                "type": String,
-                "required": true,
-                "validator": function (value) {
-                    // The value must match one of these strings
-                    return ["unknown", "can", "box", "gl", "other"].indexOf(value) !== -1
-                }
-            },
-            "currency": {
-                "type": String,
-                "required": true,
-                "validator": function (value) {
-                    // The value must match one of these strings
-                    return ["EUR", "USD", "CHF"].indexOf(value) !== -1
-                }
-            },
-            "checked": {
-                "type": Boolean,
-                "default": false
-            },
-            "numeric": {
-                "type": Number,
-                "default": 0.0
-            },
-            "type": {
-                "type": String,
-                "default": "cash"
-            },
-            "description": {
-                "type": Boolean,
-                "default": false
-            },
-            "descriptionText": {
-                "type": String,
-                "default": ""
-            }
         },
         data () {
-            var formatter = CurrencyFormatter.getDefault(this.currency)
+            var formatter = CurrencyFormatter.getDefault(this.source.amount.currency)
             return {
                 "checkedVar": false,
                 "amount": {
@@ -111,21 +72,20 @@
             }
         },
         created: function () {
-            var formatter = CurrencyFormatter.getFromNumeric(this.currency, this.numeric)
+            var formatter = CurrencyFormatter.getFromNumeric(this.source.amount.currency, this.numeric)
             this.amount.formatted = formatter.localize()
             this.amount.amount = formatter.getNumeric()
             this.checkedVar = this.checked
             this.typeVar = this.type
             this.descriptionTextVar = this.descriptionText
-            this.commit()
         },
         methods: {
             commit() {
                 if(this.checkedVar && !this.amountErrorState) {
                     var result = {
                         "category": this.category,
-                        "amount": this.amount.amount,
-                        "currency": this.currency,
+                        "amount": this.source.amount.amount,
+                        "currency": this.source.amount.currency,
                         "type": this.typeVar
                     }
                     if(this.description) {

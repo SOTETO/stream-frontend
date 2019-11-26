@@ -18,7 +18,7 @@
                 >
                 <WidgetUserAutocomplete
                         :placeholder="$t('donation.placeholder.involved.indicator')"
-                        :preselection="involvedSupporter"
+                        :preselection="amount.involvedSupporter"
                         @vca-user-selection="selectSupporter"
                 />
             </el-form-item>
@@ -51,13 +51,12 @@
                         v-for="t in amount.sources"
                         :source="t"
                         :category="t.category"
-                        :currency="currency"
                         :checked="getCheckedSource(t.category)"
                         :type="getTypeSource(t.category)"
                         :numeric="getNumericSource(t.category)"
                         :description="t.desc"
                         :descriptionText="getDescSource(t.category)"
-                        :key="t.category + currency"
+                        :key="t.category"
                     />
                 </tbody>
             </table>
@@ -76,7 +75,7 @@
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
-    import TakingSelectSource from '@/components/takings/TakingSelectSource'
+    import TakingSelectSource from '@/components/takings/edit/TakingSelectSource'
     import TakingSource from '@/components/takings/edit/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
@@ -103,14 +102,6 @@
                 }
               }
             },
-            "first": {
-               "type": Boolean,
-               "default": true
-            },
-            "value": {
-               "type": Object,
-                "required": false
-            }
         },
         data () {
             var sources = []
@@ -176,7 +167,6 @@
                     this.involvedSupporter = this.value.involvedSupporter
                 }
             }
-            this.commit()
         },
         methods: {
             addSourceType(value) {
@@ -196,11 +186,11 @@
                 this.commit()
             },
             getTotal(part) {
-                const reducer = (acc, c) => acc + c.amount
-                const filter = source => source.type === part
+                const reducer = (acc, c) => acc + c.amount.amount
+                const filter = source => source.typeOfSource === part
                 var result = this.amount.sources.reduce(reducer, 0);
                 if(typeof part === "string" && (part === "cash" || part === "extern")) {
-                    result = this.sources.filter(filter).reduce(reducer, 0)
+                    result = this.amount.sources.filter(filter).reduce(reducer, 0)
                 }
                 return CurrencyFormatter.getFromNumeric(this.currency, result)
             },
@@ -245,7 +235,7 @@
                 return result
             },
             selectSupporter(supporter) {
-                this.involvedSupporter = supporter
+                this.amount.involvedSupporter = supporter
             }
         }
     }
