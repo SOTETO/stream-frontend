@@ -27,14 +27,13 @@
                 :required="true"
                 :label="$t('donation.placeholder.received')">
                 <el-date-picker
-                    v-model="received"
+                    v-model="amount.received"
                     type="date"
                     :placeholder="$t('donation.placeholder.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
                     :clearable="false"
-                    :picker-options="datePickerOptions"
-                    @change="commit">
+                    :picker-options="datePickerOptions">
                 </el-date-picker>
             </el-form-item>
             <TakingSelectSource v-on:input="addSourceType($event)"/>
@@ -48,8 +47,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <DonationSource
-                        v-for="t in currentSourceType"
+                    <TakingSource
+                        v-for="t in amount.sources"
+                        :source="t"
                         :category="t.category"
                         :currency="currency"
                         :checked="getCheckedSource(t.category)"
@@ -58,8 +58,6 @@
                         :description="t.desc"
                         :descriptionText="getDescSource(t.category)"
                         :key="t.category + currency"
-                        @input="changeDonation"
-                        @deselect="deselect"
                     />
                 </tbody>
             </table>
@@ -79,22 +77,32 @@
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
     import TakingSelectSource from '@/components/takings/TakingSelectSource'
-    import DonationSource from '@/components/DonationSource.vue'
+    import TakingSource from '@/components/takings/edit/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
-        name: "DonationCalculator",
+        name: "TakingCalculator",
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
-            "DonationSource": DonationSource,
+            "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
             "VcABox": VcABox,
             "TakingSelectSource": TakingSelectSource
         },
         props: {
+            amount: {
+              type: Object,
+              default: function () {
+                return {
+                  "received": "",
+                  "sources": [],
+                  "involvedSupporter": []
+                }
+              }
+            },
             "first": {
                "type": Boolean,
                "default": true
@@ -172,7 +180,7 @@
         },
         methods: {
             addSourceType(value) {
-              this.currentSourceType.push(value)
+              this.amount.sources.push(value)
             },
             changeDonation(source) {
                 var copy = this.sources.slice(0)
@@ -190,7 +198,7 @@
             getTotal(part) {
                 const reducer = (acc, c) => acc + c.amount
                 const filter = source => source.type === part
-                var result = this.sources.reduce(reducer, 0);
+                var result = this.amount.sources.reduce(reducer, 0);
                 if(typeof part === "string" && (part === "cash" || part === "extern")) {
                     result = this.sources.filter(filter).reduce(reducer, 0)
                 }

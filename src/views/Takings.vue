@@ -17,10 +17,10 @@
         </VcAColumn>
         <VcAColumn size="20%">
             <VcABox :first="true" :title="$t('takings.head.add')">
-                <router-link class="vca-button-primary vca-full-width" to="/takings/add">
+                <router-link class="vca-button-primary vca-full-width" to="/donations/add">
                   {{ $t('takings.buttons.donation') }}
                 </router-link>
-                <router-link class="vca-button-primary vca-full-width" to="/economic/add">
+                <router-link class="vca-button-primary vca-full-width" to="/takings/edit">
                   {{ $t('takings.buttons.economic') }}
                 </router-link>
             </VcABox>

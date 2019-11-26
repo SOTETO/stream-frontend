@@ -1,9 +1,9 @@
 <template>
   <el-form-item>
-    <el-select v-model="value" @input="commit">
+    <el-select v-model="val" @input="commit">
       <el-option
         v-for="item in sourceSelect"
-        :key="item.value"
+        :key="item.id"
         :label="item.label"
         :value="item.value">
       </el-option>
@@ -21,6 +21,7 @@ export default {
   },
   data () {
     return {
+      "val": "",
       "sourceSelect": [
         {'label': this.$t('donation.placeholder.source.unknown'), 'value' : {
           "category": "unknown", "desc": false}
@@ -41,7 +42,7 @@ export default {
   },
   methods: {
     commit() {
-      this.$emit("input", this.value)
+      this.$emit("input", this.val)
     }
   }
 }

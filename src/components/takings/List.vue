@@ -2,23 +2,24 @@
     <table class="takings">
         <thead>
         <tr>
-            <th>{{ $t("takings.table.head.norms") }}
             <th>{{ $t("takings.table.head.title") }}</th>
             <th>{{ $t("takings.table.head.crew") }}</th>
             <th>{{ $t("takings.table.head.amount") }}</th>
             <th>{{ $t("takings.table.head.deposited") }}</th>
             <th>{{ $t("takings.table.head.date") }}</th>
             <th>{{ $t("takings.table.head.supporter") }}</th>
+            <th>{{ $t("takings.table.head.norms") }} </th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="taking in takings" :key="taking.id" class="taking">
-            <td>{{ formatNorms(taking.norms) }}</td>
             <td>{{ taking.name }}</td>
             <td class="crew"><CrewPlainName :id="taking.crew" /></td>
             <td>{{ formatAmount(taking.amount) }}</td>
             <td>
                 <DepositLights :donation="taking" />
+                <DepositAdd/>
+            </td>
             </td>
             <td>
                 <div class="dates">
@@ -32,6 +33,13 @@
                     <span v-if="hasAddtionalSupporter(taking)">...</span>
                 </div>
             </td>
+            <td>
+              <router-link class="vca-button-primary vca-full-width" :to="{name: 'takings-edit', params: {taking: getById(taking.id)}}">
+                  {{ $t('takings.buttons.edit') }}
+                </router-link>
+
+            </td>
+
         </tr>
         </tbody>
     </table>
@@ -43,6 +51,7 @@
     import { Tag, CrewPlainName } from 'vca-widget-user'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
     import DepositLights from '@/components/takings/DepositLights'
+    import DepositAdd from '@/components/deposit/DepositAdd'
     import { Notification } from 'element-ui'
 
     Vue.use(Notification)
@@ -51,13 +60,14 @@
     export default {
         name: "List",
         components: {
-            Tag, CrewPlainName, DepositLights
+            Tag, CrewPlainName, DepositLights, DepositAdd
         },
         computed: {
             ...mapGetters('takings', {
                 takings: 'overview',
                 isError: 'isError',
                 getErrorCode: 'getErrorCode',
+                getById: 'getById',
             }),
             maximumTags () {
                 return 2;

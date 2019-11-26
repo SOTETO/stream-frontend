@@ -83,7 +83,7 @@ const getters = {
         })
     },
     getById: (state) => (id) => {
-        return state.specialRequests.find(item => item.id === id)
+        return state.items.find(item => item.id === id)
     },
     isError: (state) => {
         return state.error !== null

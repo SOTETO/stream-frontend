@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import TakingsEdit from './views/TakingsEdit.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -44,11 +45,20 @@ var router = new Router({
         }
     },
     {
-        path: '/donations/add',
-        name: 'donations-add',
+        path: '/takings/add',
+        name: 'takings-add',
         component: () => import('./views/DonationsAdd.vue'),
         meta: {
           'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+        }
+    },
+    {
+        path: '/takings/edit',
+        name: 'takings-edit',
+        props: true,
+        component: () => import('./views/TakingsEdit.vue'),
+        meta: {
+          'roles': ['Admin', 'Employee', {'name': 'VolunteerManager'}]
         }
     },
     {
