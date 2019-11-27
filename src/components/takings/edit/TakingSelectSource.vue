@@ -31,6 +31,7 @@ export default {
               "currency": "EUR"
             },
             "category": "unknown", 
+            "norms": "DONATION",
             "desc": false
           }
         },
@@ -42,6 +43,7 @@ export default {
               "currency": "EUR"
             },
             "category": "can", 
+            "norms": "DONATION",
             "desc": false
           }
         },
@@ -53,6 +55,7 @@ export default {
               "currency": "EUR"
             },
             "category": "box", 
+            "norms": "DONATION",
             "desc": false
           }
         },
@@ -64,6 +67,7 @@ export default {
               "currency": "EUR"
             },
             "category": "gl", 
+            "norms": "DONATION",
             "desc": false
           }
         },
@@ -75,6 +79,7 @@ export default {
               "currency": "EUR"
             },
             "category": "other", 
+            "norms": "DONATION",
             "desc": true
           }
         }

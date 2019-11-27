@@ -48,7 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <DonationSource
+                    <TakingSource
                         v-for="t in currentSourceType"
                         :category="t.category"
                         :currency="currency"
@@ -79,17 +79,17 @@
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
     import TakingSelectSource from '@/components/takings/TakingSelectSource'
-    import DonationSource from '@/components/DonationSource.vue'
+    import TakingSource from '@/components/takings/add/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
-        name: "DonationCalculator",
+        name: "TakingCalculator",
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
-            "DonationSource": DonationSource,
+            "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
             "VcABox": VcABox,
             "TakingSelectSource": TakingSelectSource

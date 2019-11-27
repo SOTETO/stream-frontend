@@ -39,7 +39,15 @@
                     "validator": (numericValue) => false,
                     "msg": ""
                 }]
-            }
+            },
+            label: {
+                "type": String,
+                "default": ""
+            },
+            disabled: {
+                "type": Boolean,
+                "default": false
+            },
         },
         data () {
             var formatter = CurrencyFormatter.getFromNumeric(this.amount.currency, this.amount.amount)

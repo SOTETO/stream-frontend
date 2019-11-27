@@ -83,7 +83,7 @@ const getters = {
         })
     },
     getById: (state) => (id) => {
-        return state.items.find(item => item.id === id)
+        return JSON.parse(JSON.stringify(state.items.find(item => item.id === id)))
     },
     isError: (state) => {
         return state.error !== null
@@ -218,6 +218,12 @@ const actions = {
         var successHandler = (response) => store.commit({ "type": 'push', "taking": response.data.data[0] })
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
         ajax.save(successHandler, errorHandler, taking)
+    },
+    update (store, taking) {
+      var ajax = new DonationEndpoints(store)
+      var successHandler = (response) => store.commit({"type": 'push', 'taking': response.data})
+      var errorHandler = (error) => store.commit({'type': 'setError', error: error})
+      ajax.update(successHandler, errorHandler, taking)
     },
     getById (store, id) {
         // TODO: Use Ajax query!

@@ -66,4 +66,13 @@ export default class DonationEndpoints {
         .then(response => successHandler(response))
         .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
+  update(successHandler, errorHandler, taking) {
+    axios.post(
+      '/backend/stream/takings/update',
+      taking,
+      { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+    )
+      .then(response => successHandler(response))
+      .catch(error => this.defaultErrorHandler(error, errorHandler))
+  }
 }

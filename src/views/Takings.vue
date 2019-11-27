@@ -17,11 +17,8 @@
         </VcAColumn>
         <VcAColumn size="20%">
             <VcABox :first="true" :title="$t('takings.head.add')">
-                <router-link class="vca-button-primary vca-full-width" to="/donations/add">
-                  {{ $t('takings.buttons.donation') }}
-                </router-link>
-                <router-link class="vca-button-primary vca-full-width" to="/takings/edit">
-                  {{ $t('takings.buttons.economic') }}
+                <router-link class="vca-button-primary vca-full-width" to="/takings/add">
+                  {{ $t('takings.buttons.add') }}
                 </router-link>
             </VcABox>
             <VcABox :title="$t('takings.head.deposit')">
@@ -32,19 +29,17 @@
 </template>
 
 <script>
-  import Collapse from "../components/utils/Collapse";
   import List from '@/components/takings/List'
   import ListMenu from '../components/utils/ListMenu'
   import { mapGetters, mapActions } from 'vuex'
-  import { VcAFrame, VcAColumn, VcABox, VcAFilterTag } from 'vca-widget-base'
+  import { VcAFrame, VcAColumn, VcABox} from 'vca-widget-base'
   import 'vca-widget-base/dist/vca-widget-base.css'
   import TakingDeposit from '@/components/takings/TakingDeposit' 
   import TakingFilter from "../components/takings/TakingFilter"
-  import { CrewPlainName } from 'vca-widget-user'
   export default {
     name: "takings",
     components: {
-      VcAFrame, VcAColumn, VcABox, List, ListMenu, TakingDeposit, Collapse, VcAFilterTag, CrewPlainName, TakingFilter
+      VcAFrame, VcAColumn, VcABox, List, ListMenu, TakingDeposit, TakingFilter
     },
     data () {
       var editableDefault = {

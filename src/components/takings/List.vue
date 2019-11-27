@@ -8,7 +8,7 @@
             <th>{{ $t("takings.table.head.deposited") }}</th>
             <th>{{ $t("takings.table.head.date") }}</th>
             <th>{{ $t("takings.table.head.supporter") }}</th>
-            <th>{{ $t("takings.table.head.norms") }} </th>
+            <th v-if="isEployee">{{ $t("takings.table.head.norms") }} </th>
         </tr>
         </thead>
         <tbody>
@@ -19,7 +19,6 @@
             <td>
                 <DepositLights :donation="taking" />
                 <DepositAdd/>
-            </td>
             </td>
             <td>
                 <div class="dates">
@@ -33,13 +32,11 @@
                     <span v-if="hasAddtionalSupporter(taking)">...</span>
                 </div>
             </td>
-            <td>
-              <router-link class="vca-button-primary vca-full-width" :to="{name: 'takings-edit', params: {taking: getById(taking.id)}}">
+            <td v-if="isEployee">
+              <router-link class="vca-button-primary vca-full-width" :to="{name: 'takings-edit', params: {id: taking.id}}">
                   {{ $t('takings.buttons.edit') }}
                 </router-link>
-
             </td>
-
         </tr>
         </tbody>
     </table>
@@ -71,6 +68,9 @@
             }),
             maximumTags () {
                 return 2;
+            },
+            isEployee () {
+              return this.$store.getters['user/is'](["Admin", "Employee"]);
             }
         },
         created () {
