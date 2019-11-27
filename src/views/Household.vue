@@ -142,13 +142,13 @@
             filterTags () {
                 return this.taggableFilter.reduce((fields, field) => {
                     var translate = f => {
-                        if(f.name === "complete") {
+                        if(f.name === "publicId") {
                             f.value = this.$t("household.filter.tag.values." + f.name + "." + f.value)
-                        } else if(f.name === "repayment") {
+                        } else if(f.name === "crew") {
                             f.value = this.$t('household.states.' + f.value)
-                        } else if(f.name === "volunteerManager") {
+                        } else if(f.name === "name") {
                             f.value = this.$t('household.process.VolunteerManager.' + f.value)
-                        } else if(f.name === "employee") {
+                        } else if(f.name === "norms") {
                             f.value = this.$t('household.process.Employee.' + f.value)
                         } else if(f.name === "amount") {
                             var formatter = CurrencyFormatter.getFromNumeric(f.value.currency, f.value.amount)

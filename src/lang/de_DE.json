@@ -171,7 +171,7 @@
       }
     }
   },
-  "donations": {
+  "donation": {
     "header": {
       "frame": {
         "create": "Spende hinzufügen"
@@ -339,6 +339,14 @@
         "date": "Datum",
         "supporter": "Beteiligte Supporter"
       },
+      "sort": {
+        "title": "Name / Aktion",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "deposited": "Eingezahlt",
+        "date": "Datum",
+        "supporter": "Beteiligte Supporter"
+      },
       "dates": {
         "received": "Erhalten: {date}",
         "created": "Eingetragen: {date}"
@@ -353,6 +361,9 @@
       "donation": "Spende Hinzufügen",
       "economic": "Wirtschaftsgeld Hinzufügen",
       "depositAdd": "Speichern"
+    },
+    "filter": {
+      "name": "Name"
     }
   },
   

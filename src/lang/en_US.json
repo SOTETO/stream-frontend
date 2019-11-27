@@ -335,13 +335,27 @@
       "deposit": "add ecnomy money"
     },
     "table": {
-      "norms": "Type",
-      "title": "Name / Event",
-      "crew": "Crew",
-      "amount": "Amount",
-      "deposited": "Deposited",
-      "date": "Date",
-      "supporter": "Supporter"
+      "head": {
+        "norms": "Type",
+        "title": "Name / Event",
+        "crew": "Crew",
+        "amount": "Amount",
+        "deposited": "Deposited",
+        "date": "Date",
+        "supporter": "Supporter"
+      },
+      "sort": {
+        "title": "Name / Event",
+        "crew": "Crew",
+        "amount": "Amount",
+        "deposited": "Deposited",
+        "date": "Date",
+        "supporter": "Supporter"
+      },
+      "dates": {
+        "received": "Received: {date}",
+        "created": "Recorded: {date}"
+      }
     },
     "placeholder": {
         "amount": "Deposited amount",
@@ -352,6 +366,9 @@
       "donation": "add donation",
       "economic": "add economic money",
       "depositAdd": "save"
+    },
+    "filter":{
+      "name": "name"
     }
   },
   "economic-add": {

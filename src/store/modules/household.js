@@ -58,10 +58,10 @@ const state = {
 }
 
 const getters = {
-    all: (state, getters) => {
+    all: (state) => {
         return state.items
     },
-    overview: (state, getters) => {
+    overview: (state) => {
         return state.items.map((household) => {
             // var stateDescription = household.state.describe()
             var stateDescription = StateMessageInterpreter.describe(household.state)

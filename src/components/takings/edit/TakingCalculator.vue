@@ -18,7 +18,7 @@
                 >
                 <WidgetUserAutocomplete
                         :placeholder="$t('donation.placeholder.involved.indicator')"
-                        :preselection="involvedSupporter"
+                        :preselection="amount.involvedSupporter"
                         @vca-user-selection="selectSupporter"
                 />
             </el-form-item>
@@ -27,16 +27,16 @@
                 :required="true"
                 :label="$t('donation.placeholder.received')">
                 <el-date-picker
-                    v-model="received"
+                    v-model="amount.received"
                     type="date"
                     :placeholder="$t('donation.placeholder.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
                     :clearable="false"
-                    :picker-options="datePickerOptions"
-                    @change="commit">
+                    :picker-options="datePickerOptions">
                 </el-date-picker>
             </el-form-item>
+            <TakingSelectSource v-on:input="addSourceType($event)"/>
             <table class="sources">
                 <thead>
                     <tr>
@@ -47,18 +47,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <DonationSource
-                        v-for="t in sourceTypes"
+                    <TakingSource
+                        v-for="t in amount.sources"
+                        :source="t"
                         :category="t.category"
-                        :currency="currency"
                         :checked="getCheckedSource(t.category)"
                         :type="getTypeSource(t.category)"
                         :numeric="getNumericSource(t.category)"
                         :description="t.desc"
                         :descriptionText="getDescSource(t.category)"
-                        :key="t.category + currency"
-                        @input="changeDonation"
-                        @deselect="deselect"
+                        :key="t.category"
                     />
                 </tbody>
             </table>
@@ -77,29 +75,33 @@
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
-    import DonationSource from '@/components/DonationSource.vue'
+    import TakingSelectSource from '@/components/takings/edit/TakingSelectSource'
+    import TakingSource from '@/components/takings/edit/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
 
     export default {
-        name: "DonationCalculator",
+        name: "TakingCalculator",
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
-            "DonationSource": DonationSource,
+            "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
-            "VcABox": VcABox
+            "VcABox": VcABox,
+            "TakingSelectSource": TakingSelectSource
         },
         props: {
-            "first": {
-               "type": Boolean,
-               "default": true
+            amount: {
+              type: Object,
+              default: function () {
+                return {
+                  "received": "",
+                  "sources": [],
+                  "involvedSupporter": []
+                }
+              }
             },
-            "value": {
-               "type": Object,
-                "required": false
-            }
         },
         data () {
             var sources = []
@@ -122,12 +124,16 @@
                         return time.getTime() > Date.now();
                     }
                 },
+
                 "sourceTypes": [
                     { "category": "unknown", "desc": false},
                     { "category": "can", "desc": false},
                     { "category": "box", "desc": false},
                     { "category": "gl", "desc": false},
                     { "category": "other", "desc": true}
+                ],
+                "currentSourceType": [
+
                 ],
                 "currency": this.$t("currencies.default"),
                 "currencyOptions": [
@@ -161,9 +167,11 @@
                     this.involvedSupporter = this.value.involvedSupporter
                 }
             }
-            this.commit()
         },
         methods: {
+            addSourceType(value) {
+              this.amount.sources.push(value)
+            },
             changeDonation(source) {
                 var copy = this.sources.slice(0)
                 copy = copy.filter(s => source.category !== s.category)
@@ -178,11 +186,11 @@
                 this.commit()
             },
             getTotal(part) {
-                const reducer = (acc, c) => acc + c.amount
-                const filter = source => source.type === part
-                var result = this.sources.reduce(reducer, 0);
+                const reducer = (acc, c) => acc + c.amount.amount
+                const filter = source => source.typeOfSource === part
+                var result = this.amount.sources.reduce(reducer, 0);
                 if(typeof part === "string" && (part === "cash" || part === "extern")) {
-                    result = this.sources.filter(filter).reduce(reducer, 0)
+                    result = this.amount.sources.filter(filter).reduce(reducer, 0)
                 }
                 return CurrencyFormatter.getFromNumeric(this.currency, result)
             },
@@ -227,7 +235,7 @@
                 return result
             },
             selectSupporter(supporter) {
-                this.involvedSupporter = supporter
+                this.amount.involvedSupporter = supporter
             }
         }
     }

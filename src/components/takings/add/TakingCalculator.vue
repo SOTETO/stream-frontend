@@ -1,11 +1,11 @@
 <template>
-  <div>
+    <div>
         <template slot="header">
             <el-select v-model="currency" size="small">
                 <el-option
                         v-for="c in currencyOptions"
                         :key="c"
-                        :label="$t('economic-add.calculator.header.label.' + c)"
+                        :label="$t('currencies.label.' + c)"
                         :value="c">
                 </el-option>
             </el-select>
@@ -14,10 +14,10 @@
             <el-form-item
                 class="vca-form user-select"
                 :required="false"
-                :label="$t('economic-add.calculator.involved.label')"
+                :label="$t('donation.placeholder.involved.label')"
                 >
                 <WidgetUserAutocomplete
-                        :placeholder="$t('economic-add.calculator.involved.indicator')"
+                        :placeholder="$t('donation.placeholder.involved.indicator')"
                         :preselection="involvedSupporter"
                         @vca-user-selection="selectSupporter"
                 />
@@ -25,11 +25,11 @@
             <el-form-item
                 class="vca-form"
                 :required="true"
-                :label="$t('economic-add.calculator.received')">
+                :label="$t('donation.placeholder.received')">
                 <el-date-picker
                     v-model="received"
                     type="date"
-                    :placeholder="$t('economic-add.calculator.received')"
+                    :placeholder="$t('donation.placeholder.received')"
                     format="dd. MMM. yyyy"
                     value-format="timestamp"
                     :clearable="false"
@@ -37,18 +37,19 @@
                     @change="commit">
                 </el-date-picker>
             </el-form-item>
+            <TakingSelectSource v-on:input="addSourceType($event)"/>
             <table class="sources">
                 <thead>
                     <tr>
-                        <th>{{ $t('economic-add.calculator.source.label.sourceSelect') }}</th>
-                        <th>{{ $t('economic-add.calculator.source.label.sum') }}</th>
-                        <th>{{ $t('economic-add.calculator.source.label.sourceType.cash') }}</th>
-                        <th>{{ $t('economic-add.calculator.source.label.sourceType.extern') }}</th>
+                        <th>{{ $t('donation.header.donationSource.sourceSelect') }}</th>
+                        <th>{{ $t('donation.header.donationSource.sum') }}</th>
+                        <th>{{ $t('donation.header.donationSource.sourceType.cash') }}</th>
+                        <th>{{ $t('donation.header.donationSource.sourceType.extern') }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <EconomicSource
-                        v-for="t in sourceTypes"
+                    <TakingSource
+                        v-for="t in currentSourceType"
                         :category="t.category"
                         :currency="currency"
                         :checked="getCheckedSource(t.category)"
@@ -64,31 +65,34 @@
             </table>
         </div>
         <div class="evaluation">
-            <span class="part">{{ $t('economic-add.calculator.total.cash', { 'total': getTotalCash.localize() }) }}</span>
-            <span class="part">{{ $t('economic-add.calculator.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
-            <span class="all">{{ $t('economic-add.calculator.total.all', { 'total': getTotalAll.localize() }) }}</span>
+            <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
+            <span class="part">{{ $t('donation.hints.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
+            <span class="all">{{ $t('donation.hints.total.all', { 'total': getTotalAll.localize() }) }}</span>
         </div>
-  </div>
+    </div>
 </template>
 
 <script>
     import { DatePicker, FormItem, Select, Option } from 'element-ui'
-   // import { VcABox } from 'vca-widget-base'
+    import { VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
-    import EconomicSource from '@/components/economy/EconomicSource.vue'
+    import TakingSelectSource from '@/components/takings/TakingSelectSource'
+    import TakingSource from '@/components/takings/add/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+
     export default {
-        name: "EconomicCalculator",
+        name: "TakingCalculator",
         components: {
             "el-date-picker": DatePicker,
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
-            "EconomicSource": EconomicSource,
-            'WidgetUserAutocomplete': WidgetUserAutocomplete
-            //"VcABox": VcABox
+            "TakingSource": TakingSource,
+            'WidgetUserAutocomplete': WidgetUserAutocomplete,
+            "VcABox": VcABox,
+            "TakingSelectSource": TakingSelectSource
         },
         props: {
             "first": {
@@ -121,10 +125,16 @@
                         return time.getTime() > Date.now();
                     }
                 },
+
                 "sourceTypes": [
                     { "category": "unknown", "desc": false},
                     { "category": "can", "desc": false},
+                    { "category": "box", "desc": false},
+                    { "category": "gl", "desc": false},
                     { "category": "other", "desc": true}
+                ],
+                "currentSourceType": [
+
                 ],
                 "currency": this.$t("currencies.default"),
                 "currencyOptions": [
@@ -161,6 +171,9 @@
             this.commit()
         },
         methods: {
+            addSourceType(value) {
+              this.currentSourceType.push(value)
+            },
             changeDonation(source) {
                 var copy = this.sources.slice(0)
                 copy = copy.filter(s => source.category !== s.category)
@@ -234,18 +247,22 @@
     .vca-form .el-input {
         width: 100%;
     }
+
     .user-select /deep/ .small {
         font-size: 100%;
     }
+
     .sources {
         width: 100%;
         & /deep/ th:not(:first-child), & /deep/ td:not(:first-child) {
             padding-left: 1em;
         }
+
         thead tr th {
             padding-bottom: 1em;
         }
     }
+
     .evaluation {
         border-top: 1px solid rgb(220, 223, 230);
         display: flex;
@@ -253,10 +270,12 @@
         padding-top: 1em;
         margin-top: 1em;
         .part {
+
         }
         .all {
             font-weight: bold;
             font-size: 1.2em;
         }
     }
+
 </style>

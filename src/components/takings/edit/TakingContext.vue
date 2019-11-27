@@ -1,18 +1,17 @@
 <template>
     <div class="context-form">
-        <el-form-item :label="$t('economic-add.context.description.label')" :required="true">
-            <el-input :placeholder="$t('economic-add.context.description.indicator')" v-model="description" @change="commit"></el-input>
+        <el-form-item :label="$t('donation.placeholder.context.label')" :required="true">
+            <el-input :placeholder="$t('donation.placeholder.context.indicator')" v-model="context.description"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('economic-add.context.category.label')" :required="true" class="vca-categories">
+        <el-form-item :label="$t('donation.placeholder.category')" :required="true" class="vca-categories">
             <table class="categoryChooser">
                 <tr v-for="(group, i) in categories" class="vca-group" :key="i">
                     <td v-for="cat in group"  :key="cat">
                         <el-radio
-                                v-model="category"
+                                v-model="context.category"
                                 :label="cat"
-                                @change="commit"
                         >
-                            {{ $t("economic-add.context.category.categories." + cat) }}
+                            {{ $t("donation.placeholder.categories." + cat) }}
                         </el-radio>
                     </td>
                 </tr>
@@ -25,10 +24,16 @@
     import { Input, FormItem, Radio } from 'element-ui'
 
     export default {
-        name: "EconomicContext",
+        name: "TakingContext",
         props: {
-           "value": {
-             "type": Object
+           context: {
+             type: Object,
+             default: function () {
+               return {
+                  "description": "",
+                  "category": ""
+               }
+             }
            }
         },
         components: {
@@ -37,8 +42,6 @@
             "el-form-item": FormItem
         },
         data () {
-            var description = ""
-            var category = ""
             if(typeof this.value !== "undefined" && this.value !== null) {
                 if(this.value.hasOwnProperty("description")) {
                     description = this.value.description
@@ -48,19 +51,11 @@
                 }
             }
             return {
-                "description": description,
-                "category": category,
                 "categories": [
-                    ["selling", "service", "other"],
-                  ]
-            }
-        },
-        methods: {
-            commit () {
-                this.$emit("input", {
-                    "description": this.description,
-                    "category": this.category
-                })
+                    ["concert", "run4wash", "streetFestivals"],
+                    ["festival", "school", "karaoke"],
+                    ["stadium", "party", "kicker"]
+                ]
             }
         }
     }

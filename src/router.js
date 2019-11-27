@@ -44,19 +44,20 @@ var router = new Router({
         }
     },
     {
-        path: '/donations/add',
-        name: 'donations-add',
-        component: () => import('./views/DonationsAdd.vue'),
+        path: '/takings/add',
+        name: 'takings-add',
+        component: () => import('./views/TakingsEdit.vue'),
         meta: {
           'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
         }
     },
     {
-        path: '/economic/add',
-        name: 'economic-add',
-        component: () => import('./views/EconomicAdd.vue'),
+        path: '/takings/edit/:id',
+        name: 'takings-edit',
+        props: true,
+        component: () => import('./views/TakingsEdit.vue'),
         meta: {
-          'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
+          'roles': ['Admin', 'Employee', {'name': 'VolunteerManager'}]
         }
     },
     {
