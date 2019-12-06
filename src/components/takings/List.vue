@@ -14,11 +14,11 @@
         <tbody>
         <tr v-for="taking in takings" :key="taking.id" class="taking">
             <td>{{ taking.name }}</td>
-            <td class="crew"><CrewPlainName :id="taking.crew" /></td>
+            <td class="crew"><span class="vca-crew-name">DennisCrew</span></td>
             <td>{{ formatAmount(taking.amount) }}</td>
             <td>
                 <DepositLights :donation="taking" />
-                <DepositAdd/>
+                <DepositAdd v-if="depositAddView" :depositUnit="deposit.depositUnits" :amount="taking.amount" :takingId="taking.id" />
             </td>
             <td>
                 <div class="dates">
@@ -43,95 +43,109 @@
 </template>
 
 <script>
-    import Vue from 'vue'
-    import { mapGetters, mapActions } from 'vuex'
-    import { Tag, CrewPlainName } from 'vca-widget-user'
-    import CurrencyFormatter from '@/utils/CurrencyFormatter'
-    import DepositLights from '@/components/takings/DepositLights'
-    import DepositAdd from '@/components/deposit/DepositAdd'
-    import { Notification } from 'element-ui'
+import Vue from 'vue'
+import { mapGetters, mapActions } from 'vuex'
+import { Tag, CrewPlainName } from 'vca-widget-user'
+import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import DepositLights from '@/components/takings/DepositLights'
+import DepositAdd from '@/components/deposit/DepositAdd'
+import { Notification } from 'element-ui'
 
-    Vue.use(Notification)
-    Notification.closeAll()
+Vue.use(Notification)
+Notification.closeAll()
 
-    export default {
-        name: "List",
-        components: {
-            Tag, CrewPlainName, DepositLights, DepositAdd
-        },
-        computed: {
-            ...mapGetters('takings', {
-                takings: 'overview',
-                isError: 'isError',
-                getErrorCode: 'getErrorCode',
-                getById: 'getById',
-            }),
-            maximumTags () {
-                return 2;
-            },
-            isEployee () {
-              return this.$store.getters['user/is'](["Admin", "Employee"]);
-            }
-        },
-        created () {
-            if(this.isError) {
-                switch(this.getErrorCode) {
-                    case 400:
-                        this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
-                        break;
-                    case 403:
-                        this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
-                        break;
-                    case 404:
-                        this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
-                        break;
-                    default:
-                        if(this.getErrorCode > 404) {
-                            this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
-                        }
-                }
-            } else {
-                this.init()
-            }
-        },
-        methods: {
-            ...mapActions('takings', [
-                'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
-            ]),
-            formatAmount(amount) {
-                var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
-                return formatter.localize()
-            },
-            formatDate(date) {
-                var d = new Date(date)
-                return this.$d(d, 'short')
-            },
-            formatNorms(norms) {
-              if (norms === "ECONOMY") {
-                return "W"
-              } else {
-                return "D"
-              }
-            },
-            supporter (donation) {
-                return [donation.author].concat(donation.supporter)
-                    .filter((value, index, self) => self.indexOf(value) === index)
-            },
-            teaserSupporter (donation) {
-                return this.supporter(donation).slice(0, this.maximumTags)
-            },
-            hasAddtionalSupporter (donation) {
-                return this.supporter(donation).length > this.maximumTags
-            },
-            open(title, message, type) {
-                Notification({
-                    title:  title,
-                    message: message,
-                    type: type
-                });
-            }
+export default {
+  name: "List",
+  components: {
+    Tag, CrewPlainName, DepositLights, DepositAdd
+  },
+  props: {
+    depositAddView : {
+      type: Boolean,
+      default: false
+    },
+    deposit: {
+      type: Object,
+      default: function () {
+        return {
+          "full": {
+            "amount": 0,
+            "currency": "EUR"
+          },
+          "depositUnits": [],
+          "dateOfDeposit": null
         }
+      }
     }
+  },
+  computed: {
+      ...mapGetters(
+        'takings', {
+          takings: 'overview',
+          isError: 'isError',
+          getErrorCode: 'getErrorCode',
+          getById: 'getById',
+        },
+      ),
+      maximumTags () {
+          return 2;
+      },
+      isEployee () {
+        return this.$store.getters['user/is'](["Admin", "Employee"]);
+      }
+  },
+  created () {
+      if(this.isError) {
+          switch(this.getErrorCode) {
+              case 400:
+                  this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
+                  break;
+              case 403:
+                  this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
+                  break;
+              case 404:
+                  this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
+                  break;
+              default:
+                  if(this.getErrorCode > 404) {
+                      this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
+                  }
+          }
+      } else {
+          this.init()
+      }
+  },
+  methods: {
+      ...mapActions('takings', [
+          'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
+      ]),
+      formatAmount(amount) {
+          var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
+          return formatter.localize()
+      },
+      formatDate(date) {
+          var d = new Date(date)
+          return this.$d(d, 'short')
+      },
+      supporter (donation) {
+          return [donation.author].concat(donation.supporter)
+              .filter((value, index, self) => self.indexOf(value) === index)
+      },
+      teaserSupporter (donation) {
+          return this.supporter(donation).slice(0, this.maximumTags)
+      },
+      hasAddtionalSupporter (donation) {
+          return this.supporter(donation).length > this.maximumTags
+      },
+      open(title, message, type) {
+          Notification({
+              title:  title,
+              message: message,
+              type: type
+          });
+      }
+  }
+}
 </script>
 
 <style scoped lang="less">

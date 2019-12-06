@@ -4,21 +4,6 @@
     :rules="rules"
     :key="reloadKey">
     <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('takings.placeholder.amount')" @vca-money-validationError="setErrorState('general')" @input="removeErrorState('general')" />
-    <div>
-      <span v-if="visibleUnassignedDeposit">{{ $t("deposits.table.hint.openDeposit", { "amount": unassignedDeposit.localize() }) }}</span>
-    </div>
-    <TakingSelect @vca-select-donation="selectTaking" @vca-deselect-donation="removeDepositUnit" />
-    <TakingDepositAssignment
-            v-for="donation in donations"
-            :key="donation.value"
-            :id="donation.value"
-            :label="donation.label"
-            :currency="deposit.full.currency"
-            :max="unassignedDeposit.numeric()"
-            @vca-add-depositUnit="addDepositUnit"
-            @vca-assignment-error-state="setErrorState"
-            @vca-assignment-no-error-state="removeErrorState"
-    />
     <el-form-item
       class="vca-form"
       :required="true">
@@ -59,17 +44,24 @@
       "TakingDepositAssignment": TakingDepositAssignment,
       "TakingSelect": TakingSelect
     },
-    data () {
-      return {
-        "reloadKey": 1,
-        "deposit": {
+    props: {
+      deposit: {
+        type: Object,
+        default: function () {
+          return {
             "full": {
                 "amount": 0,
                 "currency": "EUR"
             },
             "depositUnits": [],
             "dateOfDeposit": null
-        },
+          }
+        }
+      }
+    },
+    data () {
+      return {
+        "reloadKey": 1,
         "donations": [],
         "rules": {},
         "errorState": []
@@ -80,9 +72,6 @@
             var amount = this.deposit.full.amount - this.deposit.depositUnits.reduce((acc, unit) => acc + unit.deposit.amount, 0)
             var formatter = CurrencyFormatter.getFromNumeric(this.deposit.full.currency, amount)
             return formatter
-        },
-        visibleUnassignedDeposit () {
-            return this.deposit.full.amount > 0 && this.unassignedDeposit.numeric() > 0
         },
         inErrorState () {
             return this.errorState.length > 0
