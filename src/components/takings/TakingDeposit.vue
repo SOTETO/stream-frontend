@@ -4,6 +4,15 @@
     :rules="rules"
     :key="reloadKey">
     <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('takings.placeholder.amount')" @vca-money-validationError="setErrorState('general')" @input="removeErrorState('general')" />
+    <div v-for="unit in deposit.depositUnits">
+      <span class="depositName"> 
+        {{takingName(unit.takingId) }} 
+      </span>
+      <span class="depositAmount">
+        {{ formatAmount(unit.amount) }} 
+      </span>
+      <el-button class="depositButton" @click="pop" type="danger" icon="el-icon-delete" size="mini"></el-button>
+    </div>
     <el-form-item
       class="vca-form"
       :required="true">
@@ -75,12 +84,18 @@
         },
         inErrorState () {
             return this.errorState.length > 0
-        }
+        },
+        ...mapGetters('takings', {
+           getById: 'getById',
+        })
     },
     methods: {
-        ...mapActions("deposits", {
+        ...mapActions(
+          "deposits", {
             "save": "add"
-        }),
+        }
+
+        ),
       addDepositUnit (depositUnit) {
         var index = this.deposit.depositUnits.findIndex((unit) => unit.donation === depositUnit.donation)
         if(index !== -1) {
@@ -118,12 +133,29 @@
       commit () {
         this.save(this.deposit)
         this.reset()
-      }
+      },
+      formatAmount(amount) {
+        var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
+        return formatter.localize()
+      },
+      takingName(id) {
+        var taking = this.getById(id)
+        return taking.context.description
+      },
+    pop () {
+      var index = this.deposit.depositUnits.indexOf(this.unit)
+      this.deposit.depositUnits.splice(index, 1)
+    }
+
     }
   }
 </script>
 <style scoped lang="less">
-  .vca-form /deep/ .el-select, .vca-form /deep/ .el-date-editor {
-    width: 100%;
+  .depositName {
   }
-</script>
+  .depositButton {
+      float: right;
+    }
+  .depositAmount {
+  }
+</style>

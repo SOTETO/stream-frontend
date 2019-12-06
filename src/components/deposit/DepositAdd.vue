@@ -43,7 +43,7 @@ export default {
   },
   data () {
     return {
-      "submitted": false,
+      //"submitted": false,
       "unit": {
         "takingId": "",
         "amount": {
@@ -57,17 +57,27 @@ export default {
   computed: {
     deleteUnit () {
       return this.depositUnit.filter(unit => unit.takingId !== this.unit.takingId)
+    },
+    submitted () {
+      var i
+      for (i = 0; i < this.depositUnit.length; i++) {
+        if (this.depositUnit[i] === this.unit) {
+          return true
+        }
+      }
+      return false
     }
+
   },
   methods: {
     submit () {
       this.depositUnit.push(this.unit)
-      this.submitted = true
+      //this.submitted = true
     },
     pop () {
       var index = this.depositUnit.indexOf(this.unit)
       this.depositUnit.splice(index, 1)
-      this.submitted = false
+      //this.submitted = false
     }
   }
 }
