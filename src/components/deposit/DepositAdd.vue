@@ -1,7 +1,7 @@
 <template>
   <div>
   <div class="unit unsubmitted" v-if="!submitted">
-    <el-input class="money-input" v-model="unit.amount" size="mini">
+    <el-input class="money-input" v-model="unit.amount.amount" size="mini">
       <template class="currency" slot="append">€</template>
     </el-input>
     <el-button @click="submit" type="success" icon="el-icon-check" size="mini"></el-button>
@@ -38,7 +38,7 @@ export default {
     }
   },
   created () {
-    this.unit.amount = this.amount
+    this.unit.amount.amount = this.amount
     this.unit.takingId = this.takingId
   },
   data () {
