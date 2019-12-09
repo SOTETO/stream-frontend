@@ -23,7 +23,7 @@
         </el-form-item>
         <el-form-item
           :required="false"
-	   prop="iban"
+          prop="iban"
         >
           <el-input v-model="expense.iban" :placeholder="$t('household.placeholder.iban')" :disabled="!isEditable"></el-input>
         </el-form-item>
