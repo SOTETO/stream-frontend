@@ -35,6 +35,9 @@
     "next": "No more entries | Show last | Show next (%{number})"
   },
   "household": {
+    "errors": {
+      "invalidIBAN": "IBAN validation failed."
+    },
     "header": {
       "box": {
         "list": "Overview",

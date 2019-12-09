@@ -13,14 +13,14 @@
                 </el-card>
 
                 <el-card v-if="showExternalTransactions" class="box-card tail expand">
-                    <ExternalTransactionDetails v-model="donation.details" />
+                    <ExternalTransactionDetails v-model="taking.details" />
                 </el-card>
                 <el-card class="box-card tail expand">
                     <TakingDeadline :received="taking.amount.received" />
                     <el-input
                             type="textarea"
                             :rows="4"
-                            :placeholder="$t('donation.placeholder.comment')"
+                            :placeholder="$t('taking.placeholder.comment')"
                             v-model="taking.comment">
                     </el-input>
                     <button
@@ -28,7 +28,7 @@
                             :disabled="!validDonation"
                             class="vca-button-primary vca-full-width"
                             @click.prevent="submitForm">
-                        {{ $t("donation.buttons.save") }}
+                        {{ $t("taking.buttons.save") }}
                     </button>
                     <button 
                             v-if="updateMode"
@@ -109,7 +109,7 @@
               return this.id !== null
             },
             showExternalTransactions () {
-                return this.taking.amount.sources.filter(s => s.type === "extern").length > 0
+                return this.taking.amount.sources.filter(s => s.typeOfSource === "extern").length > 0
             },
             showCalculator () {
                 return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
