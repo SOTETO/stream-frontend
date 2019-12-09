@@ -1,7 +1,7 @@
 <template>
     <VcAFrame>
         <VcAColumn size="70%">
-            <VcABox :first="true" :title="$t('takings.head.table')">
+            <el-card class="box-card">
 
                     <TakingFilter @vca-filter-updated="addState" />
 
@@ -9,21 +9,23 @@
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
                     {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
                 </button>
-                <List />
+                <List :depositAddView="depositAddView" :deposit="deposit"/>
                 <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
                     {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
                 </button>
-            </VcABox>
+            </el-card>
         </VcAColumn>
         <VcAColumn size="20%">
-            <VcABox :first="true" :title="$t('takings.head.add')">
+            <el-card class="box-card">
                 <router-link class="vca-button-primary vca-full-width" to="/takings/add">
                   {{ $t('takings.buttons.add') }}
                 </router-link>
-            </VcABox>
-            <VcABox :title="$t('takings.head.deposit')">
-              <TakingDeposit takings="takings" ></TakingDeposit>
-            </VcAbox>
+                <button label="$t('takings.button.depositAdd')" class="vca-button-primary vca-full-width" v-on:click="depositAdd">
+                </button>
+          </el-card>
+            <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
+              <TakingDeposit :deposit="deposit"></TakingDeposit>
+            </el-card>
         </VcAColumn>
     </VcAFrame>
 </template>
@@ -31,15 +33,16 @@
 <script>
   import List from '@/components/takings/List'
   import ListMenu from '../components/utils/ListMenu'
+  import { Card} from 'element-ui'
   import { mapGetters, mapActions } from 'vuex'
-  import { VcAFrame, VcAColumn, VcABox} from 'vca-widget-base'
+  import { VcAFrame, VcAColumn} from 'vca-widget-base'
   import 'vca-widget-base/dist/vca-widget-base.css'
   import TakingDeposit from '@/components/takings/TakingDeposit' 
   import TakingFilter from "../components/takings/TakingFilter"
   export default {
     name: "takings",
     components: {
-      VcAFrame, VcAColumn, VcABox, List, ListMenu, TakingDeposit, TakingFilter
+      VcAFrame, VcAColumn, List, ListMenu, TakingDeposit, TakingFilter, 'el-card': Card
     },
     data () {
       var editableDefault = {
@@ -48,9 +51,18 @@
       }
       return {
         "editableDefault" : editableDefault,
-        "editable": JSON.parse(JSON.stringify(editableDefault))
+        "editable": JSON.parse(JSON.stringify(editableDefault)),
+        "depositAddView": false,
+        "deposit": {
+          "full": {
+            "amount": 0,
+            "currency": "EUR"
+          },
+          "depositUnits": [],
+          "dateOfDeposit": null
       }
-    },
+    }
+  },
     computed: {
       ...mapGetters('takings', {
         pageGet: 'page',
@@ -140,6 +152,9 @@
       },
       pageUp () {
         this.page(false)
+      },
+      depositAdd () {
+        this.depositAddView = true
       }
     }
   }
@@ -148,6 +163,15 @@
 <style scoped lang="less">
     @import '../assets/less/general.less';
     
+    .box-card {
+        width: 100%;
+    }
+    .box-card.tail {
+        margin-top: 2em;
+    }
+    .box-card.expand {
+        flex-grow: 1;
+    }
     .tags {
         margin: 0 1em;
         display: flex;
