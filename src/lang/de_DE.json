@@ -36,6 +36,9 @@
     "next": "Keine nächsten Einträge | Letzter Eintrag | Nächste %{number} Einträge"
   },
   "household": {
+    "errors": {
+      "invalidIBAN": "IBAN konnte nicht validiert werden."
+    },
     "header": {
       "box": {
         "list": "Übersicht",
