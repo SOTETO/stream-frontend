@@ -207,7 +207,6 @@ const actions = {
     },
     add (store, taking) {
         var user = store.rootGetters['user/get']
-        taking["id"] = uuidv4()
         taking["author"] = user.uuid
         //taking["norms"] = "Donation"
         taking["crew"] = store.rootGetters['user/getCrew']

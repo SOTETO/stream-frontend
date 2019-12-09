@@ -15,6 +15,7 @@
         label-width="8em">
         <el-form-item  class="filter" :label="$t('takings.filter.name')" required>
             <FilterTags v-on:commit="commitName($event)" v-on:delete="deleteName($event)" />
+            <FilterTags v-on:commit="commitNorms($event)" v-on:delete="deleteNorms($event)" />
         </el-form-item>
     </el-form>
     </slot>
@@ -100,6 +101,23 @@
               }
               this.commit()
             },
+            commitNorms(value) {
+              if(this.filter.norms !== null) {
+                this.filter.norms.push(value)
+              } else {
+                this.filter.norms = [value]
+              }
+              this.commit()
+            },
+            deleteNorms(value) {
+              var index = this.filter.norms.indexOf(value)
+              if (this.filter.norms.length === 1 ) {
+                this.filter.norms = null
+              } else if (index > -1) {
+                this.filter.norms.splice(index, 1)
+              }
+              this.commit()
+            },
             deleteName(value) {
               var index = this.filter.name.indexOf(value);
               if (this.filter.name.length === 1) {
@@ -108,10 +126,6 @@
               else if (index > -1) {
                 this.filter.name.splice(index, 1);
               }
-              this.commit()
-            },
-            commitNorms() {
-              this.filter.norms.push(this.input.norms)
               this.commit()
             },
             commit() {
