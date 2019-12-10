@@ -44,6 +44,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     import { mapGetters, mapActions } from 'vuex'
     import { VcAFrame, VcAColumn } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
@@ -96,14 +97,24 @@
                 rules: {},
             }
         },
-        mounted () {
-          if (this.id !== null) {
-            this.taking = this.getById(this.id)
-          }
-        },
+      mounted () {
+        if (this.id !== null) {
+        axios.get(
+          '/backend/stream/takings/id/' + this.id,
+          { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+        )
+            .then(response => {
+              if(response.status === 200) {
+                this.taking = response.data
+              }
+            })
+            .catch(error => console.log(error))
+
+        }
+      },
         computed: {
             ...mapGetters('takings', {
-                getById: 'getById',
+                get: 'getById',
             }),
             updateMode () {
               return this.id !== null
@@ -127,6 +138,7 @@
             ...mapActions('takings', [
                 'add', // -> this.foo()
                 'update',
+                'getById',
             ]),
             submitForm () {
                 this.add(this.taking)
