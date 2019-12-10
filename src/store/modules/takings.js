@@ -7,8 +7,7 @@ const uuidv4 = require('uuid/v4');
 //             "id"
 //             "context": {
 //                 "description": "",
-//                 "category": ""
-//             },
+//                 "category": //             },
 //             "comment": "",
 //             "details": {
 //                 "reasonForPayment": "",
@@ -44,7 +43,7 @@ const state = {
       'name': null,
       'norms': null
     },
-    error: null
+    error: null,
 }
 
 const getters = {
@@ -83,7 +82,11 @@ const getters = {
         })
     },
     getById: (state) => (id) => {
-        return JSON.parse(JSON.stringify(state.items.find(item => item.id === id)))
+        var taking = state.items.find(item  => item.id === id)
+        if (taking === undefined) {
+          
+        }
+        return JSON.parse(JSON.stringify(taking))
     },
     isError: (state) => {
         return state.error !== null
@@ -214,21 +217,26 @@ const actions = {
         taking["depositUnits"] = []
 
         var ajax = new DonationEndpoints(store)
-        var successHandler = (response) => store.commit({ "type": 'push', "taking": response.data.data[0] })
+        var successHandler = (response) => store.commit({ "type": 'push', "takings": response.data.data[0] })
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
         ajax.save(successHandler, errorHandler, taking)
     },
     update (store, taking) {
       var ajax = new DonationEndpoints(store)
-      var successHandler = (response) => store.commit({"type": 'push', 'taking': response.data})
+      var successHandler = (response) => store.commit({"type": 'push', 'takings': response.data})
       var errorHandler = (error) => store.commit({'type': 'setError', error: error})
       ajax.update(successHandler, errorHandler, taking)
     },
     getById (store, id) {
         // TODO: Use Ajax query!
         var item = store.state.items.find(item => item.id === id)
-        if(typeof item !== "undefined") {
-            store.commit({ "type": "getById", "taking": item })
+        if(item !== undefined) {
+            store.commit({ "type": "getById", "takings": item })
+        } else {
+            var ajax = new DonationEndpoints(store)
+            var successHandler = (response) => store.commit({'type': 'push', 'takings': response.data})
+            var errorHandler = (error) => store.commit({'type': 'setError', error: error})
+            ajax.getById(successHandler, errorHandler,id)
         }
     },
     
@@ -254,7 +262,7 @@ const mutations = {
         state.page.offset = offset.offset
     },
     push(state, pushDonation) {
-        state.items.push(pushDonation.taking)
+        state.items.push(pushDonation.takings)
     },
     setError(state, pushError) {
         state.error = pushError.error
