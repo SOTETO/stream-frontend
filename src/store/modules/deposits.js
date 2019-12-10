@@ -210,7 +210,7 @@ const actions = {
         }
     })
     deposit["amount"] = JSON.parse(JSON.stringify(amount))
-    delete deposit.depositUnits
+    deposit.depositUnits = []
       
     //post deposit
       var ajax = new DepositEndpoints(store)

@@ -7,7 +7,7 @@
     <el-button @click="submit" type="success" icon="el-icon-check" size="mini"></el-button>
   </div>
   <div class="unit submitted" v-if="submitted">
-    <span>{{unit.amount}}</span>
+    <span class="formatAmount">{{ formatAmount(unit.amount) }}</span>
     <el-button @click="pop" type="danger" icon="el-icon-delete" size="mini"></el-button>
   </div>
   </div>
@@ -16,6 +16,7 @@
 <script>
 import {Form, Button} from 'element-ui'
 import MoneyInput from '@/components/deposit/MoneyInput'
+import CurrencyFormatter from '@/utils/CurrencyFormatter'
 export default {
   name: "DepositAdd",
   components: {
@@ -26,7 +27,9 @@ export default {
   props: {
     depositUnit: {
       type: Array,
-      default: []
+      default: function () {
+        return []
+      }
     },
     amount: {
       type: Number,
@@ -67,12 +70,15 @@ export default {
       }
       return false
     }
-
   },
   methods: {
     submit () {
       this.depositUnit.push(this.unit)
       //this.submitted = true
+    },
+    formatAmount(unit) {
+      var formatter = CurrencyFormatter.getFromNumeric(unit.currency, unit.amount)
+      return formatter.localize()
     },
     pop () {
       var index = this.depositUnit.indexOf(this.unit)
@@ -83,6 +89,10 @@ export default {
 }
 </script>
 <style lang="less">
+.formatAmount {
+  margin-right: 5px;
+  font-weight: bold;
+}
 .dunit {
   display: inline-block;
 }

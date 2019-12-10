@@ -361,9 +361,10 @@
       "searchDonation": "Wähle eine Spende"
     },
     "buttons": {
-      "donation": "Spende Hinzufügen",
-      "economic": "Wirtschaftsgeld Hinzufügen",
-      "depositAdd": "Speichern"
+      "add": "Einnahme hinzufügen",
+      "donation": "Spende hinzufügen",
+      "economic": "Wirtschaftsgeld hinzufügen",
+      "depositAdd": "Einzahlung hinzufügen"
     },
     "filter": {
       "name": "Name"
