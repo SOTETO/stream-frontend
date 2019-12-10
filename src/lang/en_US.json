@@ -364,11 +364,12 @@
         "amount": "Deposited amount",
         "dateOfDeposit": "When?",
         "searchDonation": "Select a donation"
-      },
+    },
     "buttons": {
+      "add": "add taking",
       "donation": "add donation",
       "economic": "add economic money",
-      "depositAdd": "save"
+      "depositAdd": "add deposit"
     },
     "filter":{
       "name": "name"

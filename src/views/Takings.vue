@@ -3,7 +3,7 @@
         <VcAColumn size="70%">
             <el-card class="box-card">
 
-                    <TakingFilter @vca-filter-updated="addState" />
+                <TakingFilter @vca-filter-updated="addState" />
 
                 <ListMenu :fields="sortFields" store="takings" />
                 <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
@@ -20,11 +20,12 @@
                 <router-link class="vca-button-primary vca-full-width" to="/takings/add">
                   {{ $t('takings.buttons.add') }}
                 </router-link>
-                <button label="$t('takings.button.depositAdd')" class="vca-button-primary vca-full-width" v-on:click="depositAdd">
+                <button class="vca-button-primary vca-full-width" v-on:click="depositAdd">
+                    {{ $t('takings.buttons.depositAdd') }}
                 </button>
           </el-card>
             <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
-              <TakingDeposit :deposit="deposit"></TakingDeposit>
+              <TakingDeposit :deposit="deposit" v-on:resetDepositAddView="resetDepositAddView"></TakingDeposit>
             </el-card>
         </VcAColumn>
     </VcAFrame>
@@ -140,6 +141,9 @@
       ...mapActions('takings', [
         'page'
       ]),
+      resetDepositAddView() {
+        this.depositAddView = false;
+      },
       editState (expense) {
         this.editable.value = this.byId(expense.id)
         this.editable.key = expense.id

@@ -76,7 +76,7 @@
                             that.expense.bic = response.data.bankData.bic
                             callback();
                         } else {
-			    callback(new Error(that.$i18n.t('household.errors.invalidIBAN')));
+                            callback(new Error(that.$i18n.t('household.errors.invalidIBAN')));
                         }
                    }
                 })
