@@ -14,7 +14,11 @@
         <tbody>
         <tr v-for="taking in takings" :key="taking.id" class="taking">
             <td>{{ taking.name }}</td>
-            <td class="crew"><span class="vca-crew-name">DennisCrew</span></td>
+            <td class="crew">
+              <span class="vca-crew-name" v-for="c in taking.crew">
+                <el-tag> {{ c.name }} </el-tag>
+              </span>
+            </td>
             <td>{{ formatAmount(taking.amount) }}</td>
             <td>
                 <DepositLights :donation="taking" />
@@ -28,8 +32,9 @@
             </td>
             <td>
                 <div class="supporter">
-                    <Tag v-for="uuid in teaserSupporter(taking)" :uuid="uuid" :key="'sup-' + uuid" />
-                    <span v-if="hasAddtionalSupporter(taking)">...</span>
+                    <span class="vca-user-name" v-for="s in taking.supporter">
+                      <el-tag> {{ s.name }} </el-tag>
+                    </span>
                 </div>
             </td>
             <td v-if="isEployee">
@@ -92,7 +97,8 @@ export default {
       },
       isEployee () {
         return this.$store.getters['user/is'](["Admin", "Employee"]);
-      }
+      },
+
   },
   created () {
       if(this.isError) {
