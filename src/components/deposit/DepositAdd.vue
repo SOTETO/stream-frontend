@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div class="unit unsubmitted" v-if="!submitted">
+  <div class="unit unsubmitted" v-if="!submitted && !stateConfirmed && !stateUnConfirmed">
     <el-input class="money-input" v-model="unit.amount.amount" size="mini">
       <template class="currency" slot="append">€</template>
     </el-input>
@@ -25,6 +25,10 @@ export default {
     "MoneyInput": MoneyInput
   },
   props: {
+    taking: {
+      type: Object,
+      "required": true
+    },
     depositUnit: {
       type: Array,
       default: function () {
@@ -69,6 +73,26 @@ export default {
         }
       }
       return false
+    },
+    confirmedAmount () {
+        var confirmed = 0
+        if(this.taking.deposited.confirmed.hasOwnProperty("EUR")) {
+            confirmed = this.taking.deposited.confirmed.EUR
+        }
+        return confirmed
+    },
+    stateConfirmed () {
+        return (this.confirmedAmount === this.taking.amount)
+    },
+    unconfirmedAmount () {
+        var unconfirmed = 0
+        if(this.taking.deposited.unconfirmed.hasOwnProperty("EUR")) {
+            unconfirmed = this.taking.deposited.unconfirmed.EUR
+        }
+        return unconfirmed
+    },
+    stateUnConfirmed () {
+        return (this.unconfirmedAmount === this.taking.amount)
     }
   },
   methods: {
@@ -98,6 +122,9 @@ export default {
 }
 .money-input {
   width: 30%;
+}
+.money-input input {
+  min-width: 75px;
 }
 .currency {
   width: 30%;

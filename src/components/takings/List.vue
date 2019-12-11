@@ -22,7 +22,7 @@
             <td>{{ formatAmount(taking.amount) }}</td>
             <td>
                 <DepositLights :donation="taking" />
-                <DepositAdd v-if="depositAddView" :depositUnit="deposit.depositUnits" :amount="taking.amount" :takingId="taking.id" />
+                <DepositAdd v-if="depositAddView" :depositUnit="deposit.depositUnits" :taking="taking" :amount="taking.amount" :takingId="taking.id" />
             </td>
             <td>
                 <div class="dates">
