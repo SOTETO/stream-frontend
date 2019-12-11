@@ -63,7 +63,10 @@ const getters = {
         }
       return {
         "id": deposit.publicId,
-        "amount": deposit.full,
+        "amount": {
+          "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0),
+          "currency": deposit.amount[0].amount.currency
+	},
         "date": {
           "received": deposit.dateOfDeposit,
           "created": deposit.created,

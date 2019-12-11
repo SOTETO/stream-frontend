@@ -59,16 +59,16 @@ const getters = {
                 "amount": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
                 "deposited": taking.depositUnits.reduce((categories, unit) => {
                     if(unit.hasOwnProperty("confirmed")) {
-                        if(!categories.confirmed.hasOwnProperty(unit.currency)) {
-                            categories.confirmed[unit.currency] = 0
+                        if(!categories.confirmed.hasOwnProperty(unit.amount.currency)) {
+                            categories.confirmed[unit.amount.currency] = 0
                         }
-                        categories.confirmed[unit.currency] += unit.amount
+                        categories.confirmed[unit.amount.currency] += unit.amount.amount
                     } else {
-                        if(!categories.unconfirmed.hasOwnProperty(unit.currency)) {
-                            categories.unconfirmed[unit.currency] = 0
+                        if(!categories.unconfirmed.hasOwnProperty(unit.amount.currency)) {
+                            categories.unconfirmed[unit.amount.currency] = 0
                         }
-                        categories.unconfirmed[unit.currency] += unit.amount
-                    }
+                        categories.unconfirmed[unit.amount.currency] += unit.amount.amount
+                    }console.log(categories);
                     return categories
                 }, { "confirmed": {}, "unconfirmed": {} }),
                 "date": {
