@@ -68,7 +68,7 @@ const getters = {
                             categories.unconfirmed[unit.amount.currency] = 0
                         }
                         categories.unconfirmed[unit.amount.currency] += unit.amount.amount
-                    }console.log(categories);
+                    }
                     return categories
                 }, { "confirmed": {}, "unconfirmed": {} }),
                 "date": {
