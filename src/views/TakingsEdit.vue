@@ -1,6 +1,7 @@
 <template>
-    <VcAFrame :title="$t('takingsEdit.header')" hasContainer="true">
-        <el-form
+  <VcAFrame :title="$t('takingsEdit.header')" hasContainer="true">
+
+      <el-form
                 :model="taking"
                 :rules="rules"
                 class="columns-container">
