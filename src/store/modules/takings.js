@@ -210,10 +210,16 @@ const actions = {
     },
     add (store, taking) {
         var user = store.rootGetters['user/get']
+        var supporter = []
+        supporter.push({"uuid": user.uuid, "name": user.name})
+        for (var i=0; i < taking.amount.involvedSupporter.length; i++ ) {
+          var entry = { "uuid": taking.amount.involvedSupporter[i].id, "name": taking.amount.involvedSupporter[i].profiles[0].supporter.fullName}
+          supporter.push(entry)
+        }
         taking["author"] = user.uuid
         //taking["norms"] = "Donation"
         taking["crew"] = store.rootGetters['user/getCrew']
-        taking.amount.involvedSupporter = taking.amount.involvedSupporter.map(supporter => supporter.id)
+        taking.amount.involvedSupporter = supporter
         taking["depositUnits"] = []
 
         var ajax = new DonationEndpoints(store)
