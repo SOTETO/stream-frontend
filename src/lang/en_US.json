@@ -339,7 +339,7 @@
     },
     "table": {
       "head": {
-        "norms": "Type",
+        "edit": "Show / Edit",
         "title": "Name / Event",
         "crew": "Crew",
         "amount": "Amount",
@@ -529,7 +529,7 @@
         "unknown": "I don't know",
         "can": "Box",
         "other": "Other",
-        "description": "Description..."
+        "Madescription": "Description..."
       },
       "externalDetails": {
         "partner": {
@@ -554,6 +554,12 @@
       "label": {
         "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
+    }
+  },
+  "takingsEdit": {
+    "header": {
+      "add": "Add Taking",
+      "edit": "Edit Taking"
     }
   }
 
