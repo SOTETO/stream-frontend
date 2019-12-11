@@ -1,21 +1,22 @@
 <template>
-  <el-form-item>
     <el-select v-model="val" @input="commit">
       <el-option
         v-for="item in sourceSelect"
         :key="item.id"
         :label="item.label"
-        :value="item.value">
+        :value="item.value"
+        :disabled="item.disabled">
       </el-option>
     </el-select>
-  </el-form-item>
 </template>
+
 <script>
+
 import {FormItem, Select, Option } from 'element-ui'
+
 export default {
   name: 'TakingSelectSource',
   components: {
-    'el-form-iteam': FormItem,
     'el-select': Select,
     'el-option': Option
   },
@@ -25,6 +26,7 @@ export default {
       "sourceSelect": [
         {
           'label': this.$t('donation.placeholder.source.unknown'), 
+          'disabled': false,
           'value' : {
             "amount": {      
               "amount": 0,
@@ -36,7 +38,8 @@ export default {
           }
         },
         {
-          'label': this.$t('donation.placeholder.source.can'), 
+          'label': this.$t('donation.placeholder.source.can'),
+          'disabled': false,
           'value' : {
             "amount": {      
               "amount": 0,
@@ -48,7 +51,8 @@ export default {
           }
         },
         {
-          'label': this.$t('donation.placeholder.source.box'), 
+          'label': this.$t('donation.placeholder.source.box'),
+          'disabled': false,
           'value' : { 
             "amount": {      
               "amount": 0,
@@ -60,7 +64,8 @@ export default {
           }
         },
         {
-          'label': this.$t('donation.placeholder.source.gl'), 
+          'label': this.$t('donation.placeholder.source.gl'),
+          'disabled': false,
           'value' : { 
             "amount": {      
               "amount": 0,
@@ -72,7 +77,8 @@ export default {
           }
         },
         {
-          'label': this.$t('donation.placeholder.source.other'), 
+          'label': this.$t('donation.placeholder.source.other'),
+          'disabled': false,
           'value' : { 
             "amount": {      
               "amount": 0,
@@ -88,8 +94,20 @@ export default {
   },
   methods: {
     commit() {
-      this.$emit("input", this.val)
+      this.$emit("input", this.val);
+      console.log(this.val.amount);
+      Object.entries(this.sourceSelect).forEach(([key, val]) => {
+        if (this.val.category == val.value.category) {
+          this.sourceSelect[key].disabled=true;
+        }
+      });
     }
   }
 }
 </script>
+
+<style scoped lang="less">
+  .el-select {
+    display: block;
+  }
+</style>

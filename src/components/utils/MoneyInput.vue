@@ -39,7 +39,7 @@
             },
             "numeric": {
                 "type": Number,
-                "default": 0.0
+                "default": 0.00
             },
             "label": {
                 "type": String,

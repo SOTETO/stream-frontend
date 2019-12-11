@@ -37,6 +37,7 @@
                     @change="commit">
                 </el-date-picker>
             </el-form-item>
+          asdasdasd
             <TakingSelectSource v-on:input="addSourceType($event)"/>
             <table class="sources">
                 <thead>

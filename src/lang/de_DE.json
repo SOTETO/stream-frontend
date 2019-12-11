@@ -364,6 +364,10 @@
     },
     "filter": {
       "name": "Name"
+    },
+    "validations": {
+      "category": "Bitte gib eine Kategorie an",
+      "description": "Bitte füge eine Beschreibung hinzu"
     }
   },
   

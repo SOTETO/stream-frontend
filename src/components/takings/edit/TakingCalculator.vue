@@ -11,32 +11,38 @@
             </el-select>
         </template>
         <div class="collector">
+          <el-form :model="dataForm" :rules="rules">
             <el-form-item
                 class="vca-form user-select"
                 :required="false"
                 :label="$t('donation.placeholder.involved.label')"
+                prop="who"
                 >
                 <WidgetUserAutocomplete
                         :placeholder="$t('donation.placeholder.involved.indicator')"
                         :preselection="amount.involvedSupporter"
                         @vca-user-selection="selectSupporter"
+                        v-model="dataForm.who"
                 />
             </el-form-item>
             <el-form-item
                 class="vca-form"
-                :required="true"
-                :label="$t('donation.placeholder.received')">
+                :label="$t('donation.placeholder.received')"
+                prop="when"
+            >
                 <el-date-picker
-                    v-model="amount.received"
-                    type="date"
+                    v-model="dataForm.when"
                     :placeholder="$t('donation.placeholder.received')"
-                    format="dd. MMM. yyyy"
-                    value-format="timestamp"
-                    :clearable="false"
+                    format="dd.MMM.yyyy"
                     :picker-options="datePickerOptions">
                 </el-date-picker>
             </el-form-item>
+          <el-form-item
+          :label="$t('donation.header.donationSource.sourceSelect')"
+          prop="where">
+          <br/>
             <TakingSelectSource v-on:input="addSourceType($event)"/>
+          </el-form-item>
             <table class="sources">
                 <thead>
                     <tr>
@@ -47,6 +53,8 @@
                     </tr>
                 </thead>
                 <tbody>
+           <!--     {{ amount.sources[0].amount.amount }} -->
+
                     <TakingSource
                         v-for="t in amount.sources"
                         :source="t"
@@ -60,6 +68,7 @@
                     />
                 </tbody>
             </table>
+          </el-form>
         </div>
         <div class="evaluation">
             <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
@@ -70,7 +79,7 @@
 </template>
 
 <script>
-    import { DatePicker, FormItem, Select, Option } from 'element-ui'
+    import { DatePicker, FormItem, Select, Option} from 'element-ui'
     import { VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
@@ -86,6 +95,8 @@
             "el-form-item": FormItem,
             "el-select": Select,
             "el-option": Option,
+/*            "el-tag": Tag,
+            "el-input": Input,*/
             "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
             "VcABox": VcABox,
@@ -96,9 +107,9 @@
               type: Object,
               default: function () {
                 return {
-                  "received": "",
-                  "sources": [],
-                  "involvedSupporter": []
+                  "received": this.dataForm.when,
+                  "sources": '',
+                  "involvedSupporter": this.dataForm.who
                 }
               }
             },
@@ -112,12 +123,15 @@
                     sources = this.value.sources
                 }
                 if(this.value.hasOwnProperty("received")) {
-                    received = this.value.received
+                    received = this.dataForm.when
                 }
                 if(this.value.hasOwnProperty("involvedSupporter")) {
                     involvedSupporter = this.value.involvedSupporter
                 }
             }
+
+
+
             return {
                 "datePickerOptions": {
                     disabledDate(time) {
@@ -125,7 +139,26 @@
                     }
                 },
 
-                "sourceTypes": [
+                result: Number,
+
+                dataForm: {
+                  when:'',
+                  who: '',
+                },
+
+                rules: {
+                  who: [
+                    { required: true, message: 'test', trigger:'change' }
+                  ],
+                  when: [
+                    { type: 'date', required: true, pattern:/^\d{2}.[a-zA-Z]{3}.\d{4}$/, message: 'test', trigger:'change' },
+                  ],
+                  where: [
+                    { type: 'array', required: true, message: 'test', trigger:'blur' }
+                  ],
+                },
+
+              "sourceTypes": [
                     { "category": "unknown", "desc": false},
                     { "category": "can", "desc": false},
                     { "category": "box", "desc": false},
@@ -145,11 +178,12 @@
             }
         },
         computed: {
+
             getTotalCash: function () {
-                return this.getTotal("cash")
+              return this.getTotal('cash')
             },
             getTotalExtern: function () {
-                return this.getTotal("extern")
+                return this.getTotal('extern')
             },
             getTotalAll: function () {
                 return this.getTotal()
@@ -169,31 +203,31 @@
             }
         },
         methods: {
-            addSourceType(value) {
-              this.amount.sources.push(value)
-            },
-            changeDonation(source) {
-                var copy = this.sources.slice(0)
-                copy = copy.filter(s => source.category !== s.category)
-                copy.push(source)
-                this.sources = copy
-                this.commit()
-            },
-            deselect(category) {
-                var copy = this.sources.slice(0)
-                copy = copy.filter(s => category !== s.category)
-                this.sources = copy
-                this.commit()
-            },
-            getTotal(part) {
-                const reducer = (acc, c) => acc + c.amount.amount
-                const filter = source => source.typeOfSource === part
-                var result = this.amount.sources.reduce(reducer, 0);
-                if(typeof part === "string" && (part === "cash" || part === "extern")) {
-                    result = this.amount.sources.filter(filter).reduce(reducer, 0)
-                }
-                return CurrencyFormatter.getFromNumeric(this.currency, result)
-            },
+          addSourceType(value) {
+            this.amount.sources.push(value)
+          },
+          changeDonation(source) {
+            var copy = this.sources.slice(0)
+            copy = copy.filter(s => source.category !== s.category)
+            copy.push(source)
+            this.sources = copy
+            this.commit()
+          },
+          deselect(category) {
+            var copy = this.sources.slice(0)
+            copy = copy.filter(s => category !== s.category)
+            this.sources = copy
+            this.commit()
+          },
+          getTotal(part) {
+            const reducer = (acc, c) => acc + c.amount.amount
+            const filter = source => source.typeOfSource === part
+            var result = this.amount.sources.reduce(reducer, 0);
+            if (typeof part === 'string' && (part === 'cash' || part === 'extern')) {
+              result = this.amount.sources.filter(filter).reduce(reducer, 0)
+            }
+            return CurrencyFormatter.getFromNumeric(this.currency, result)
+          },
             commit() {
                 var result = {
                     "received": this.received,
@@ -220,7 +254,7 @@
             },
             getNumericSource(category) {
                 var source = this.sources.filter(s => s.category === category).pop()
-                var result = 0.0
+                var result = 0.00
                 if(typeof source !== "undefined") {
                     result = source.amount
                 }

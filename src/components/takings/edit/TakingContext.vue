@@ -1,9 +1,10 @@
 <template>
     <div class="context-form">
-        <el-form-item :label="$t('donation.placeholder.context.label')" :required="true">
-            <el-input :placeholder="$t('donation.placeholder.context.indicator')" v-model="context.description"></el-input>
+      <el-form :rules="rules" :model="context">
+        <el-form-item :label="$t('donation.placeholder.context.label')" prop="description">
+            <el-input :placeholder="$t('donation.placeholder.context.indicator')"  v-model="context.description"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('donation.placeholder.category')" :required="true" class="vca-categories">
+        <el-form-item :label="$t('donation.placeholder.category')" class="vca-categories" prop="category">
             <table class="categoryChooser">
                 <tr v-for="(group, i) in categories" class="vca-group" :key="i">
                     <td v-for="cat in group"  :key="cat">
@@ -17,6 +18,7 @@
                 </tr>
             </table>
         </el-form-item>
+      </el-form>
     </div>
 </template>
 
@@ -47,7 +49,7 @@
                     description = this.value.description
                 }
                 if(this.value.hasOwnProperty("category")) {
-                    category = this.value.category
+                    category = this.value.dataForm.category
                 }
             }
             return {
@@ -55,7 +57,21 @@
                     ["concert", "run4wash", "streetFestivals"],
                     ["festival", "school", "karaoke"],
                     ["stadium", "party", "kicker"]
-                ]
+                ],
+
+                dataForm: {
+                  description: '',
+                  category: '',
+                },
+
+                rules: {
+                  description: [
+                    { required: true, message: this.$t('takings.validations.description'), trigger:'blur' },
+                  ],
+                  category: [
+                    { required: true, message:  this.$t('takings.validations.category'), trigger:'change' }
+                  ],
+              },
             }
         }
     }
