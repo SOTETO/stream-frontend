@@ -334,7 +334,7 @@
     },
     "table": {
       "head": {
-        "norms": "Art",
+        "edit": "Anzeigen / Bearbeiten",
         "title": "Name / Aktion",
         "crew": "Crew",
         "amount": "Betrag",
@@ -550,6 +550,12 @@
       "label": {
         "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
+    }
+  },
+  "takingsEdit": {
+    "header": {
+      "add": "Einnahme Hinzufügen",
+      "edit": "Einnahme Bearbeiten"
     }
   }
 }

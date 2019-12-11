@@ -8,7 +8,7 @@
             <th>{{ $t("takings.table.head.deposited") }}</th>
             <th>{{ $t("takings.table.head.date") }}</th>
             <th>{{ $t("takings.table.head.supporter") }}</th>
-            <th v-if="isEployee">{{ $t("takings.table.head.norms") }} </th>
+            <th v-if="isEployee">{{ $t("takings.table.head.edit") }} </th>
         </tr>
         </thead>
         <tbody>
@@ -38,9 +38,10 @@
                 </div>
             </td>
             <td v-if="isEployee">
-              <router-link class="vca-button-primary vca-full-width" :to="{name: 'takings-edit', params: {id: taking.id}}">
-                  {{ $t('takings.buttons.edit') }}
-                </router-link>
+              <el-button type="primary" icon="el-icon-search" size="mini">
+              </el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="editPage(taking.id)">
+              </el-button>
             </td>
         </tr>
         </tbody>
@@ -145,6 +146,9 @@ export default {
       },
       userPage (uuid) {
         window.location.href = '/arise/#/user/' + uuid
+      },
+      editPage (uuid) {
+        this.$router.push({name: 'takings-edit', params: {id: uuid}})
       },
       open(title, message, type) {
           Notification({

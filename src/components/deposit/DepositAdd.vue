@@ -82,7 +82,7 @@ export default {
         return confirmed
     },
     stateConfirmed () {
-        return (this.confirmedAmount === this.taking.amount)
+      return (this.confirmedAmount >= this.taking.amount)
     },
     unconfirmedAmount () {
         var unconfirmed = 0

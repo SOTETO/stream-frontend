@@ -1,6 +1,5 @@
 <template>
-  <VcAFrame :title="$t('takingsEdit.header')" hasContainer="true">
-
+  <VcAFrame :title="headerTitle" hasContainer="true">
       <el-form
                 :model="taking"
                 :rules="rules"
@@ -117,6 +116,13 @@
             ...mapGetters('takings', {
                 get: 'getById',
             }),
+            headerTitle () {
+              if (this.id !== null) {
+                return this.$t('takingsEdit.header.edit')
+              } else {
+                return this.$t('takingsEdit.header.add')
+              }
+            },
             updateMode () {
               return this.id !== null
             },
