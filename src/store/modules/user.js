@@ -61,7 +61,7 @@ const getters = {
             res =  [
               {
                 "uuid": crewRole.crewId,
-                "name": crewRole.name
+                "name": crewRole.crewName
               }
             ]
         }
