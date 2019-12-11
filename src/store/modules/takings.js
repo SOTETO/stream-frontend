@@ -1,7 +1,5 @@
 import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 
-const uuidv4 = require('uuid/v4');
-
 // initial state
 // shape: [{
 //             "id"
@@ -83,9 +81,6 @@ const getters = {
     },
     getById: (state) => (id) => {
         var taking = state.items.find(item  => item.id === id)
-        if (taking === undefined) {
-          
-        }
         return JSON.parse(JSON.stringify(taking))
     },
     isError: (state) => {
