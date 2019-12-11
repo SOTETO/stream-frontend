@@ -33,7 +33,7 @@
             <td>
                 <div class="supporter">
                     <span class="vca-user-name" v-for="s in taking.supporter">
-                      <el-tag> {{ s.name }} </el-tag>
+                      <el-button type="primary" size="mini" @click="userPage(s.uuid)"> {{ s.name }} </el-button>
                     </span>
                 </div>
             </td>
@@ -142,6 +142,9 @@ export default {
       },
       hasAddtionalSupporter (donation) {
           return this.supporter(donation).length > this.maximumTags
+      },
+      userPage (uuid) {
+        window.location.href = '/arise/#/user/' + uuid
       },
       open(title, message, type) {
           Notification({
