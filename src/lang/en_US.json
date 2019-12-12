@@ -369,7 +369,8 @@
       "add": "add taking",
       "donation": "add donation",
       "economic": "add economic money",
-      "depositAdd": "add deposit"
+      "depositAdd": "add deposit",
+      "abort": "abort deposit"
     },
     "filter":{
       "name": "name"
