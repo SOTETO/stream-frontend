@@ -364,7 +364,8 @@
       "add": "Einnahme hinzufügen",
       "donation": "Spende hinzufügen",
       "economic": "Wirtschaftsgeld hinzufügen",
-      "depositAdd": "Einzahlung hinzufügen"
+      "depositAdd": "Einzahlung hinzufügen",
+      "abort": "Einzahlung abbrechen"
     },
     "filter": {
       "name": "Name"
