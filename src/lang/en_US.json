@@ -339,7 +339,7 @@
     },
     "table": {
       "head": {
-        "norms": "Type",
+        "edit": "Show / Edit",
         "title": "Name / Event",
         "crew": "Crew",
         "amount": "Amount",
@@ -369,7 +369,8 @@
       "add": "add taking",
       "donation": "add donation",
       "economic": "add economic money",
-      "depositAdd": "add deposit"
+      "depositAdd": "add deposit",
+      "abort": "abort deposit"
     },
     "filter":{
       "name": "name"
@@ -529,7 +530,7 @@
         "unknown": "I don't know",
         "can": "Box",
         "other": "Other",
-        "description": "Description..."
+        "Madescription": "Description..."
       },
       "externalDetails": {
         "partner": {
@@ -554,6 +555,12 @@
       "label": {
         "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
+    }
+  },
+  "takingsEdit": {
+    "header": {
+      "add": "Add Taking",
+      "edit": "Edit Taking"
     }
   }
 
