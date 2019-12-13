@@ -260,11 +260,16 @@
         "other": "Sonstiges"
       },
       "source": {
+        "group": {
+          "donations": "Spendeneinnahmen",
+          "economic": "Wirtschaftseinnahmen"
+        },
         "unknown": "Kann ich nicht zuordnen",
         "can": "Pfandtonne",
         "box": "Spendendose",
         "gl": "Gästeliste",
         "other": "Sonstiges",
+        "merch": "Merchandise",
         "description": "Beschreibung..."
       },
       "externalDetails": {
@@ -275,6 +280,12 @@
           "asp": "Ansprechperson",
           "email": "Emailadresse",
           "address": "Postanschrift"
+        },
+        "account": {
+          "label": "Spendenkonto:",
+          "owner": "Empfänger: Viva con Agua",
+          "iban": "IBAN: DE58 2005 0550 12681 351 81",
+          "bic": "BIC: HASPDEHHXXX"
         }
       }
     }

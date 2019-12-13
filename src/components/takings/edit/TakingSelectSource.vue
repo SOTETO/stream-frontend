@@ -1,12 +1,17 @@
 <template>
     <el-select v-model="val" @input="commit">
-      <el-option
-        v-for="item in sourceSelect"
-        :key="item.id"
-        :label="item.label"
-        :value="item.value"
-        :disabled="item.disabled">
-      </el-option>
+      <el-option-group
+        v-for="group in sourceGroups"
+        :key="group.label"
+        :label="group.label">
+          <el-option
+            v-for="item in group.sourceSelect"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled">
+          </el-option>
+      </el-option-group>
     </el-select>
 </template>
 
@@ -23,71 +28,107 @@ export default {
   data () {
     return {
       "val": "",
-      "sourceSelect": [
+      "sourceGroups": [
         {
-          'label': this.$t('donation.placeholder.source.unknown'), 
-          'disabled': false,
-          'value' : {
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+          "label": this.$t('donation.placeholder.source.group.donations'),
+          "sourceSelect":
+          [
+            {
+              'label': this.$t('donation.placeholder.source.unknown'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "unknown",
+                "norms": "DONATION",
+                "desc": false
+              }
             },
-            "category": "unknown", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.can'),
-          'disabled': false,
-          'value' : {
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.can'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "can",
+                "norms": "DONATION",
+                "desc": false
+              }
             },
-            "category": "can", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.box'),
-          'disabled': false,
-          'value' : { 
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.box'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "box",
+                "norms": "DONATION",
+                "desc": false
+              }
             },
-            "category": "box", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.gl'),
-          'disabled': false,
-          'value' : { 
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.gl'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "gl",
+                "norms": "DONATION",
+                "desc": false
+              }
             },
-            "category": "gl", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.other'),
-          'disabled': false,
-          'value' : { 
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.other'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "other",
+                "norms": "DONATION",
+                "desc": true
+              }
+            }
+          ]
+        },{
+          "label": this.$t('donation.placeholder.source.group.economic'),
+          "sourceSelect": [
+            {
+              'label': this.$t('donation.placeholder.source.merch'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "merch",
+                "norms": "ECONOMIC",
+                "desc": false
+              }
             },
-            "category": "other", 
-            "norms": "DONATION",
-            "desc": true
-          }
+            {
+              'label': this.$t('donation.placeholder.source.other'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "other",
+                "norms": "ECONOMIC",
+                "desc": false
+              }
+            }
+          ]
         }
       ]
     }
@@ -95,11 +136,12 @@ export default {
   methods: {
     commit() {
       this.$emit("input", this.val);
-      console.log(this.val.amount);
-      Object.entries(this.sourceSelect).forEach(([key, val]) => {
-        if (this.val.category == val.value.category) {
-          this.sourceSelect[key].disabled=true;
-        }
+      Object.entries(this.sourceGroups).forEach(([groupKey, groupVal]) => {
+        Object.entries(groupVal.sourceSelect).forEach(([key, val]) => {
+          if (this.val.category == val.value.category) {
+            this.sourceGroups[groupKey].sourceSelect[key].disabled=true;
+          }
+        });
       });
     }
   }
