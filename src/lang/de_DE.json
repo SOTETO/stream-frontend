@@ -291,7 +291,8 @@
         "amount": "Betrag",
         "donations": "Zugeordnete Spenden",
         "supporter": "Beteiligte Supporter",
-        "state": "Status"
+        "state": "Status",
+        "confirmed": "Bestätigt von"
       },
       "hint": {
         "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
