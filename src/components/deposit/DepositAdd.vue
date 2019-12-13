@@ -1,7 +1,7 @@
 <template>
   <div>
   <div class="unit unsubmitted" v-if="!submitted && !stateConfirmed && !stateUnConfirmed">
-    <el-input class="money-input" v-model="unit.amount.amount" size="mini">
+    <el-input class="money-input" :disabled="true" v-model="unit.amount.amount" size="mini">
       <template class="currency" slot="append">€</template>
     </el-input>
     <el-button @click="submit" type="success" icon="el-icon-check" size="mini"></el-button>
