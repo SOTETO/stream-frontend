@@ -268,6 +268,7 @@
         "box": "Donation box",
         "gl": "Guest list",
         "other": "Other",
+        "other_ec": "Other",
         "merch": "Merchandise",
         "description": "Description..."
       },
@@ -281,7 +282,7 @@
           "address": "Postal address"
         },
         "account": {
-          "label": "Spendenkonto:",
+          "label": "Donation account:",
           "owner": "Empfänger: Viva con Agua",
           "iban": "IBAN: DE58 2005 0550 12681 351 81",
           "bic": "BIC: HASPDEHHXXX"
