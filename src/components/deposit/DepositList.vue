@@ -7,6 +7,7 @@
         <th>{{ $t("deposits.table.head.amount") }}</th>
         <th>{{ $t("deposits.table.head.donations") }}</th>
         <th>{{ $t("deposits.table.head.supporter") }}</th>
+        <th>{{ $t("deposits.table.head.confirmed") }}</th>
         <th>{{ $t("deposits.table.head.state") }}</th>
       </tr>
     </thead>
@@ -18,26 +19,38 @@
             <span>{{ $t("deposits.table.hint.dates.created", { "date":  formatDate(deposit.date.created) }) }}</span>
           </div>
         </td>
-        <td class="crew"><CrewPlainName :id="deposit.crew" /></td>
+        <td class="crew">
+            <span class="vca-crew-name">
+                <el-tag> {{ deposit.crew.name }} </el-tag>
+            </span>
         <td>{{ formatAmount(deposit.amount) }}</td>
         <td>
           <ul class="actions">
             <li v-for="unit in deposit.actions" :key="unit.publicId" class="action">
-              <span>{{ donation(unit.donationId) }}</span>
-              <span>{{ formatAmount({ "amount": unit.amount, "currency": unit.currency }) }}</span>
+              <span>{{ unit.description }}</span>
+              <span>{{ formatAmount({ "amount": unit.amount.amount, "currency": unit.amount.currency }) }}</span>
             </li>
           </ul>
         </td>
         <td>
           <div class="supporter">
-            <Tag v-for="uuid in teaserSupporter(deposit)" :uuid="uuid" :key="'sup-' + uuid" />
-            <span v-if="hasAddtionalSupporter(deposit)">...</span>
+                <div class="supporter">
+                    <span class="vca-user-name" v-for="s in deposit.supporter">
+                      <el-button type="primary" size="mini" @click="userPage(s.uuid)"> {{ s.name }} </el-button>
+                    </span>
+                </div>
           </div>
+        </td>
+        <td>
+          <span v-if="!confirmed(deposit)"> {{ $t('deposits.table.hint.dates.unconfirmed') }} </span>
+            <el-button v-else type="primary" size="mini" @click="userPage(deposit.status.user.uuid)"> {{ deposit.status.user.name }} </el-button>
         </td>
         <td>
           <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">Confirm</button>
           <StateLight v-else-if="!confirmed(deposit) && !allowedToConfirm" :value="{ 'name': $t('deposits.table.hint.dates.unconfirmed'), 'state': 0 }" />
-          <StateLight v-else :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(deposit.status) }), 'state': 1  }" />
+          <div v-else>
+            <StateLight :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(deposit.status.date) }), 'state': 1  }" />
+          </div>
         </td>
       </tr>
     </tbody>
@@ -126,11 +139,6 @@
 
   .deposits {
     width: 100%;
-
-    & .deposit:nth-child(even) {
-      background-color: #colors[primaryDeactivated];
-    }
-
     & th {
       .colorProfilePrimary();
       font-weight: bold;

@@ -288,7 +288,8 @@
           "amount": "Amount",
           "donations": "Associated donations",
           "supporter": "Involved supporter",
-          "state": "State"
+          "state": "State",
+          "confirmed": "Confirmed by"
         },
       
         "hint": {
