@@ -33,7 +33,7 @@
             <td>
                 <div class="supporter">
                     <span class="vca-user-name" v-for="s in taking.supporter" :key="s.uuid">
-                      <el-button type="primary" size="mini" @click="userPage(s.uuid)"> {{ s.name }} </el-button>
+                      <UserButton :user="s" />
                     </span>
                 </div>
             </td>
@@ -54,6 +54,7 @@ import { mapGetters, mapActions } from 'vuex'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
 import DepositLights from '@/components/takings/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
+import UserButton from '@/components/utils/UserButton'
 import { Notification } from 'element-ui'
 
 Vue.use(Notification)
@@ -62,7 +63,7 @@ Notification.closeAll()
 export default {
   name: "List",
   components: {
-    DepositLights, DepositAdd
+    DepositLights, DepositAdd, UserButton
   },
   props: {
     depositAddView : {
@@ -142,9 +143,6 @@ export default {
       },
       hasAddtionalSupporter (donation) {
           return this.supporter(donation).length > this.maximumTags
-      },
-      userPage (uuid) {
-        window.location.href = '/arise/#/user/' + uuid
       },
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
