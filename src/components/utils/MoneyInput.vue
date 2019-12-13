@@ -66,7 +66,7 @@
             var amount = formatter.localize()
             var numericAmount = formatter.getNumeric()
             if(typeof this.value !== "undefined" && this.value !== null) {
-                var formatter = CurrencyFormatter.getFromNumeric(this.value.currency, this.value.amount)
+                formatter = CurrencyFormatter.getFromNumeric(this.value.currency, this.value.amount)
                 amount = formatter.localize()
                 numericAmount = formatter.getNumeric()
             }
@@ -82,7 +82,7 @@
             var amount = formatter.localize()
             var numericAmount = formatter.getNumeric()
             if(typeof this.value !== "undefined" && this.value !== null) {
-                var formatter = CurrencyFormatter.getFromNumeric(this.value.currency, this.value.amount)
+                formatter = CurrencyFormatter.getFromNumeric(this.value.currency, this.value.amount)
                 amount = formatter.localize()
                 numericAmount = formatter.getNumeric()
             }

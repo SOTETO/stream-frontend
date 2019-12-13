@@ -14,15 +14,12 @@
 </template>
 
 <script>
-import {Form, Button} from 'element-ui'
-import MoneyInput from '@/components/deposit/MoneyInput'
+import {Button} from 'element-ui'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
 export default {
   name: "DepositAdd",
   components: {
-    "el-form": Form,
-    "el-button": Button,
-    "MoneyInput": MoneyInput
+    "el-button": Button
   },
   props: {
     taking: {
@@ -92,7 +89,7 @@ export default {
         return unconfirmed
     },
     stateUnConfirmed () {
-        return (this.unconfirmedAmount === this.taking.amount)
+        return (this.unconfirmedAmount >= this.taking.amount)
     }
   },
   methods: {
