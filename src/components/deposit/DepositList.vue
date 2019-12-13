@@ -36,14 +36,14 @@
           <div class="supporter">
                 <div class="supporter">
                     <span class="vca-user-name" v-for="s in deposit.supporter">
-                      <el-button type="primary" size="mini" @click="userPage(s.uuid)"> {{ s.name }} </el-button>
+                      <UserButton :user="s" />
                     </span>
                 </div>
           </div>
         </td>
         <td>
           <span v-if="!confirmed(deposit)"> {{ $t('deposits.table.hint.dates.unconfirmed') }} </span>
-            <el-button v-else type="primary" size="mini" @click="userPage(deposit.status.user.uuid)"> {{ deposit.status.user.name }} </el-button>
+          <UserButton v-else :user="deposit.status.user" />
         </td>
         <td>
           <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">Confirm</button>
@@ -61,9 +61,10 @@
   import { CrewPlainName, Tag } from 'vca-widget-user'
   import StateLight from '@/components/utils/StateLight'
   import CurrencyFormatter from '@/utils/CurrencyFormatter'
+  import UserButton from '@/components/utils/UserButton'
   export default {
     name: "DepositList",
-    components: { CrewPlainName, Tag, StateLight },
+    components: { CrewPlainName, Tag, StateLight, UserButton},
     computed: {
       ...mapGetters('deposits', {
         depositItems: 'overview',
