@@ -1,28 +1,32 @@
 <template>
     <div>
         <p>
-            Todo: Konto
+            <span class="donationAccount">{{ $t("donation.placeholder.externalDetails.account.label") }}</span><br/>
+            <span>{{ $t("donation.placeholder.externalDetails.account.owner") }}</span><br/>
+            <span>{{ $t("donation.placeholder.externalDetails.account.iban") }}</span><br/>
+            <span>{{ $t("donation.placeholder.externalDetails.account.bic") }}</span><br/>
         </p>
-        <span>{{ $t('externalTransaction.label.reasonForPayment', { 'generated': reasonForPayment }) }}</span>
+        <span>{{ $t('externalTransaction.label.reasonForPayment', { 'generated': reasonForPayment }) }}</span><br/><br/>
+
+        <div>
+            <span>{{ $t("donation.placeholder.externalDetails.partner.label") }}</span>
+            <el-form-item>
+                <el-input v-model="partner.name" :placeholder="$t('donation.placeholder.externalDetails.partner.name')"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="partner.asp" :placeholder="$t('donation.placeholder.externalDetails.partner.asp')"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="partner.email" :placeholder="$t('donation.placeholder.externalDetails.partner.email')"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="partner.address" :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
+            </el-form-item>
+        </div>
 
         <el-form-item>
             <el-checkbox v-model="donationReceipt" @change="commit">{{ $t("donation.placeholder.externalDetails.receipt") }}</el-checkbox>
         </el-form-item>
-        <div>
-            <span>{{ $t("donation.placeholder.externalDetails.partner.label") }}</span>
-            <el-form-item>
-                <el-input v-model="partner.name" :disabled="!donationReceipt" :placeholder="$t('donation.placeholder.externalDetails.partner.name')"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input v-model="partner.asp" :disabled="!donationReceipt" :placeholder="$t('donation.placeholder.externalDetails.partner.asp')"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input v-model="partner.email" :disabled="!donationReceipt" :placeholder="$t('donation.placeholder.externalDetails.partner.email')"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input v-model="partner.address" :disabled="!donationReceipt" :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
-            </el-form-item>
-        </div>
     </div>
 </template>
 
@@ -83,5 +87,7 @@
 </script>
 
 <style scoped>
-
+.donationAccount {
+    font-weight: bold;
+}
 </style>

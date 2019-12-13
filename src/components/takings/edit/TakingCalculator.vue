@@ -163,7 +163,8 @@
                     { "category": "can", "desc": false},
                     { "category": "box", "desc": false},
                     { "category": "gl", "desc": false},
-                    { "category": "other", "desc": true}
+                    { "category": "other", "desc": true},
+                    { "category": "merch", "desc": false}
                 ],
                 "currentSourceType": [
 

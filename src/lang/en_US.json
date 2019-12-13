@@ -258,11 +258,16 @@
         "kicker": "Kicker tournament"
       },
       "source": {
+        "group": {
+          "donations": "donations",
+          "economic": "economic takings"
+        },
         "unknown": "I don't know",
         "can": "Deposit can",
         "box": "Donation box",
         "gl": "Guest list",
         "other": "Other",
+        "merch": "Merchandise",
         "description": "Description..."
       },
       "externalDetails": {
@@ -273,6 +278,12 @@
           "asp": "Contact person",
           "email": "Email address",
           "address": "Postal address"
+        },
+        "account": {
+          "label": "Spendenkonto:",
+          "owner": "Empfänger: Viva con Agua",
+          "iban": "IBAN: DE58 2005 0550 12681 351 81",
+          "bic": "BIC: HASPDEHHXXX"
         }
       }
     },
