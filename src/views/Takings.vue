@@ -27,6 +27,9 @@
             <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
               <TakingDeposit :deposit="deposit" v-on:resetDepositAddView="resetDepositAddView"></TakingDeposit>
             </el-card>
+            <el-card class="box-card tail">
+              <CrewDetail />
+            </el-card>
         </VcAColumn>
     </VcAFrame>
 </template>
@@ -40,10 +43,11 @@
   import 'vca-widget-base/dist/vca-widget-base.css'
   import TakingDeposit from '@/components/takings/TakingDeposit' 
   import TakingFilter from "../components/takings/TakingFilter"
+  import CrewDetail from '@/components/takings/CrewDetail'
   export default {
     name: "takings",
     components: {
-      VcAFrame, VcAColumn, List, ListMenu, TakingDeposit, TakingFilter, 'el-card': Card
+      VcAFrame, VcAColumn, List, ListMenu, TakingDeposit, TakingFilter, 'el-card': Card, CrewDetail
     },
     data () {
       var editableDefault = {

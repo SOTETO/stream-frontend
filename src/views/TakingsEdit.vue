@@ -20,7 +20,7 @@
                     <el-input
                             type="textarea"
                             :rows="4"
-                            :placeholder="$t('taking.placeholder.comment')"
+                            :placeholder="$t('takings.placeholder.comment')"
                             v-model="taking.comment">
                     </el-input>
                     <button
@@ -28,7 +28,7 @@
                             :disabled="!validDonation"
                             class="vca-button-primary vca-full-width"
                             @click.prevent="submitForm">
-                        {{ $t("taking.buttons.save") }}
+                        {{ $t("takings.buttons.save") }}
                     </button>
                     <button 
                             v-if="updateMode"

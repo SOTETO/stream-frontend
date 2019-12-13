@@ -80,7 +80,6 @@
 
 <script>
     import { DatePicker, FormItem, Select, Option} from 'element-ui'
-    import { VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
@@ -99,7 +98,6 @@
             "el-input": Input,*/
             "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
-            "VcABox": VcABox,
             "TakingSelectSource": TakingSelectSource
         },
         props: {

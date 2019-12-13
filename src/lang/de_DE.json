@@ -256,7 +256,8 @@
         "party": "Party",
         "streetFestivals": "Straßenfeste",
         "karaoke": "Slam, Powerpoint-Karaoke & Co.",
-        "kicker": "Kickerturniere"
+        "kicker": "Kickerturniere",
+        "other": "Sonstiges"
       },
       "source": {
         "group": {
@@ -301,7 +302,8 @@
         "amount": "Betrag",
         "donations": "Zugeordnete Spenden",
         "supporter": "Beteiligte Supporter",
-        "state": "Status"
+        "state": "Status",
+        "confirmed": "Bestätigt von"
       },
       "hint": {
         "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
@@ -367,12 +369,15 @@
       }
     },
     "placeholder": {
+      "comment": "Kommentar",
       "amount": "Eingezahlte Summe",
       "dateOfDeposit": "Wann wurde eingezahlt?",
       "searchDonation": "Wähle eine Spende"
     },
     "buttons": {
       "add": "Einnahme hinzufügen",
+      "save": "Einnahme speichern",
+      "update": "Einnahme aktualisieren",
       "donation": "Spende hinzufügen",
       "economic": "Wirtschaftsgeld hinzufügen",
       "depositAdd": "Einzahlung hinzufügen",

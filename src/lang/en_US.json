@@ -255,7 +255,8 @@
         "party": "Party",
         "streetFestivals": "Street markets / festivals",
         "karaoke": "Karaoke",
-        "kicker": "Kicker tournament"
+        "kicker": "Kicker tournament",
+        "other": "Others"
       },
       "source": {
         "group": {
@@ -299,7 +300,8 @@
           "amount": "Amount",
           "donations": "Associated donations",
           "supporter": "Involved supporter",
-          "state": "State"
+          "state": "State",
+          "confirmed": "Confirmed by"
         },
       
         "hint": {
@@ -372,12 +374,15 @@
       }
     },
     "placeholder": {
+        "comment": "Comment",
         "amount": "Deposited amount",
         "dateOfDeposit": "When?",
         "searchDonation": "Select a donation"
     },
     "buttons": {
       "add": "add taking",
+      "save": "save taking",
+      "update": "update taking",
       "donation": "add donation",
       "economic": "add economic money",
       "depositAdd": "add deposit",

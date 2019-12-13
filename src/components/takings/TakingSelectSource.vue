@@ -11,11 +11,10 @@
   </el-form-item>
 </template>
 <script>
-import {FormItem, Select, Option } from 'element-ui'
+import { Select, Option } from 'element-ui'
 export default {
   name: 'TakingSelectSource',
   components: {
-    'el-form-iteam': FormItem,
     'el-select': Select,
     'el-option': Option
   },

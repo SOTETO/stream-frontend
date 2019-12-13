@@ -15,7 +15,7 @@
         <tr v-for="taking in takings" :key="taking.id" class="taking">
             <td>{{ taking.name }}</td>
             <td class="crew">
-              <span class="vca-crew-name" v-for="c in taking.crew">
+              <span class="vca-crew-name" v-for="c in taking.crew" :key="c.id">
                 <el-tag> {{ c.name }} </el-tag>
               </span>
             </td>
@@ -32,7 +32,7 @@
             </td>
             <td>
                 <div class="supporter">
-                    <span class="vca-user-name" v-for="s in taking.supporter">
+                    <span class="vca-user-name" v-for="s in taking.supporter" :key="s.uuid">
                       <el-button type="primary" size="mini" @click="userPage(s.uuid)"> {{ s.name }} </el-button>
                     </span>
                 </div>
@@ -51,7 +51,6 @@
 <script>
 import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
-import { Tag, CrewPlainName } from 'vca-widget-user'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
 import DepositLights from '@/components/takings/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
@@ -63,7 +62,7 @@ Notification.closeAll()
 export default {
   name: "List",
   components: {
-    Tag, CrewPlainName, DepositLights, DepositAdd
+    DepositLights, DepositAdd
   },
   props: {
     depositAddView : {
