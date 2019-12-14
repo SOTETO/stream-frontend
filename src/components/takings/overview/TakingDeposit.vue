@@ -5,7 +5,7 @@
     :key="reloadKey">
 
     <div style="display: table; width: 100%;">
-      <div class="depositRow" v-for="unit in deposit.depositUnits">
+      <div class="depositRow" v-for="unit in deposit.depositUnits" :key="unit.id">
         <div class="depositCell depositName">
           {{ takingName(unit.takingId) }}
         </div>
