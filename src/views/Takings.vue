@@ -35,15 +35,15 @@
 </template>
 
 <script>
-  import List from '@/components/takings/List'
+  import List from '@/components/takings/overview/List'
   import ListMenu from '../components/utils/ListMenu'
   import { Card} from 'element-ui'
   import { mapGetters, mapActions } from 'vuex'
   import { VcAFrame, VcAColumn} from 'vca-widget-base'
   import 'vca-widget-base/dist/vca-widget-base.css'
-  import TakingDeposit from '@/components/takings/TakingDeposit' 
-  import TakingFilter from "../components/takings/TakingFilter"
-  import CrewDetail from '@/components/takings/CrewDetail'
+  import TakingDeposit from '@/components/takings/overview/TakingDeposit' 
+  import TakingFilter from "../components/takings/overview/TakingFilter"
+  import CrewDetail from '@/components/takings/overview/CrewDetail'
   export default {
     name: "takings",
     components: {

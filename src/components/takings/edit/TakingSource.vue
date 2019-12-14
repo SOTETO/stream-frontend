@@ -29,7 +29,6 @@
 </template>
 
 <script>
-    import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
     import MoneyInput from '@/components/takings/edit/MoneyInput'
 
@@ -37,10 +36,6 @@
     export default {
         name: "TakingSource",
         components: {
-            "el-input": Input,
-            "el-checkbox": Checkbox,
-            "el-radio": Radio,
-            "el-form-item": FormItem,
             "MoneyInput": MoneyInput
         },
         props: {

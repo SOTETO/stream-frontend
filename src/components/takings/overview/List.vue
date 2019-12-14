@@ -52,7 +52,7 @@
 import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
-import DepositLights from '@/components/takings/DepositLights'
+import DepositLights from '@/components/deposit/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
 import UserButton from '@/components/utils/UserButton'
 import { Notification } from 'element-ui'
@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-    @import '../../assets/less/general.less';
+    @import '../../../assets/less/general.less';
 
     .takings {
         width: 100%;
