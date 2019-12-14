@@ -123,7 +123,7 @@ export default {
                   "amount": 0,
                   "currency": "EUR"
                 },
-                "category": "other",
+                "category": "other_ec",
                 "norms": "ECONOMIC",
                 "desc": false
               }

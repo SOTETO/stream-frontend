@@ -157,12 +157,13 @@
                 },
 
               "sourceTypes": [
-                    { "category": "unknown", "desc": false},
-                    { "category": "can", "desc": false},
-                    { "category": "box", "desc": false},
-                    { "category": "gl", "desc": false},
-                    { "category": "other", "desc": true},
-                    { "category": "merch", "desc": false}
+                    { "category": "unknown", "desc": false },
+                    { "category": "can", "desc": false },
+                    { "category": "box", "desc": false },
+                    { "category": "gl", "desc": false },
+                    { "category": "other", "desc": true },
+                    { "category": "merch", "desc": false },
+                    { "category": "other_ec", "desc": true }
                 ],
                 "currentSourceType": [
 
