@@ -9,7 +9,7 @@
         </el-form-item>
         <el-form-item :label="$t('household.filter.state.general')" required>
             <el-form-item :label="$t('household.filter.state.complete')" required>
-                <el-radio-group v-model="filter.state.complete"@change="commit">
+                <el-radio-group v-model="filter.state.complete" @change="commit">
                     <el-radio-button v-for="state in completeOptions" :label="state" :key="state">{{ $t('household.filter.options.complete.' + state) }}</el-radio-button>
                 </el-radio-group>
             </el-form-item>
@@ -52,18 +52,11 @@
 
 <script>
     import { mapGetters, mapActions} from 'vuex'
-    import { Input, InputNumber, Form, FormItem } from 'element-ui'
-    import MoneyInput from "../utils/MoneyInput"
     import { CrewSelect } from 'vca-widget-user'
 
     export default {
         name: "DepositFilter",
         components: {
-            MoneyInput,
-            'el-input': Input,
-            'el-input-number': InputNumber,
-            'el-form-item': FormItem,
-            'el-form': Form,
             CrewSelect
         },
         props: {

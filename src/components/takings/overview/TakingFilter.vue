@@ -25,20 +25,11 @@
 
 <script>
     import { mapGetters, mapActions} from 'vuex'
-    import { Input, InputNumber, Form, FormItem } from 'element-ui'
-    import MoneyInput from "../utils/MoneyInput"
-    import { CrewSelect } from 'vca-widget-user'
     import FilterTags from '@/components/utils/FilterTags'
 
     export default {
         name: "TakingFilter",
         components: {
-            MoneyInput,
-            'el-input': Input,
-            'el-input-number': InputNumber,
-            'el-form-item': FormItem,
-            'el-form': Form,
-            CrewSelect,
             FilterTags
         },
         props: {
