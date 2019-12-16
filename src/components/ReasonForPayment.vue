@@ -11,9 +11,6 @@
 </template>
 
 <script>
-    const uuidv5 = require('uuid/v5');
-    import { Input, Checkbox, FormItem } from 'element-ui'
-
     export default {
         name: "ReasonForPayment",
         props: {
