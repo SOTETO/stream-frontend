@@ -1,13 +1,5 @@
 <template>
     <div>
-        <p>
-            <span class="donationAccount">{{ $t("donation.placeholder.externalDetails.account.label") }}</span><br/>
-            <span>{{ $t("donation.placeholder.externalDetails.account.owner") }}</span><br/>
-            <span>{{ $t("donation.placeholder.externalDetails.account.iban") }}</span><br/>
-            <span>{{ $t("donation.placeholder.externalDetails.account.bic") }}</span><br/>
-        </p>
-        <span>{{ $t('externalTransaction.label.reasonForPayment', { 'generated': reasonForPayment }) }}</span><br/><br/>
-
         <div>
             <span>{{ $t("donation.placeholder.externalDetails.partner.label") }}</span>
             <el-form-item>
@@ -23,27 +15,38 @@
                 <el-input v-model="partner.address" :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
             </el-form-item>
         </div>
-
         <el-form-item>
             <el-checkbox v-model="donationReceipt" @change="commit">{{ $t("donation.placeholder.externalDetails.receipt") }}</el-checkbox>
         </el-form-item>
+
+        <el-card class="box-card tail expand">
+            <div><span>{{ $t("donation.placeholder.externalDetails.description") }}</span></div><br/>
+            <ReasonForPayment :typeOfSource="external" :name="name" :address="partner.address"  />
+        </el-card>
+
     </div>
 </template>
 
 <script>
     const uuidv5 = require('uuid/v5');
     import { Input, Checkbox, FormItem } from 'element-ui'
+    import ReasonForPayment from '@/components/ReasonForPayment.vue'
 
     export default {
         name: "ExternalTransactionDetails",
         components: {
             "el-input": Input,
             "el-checkbox": Checkbox,
-            "el-form-item": FormItem
+            "el-form-item": FormItem,
+            'ReasonForPayment': ReasonForPayment,
         },
         props: {
             "value": {
                 "type": Object
+            },
+            name: {
+                type: String,
+                default: null
             }
         },
         data () {
@@ -60,6 +63,9 @@
         computed: {
             reasonForPayment () {
                 return uuidv5('http://pool.vivaconagua.org/stream', uuidv5.URL)
+            },
+            external() {
+                return "external"
             }
         },
         created () {

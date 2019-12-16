@@ -34,6 +34,7 @@
                     v-model="dataForm.when"
                     :placeholder="$t('donation.placeholder.received')"
                     format="dd.MMM.yyyy"
+                    :default-value="formatReceived"
                     :picker-options="datePickerOptions">
                 </el-date-picker>
             </el-form-item>
@@ -128,8 +129,6 @@
                 }
             }
 
-
-
             return {
                 "datePickerOptions": {
                     disabledDate(time) {
@@ -178,7 +177,6 @@
             }
         },
         computed: {
-
             getTotalCash: function () {
               return this.getTotal('cash')
             },
@@ -187,6 +185,9 @@
             },
             getTotalAll: function () {
                 return this.getTotal()
+            },
+            formatReceived: function() {
+                return new Date(this.amount.received)
             }
         },
         created () {
@@ -201,6 +202,7 @@
                     this.involvedSupporter = this.value.involvedSupporter
                 }
             }
+            this.dataForm.when = this.formatReceived
         },
         methods: {
           addSourceType(value) {

@@ -2,7 +2,8 @@
   "defaults": {
     "support": "it@vivaconagua.org",
     "volunteerManager": "volunteer manager",
-    "employee": "employee"
+    "employee": "employee",
+    "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
   },
   "errors": {
     "ajax": {
@@ -188,7 +189,7 @@
         "deposit": "Enter deposit"
       },
       "donationSource": {
-        "sourceSelect": "What type of donation?",
+        "sourceSelect": "What type of taking?",
         "sum": "Sum",
         "sourceType": {
           "cash": "Cash",
@@ -222,7 +223,7 @@
       "total": {
         "cash": "Total (cash): {total}",
         "extern": "Total (external transaction): {total}",
-        "all": "Total donation: {total}"
+        "all": "Total takings: {total}"
       },
       "error": {
         "amount": {
@@ -236,13 +237,13 @@
     },
     "placeholder": {
       "comment": "Comment / Question",
-      "received": "When did you received the donation?",
+      "received": "When did you received the takings?",
       "involved": {
-        "label": "Who has given the donation to you?",
+        "label": "Who has given the taking to you?",
         "indicator": "Jane Doe of your crew..."
       },
       "context": {
-        "label": "How does the donation was collected?",
+        "label": "How was the taking collected?",
         "indicator": "e.g. street festival"
       },
       "category": "Category",
@@ -274,6 +275,7 @@
       },
       "externalDetails": {
         "receipt": "Donation receipt required?",
+        "description": "Please give these informations to your external contact person. It helps us to allocate the donation the this taking:",
         "partner": {
           "label": "Who transfers the donation?",
           "name": "Location / Organizer",
@@ -283,53 +285,56 @@
         },
         "account": {
           "label": "Donation account:",
-          "owner": "Empfänger: Viva con Agua",
+          "owner": "Account owner: Viva con Agua",
           "iban": "IBAN: DE58 2005 0550 12681 351 81",
           "bic": "BIC: HASPDEHHXXX"
         }
+      },
+      "internalDetails": {
+        "description": "Please use these informations for your deposit of the taking. It helps us to allocate the deposit the this taking:"
       }
+    }
+  },
+  "deposits": {
+    "header": {
+      "box": "Deposits"
     },
-    "deposits": {
-      "header": {
-        "box": "Deposits"
+    "table": {
+      "head": {
+        "created": "Created",
+        "date": "Date of deposit",
+        "crew": "Crew",
+        "amount": "Amount",
+        "donations": "Associated donations",
+        "supporter": "Involved supporter",
+        "state": "State",
+        "confirmed": "Confirmed by"
       },
-      "table": {
-        "head": {
-          "created": "Created",
-          "date": "Date of deposit",
-          "crew": "Crew",
-          "amount": "Amount",
-          "donations": "Associated donations",
-          "supporter": "Involved supporter",
-          "state": "State",
-          "confirmed": "Confirmed by"
-        },
-      
-        "hint": {
-          "openDeposit": "{amount} are not assigned to a donation.",
-          "dates": {
-            "received": "Date of deposit: {date}",
-            "created": "Created: {date}",
-            "confirmed": "Confirmed: {date}",
-            "unconfirmed": "Not confirmed"
-          }
-        }
-      },
-      "placeholder": {
-        "amount": "Deposited amount",
-        "dateOfDeposit": "When?",
-        "searchDonation": "Select a donation"
-      },
-      "errors": {
-        "noValueForAssignedDonation": "Missing amount...",
-        "valueForAssignedDonationOutOfRange": "Out of range...",
-        "takingsNotFound": "No takings name",
-        "takingsBackendError": {
-          "title": "Internal error",
-          "msg": "No taking has been found."
+      "hint": {
+        "openDeposit": "{amount} are not assigned to a donation.",
+        "dates": {
+          "received": "Date of deposit: {date}",
+          "created": "Created: {date}",
+          "confirmed": "Confirmed: {date}",
+          "unconfirmed": "Not confirmed"
         }
       }
     },
+    "placeholder": {
+      "amount": "Deposited amount",
+      "dateOfDeposit": "When?",
+      "searchDonation": "Select a donation"
+    },
+    "errors": {
+      "noValueForAssignedDonation": "Missing amount...",
+      "valueForAssignedDonationOutOfRange": "Out of range...",
+      "takingsNotFound": "No takings name",
+      "takingsBackendError": {
+        "title": "Internal error",
+        "msg": "No taking has been found."
+      }
+    }
+  },
     "currencies": {
       "default": "USD",
       "label": {
@@ -343,7 +348,6 @@
       "label": {
         "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
-    }
   },
   "takings": {
     "head":{
@@ -367,7 +371,8 @@
         "amount": "Amount",
         "deposited": "Deposited",
         "date": "Date",
-        "supporter": "Supporter"
+        "supporter": "Supporter",
+        "norms": "Type of taking"
       },
       "dates": {
         "received": "Received: {date}",
@@ -397,188 +402,10 @@
       "description": "Please add a description"
     }
   },
-  "economic-add": {
-    "header": "Wirtschaftsgeld hinzufügen",
-    "box": {
-      "list": "Alle Wirtschafstsgelder",
-      "list-methods": "Editieren",
-      "save": "Speichern",
-      "amount": "Summe",
-      "externalTransactions": "Details externer Überweiser",
-      "action": "Aktion"
-    },
-    "comment": "Bemerkung / Frage",
-    "buttons": {
-      "add": "Wirtschaftsgeld hinzufügen",
-      "save": "Speichern"
-    },
-    "context": {
-      "description": {
-        "label": "Wo ist das Wirtschaftsgeld entstanden?",
-        "indicator": "z.B. Hurricane 2019"
-      },
-      "category": {
-        "label": "Kategorie",
-        "categories": {
-          "selling": "Verkauf (Merch / etc.)",
-          "service": "Dienstleistung (Barschicht / etc.)",
-          "other": "Anderes",
-          "description": "Beschreibung.."
-        }
-      }
-    },
-    "calculator":{
-      "header": {     
-        "label": {
-          "EUR": "EUR €",
-          "CHF": "Fr.",
-          "USD": "$ USD"
-        }
-      },
-      "involved": {
-        "label": "Von wem hast du das Geld erhalten?",
-        "indicator": "Max Mustermann aus deiner Crew..."
-      },
-      "received": "Wann hast du das Wirtschaftsgeld erhalten?",
-      "source": {
-        "label": {
-          "sourceSelect": "Woher kommt das Wirtschaftsgeld?",
-          "sum": "Summe",
-          "sourceType": {
-            "cash": "Bar",
-            "extern": "externe Überweisung"
-          }
-        },
-        "categories": {
-          "unknown": "Kann ich nicht zuordnen",
-          "can": "Kasse",
-          "other": "Sonstiges"
-        },
-        "description": "Beschreibung...",
-        "total": {
-            "cash": "Summe (Bar): {total}",
-          "extern": "Summe (durch externe Überweisung): {total}",
-          "all": "Summe Wirtschaftsgeld: {total}"
-        }
-      },
-      "total": {
-        "cash": "Summe (Bar): {total}",
-        "extern": "Summe (durch externe Überweisung): {total}",
-        "all": "Summe Wirtschaftsgeld: {total}"
-      }
-    },
-    "deadline": {
-      "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
-      "date": "bis spätestens {deadline}",
-      "immediately": "umgehend"
-    }
-  },
-  "trash":{
-    "trash": {
-      "box": {
-        "list": "All takings",
-        "list-methods": "Edit",
-        "save": "Save",
-        "amount": "Takings amount",
-        "externalTransactions": "Details external transaction",
-        "action": "Event"
-      },
-      "source": {
-        "sourceSelect": "What type of taking?",
-        "sum": "Sum",
-        "sourceType": {
-          "cash": "Cash",
-          "extern": "external transaction"
-        }
-      },
-      "table": {
-        "title": "Name / Event",
-        "crew": "Crew",
-        "amount": "Amount",
-        "deposited": "Deposited",
-        "date": "Date",
-        "supporter": "Supporter"
-      }
-    },
-    "hints": {
-      "deadline": {
-        "prefix": "Please deposit the money, using the banking card {0}!",
-        "date": "until {deadline}",
-        "immediately": "immediately"
-      },
-      "dates": {
-        "received": "Received: {date}",
-        "created": "Recorded: {date}"
-      },
-      "total": {
-        "cash": "Total (cash): {total}",
-        "extern": "Total (external transaction): {total}",
-        "all": "Total takings: {total}"
-      },
-      "error": {
-        "amount": {
-          "pattern": "Wrong money format (e.g. $37.50)"
-        }
-      }
-    },
-    "buttons": {
-      "add": "Add taking",
-      "save": "Save"
-    },
-    "placeholder": {
-      "comment": "Comment / Question",
-      "received": "When did you received the takings?",
-      "involved": {
-        "label": "Who has given the takings to you?",
-        "indicator": "Jane Doe of your crew..."
-      },
-      "context": {
-        "label": "Where was the taking collected?",
-        "indicator": "e.g. Hurricane 2019"
-      },
-      "category": "Category",
-      "categories": {
-        "selling": "Selling (Merch / Etc.)",
-        "service": "Service (Bar / Etc.)",
-        "other": "Other",
-        "description": "Description..."
-      },
-      "source": {
-        "unknown": "I don't know",
-        "can": "Box",
-        "other": "Other",
-        "Madescription": "Description..."
-      },
-      "externalDetails": {
-        "partner": {
-          "label": "Who transfers the taking?",
-          "name": "Location / Organizer",
-          "asp": "Contact person",
-          "email": "Email address",
-          "address": "Postal address"
-        }
-      }
-    },
-    "currencies": {
-      "default": "USD",
-      "label": {
-        "EUR": "EUR €",
-        "CHF": "Fr.",
-        "USD": "$ USD"
-      }
-    },
-    "externalTransaction": {
-      "reasonForPayment": "Reason for payment",
-      "label": {
-        "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
-      }
-    }
-  },
   "takingsEdit": {
     "header": {
       "add": "Add Taking",
       "edit": "Edit Taking"
     }
   }
-
 }

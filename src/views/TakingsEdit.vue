@@ -13,7 +13,7 @@
                 </el-card>
 
                 <el-card v-if="showExternalTransactions" class="box-card tail expand">
-                    <ExternalTransactionDetails v-model="taking.details" />
+                    <ExternalTransactionDetails v-model="taking.details" :name="taking.context.description" />
                 </el-card>
                 <el-card class="box-card tail expand">
                     <TakingDeadline :received="taking.amount.received" />
@@ -23,6 +23,11 @@
                             :placeholder="$t('takings.placeholder.comment')"
                             v-model="taking.comment">
                     </el-input>
+
+                    <el-card class="box-card tail expand">
+                        <div><span>{{ $t("donation.placeholder.internalDetails.description") }}</span></div><br/>
+                        <ReasonForPayment :name="taking.context.description"/>
+                    </el-card>
                     <button
                             v-if="!updateMode"
                             :disabled="!validDonation"
@@ -51,6 +56,7 @@
     import { Input, Form, Card} from 'element-ui'
     import TakingCalculator from '@/components/takings/edit/TakingCalculator.vue'
     import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
+    import ReasonForPayment from '@/components/ReasonForPayment.vue'
     import TakingDeadline from '@/components/takings/edit/TakingDeadline.vue'
     import TakingContext from '@/components/takings/edit/TakingContext.vue'
 
@@ -59,6 +65,7 @@
         components: {
             'TakingCalculator': TakingCalculator,
             'ExternalTransactionDetails': ExternalTransactionDetails,
+            'ReasonForPayment': ReasonForPayment,
             'TakingDeadline': TakingDeadline,
             'TakingContext': TakingContext,
             'VcAFrame': VcAFrame,
