@@ -187,26 +187,33 @@
                 return this.getTotal()
             },
             formatReceived: function() {
+console.log(new Date(this.amount.received))
                 return new Date(this.amount.received)
             }
         },
         created () {
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                if(this.value.hasOwnProperty("received")) {
-                    this.received = this.value.received
+            if(typeof this.amount !== "undefined" && this.amount !== null) {
+                if(this.amount.hasOwnProperty("received")) {
+                    this.received = this.formatReceived
+                    this.dataForm.when = this.getWhen()
                 }
-                if(this.value.hasOwnProperty("sources")) {
-                    this.sources = this.value.sources
+                if(this.amount.hasOwnProperty("sources")) {
+                    this.sources = this.amount.sources
                 }
-                if(this.value.hasOwnProperty("involvedSupporter")) {
-                    this.involvedSupporter = this.value.involvedSupporter
+                if(this.amount.hasOwnProperty("involvedSupporter")) {
+                    this.involvedSupporter = this.amount.involvedSupporter
                 }
             }
-            this.dataForm.when = this.formatReceived
         },
         methods: {
           addSourceType(value) {
             this.amount.sources.push(value)
+          },
+          getWhen() {
+            var day = "13.Dec.2019"
+            var month = "13.Dec.2019"
+            var year = this.formatReceived.getFullYear()
+            return formattedWhen
           },
           changeDonation(source) {
             var copy = this.sources.slice(0)

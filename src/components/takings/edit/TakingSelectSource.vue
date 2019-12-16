@@ -17,7 +17,7 @@
 
 <script>
 
-import {FormItem, Select, Option } from 'element-ui'
+import { Select, Option } from 'element-ui'
 
 export default {
   name: 'TakingSelectSource',

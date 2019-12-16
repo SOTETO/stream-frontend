@@ -86,6 +86,7 @@
                         "receipt": false,
                         "partner": {}
                     },
+                    "description": "",
                     "amount": {
                         "received": Date.now(),
                         "sources": [],
@@ -105,6 +106,7 @@
         )
             .then(response => {
               if(response.status === 200) {
+console.log(response.data)
                 this.taking = response.data
               }
             })
@@ -127,7 +129,7 @@
               return this.id !== null
             },
             showExternalTransactions () {
-                return this.taking.amount.sources.filter(s => s.typeOfSource === "extern").length > 0
+                return this.taking.amount.sources.filter(s => s.typeOfSource.category === "extern").length > 0
             },
             showCalculator () {
                 return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
