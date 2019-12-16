@@ -237,13 +237,13 @@
     },
     "placeholder": {
       "comment": "Bemerkung / Frage",
-      "received": "Wann hast du die Spende erhalten?",
+      "received": "Wann hast du die Einnahme erhalten?",
       "involved": {
-        "label": "Von wem hast du die Spende erhalten?",
+        "label": "Von wem hast du die Einnahme erhalten?",
         "indicator": "Max Mustermann aus deiner Crew..."
       },
       "context": {
-        "label": "Wobei ist die Spende entstanden?",
+        "label": "Wobei ist die Einnahme entstanden?",
         "indicator": "z.B. Straßenfest"
       },
       "category": "Kategorie",
@@ -276,7 +276,7 @@
       "externalDetails": {
         "receipt": "Spendenbescheinigung erwünscht?",
         "partner": {
-          "label": "Wer überweist die Spende?",
+          "label": "Wer überweist die Einnahme?",
           "name": "Location / Veranstalter",
           "asp": "Ansprechperson",
           "email": "Emailadresse",
@@ -316,6 +316,11 @@
         }
       }
     },
+      "placeholder": {
+        "amount": "Eingezahlter Betrag",
+        "dateOfDeposit": "Wann?",
+        "searchDonation": "Wähle eine Spende"
+      },
     "errors": {
       "noValueForAssignedDonation": "Der Anteil fehlt...",
       "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
@@ -362,7 +367,8 @@
         "amount": "Betrag",
         "deposited": "Eingezahlt",
         "date": "Datum",
-        "supporter": "Beteiligte Supporter"
+        "supporter": "Beteiligte Supporter",
+        "norms": "Art der Einnahme"
       },
       "dates": {
         "received": "Erhalten: {date}",
@@ -390,184 +396,6 @@
     "validations": {
       "category": "Bitte gib eine Kategorie an",
       "description": "Bitte füge eine Beschreibung hinzu"
-    }
-  },
-  
-  "economic-add": {
-    "header": "Wirtschaftsgeld hinzufügen",
-    "box": {
-      "list": "Alle Wirtschafstsgelder",
-      "list-methods": "Editieren",
-      "save": "Speichern",
-      "amount": "Summe",
-      "externalTransactions": "Details externer Überweiser",
-      "action": "Aktion"
-    },
-    "comment": "Bemerkung / Frage",
-    "buttons": {
-      "add": "Wirtschaftsgeld hinzufügen",
-      "save": "Speichern"
-    },
-    "context": {
-      "description": {
-        "label": "Wo ist das Wirtschaftsgeld entstanden?",
-        "indicator": "z.B. Hurricane 2019"
-      },
-      "category": {
-        "label": "Kategorie",
-        "categories": {
-          "selling": "Verkauf (Merch / etc.)",
-          "service": "Dienstleistung (Barschicht / etc.)",
-          "other": "Anderes",
-          "description": "Beschreibung.."
-        }
-      }
-    },
-    "calculator":{
-      "header": {     
-        "label": {
-          "EUR": "EUR €",
-          "CHF": "Fr.",
-          "USD": "$ USD"
-        }
-      },
-      "involved": {
-        "label": "Von wem hast du das Geld erhalten?",
-        "indicator": "Max Mustermann aus deiner Crew..."
-      },
-      "received": "Wann hast du das Wirtschaftsgeld erhalten?",
-      "source": {
-        "label": {
-          "sourceSelect": "Woher kommt das Wirtschaftsgeld?",
-          "sum": "Summe",
-          "sourceType": {
-            "cash": "Bar",
-            "extern": "externe Überweisung"
-          }
-        },
-        "categories": {
-          "unknown": "Kann ich nicht zuordnen",
-          "can": "Kasse",
-          "other": "Sonstiges"
-        },
-        "description": "Beschreibung...",
-        "total": {
-            "cash": "Summe (Bar): {total}",
-          "extern": "Summe (durch externe Überweisung): {total}",
-          "all": "Summe Wirtschaftsgeld: {total}"
-        }
-      },
-      "total": {
-        "cash": "Summe (Bar): {total}",
-        "extern": "Summe (durch externe Überweisung): {total}",
-        "all": "Summe Wirtschaftsgeld: {total}"
-      }
-    },
-    "deadline": {
-      "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
-      "date": "bis spätestens {deadline}",
-      "immediately": "umgehend"
-    }
-  },
-  "trash": {
-    "trash": {
-      "box": {
-        "list": "Alle Wirtschafstsgelder",
-        "list-methods": "Editieren",
-        "save": "Speichern",
-        "amount": "Summe",
-        "externalTransactions": "Details externer Überweiser",
-        "action": "Aktion"
-      },
-      "donationSource": {
-        "sourceSelect": "Woher kommt das Wirtschaftsgeld?",
-        "sum": "Summe",
-        "sourceType": {
-          "cash": "Bar",
-          "extern": "externe Überweisung"
-        }
-      },
-      "table": {
-        "title": "Name / Aktion",
-        "crew": "Crew",
-        "amount": "Betrag",
-        "deposited": "Eingezahlt",
-        "date": "Datum",
-        "supporter": "Beteiligte Supporter"
-      }
-    },
-    "hints": {
-      "deadline": {
-        "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
-        "date": "bis spätestens {deadline}",
-        "immediately": "umgehend"
-      },
-      "dates": {
-        "received": "Erhalten: {date}",
-        "created": "Eingetragen: {date}"
-      },
-      "total": {
-        "cash": "Summe (Bar): {total}",
-        "extern": "Summe (durch externe Überweisung): {total}",
-        "all": "Summe Wirtschaftsgeld: {total}"
-      },
-      "error": {
-        "amount": {
-          "pattern": "Falsches Format (z.B. 37,50 € oder Fr. 37.50)"
-        }
-      }
-    },
-    "buttons": {
-      "add": "Wirtschaftsgeld hinzufügen",
-      "save": "Speichern"
-    },
-    "placeholder": {
-      "comment": "Bemerkung / Frage",
-      "received": "Wann hast du das Wirtschaftsgeld erhalten?",
-      "involved": {
-        "label": "Von wem hast du das Geld erhalten?",
-        "indicator": "Max Mustermann aus deiner Crew..."
-      },
-      "context": {
-        "label": "Wo ist das Wirtschaftsgeld entstanden?",
-        "indicator": "z.B. Hurricane 2019"
-      },
-      "category": "Kategorie",
-      "categories": {
-        "selling": "Verkauf (Merch / etc.)",
-        "service": "Dienstleistung (Barschicht / etc.)",
-        "other": "Anderes",
-        "description": "Beschreibung.."
-        },
-      "source": {
-        "unknown": "Kann ich nicht zuordnen",
-        "can": "Kasse",
-        "other": "Sonstiges",
-        "description": "Beschreibung..."
-      },
-      "externalDetails": {
-        "partner": {
-          "label": "Wer überweist das Wirtschaftsgeld?",
-          "name": "Location / Veranstalter",
-          "asp": "Ansprechperson",
-          "email": "Emailadresse",
-          "address": "Postanschrift"
-        }
-      }
-    },
-    "currencies": {
-      "default": "EUR",
-      "label": {
-        "EUR": "EUR €",
-        "CHF": "Fr.",
-        "USD": "$ USD"
-      }
-    },
-    "externalTransaction": {
-      "reasonForPayment": "Verwendungszweck",
-      "label": {
-        "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
-      }
     }
   },
   "takingsEdit": {
