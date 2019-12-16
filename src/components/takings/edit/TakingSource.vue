@@ -17,12 +17,12 @@
         </td>
         <td>
             <el-form-item>
-                <el-radio v-model="source.typeOfSource" label="cash">&nbsp;</el-radio>
+                <el-radio v-model="source.typeOfSource.category" label="cash">&nbsp;</el-radio>
             </el-form-item>
         </td>
         <td>
             <el-form-item>
-                <el-radio v-model="source.typeOfSource" label="extern" >&nbsp;</el-radio>
+                <el-radio v-model="source.typeOfSource.category" label="extern" >&nbsp;</el-radio>
             </el-form-item>
         </td>
     </tr>
@@ -48,7 +48,9 @@
                   "currency": "EUR"
                 },
                 "category": "",
-                "typeOfSource": ""
+                "typeOfSource": {
+                  "category": ""
+                }
               }
             }
           },
