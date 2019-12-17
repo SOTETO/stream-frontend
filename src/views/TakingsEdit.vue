@@ -94,7 +94,18 @@
                     "created": Date.now(),
                     "updated": Date.now(),
                 },
-                rules: {},
+                rules: {
+                   context: [{
+                     required: true
+                     }],
+                   comment: [{
+                     required: true
+                   }],
+                  amount: [{
+                     required: true
+                  }],
+
+                },
             }
         },
         mounted () {
@@ -118,10 +129,10 @@
             },
             validDonation () {
               function validateSource(source) {
-                return source.amount.hasOwnProperty("amount") && source.amount.amount > 0 &&
+                  return source.amount.hasOwnProperty("amount") && source.amount.amount > 0 &&
                 source.hasOwnProperty("typeOfSource") && source.typeOfSource !== ""
               }
-              return this.taking.amount.sources.length > 0 && this.taking.amount.sources.every(validateSource)
+              return this.taking.amount.sources.length > 0 && this.taking.context.category !== "" && this.taking.context.description !== "" && this.taking.created !== "" && this.taking.amount.involvedSupporter !== "" && this.taking.amount.sources.every(validateSource)
             }
         },
         methods: {

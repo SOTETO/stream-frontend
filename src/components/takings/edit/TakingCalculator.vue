@@ -99,7 +99,7 @@
             "el-input": Input,*/
             "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
-            "VcABox": VcABox,
+     /*       "VcABox": VcABox, */
             "TakingSelectSource": TakingSelectSource
         },
         props: {
@@ -234,6 +234,13 @@
                     "sources": this.sources,
                     "involvedSupporter": this.involvedSupporter
                 }
+                this.$refs[this.dataForm].validate((valid) => {
+                  if (valid) {
+                    alert('submit');
+                  } else {
+                    console.log('error submit');
+                  }
+                });
                 this.$emit("input", result)
             },
             getCheckedSource(category) {
