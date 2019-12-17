@@ -32,6 +32,10 @@
                 "reasonForPayment": ""
             }
         },
+        created: function () {
+            this.reasonForPayment = this.reasonForPayments
+            this.$emit("addReason", this.reasonForPayment)
+        },
         computed: {
             reasonForPayments () {
 
@@ -52,7 +56,7 @@
                     address  = this.address.toUpperCase().replace(/\s/g, ' ')
                 }
                 
-                var reason = "\r\n" + crewName + " - " + name
+                var reason = crewName + " - " + name
 
 		if (this.typeOfSource == "external") {
                     reason  += " - " + address

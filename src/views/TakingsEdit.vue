@@ -13,7 +13,7 @@
                 </el-card>
 
                 <el-card v-if="showExternalTransactions" class="box-card tail expand">
-                    <ExternalTransactionDetails v-model="taking.details" :name="taking.context.description" />
+                    <ExternalTransactionDetails v-model="taking.details" :sources="taking.amount.sources" :name="taking.context.description" />
                 </el-card>
                 <el-card class="box-card tail expand">
                     <TakingDeadline :received="taking.amount.received" />
@@ -93,6 +93,7 @@
                         "receipt": false,
                         "partner": {}
                     },
+                    "description": "",
                     "amount": {
                         "received": Date.now(),
                         "sources": [],
@@ -134,7 +135,7 @@
               return this.id !== null
             },
             showExternalTransactions () {
-                return this.taking.amount.sources.filter(s => s.typeOfSource === "extern").length > 0
+                return this.taking.amount.sources.filter(s => s.typeOfSource.category === "extern").length > 0
             },
             showCalculator () {
                 return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
@@ -155,10 +156,36 @@
                 'getById',
             ]),
             submitForm () {
+
+                if(this.taking.amount.sources.length > 0) {
+                    for (var source in this.taking.amount.sources) {
+                        this.taking.amount.sources[source].typeOfSource.external = {
+                            "location": this.taking.details.partner.name,
+                            "contactPerson": this.taking.details.partner.asp,
+                            "email": this.taking.details.partner.email,
+                            "address": this.taking.details.partner.address,
+                            "receipt": this.taking.details.receipt,
+                        }
+                    }
+                }
+
                 this.add(this.taking)
                 this.$router.push('/takings')
             },
             updateForm () {
+
+                if(this.taking.amount.sources.length > 0) {
+                    for (var source in this.taking.amount.sources) {
+                        this.taking.amount.sources[source].typeOfSource.external = {
+                            "location": this.taking.details.partner.name,
+                            "contactPerson": this.taking.details.partner.asp,
+                            "email": this.taking.details.partner.email,
+                            "address": this.taking.details.partner.address,
+                            "receipt": this.taking.details.receipt
+                        }
+                    }
+                }
+
                 this.update(this.taking)
                 this.$router.push('/takings')
             }

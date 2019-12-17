@@ -4,7 +4,7 @@
             <div class="category">
                   <span> {{$t("donation.placeholder.source." + source.category) }}</span>
                 <el-form-item>
-                    <el-input v-model="descriptionTextVar" :placeholder="$t('donation.placeholder.source.description')"></el-input>
+                    <el-input v-model="source.description" :placeholder="$t('donation.placeholder.source.description')"></el-input>
                 </el-form-item>
             </div>
         </td>
@@ -48,6 +48,7 @@
                   "currency": "EUR"
                 },
                 "category": "",
+                "description": "",
                 "typeOfSource": {
                   "category": ""
                 }
@@ -85,7 +86,7 @@
                         "currency": this.source.amount.currency,
                         "type": this.typeVar
                     }
-                    if(this.description) {
+                    if(this.descriptionText) {
                         result["description"] = this.descriptionTextVar
                     }
                     this.$emit('input', result)

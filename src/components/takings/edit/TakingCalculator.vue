@@ -32,6 +32,7 @@
             >
                 <el-date-picker
                     v-model="dataForm.when"
+                    @change="changeWhen"
                     :placeholder="$t('donation.placeholder.received')"
                     format="dd.MMM.yyyy"
                     :default-value="formatReceived"
@@ -106,26 +107,40 @@
               type: Object,
               default: function () {
                 return {
-                  "received": this.dataForm.when,
+                  "received": '',
                   "sources": '',
                   "involvedSupporter": this.dataForm.who
                 }
               }
             },
         },
+        watch: {
+            amount: function(amount, oldAmount) {
+                if(amount.hasOwnProperty("received")) {
+                    this.received = this.received
+                    this.dataForm.when = this.formatReceived
+                }
+                if(amount.hasOwnProperty("sources")) {
+                    this.sources = amount.sources
+                }
+                if(amount.hasOwnProperty("involvedSupporter")) {
+                    this.involvedSupporter = amount.involvedSupporter
+                }
+            }
+        },
         data () {
             var sources = []
-            var received = Date.now()
+            var received = new Date()
             var involvedSupporter = []
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                if(this.value.hasOwnProperty("sources")) {
-                    sources = this.value.sources
+            if(typeof this.amount !== "undefined" && this.amount !== null) {
+                if(this.amount.hasOwnProperty("sources")) {
+                    sources = this.amount.sources
                 }
-                if(this.value.hasOwnProperty("received")) {
-                    received = this.dataForm.when
+                if(this.amount.hasOwnProperty("received")) {
+                    received = this.amount.received
                 }
-                if(this.value.hasOwnProperty("involvedSupporter")) {
-                    involvedSupporter = this.value.involvedSupporter
+                if(this.amount.hasOwnProperty("involvedSupporter")) {
+                    involvedSupporter = this.amount.involvedSupporter
                 }
             }
 
@@ -139,7 +154,7 @@
                 result: Number,
 
                 dataForm: {
-                  when:'',
+                  when: '',
                   who: '',
                 },
 
@@ -191,22 +206,28 @@
             }
         },
         created () {
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                if(this.value.hasOwnProperty("received")) {
-                    this.received = this.value.received
+            if(typeof this.amount !== "undefined" && this.amount !== null) {
+                if(this.amount.hasOwnProperty("received")) {
+                    this.received = this.received
+                    this.dataForm.when = this.formatReceived
                 }
-                if(this.value.hasOwnProperty("sources")) {
-                    this.sources = this.value.sources
+                if(this.amount.hasOwnProperty("sources")) {
+                    this.sources = this.amount.sources
                 }
-                if(this.value.hasOwnProperty("involvedSupporter")) {
-                    this.involvedSupporter = this.value.involvedSupporter
+                if(this.amount.hasOwnProperty("involvedSupporter")) {
+                    this.involvedSupporter = this.amount.involvedSupporter
                 }
             }
-            this.dataForm.when = this.formatReceived
         },
         methods: {
           addSourceType(value) {
             this.amount.sources.push(value)
+          },
+          getWhen() {
+            var day = this.formatReceived.getDate()
+            var month = this.formatReceived.toString().substr(4,3)
+            var year = this.formatReceived.getFullYear()
+            return day + "." + month + "." + year
           },
           changeDonation(source) {
             var copy = this.sources.slice(0)
@@ -219,6 +240,10 @@
             var copy = this.sources.slice(0)
             copy = copy.filter(s => category !== s.category)
             this.sources = copy
+            this.commit()
+          },
+          changeWhen() {
+            this.received = Date.parse(this.dataForm.when)
             this.commit()
           },
           getTotal(part) {
