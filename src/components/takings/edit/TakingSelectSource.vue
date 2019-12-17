@@ -43,6 +43,7 @@ export default {
                 },
                 "category": "unknown",
                 "norms": "DONATION",
+                "typeOfSource": {},
                 "desc": false
               }
             },
@@ -56,6 +57,7 @@ export default {
                 },
                 "category": "can",
                 "norms": "DONATION",
+                "typeOfSource": {},
                 "desc": false
               }
             },
@@ -69,6 +71,7 @@ export default {
                 },
                 "category": "box",
                 "norms": "DONATION",
+                "typeOfSource": {},
                 "desc": false
               }
             },
@@ -82,6 +85,7 @@ export default {
                 },
                 "category": "gl",
                 "norms": "DONATION",
+                "typeOfSource": {},
                 "desc": false
               }
             },
@@ -95,6 +99,7 @@ export default {
                 },
                 "category": "other",
                 "norms": "DONATION",
+                "typeOfSource": {},
                 "desc": true
               }
             }
@@ -112,6 +117,7 @@ export default {
                 },
                 "category": "merch",
                 "norms": "ECONOMIC",
+                "typeOfSource": {},
                 "desc": false
               }
             },
@@ -125,6 +131,7 @@ export default {
                 },
                 "category": "other_ec",
                 "norms": "ECONOMIC",
+                "typeOfSource": {},
                 "desc": false
               }
             }

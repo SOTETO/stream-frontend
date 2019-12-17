@@ -275,6 +275,7 @@
       },
       "externalDetails": {
         "receipt": "Donation receipt required?",
+        "description": "Please give these informations to your external contact person. It helps us to allocate the donation the this taking:",
         "partner": {
           "label": "Who transfers the donation?",
           "name": "Location / Organizer",
@@ -288,6 +289,9 @@
           "iban": "IBAN: DE58 2005 0550 12681 351 81",
           "bic": "BIC: HASPDEHHXXX"
         }
+      },
+      "internalDetails": {
+        "description": "Please use these informations for your deposit of the taking. It helps us to allocate the deposit the this taking:"
       }
     }
   },

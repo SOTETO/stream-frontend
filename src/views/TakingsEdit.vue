@@ -13,7 +13,7 @@
                 </el-card>
 
                 <el-card v-if="showExternalTransactions" class="box-card tail expand">
-                    <ExternalTransactionDetails v-model="taking.details" />
+                    <ExternalTransactionDetails v-model="taking.details" :sources="taking.amount.sources" :name="taking.context.description" />
                 </el-card>
                 <el-card class="box-card tail expand">
                     <TakingDeadline :received="taking.amount.received" />
@@ -23,6 +23,11 @@
                             :placeholder="$t('takings.placeholder.comment')"
                             v-model="taking.comment">
                     </el-input>
+
+                    <el-card class="box-card tail expand">
+                        <div><span>{{ $t("donation.placeholder.internalDetails.description") }}</span></div><br/>
+                        <ReasonForPayment :name="taking.context.description"/>
+                    </el-card>
                     <button
                             v-if="!updateMode"
                             :disabled="!validDonation"
@@ -51,6 +56,7 @@
     import { Input, Form, Card} from 'element-ui'
     import TakingCalculator from '@/components/takings/edit/TakingCalculator.vue'
     import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
+    import ReasonForPayment from '@/components/ReasonForPayment.vue'
     import TakingDeadline from '@/components/takings/edit/TakingDeadline.vue'
     import TakingContext from '@/components/takings/edit/TakingContext.vue'
 
@@ -59,6 +65,7 @@
         components: {
             'TakingCalculator': TakingCalculator,
             'ExternalTransactionDetails': ExternalTransactionDetails,
+            'ReasonForPayment': ReasonForPayment,
             'TakingDeadline': TakingDeadline,
             'TakingContext': TakingContext,
             'VcAFrame': VcAFrame,
@@ -106,7 +113,6 @@
         )
             .then(response => {
               if(response.status === 200) {
-console.log(response.data)
                 this.taking = response.data
               }
             })
@@ -150,10 +156,36 @@ console.log(response.data)
                 'getById',
             ]),
             submitForm () {
+
+                if(this.taking.amount.sources.length > 0) {
+                    for (var source in this.taking.amount.sources) {
+                        this.taking.amount.sources[source].typeOfSource.external = {
+                            "location": this.taking.details.partner.name,
+                            "contactPerson": this.taking.details.partner.asp,
+                            "email": this.taking.details.partner.email,
+                            "address": this.taking.details.partner.address,
+                            "receipt": this.taking.details.receipt,
+                        }
+                    }
+                }
+
                 this.add(this.taking)
                 this.$router.push('/takings')
             },
             updateForm () {
+
+                if(this.taking.amount.sources.length > 0) {
+                    for (var source in this.taking.amount.sources) {
+                        this.taking.amount.sources[source].typeOfSource.external = {
+                            "location": this.taking.details.partner.name,
+                            "contactPerson": this.taking.details.partner.asp,
+                            "email": this.taking.details.partner.email,
+                            "address": this.taking.details.partner.address,
+                            "receipt": this.taking.details.receipt
+                        }
+                    }
+                }
+
                 this.update(this.taking)
                 this.$router.push('/takings')
             }

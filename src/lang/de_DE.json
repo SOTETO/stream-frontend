@@ -275,6 +275,7 @@
       },
       "externalDetails": {
         "receipt": "Spendenbescheinigung erwünscht?",
+        "description": "Bitte gib diese Informationen an deine externe Kontaktperson. Das hilft uns dabei die Überweisung mit dieser Einnahme zu verknüpfen:",
         "partner": {
           "label": "Wer überweist die Einnahme?",
           "name": "Location / Veranstalter",
@@ -288,6 +289,9 @@
           "iban": "IBAN: DE58 2005 0550 12681 351 81",
           "bic": "BIC: HASPDEHHXXX"
         }
+      },
+      "internalDetails": {
+        "description": "Bitte nutze diese Informationen für deine Einzahlung mit der Einzahlkarte. Das hilft uns dabei die Einzahlung mit dieser Einnahme zu verknüpfen:"
       }
     }
   },
