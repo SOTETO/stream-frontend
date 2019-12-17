@@ -317,7 +317,8 @@
           "created": "Created: {date}",
           "confirmed": "Confirmed: {date}",
           "unconfirmed": "Not confirmed"
-        }
+        },
+        "confirm": "confirm"
       }
     },
     "placeholder": {
