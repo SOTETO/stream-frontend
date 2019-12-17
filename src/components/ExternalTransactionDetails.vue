@@ -28,7 +28,6 @@
 </template>
 
 <script>
-    const uuidv5 = require('uuid/v5');
     import { Input, Checkbox, FormItem } from 'element-ui'
     import ReasonForPayment from '@/components/ReasonForPayment.vue'
 
