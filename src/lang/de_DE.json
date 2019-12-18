@@ -189,7 +189,7 @@
         "deposit": "Einzahlung vermerken"
       },
       "donationSource": {
-        "sourceSelect": "Woher kommt die Spende?",
+        "sourceSelect": "Woher kommt die Einnahme?",
         "sum": "Summe",
         "sourceType": {
           "cash": "Bar",
@@ -262,7 +262,7 @@
       "source": {
         "group": {
           "donations": "Spendeneinnahmen",
-          "economic": "Wirtschaftseinnahmen"
+          "economic": "Wirtschaftliche Einnahmen"
         },
         "unknown": "Kann ich nicht zuordnen",
         "can": "Pfandtonne",
@@ -317,7 +317,8 @@
           "created": "Eingetragen: {date}",
           "confirmed": "Bestätigt: {date}",
           "unconfirmed": "Nicht bestätigt"
-        }
+        },
+        "confirm": "bestätigen"
       }
     },
       "placeholder": {
@@ -390,7 +391,7 @@
       "save": "Einnahme speichern",
       "update": "Einnahme aktualisieren",
       "donation": "Spende hinzufügen",
-      "economic": "Wirtschaftsgeld hinzufügen",
+      "economic": "Wirtschaftlich Einnahmen hinzufügen",
       "depositAdd": "Einzahlung hinzufügen",
       "abort": "Einzahlung abbrechen"
     },

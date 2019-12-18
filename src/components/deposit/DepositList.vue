@@ -46,7 +46,7 @@
           <UserButton v-else :user="deposit.status.user" />
         </td>
         <td>
-          <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">Confirm</button>
+          <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">{{ $t('deposits.table.hint.confirm') }}</button>
           <StateLight v-else-if="!confirmed(deposit) && !allowedToConfirm" :value="{ 'name': $t('deposits.table.hint.dates.unconfirmed'), 'state': 0 }" />
           <div v-else>
             <StateLight :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(deposit.status.date) }), 'state': 1  }" />
