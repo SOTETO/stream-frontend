@@ -43,8 +43,8 @@
             "value": {
                 "type": Object
             },
-            "sources": {
-                "type": Array
+            sources: {
+                type: Array
             },
             "name": {
                 type: String,
@@ -96,12 +96,19 @@
             this.commit()
         },
         watch: {
-          sources: function (update) {
-            for (var source in this.sources) {
-              if (this.sources[source].typeOfSource.category === "extern") {
-                if (typeof this.sources[source].typeOfSource.external == "undefined") {
-                  this.sources[source].typeOfSource["external"] = {"location": this.partner.name, "address": this.partner.address, "contactPerson": this.partner.asp, "email": this.partner.email, "receipt": this.donationReceipt}
-               }
+          sources: {
+            deep: true,
+            handler(update) {
+              for (var source in this.sources) {
+                if (this.sources[source].typeOfSource.category === "extern") {
+                  if (typeof this.sources[source].typeOfSource.external == "undefined") {
+                    this.sources[source].typeOfSource["external"] = {"location": this.partner.name, "address": this.partner.address, "contactPerson": this.partner.asp, "email": this.partner.email, "receipt": this.donationReceipt}
+                  }
+                }else{
+                  if (typeof this.sources[source].typeOfSource.external != "undefined") {
+                    delete this.sources[source].typeOfSource.external
+                  }
+                }
               }
             }
           }
