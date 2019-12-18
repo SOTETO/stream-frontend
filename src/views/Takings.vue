@@ -27,9 +27,9 @@
             <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
               <TakingDeposit :deposit="deposit" v-on:resetDepositAddView="resetDepositAddView"></TakingDeposit>
             </el-card>
-            <el-card class="box-card tail">
+            <!--el-card class="box-card tail">
               <CrewDetail />
-            </el-card>
+            </el-card-->
         </VcAColumn>
     </VcAFrame>
 </template>
