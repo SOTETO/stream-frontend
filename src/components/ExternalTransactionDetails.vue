@@ -3,16 +3,16 @@
         <div>
             <span>{{ $t("donation.placeholder.externalDetails.partner.label") }}</span>
             <el-form-item>
-                <el-input v-model="partner.name" :placeholder="$t('donation.placeholder.externalDetails.partner.name')"></el-input>
+                <el-input v-model="partner.name" @change="changeName" :placeholder="$t('donation.placeholder.externalDetails.partner.name')"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-input v-model="partner.asp" :placeholder="$t('donation.placeholder.externalDetails.partner.asp')"></el-input>
+                <el-input v-model="partner.asp" @change="changeASP" :placeholder="$t('donation.placeholder.externalDetails.partner.asp')"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-input v-model="partner.email" :placeholder="$t('donation.placeholder.externalDetails.partner.email')"></el-input>
+                <el-input v-model="partner.email" @change="changeEmail" :placeholder="$t('donation.placeholder.externalDetails.partner.email')"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-input v-model="partner.address" :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
+                <el-input v-model="partner.address" @change="changeAddress" :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
             </el-form-item>
         </div>
         <el-form-item>
@@ -43,8 +43,8 @@
             "value": {
                 "type": Object
             },
-            "sources": {
-                "type": Array
+            sources: {
+                type: Array
             },
             "name": {
                 type: String,
@@ -71,13 +71,17 @@
         created () {
             if(this.sources.length > 0) {
                 for (var source in this.sources) {
-                    if (this.sources[source].typeOfSource.category == "extern") {
-                        this.partner.name = this.sources[source].typeOfSource.external.location
-                        this.partner.address = this.sources[source].typeOfSource.external.address
-                        this.partner.asp = this.sources[source].typeOfSource.external.contactPerson
-                        this.partner.email = this.sources[source].typeOfSource.external.email
-                        this.donationReceipt = this.sources[source].typeOfSource.external.receipt
+                  if (this.sources[source].typeOfSource.category === "extern") {
+                    if (typeof this.sources[source].typeOfSource.external == "undefined") {
+                      this.sources[source].typeOfSource["external"] = {"location": "", "address": "", "contactPerson":"", "email":"", "receipt": false}
+                    } else {
+                      this.partner.name = this.sources[source].typeOfSource.external.location
+                      this.partner.address = this.sources[source].typeOfSource.external.address
+                      this.partner.asp = this.sources[source].typeOfSource.external.contactPerson
+                      this.partner.email = this.sources[source].typeOfSource.external.email
+                      this.donationReceipt = this.sources[source].typeOfSource.external.receipt
                     }
+                  }
                 }
             }
 
@@ -91,6 +95,24 @@
             }
             this.commit()
         },
+        watch: {
+          sources: {
+            deep: true,
+            handler(update) {
+              for (var source in this.sources) {
+                if (this.sources[source].typeOfSource.category === "extern") {
+                  if (typeof this.sources[source].typeOfSource.external == "undefined") {
+                    this.sources[source].typeOfSource["external"] = {"location": this.partner.name, "address": this.partner.address, "contactPerson": this.partner.asp, "email": this.partner.email, "receipt": this.donationReceipt}
+                  }
+                }else{
+                  if (typeof this.sources[source].typeOfSource.external != "undefined") {
+                    delete this.sources[source].typeOfSource.external
+                  }
+                }
+              }
+            }
+          }
+        },
         methods: {
             commit() {
                 var result = {
@@ -99,6 +121,51 @@
                     "partner": this.partner
                 }
                 this.$emit("input", result)
+            },
+            changeName () {
+              if(this.sources.length > 0) {
+                for (var source in this.sources ) {
+                  if (this.sources[source].typeOfSource.category === "extern") {
+                    this.sources[source].typeOfSource.external.location = this.partner.name
+                  }
+                }
+              }
+            },
+            changeAddress () {
+              if(this.sources.length > 0) {
+                for (var source in this.sources ) {
+                  if (this.sources[source].typeOfSource.category === "extern") {
+                    this.sources[source].typeOfSource.external.address = this.partner.address
+                  }
+                }
+              }
+            },
+            changeASP () {
+              if(this.sources.length > 0) {
+                for (var source in this.sources ) {
+                  if (this.sources[source].typeOfSource.category === "extern") {
+                    this.sources[source].typeOfSource.external.contactPerson = this.partner.asp
+                  }
+                }
+              }
+            },
+            changeEmail () {
+              if(this.sources.length > 0) {
+                for (var source in this.sources ) {
+                  if (this.sources[source].typeOfSource.category === "extern") {
+                    this.sources[source].typeOfSource.external.email = this.partner.email
+                  }
+                }
+              }
+            },
+            changeReceipt () {
+              if(this.sources.length > 0) {
+                for (var source in this.sources ) {
+                  if (this.sources[source].typeOfSource.category === "extern") {
+                    this.sources[source].external.receipt = this.donationReceipt
+                  }
+                }
+              }
             },
             addReason(reason) {
                 this.reasonForPayment = reason

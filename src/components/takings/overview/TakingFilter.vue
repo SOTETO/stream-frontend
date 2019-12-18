@@ -5,7 +5,7 @@
        <div class="status-bar">
          <slot name="status"></slot>
        </div>
-       <button @click="collapse">{{ buttonLabel }}</button>
+       <!--button :disabled=true @click="collapse">{{ buttonLabel }}</button-->
     </div>
     <div class="content">
       <slot>

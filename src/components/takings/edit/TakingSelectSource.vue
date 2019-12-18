@@ -25,6 +25,26 @@ export default {
     'el-select': Select,
     'el-option': Option
   },
+  props: {
+    sources: {
+      type: Array,
+      required: true
+    }
+  },
+  created (){
+    this.sourceGroups = this.sourceGroups.map( entry => {
+      entry.sourceSelect = entry.sourceSelect.map(s => {
+        for(var so in this.sources) {
+          if(this.sources[so].category === s.value.category) {
+            s.disabled = true
+            console.log(s)
+          }
+        }
+        return s
+      })
+      return entry
+    })
+  },
   data () {
     return {
       "val": "",
