@@ -43,7 +43,7 @@
           :label="$t('donation.header.donationSource.sourceSelect')"
           prop="where">
           <br/>
-            <TakingSelectSource v-on:input="addSourceType($event)"/>
+            <TakingSelectSource v-on:input="addSourceType($event)" :sources="amount.sources"/>
           </el-form-item>
             <table class="sources">
                 <thead>
@@ -66,7 +66,7 @@
                         :numeric="getNumericSource(t.category)"
                         :description="t.desc"
                         :descriptionText="getDescSource(t.category)"
-                        :key="t.category"
+                        :key="t.key"
                     />
                 </tbody>
             </table>
