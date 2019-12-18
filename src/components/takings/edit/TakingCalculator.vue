@@ -34,7 +34,7 @@
                     v-model="dataForm.when"
                     @change="changeWhen"
                     :placeholder="$t('donation.placeholder.received')"
-                    format="dd.MMM.yyyy"
+                    format="dd.MMM yyyy"
                     :default-value="formatReceived"
                     :picker-options="datePickerOptions">
                 </el-date-picker>
@@ -227,7 +227,7 @@
             var day = this.formatReceived.getDate()
             var month = this.formatReceived.toString().substr(4,3)
             var year = this.formatReceived.getFullYear()
-            return day + "." + month + "." + year
+            return day + "." + month + " " + year
           },
           changeDonation(source) {
             var copy = this.sources.slice(0)
