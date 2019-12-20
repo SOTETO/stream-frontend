@@ -18,12 +18,11 @@
                 :label="$t('donation.placeholder.involved.label')"
                 prop="who"
                 >
-                <WidgetUserAutocomplete
-                        :placeholder="$t('donation.placeholder.involved.indicator')"
-                        :preselection="amount.involvedSupporter"
-                        @vca-user-selection="selectSupporter"
-                        v-model="dataForm.who"
-                />
+                <el-tag
+                  v-for="user in amount.involvedSupporter"
+                  :disable-transitions="false">
+                  {{ user.name}}
+                </el-tag>
             </el-form-item>
             <el-form-item
                 class="vca-form"
