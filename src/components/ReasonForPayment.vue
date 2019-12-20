@@ -1,6 +1,6 @@
 <template>
     <div>
-    <p>
+    <p v-if="typeOfSource == 'external'">
         <span class="donationAccount">{{ $t("donation.placeholder.externalDetails.account.label") }}</span><br/>
         <span>{{ $t("donation.placeholder.externalDetails.account.owner") }}</span><br/>
         <span>{{ $t("donation.placeholder.externalDetails.account.iban") }}</span><br/>

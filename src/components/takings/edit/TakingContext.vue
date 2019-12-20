@@ -62,7 +62,7 @@
 
                 rules: {
                   description: [
-                    { required: true, message: this.$t('takings.validations.description'), trigger:'blur' },
+                    { required: true, message: this.$t('takings.validations.description'), trigger:'blur' }
                   ],
                   category: [
                     { required: true, message: this.$t('takings.validations.category'), trigger:'change' }

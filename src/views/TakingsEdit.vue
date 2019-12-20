@@ -159,12 +159,14 @@
 
                 if(this.taking.amount.sources.length > 0) {
                     for (var source in this.taking.amount.sources) {
-                        this.taking.amount.sources[source].typeOfSource.external = {
-                            "location": this.taking.details.partner.name,
-                            "contactPerson": this.taking.details.partner.asp,
-                            "email": this.taking.details.partner.email,
-                            "address": this.taking.details.partner.address,
-                            "receipt": this.taking.details.receipt,
+                        if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
+                            this.taking.amount.sources[source].typeOfSource.external = {
+                                "location": this.taking.details.partner.name,
+                                "contactPerson": this.taking.details.partner.asp,
+                                "email": this.taking.details.partner.email,
+                                "address": this.taking.details.partner.address,
+                                "receipt": this.taking.details.receipt,
+                            }
                         }
                     }
                 }
@@ -176,12 +178,14 @@
 
                 if(this.taking.amount.sources.length > 0) {
                     for (var source in this.taking.amount.sources) {
-                        this.taking.amount.sources[source].typeOfSource.external = {
-                            "location": this.taking.details.partner.name,
-                            "contactPerson": this.taking.details.partner.asp,
-                            "email": this.taking.details.partner.email,
-                            "address": this.taking.details.partner.address,
-                            "receipt": this.taking.details.receipt
+                        if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
+                            this.taking.amount.sources[source].typeOfSource.external = {
+                                "location": this.taking.details.partner.name,
+                                "contactPerson": this.taking.details.partner.asp,
+                                "email": this.taking.details.partner.email,
+                                "address": this.taking.details.partner.address,
+                                "receipt": this.taking.details.receipt,
+                            }
                         }
                     }
                 }
