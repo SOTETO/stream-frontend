@@ -25,6 +25,9 @@
                 <el-radio v-model="source.typeOfSource.category" label="extern" >&nbsp;</el-radio>
             </el-form-item>
         </td>
+        <td>
+          <el-button type="danger" icon="el-icon-delete" :disabled="disableDelete" @click="deleteSource"></el-button>
+        </td>
     </tr>
 </template>
 
@@ -39,6 +42,10 @@
             "MoneyInput": MoneyInput
         },
         props: {
+          disableDelete:{
+            type: Boolean,
+            default: false
+          },
           source: {
             type: Object,
             default: function () {
@@ -93,6 +100,9 @@
                 } else if(!this.checkedVar && !this.amountErrorState) {
                     this.deselect()
                 }
+            },
+            deleteSource() {
+                this.$emit('delete')
             },
             deselect() {
                 this.$emit('deselect', this.category)

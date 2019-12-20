@@ -67,6 +67,8 @@
                         :description="t.desc"
                         :descriptionText="getDescSource(t.category)"
                         :key="t.key"
+                        :disableDelete="disableDelete(t)"
+                        v-on:delete="deleteSource(t)"
                     />
                 </tbody>
             </table>
@@ -103,6 +105,10 @@
             "TakingSelectSource": TakingSelectSource
         },
         props: {
+            sourceCount: {
+              type: Number,
+              default: 0
+            },
             amount: {
               type: Object,
               default: function () {
@@ -150,6 +156,7 @@
                         return time.getTime() > Date.now();
                     }
                 },
+                "count": this.amount.sources.length,
 
                 result: Number,
 
@@ -222,6 +229,21 @@
         methods: {
           addSourceType(value) {
             this.amount.sources.push(value)
+          },
+          deleteSource(value) {
+            var index = this.amount.sources.indexOf(value);
+            if (index > -1) {
+              this.amount.sources.splice(index, 1);
+            }
+          },
+          disableDelete(value) {
+            var index = this.amount.sources.indexOf(value)
+            console.log(index)
+            if(index < this.sourceCount) {
+              return true
+            } else {
+              return false
+            }
           },
           getWhen() {
             var day = this.formatReceived.getDate()
