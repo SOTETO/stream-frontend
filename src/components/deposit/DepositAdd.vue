@@ -110,6 +110,17 @@ export default {
 }
 </script>
 <style lang="less">
+
+.unsubmitted, .submitted {
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.unsubmitted {
+  background-color: #ffc100;
+}
+.submitted {
+  background-color: #3bc846;
+}
 .formatAmount {
   margin-right: 5px;
   font-weight: bold;

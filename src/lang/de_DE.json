@@ -189,7 +189,7 @@
         "deposit": "Einzahlung vermerken"
       },
       "donationSource": {
-        "sourceSelect": "Woher kommt die Einnahme?",
+        "sourceSelect": "Art der Einnahme?",
         "sum": "Summe",
         "sourceType": {
           "cash": "Bar",
@@ -239,7 +239,7 @@
       "comment": "Bemerkung / Frage",
       "received": "Wann hast du die Einnahme erhalten?",
       "involved": {
-        "label": "Von wem hast du die Einnahme erhalten?",
+        "label": "Von welchen Supportern hast du die Einnahme erhalten?",
         "indicator": "Max Mustermann aus deiner Crew..."
       },
       "context": {

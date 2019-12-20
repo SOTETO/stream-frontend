@@ -45,6 +45,10 @@
             <TakingSelectSource v-on:input="addSourceType($event)" :sources="amount.sources"/>
           </el-form-item>
             <table class="sources">
+                <col width="65%">
+                <col width="20%">
+                <col width="5%">
+                <col width="*">
                 <thead>
                     <tr>
                         <th>{{ $t('donation.header.donationSource.sourceSelect') }}</th>
@@ -54,8 +58,6 @@
                     </tr>
                 </thead>
                 <tbody>
-           <!--     {{ amount.sources[0].amount.amount }} -->
-
                     <TakingSource
                         v-for="t in amount.sources"
                         :source="t"
@@ -227,7 +229,11 @@
         },
         methods: {
           addSourceType(value) {
-            this.amount.sources.push(value)
+            var valueExists = this.amount.sources.filter(t => t.category === value.category)
+
+            if (valueExists.length === 0) {
+              this.amount.sources.push(value)
+            }
           },
           deleteSource(value) {
             var index = this.amount.sources.indexOf(value);
