@@ -9,7 +9,7 @@
                     <TakingContext v-model="taking.context" v-bind:context="taking.context" />
                 </el-card>  
                 <el-card class="box-card tail expand">
-                  <TakingCalculator :first="false" v-model="taking.amount" v-bind:amount="taking.amount" />
+                  <TakingCalculator :first="false" :sourceCount="sourceCount" v-model="taking.amount" v-bind:amount="taking.amount" />
                 </el-card>
 
                 <el-card v-if="showExternalTransactions" class="box-card tail expand">
@@ -82,6 +82,7 @@
         },
         data () {
             return {
+                sourceCount: 0,
                 taking: {
                     "context": {
                         "description": "",
@@ -114,6 +115,7 @@
             .then(response => {
               if(response.status === 200) {
                 this.taking = response.data
+                this.sourceCount = this.taking.amount.sources.length
               }
             })
             .catch(error => console.log(error))
