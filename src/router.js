@@ -23,24 +23,16 @@ Vue.use(Router)
 var router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+        path: '*',
+        props: { msg: '/arise/#/error/404' }, 
+        component: () => import('./components/Redirect.vue'),
     },
     {
         path: '/takings',
         name: 'takings',
         component: () => import('./views/Takings.vue'),
         meta: {
-          'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
+          'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
         }
     },
     {
@@ -68,14 +60,14 @@ var router = new Router({
         'roles': ['Admin', 'Employee', 'Supporter', { 'name': 'VolunteerManager' }] //'Admin',
       }
     },
-      {
-          path: '/deposits',
-          name: 'deposits',
-          component: () => import('./views/Deposit.vue'),
-          meta: {
-              'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
-          }
+    {
+      path: '/deposits',
+      name: 'deposits',
+      component: () => import('./views/Deposit.vue'),
+      meta: {
+        'roles': ['Admin', 'Employee', { 'name': 'VolunteerManager' }] //'Admin',
       }
+    }
   ]
 })
 
@@ -102,7 +94,7 @@ router.beforeEach((to, from, next) => {
                 switch (store.getters['user/getErrorCode']) {
                     case 401:
                         // Not Authenticated!
-                        window.location.replace('/arise/#/signin?redirect=' + to.fullPath)
+                        window.location.replace('/arise/#/signin/' + btoa(to.fullPath))
                         break;
                     case 403:
                         // Forbidden!
@@ -115,6 +107,9 @@ router.beforeEach((to, from, next) => {
                     case 500:
                         // redirect 500 error page
                         window.location.replace('/arise/#/error/500')
+                        break;
+                    default:
+                        window.location.replace('/arise/#/signin')
                         break;
                 }
             }
@@ -132,7 +127,7 @@ router.beforeEach((to, from, next) => {
         }
 
     } else {
-        next();
+        next()
     }
 });
 
