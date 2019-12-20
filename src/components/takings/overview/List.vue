@@ -15,7 +15,7 @@
             <th>{{ $t("takings.table.head.deposited") }}</th>
             <th>{{ $t("takings.table.head.date") }}</th>
             <th>{{ $t("takings.table.head.supporter") }}</th>
-            <th v-if="isEployee">{{ $t("takings.table.head.edit") }} </th>
+            <th>{{ $t("takings.table.head.edit") }} </th>
         </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@
                     </span>
                 </div>
             </td>
-            <td v-if="isEployee">
+            <td>
               <el-button type="primary" icon="el-icon-search" size="mini">
               </el-button>
               <el-button type="primary" icon="el-icon-edit" size="mini" @click="editPage(taking.id)">
