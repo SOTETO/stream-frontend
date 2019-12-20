@@ -45,7 +45,7 @@
                 </div>
             </td>
             <td>
-              <el-button type="primary" icon="el-icon-search" size="mini">
+              <el-button type="primary" icon="el-icon-search" size="mini" :disabled="true">
               </el-button>
               <el-button type="primary" icon="el-icon-edit" size="mini" @click="editPage(taking.id)">
               </el-button>
