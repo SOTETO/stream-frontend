@@ -199,6 +199,7 @@ const actions = {
     var user = store.rootGetters['user/get']
     var crew = store.rootGetters['user/getCrew']
     //deposit["publicId"] = uuidv4()
+    //deposit["crew"] = (crew !== null) ? crew[0] : { "name": "", "uuid": "00000000-0000-0000-0000-000000000000" } // hopefully not undefined
     deposit["crew"] = crew[0] // hopefully not undefined
     deposit["supporter"] = {}
     deposit.supporter["uuid"] = user.uuid
