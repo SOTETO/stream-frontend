@@ -1,5 +1,12 @@
 <template>
     <table class="takings">
+        <col width="15%">
+        <col width="5%">
+        <col width="15%">
+        <col width="25%">
+        <col width="15%">
+        <col width="10%">
+        <col width="*">
         <thead>
         <tr>
             <th>{{ $t("takings.table.head.title") }}</th>

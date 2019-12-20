@@ -20,8 +20,11 @@
                 <router-link class="vca-button-primary vca-full-width" to="/takings/add">
                   {{ $t('takings.buttons.add') }}
                 </router-link>
-                <button class="vca-button-primary vca-full-width" v-on:click.prevent="depositAdd">
-                    {{ depositAddLabel }}
+                <button v-if="!depositAddView" class="vca-button-primary vca-full-width" v-on:click.prevent="depositAdd">
+                    {{ this.$t('takings.buttons.depositAdd') }}
+                </button>
+                <button v-if="depositAddView" class="vca-button-warn vca-full-width" v-on:click.prevent="depositAdd">
+                    {{ $t('takings.buttons.abort') }}
                 </button>
           </el-card>
             <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
@@ -78,13 +81,6 @@
       },
       hasNext () {
         return this.pageGet.next > 0
-      },
-      depositAddLabel () {
-        if (this.depositAddView === true) {
-          return this.$t('takings.buttons.abort')
-        } else {
-          return this.$t('takings.buttons.depositAdd')
-        }
       },
       sortFields() {
         return [

@@ -195,30 +195,30 @@ const actions = {
     },
 
     add (store, deposit) {
-    //get the current user
-    var user = store.rootGetters['user/get']
-    var crew = store.rootGetters['user/getCrew']
-    //deposit["publicId"] = uuidv4()
-    //deposit["crew"] = (crew !== null) ? crew[0] : { "name": "", "uuid": "00000000-0000-0000-0000-000000000000" } // hopefully not undefined
-    deposit["crew"] = crew[0] // hopefully not undefined
-    deposit["supporter"] = {}
-    deposit.supporter["uuid"] = user.uuid
-    deposit.supporter["name"] = user.name
-    deposit["created"] = Date.now()
-    deposit["updated"] = Date.now()
+      //get the current user
+      var user = store.rootGetters['user/get']
+      var crew = store.rootGetters['user/getCrew']
+      //deposit["publicId"] = uuidv4()
+      //deposit["crew"] = (crew !== null) ? crew[0] : { "name": "", "uuid": "00000000-0000-0000-0000-000000000000" } // hopefully not undefined
+      deposit["crew"] = crew[0] // hopefully not undefined
+      deposit["supporter"] = {}
+      deposit.supporter["uuid"] = user.uuid
+      deposit.supporter["name"] = user.name
+      deposit["created"] = Date.now()
+      deposit["updated"] = Date.now()
 
-    var amount = deposit.depositUnits.map((unit) => {
+      var amount = deposit.depositUnits.map((unit) => {
         return {
             //"publicId": uuidv4(),
             "takingId": unit.takingId,
             "amount": unit.amount,
             "created": Date.now()
         }
-    })
-    deposit["amount"] = JSON.parse(JSON.stringify(amount))
-    deposit.depositUnits = []
+      })
+      deposit["amount"] = JSON.parse(JSON.stringify(amount))
+      deposit.depositUnits = []
       
-    //post deposit
+      //post deposit
       var ajax = new DepositEndpoints(store)
       var successHandler = (response) => {
         store.commit({ "type": 'push', "deposit": response.data })

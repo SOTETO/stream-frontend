@@ -3,7 +3,7 @@
         <td>
             <div class="category">
                   <span> {{$t("donation.placeholder.source." + source.category) }}</span>
-                <el-form-item>
+                <el-form-item class="category-description">
                     <el-input v-model="source.description" :placeholder="$t('donation.placeholder.source.description')"></el-input>
                 </el-form-item>
             </div>
@@ -112,6 +112,10 @@
 </script>
 
 <style scoped lang="less">
+
+    .category-description {
+        width: 65%;
+    }
     .category {
         display: flex;
         flex-direction: row;
@@ -119,5 +123,9 @@
         & > :first-child {
             margin-right: 1em;
         }
+    }
+    .category span {
+        margin-top: 9px;
+        width: 30%;
     }
 </style>

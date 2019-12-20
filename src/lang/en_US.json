@@ -239,11 +239,11 @@
       "comment": "Comment / Question",
       "received": "When did you received the takings?",
       "involved": {
-        "label": "Who has given the taking to you?",
+        "label": "From which supporters did you receive the takings?",
         "indicator": "Jane Doe of your crew..."
       },
       "context": {
-        "label": "How was the taking collected?",
+        "label": "How were the takings collected?",
         "indicator": "e.g. street festival"
       },
       "category": "Category",
@@ -291,7 +291,7 @@
         }
       },
       "internalDetails": {
-        "description": "Please use these informations for your deposit of the taking. It helps us to allocate the deposit the this taking:"
+        "description": "Please use these informations for your deposit of the takings. It helps us to allocate the deposit the this taking:"
       }
     }
   },
