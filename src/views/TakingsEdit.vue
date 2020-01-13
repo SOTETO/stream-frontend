@@ -31,13 +31,27 @@
                             @click.prevent="submitForm">
                         {{ $t("donation.buttons.save") }}
                     </button>
-                    <button 
+                    <button
                             v-if="updateMode"
                             :disabled="!validDonation"
                             class="vca-button-primary vca-full-width"
                             @click.prevent="updateForm">
                         {{ $t("takings.buttons.update") }}
                     </button>
+                  <el-popover
+                    v-if="!updateMode"
+                    placement="top"
+                    width="300"
+                    v-model="visible">
+                    <p><strong>{{ $t("takings.popover.title") }}</strong></p>
+                    <div v-if="this.taking.context.description === ''">{{ $t("takings.popover.errors.description") }}</div>
+                    <div v-if="this.taking.context.category === ''">{{ $t("takings.popover.errors.category") }}</div>
+                    <div v-if="this.taking.amount.sources.length === 0 ">{{ $t("takings.popover.errors.amount") }}</div>
+                    <div style="text-align: right; margin: 0">
+                      <el-button type="primary" size="mini" @click="visible = false">confirm</el-button>
+                    </div>
+                    <el-button type="text" slot="reference">{{ $t("takings.popover.buttonText") }}</el-button>
+                  </el-popover>
                 </el-card>
             </VcAColumn>
         </el-form>
@@ -75,6 +89,7 @@
         },
         data () {
             return {
+                visible: false,
                 taking: {
                     "context": {
                         "description": "",
@@ -94,6 +109,7 @@
                     "created": Date.now(),
                     "updated": Date.now(),
                 },
+
                 rules: {
                    context: [{
                      required: true
@@ -117,6 +133,12 @@
             ...mapGetters('takings', {
                 getById: 'getById',
             }),
+            status () {
+              if (this.taking.context.category === '')
+                return "Ohh no";
+              else
+                return "";
+              },
             updateMode () {
               return this.id !== null
             },
@@ -140,14 +162,6 @@
                 'add', // -> this.foo()
                 'update',
             ]),
-            submitForm () {
-                this.add(this.taking)
-                this.$router.push('/takings')
-            },
-            updateForm () {
-                this.update(this.taking)
-                this.$router.push('/takings')
-            }
         }
     }
 </script>

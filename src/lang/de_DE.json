@@ -365,6 +365,15 @@
     "filter": {
       "name": "Name"
     },
+    "popover": {
+      "title": "Please, check the following fields...",
+      "buttonText": "Why is the Button disabled?",
+      "errors": {
+        "description": "Description field is empty",
+        "category": "Category field is empty",
+        "amount": "Amount view is not complete"
+      }
+    },
     "validations": {
       "category": "Bitte gib eine Kategorie an",
       "description": "Bitte füge eine Beschreibung hinzu"
