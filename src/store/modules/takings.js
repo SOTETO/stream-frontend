@@ -54,7 +54,13 @@ const getters = {
                 "id": taking.id,
                 "name": taking.context.description,
                 "norms": taking.norms,
-                "amount": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                "amount": {
+                  "full": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                  "cash": taking.amount.sources.filter(s => s.typeOfSource.category == "cash")
+                    .reduce((amount, source) => amount + source.amount.amount, 0),
+                  "extern": taking.amount.sources.filter(s => s.typeOfSource.category == "extern")
+                    .reduce((amount, source) => amount + source.amount.amount, 0),
+                },
                 "deposited": taking.depositUnits.reduce((categories, unit) => {
                     if(unit.hasOwnProperty("confirmed")) {
                         if(!categories.confirmed.hasOwnProperty(unit.amount.currency)) {

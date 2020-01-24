@@ -378,6 +378,10 @@
       "dates": {
         "received": "Erhalten: {date}",
         "created": "Eingetragen: {date}"
+      },
+      "popup": {
+        "extern": "Überweisung",
+        "cash": "Bargeld"
       }
     },
     "placeholder": {

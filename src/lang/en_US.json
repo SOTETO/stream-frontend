@@ -378,6 +378,10 @@
       "dates": {
         "received": "Received: {date}",
         "created": "Recorded: {date}"
+      },
+      "popup": {
+        "extern": "transfer",
+        "cash": "cash"
       }
     },
     "placeholder": {

@@ -25,12 +25,18 @@
         :label='$t("takings.table.head.amount")'
         >
         <template slot-scope="scope">
-        {{ formatAmount(scope.row.amount)}}
+        <el-popover trigger="hover" placement="top">
+          <p>{{$t('takings.table.popup.cash')}}: {{ scope.row.amount.cash }}</p>
+          <p>{{$t('takings.table.popup.extern')}}: {{ scope.row.amount.extern }}</p>
+          <div slot="reference" class="name-wrapper">
+            {{ formatAmount(scope.row.amount.full)}}
+          </div>
+        </el-popover>
         </template>
       </el-table-column>
 
       <el-table-column
-        prop="crew[0].name"
+        prop=""
         :label='$t("takings.table.head.deposited")'
         width="210"
         >
@@ -40,13 +46,13 @@
             v-if="depositAddView" 
             :depositUnit="deposit.depositUnits" 
             :taking="scope.row" 
-            :amount="scope.row.amount" 
+            :amount="scope.row.amount.full" 
             :takingId="scope.row.id" />
         </template>
       </el-table-column>
 
       <el-table-column
-        prop="crew[0].name"
+        prop=""
         :label='$t("takings.table.head.date")'
         width="210"
         >
@@ -78,8 +84,8 @@
           <el-row>
             <el-col :span="12">
               <el-popover trigger="click" placement="top">
-                <p>Name: {{ scope.row.name }}</p>
-                <p>Addr: {{ scope.row.crew[0] }}</p>
+                <p>{{$t('takings.table.popup.cash')}}: {{ scope.row.amount.cash }}</p>
+                <p>{{$t('takings.table.popup.extern')}}: {{ scope.row.amount.extern }}</p>
                 <div slot="reference" class="name-wrapper">
                   <el-button type="primary" icon="el-icon-search" size="mini">
                   </el-button>
@@ -182,16 +188,16 @@ export default {
           var d = new Date(date)
           return this.$d(d, 'short')
       },
-      supporter (donation) {
-          return [donation.author].concat(donation.supporter)
+      /*supporter (taking) {
+          return [taking.author].concat(taking.supporter)
               .filter((value, index, self) => self.indexOf(value) === index)
       },
-      teaserSupporter (donation) {
-          return this.supporter(donation).slice(0, this.maximumTags)
+      teaserSupporter (taking) {
+          return this.supporter(taking).slice(0, this.maximumTags)
       },
-      hasAddtionalSupporter (donation) {
-          return this.supporter(donation).length > this.maximumTags
-      },
+      hasAddtionalSupporter (taking) {
+          return this.supporter(taking).length > this.maximumTags
+      },*/
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
       },
