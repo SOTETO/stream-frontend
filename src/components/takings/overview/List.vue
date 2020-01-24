@@ -84,8 +84,7 @@
           <el-row>
             <el-col :span="12">
               <el-popover trigger="click" placement="top">
-                <p>{{$t('takings.table.popup.cash')}}: {{ scope.row.amount.cash }}</p>
-                <p>{{$t('takings.table.popup.extern')}}: {{ scope.row.amount.extern }}</p>
+                <TakingsDetails :amount="scope.row.amount" />
                 <div slot="reference" class="name-wrapper">
                   <el-button type="primary" icon="el-icon-search" size="mini">
                   </el-button>
@@ -109,6 +108,7 @@ import CurrencyFormatter from '@/utils/CurrencyFormatter'
 import DepositLights from '@/components/deposit/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
 import UserButton from '@/components/utils/UserButton'
+import TakingsDetails from '@/components/takings/overview/TakingsDetails'
 import { Notification } from 'element-ui'
 
 Vue.use(Notification)
@@ -117,7 +117,7 @@ Notification.closeAll()
 export default {
   name: "List",
   components: {
-    DepositLights, DepositAdd, UserButton
+    DepositLights, DepositAdd, UserButton, TakingsDetails
   },
   props: {
     depositAddView : {
