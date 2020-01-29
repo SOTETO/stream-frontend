@@ -243,7 +243,6 @@
           },
           disableDelete(value) {
             var index = this.amount.sources.indexOf(value)
-            console.log(index)
             if(index < this.sourceCount) {
               return true
             } else {

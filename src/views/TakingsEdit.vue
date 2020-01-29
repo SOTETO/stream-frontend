@@ -13,20 +13,22 @@
                 </el-card>
 
                 <el-card v-if="showExternalTransactions" class="box-card tail expand">
-                    <ExternalTransactionDetails v-model="taking.details" :sources="taking.amount.sources" :name="taking.context.description" />
+                    <ExternalTransactionDetails v-model="taking.details" :taking="taking" :sources="taking.amount.sources" :name="taking.context.description" />
                 </el-card>
                 <el-card class="box-card tail expand">
-                    <TakingDeadline :received="taking.amount.received" />
-                    <el-input
-                            type="textarea"
-                            :rows="4"
-                            :placeholder="$t('takings.placeholder.comment')"
-                            v-model="taking.comment">
-                    </el-input>
+                    <el-form-item :label="$t('donation.placeholder.comment')" class="vca-categories">
+                        <el-input
+                                type="textarea"
+                                :rows="4"
+                                :placeholder="$t('takings.placeholder.comment')"
+                                v-model="taking.comment">
+                        </el-input>
+                    </el-form-item>
 
-                    <el-card class="box-card tail expand">
+                    <el-card v-if="showInternalTransactions" class="box-card tail expand">
+                        <TakingDeadline :received="taking.amount.received" /><br/><br/>
                         <div><span>{{ $t("donation.placeholder.internalDetails.description") }}</span></div><br/>
-                        <ReasonForPayment :name="taking.context.description"/>
+                        <ReasonForPayment v-on:addReason="addReason" :taking="taking" :name="taking.context.description"/>
                     </el-card>
                     <button
                             v-if="!updateMode"
@@ -82,6 +84,7 @@
         },
         data () {
             return {
+                reason: "",
                 sourceCount: 0,
                 taking: {
                     "context": {
@@ -139,6 +142,9 @@
             showExternalTransactions () {
                 return this.taking.amount.sources.filter(s => s.typeOfSource.category === "extern").length > 0
             },
+            showInternalTransactions () {
+                return this.taking.amount.sources.filter(s => s.typeOfSource.category === "cash").length > 0
+            },
             showCalculator () {
                 return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
                     this.taking.context.hasOwnProperty("description") && this.taking.context.description !== "" 
@@ -157,6 +163,9 @@
                 'update',
                 'getById',
             ]),
+            addReason(reason) {
+                this.reason = reason
+            },
             submitForm () {
 
                 if(this.taking.amount.sources.length > 0) {
@@ -172,6 +181,7 @@
                         }
                     }
                 }
+                this.taking.details.reasonForPayment = this.reason
 
                 this.add(this.taking)
                 this.$router.push('/takings')
