@@ -21,7 +21,7 @@
 
         <el-card class="box-card tail expand">
             <div><span>{{ $t("donation.placeholder.externalDetails.description") }}</span></div><br/>
-            <ReasonForPayment v-model="reasonForPayment" v-on:addReason="addReason" :typeOfSource="external" :name="name" :address="partner.address"  />
+            <ReasonForPayment :taking="taking" :typeOfSource="external" :name="name" :address="partner.address"  />
         </el-card>
 
     </div>
@@ -41,6 +41,9 @@
         },
         props: {
             "value": {
+                "type": Object
+            },
+            "taking": {
                 "type": Object
             },
             sources: {
@@ -166,10 +169,6 @@
                   }
                 }
               }
-            },
-            addReason(reason) {
-                this.reasonForPayment = reason
-                this.commit()
             }
         }
     }
