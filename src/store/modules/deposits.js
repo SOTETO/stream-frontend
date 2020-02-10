@@ -1,5 +1,6 @@
 import DepositEndpoints from '@/backend-endpoints/DepositEndpoints'
 import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
+import axios from "axios"
 
 //const uuidv4 = require('uuid/v4');
 
@@ -26,6 +27,14 @@ import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 //             }]
 //         }]
 const state = {
+  query: {
+    size: 0,
+    offset: 0,
+    sortby: null,
+    sortdir: "ASC",
+    name: "%"
+  },
+
   items: [], 
   donations: [],
   page: {
@@ -143,38 +152,49 @@ const getters = {
 }
 
 const actions = {
-    init (store) {
-        var ajax = new DepositEndpoints(store)
-        var ajaxDons = new DonationEndpoints(store)
     
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.count(successHandler, errorHandler, page, sort)
-        }
+  init (store) {
+    axios.get('/backend/stream/deposits', {params: store.state.query})
+      .then(function (response){
+        store.commit({"type": 'init', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+
+
+//        var ajax = new DepositEndpoints(store)
+//        var ajaxDons = new DonationEndpoints(store)
+//    
+//        var count = (store) => {
+//            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
+//            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
+//            var page = store.state.page
+//            var sort = store.state.sorting
+//            ajax.count(successHandler, errorHandler, page, sort)
+//        }
+//    
+//        var get = (store) => {
+//            var successHandler = (response) => {
+//                store.commit({"type": 'init', "deposits": response.data.data})
+//                ajaxDons.getByIds(
+//                    (response) => store.commit({"type": 'initDons', "donations": response.data.data}),
+//                    (error) => store.commit({"type": 'setError', error: error}),
+//                    response.data.data.reduce((acc, deposit) => acc.concat(deposit.amount.map(unit => unit.donationId)), [])
+//                )
+//            }
+//            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
+//            var page = store.state.page
+//            var sort = store.state.sorting
+//            var filter = store.state.filter
+//            ajax.get(successHandler, errorHandler, page, sort, filter)
+//        }
+//    
+//        get(store)
+//        count(store)
+//    },
     
-        var get = (store) => {
-            var successHandler = (response) => {
-                store.commit({"type": 'init', "deposits": response.data.data})
-                ajaxDons.getByIds(
-                    (response) => store.commit({"type": 'initDons', "donations": response.data.data}),
-                    (error) => store.commit({"type": 'setError', error: error}),
-                    response.data.data.reduce((acc, deposit) => acc.concat(deposit.amount.map(unit => unit.donationId)), [])
-                )
-            }
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            var filter = store.state.filter
-            ajax.get(successHandler, errorHandler, page, sort, filter)
-        }
-    
-        get(store)
-        count(store)
-    },
-    page (store, down) {
+  page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
         if(!down) {
