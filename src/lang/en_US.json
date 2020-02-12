@@ -403,7 +403,8 @@
     "validations": {
       "category": "Please add a category",
       "description": "Please add a description"
-    }
+    },
+    "info": "Questions? "
   },
   "takingsEdit": {
     "header": {
