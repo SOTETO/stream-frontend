@@ -37,7 +37,7 @@
                 return unconfirmed
             },
             open () {
-                return this.donation.amount - (this.confirmed + this.unconfirmed)
+                return this.donation.amount.full - (this.confirmed + this.unconfirmed)
             },
             showUnconfirmed () {
                 return this.unconfirmed > 0
