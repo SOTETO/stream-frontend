@@ -1,60 +1,87 @@
 <template>
-  <table class="deposits">
-    <thead>
-      <tr>
-        <th>{{ $t("deposits.table.head.date") }}</th>
-        <th>{{ $t("deposits.table.head.crew") }}</th>
-        <th>{{ $t("deposits.table.head.amount") }}</th>
-        <th>{{ $t("deposits.table.head.donations") }}</th>
-        <th>{{ $t("deposits.table.head.supporter") }}</th>
-        <th>{{ $t("deposits.table.head.confirmed") }}</th>
-        <th>{{ $t("deposits.table.head.state") }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="deposit in depositItems" :key="deposit.id" class="deposit">
-        <td>
-          <div class="dates">
-            <span>{{ $t("deposits.table.hint.dates.received", { "date":  formatDate(deposit.date.received) }) }}</span>
-            <span>{{ $t("deposits.table.hint.dates.created", { "date":  formatDate(deposit.date.created) }) }}</span>
-          </div>
-        </td>
-        <td class="crew">
-            <span class="vca-crew-name">
-                <el-tag> {{ deposit.crew.name }} </el-tag>
-            </span>
-        <td>{{ formatAmount(deposit.amount) }}</td>
-        <td>
-          <ul class="actions">
-            <li v-for="unit in deposit.actions" :key="unit.publicId" class="action">
-              <span>{{ unit.description }}</span>
-              <span>{{ formatAmount({ "amount": unit.amount.amount, "currency": unit.amount.currency }) }}</span>
-            </li>
-          </ul>
-        </td>
-        <td>
-          <div class="supporter">
-                <div class="supporter">
-                    <span class="vca-user-name" v-for="s in deposit.supporter">
-                      <UserButton :user="s" />
-                    </span>
-                </div>
-          </div>
-        </td>
-        <td>
-          <span v-if="!confirmed(deposit)"> {{ $t('deposits.table.hint.dates.unconfirmed') }} </span>
-          <UserButton v-else :user="deposit.status.user" />
-        </td>
-        <td>
-          <button v-if="!confirmed(deposit) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(deposit)">{{ $t('deposits.table.hint.confirm') }}</button>
-          <StateLight v-else-if="!confirmed(deposit) && !allowedToConfirm" :value="{ 'name': $t('deposits.table.hint.dates.unconfirmed'), 'state': 0 }" />
-          <div v-else>
-            <StateLight :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(deposit.status.date) }), 'state': 1  }" />
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+  <el-table
+    :data="depositItems"
+    style="width: 100%"
+    @sort-change="sorting()"
+    >
+    <el-table-column
+      prop="date"
+      :label='$t("deposits.table.head.date")'
+      sortable
+      >
+      <template slot-scope="scope">
+        <div class="dates">
+          <span>{{ $t("takings.table.dates.received", { "date":  formatDate(scope.row.date.received) }) }}</span>
+          <span>{{ $t("takings.table.dates.created", { "date":  formatDate(scope.row.date.created) }) }}</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="crew.name"
+      sortable
+      :label='$t("deposits.table.head.crew")'
+      >
+      <template slot-scope="scope">
+        <span class="vca-crew-name">
+          <el-tag> {{ scope.row.crew.name }} </el-tag>
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="amount"
+      sortable
+      :label='$t("deposits.table.head.amount")'
+      >
+      <template slot-scope="scope">
+        {{ formatAmount(scope.row.amount) }}
+      </template>
+    </el-table-column>
+    <el-table-column
+      :label='$t("deposits.table.head.donations")'
+      >
+      <template slot-scope="scope">
+        <ul class="actions">
+          <li v-for="unit in scope.row.actions" :key="unit.publicId" class="action">
+            <span>{{ unit.description }}</span>
+            <span>{{ formatAmount({ "amount": unit.amount.amount, "currency": unit.amount.currency }) }}</span>
+          </li>
+        </ul>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="supporter.name"
+      sortable
+      :label='$t("deposits.table.head.supporter")'
+      >
+      <template slot-scope="scope">
+        <span class="vca-user-name" v-for="s in scope.row.supporter">
+          <UserButton :user="s" />
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      :label='$t("deposits.table.head.confirmed")'
+      >
+      <template slot-scope="scope">
+        <span v-if="!confirmed(scope.row)"> {{ $t('deposits.table.hint.dates.unconfirmed') }} </span>
+        <UserButton v-else :user="scope.row.status.user" />
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="status.date"
+      sortable
+      :label='$t("deposits.table.head.state")'
+      >
+      <template slot-scope="scope">
+        <button v-if="!confirmed(scope.row) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(scope.row)">{{ $t('deposits.table.hint.confirm') }}</button>
+        <StateLight v-else-if="!confirmed(scope.row) && !allowedToConfirm" :value="{ 'name': $t('deposits.table.hint.dates.unconfirmed'), 'state': 0 }" />
+        <div v-else>
+          <StateLight :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(scope.row.status.date) }), 'state': 1  }" />
+        </div>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
@@ -65,6 +92,7 @@
   export default {
     name: "DepositList",
     components: { CrewPlainName, Tag, StateLight, UserButton},
+    props:["query"],
     computed: {
       ...mapGetters('deposits', {
         depositItems: 'overview',
@@ -88,14 +116,23 @@
           "donations": []
       }
     },
-    created () {
-      this.init(this.$store)
+
+    watch:{
+      query: function(newVal, oldVal) {
+        console.log(this.query)
+        this.init(this.query)
+      }
+    },
+    updated () {
+      //this.init(this.query)
     },
     methods: {
       ...mapActions('deposits', [
-        'init', // map `this.init()` to `this.$store.dispatch('deposits/init')`
         'confirm'
       ]),
+      sorting(column, event) {
+        console.log(JSON.stringify(column))
+      },
       formatAmount(amount) {
         var formatter = CurrencyFormatter.getFromNumeric(amount.currency, amount.amount)
         return formatter.localize()

@@ -32,7 +32,18 @@ const state = {
     offset: 0,
     sortby: null,
     sortdir: "ASC",
-    name: "%"
+    publicId: null, 
+    takingsId: null,
+    crew: null,
+    name: "%",
+    confirmed: null,
+    cby: null,
+    cfrom: 1581292800,
+    cto: null,
+    payfrom: null,
+    payto:null,
+    crfrom: null,
+    crto:null
   },
 
   items: [], 
@@ -106,7 +117,7 @@ const getters = {
     return res
   },
   filter: (state) => {
-    return JSON.parse(JSON.stringify(state.filter))
+    return JSON.parse(JSON.stringify(state.query))
   },
   taggableFilter: (state) => {
     var res = []
@@ -153,8 +164,8 @@ const getters = {
 
 const actions = {
     
-  init (store) {
-    axios.get('/backend/stream/deposits', {params: store.state.query})
+  init (store, query) {
+    axios.get('/backend/stream/deposits', {params: query})
       .then(function (response){
         store.commit({"type": 'init', "deposits": response.data})
       }).catch(function (error) {

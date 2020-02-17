@@ -1,28 +1,16 @@
 <template>
   <VcAFrame>
     <VcAColumn size="90%">
-      <VcABox :first="true"  :title="$t('deposits.header.box')">
-        <Collapse :label="$t('household.filter.title')">
-          <template slot="status">
-            <div  class="tags">
-              <!--<VcAFilterTag v-if="hasCrewTag" v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">-->
-              <VcAFilterTag v-for="tag in filterCrewTag" :field="tag.name" :key="tag.name">
-              <CrewPlainName :id="tag.value" />
-              </VcAFilterTag>
-              <VcAFilterTag v-for="tag in filterTags" :field="tag.name" :value="tag.value" :key="tag.name" />
-            </div>
-          </template>
-          <DepositFilter @vca-filter-updated="addState" />
-        </Collapse>
-        <ListMenu :fields="sortFields" store="deposits" />
-        <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
-          {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
-        </button>
-        <DepositList/>
+      <el-card class="box-card">
+        <DepositFilter :query="query" v-on:refresh="refresh"/>
+      </el-card>
+      <el-card class="box-card tail">
+
+        <DepositList :query="query" v-on:sort-change="sorting($event)"/>
         <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
           {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
         </button>
-      </VcABox>
+      </el-card>
     </VcAColumn>
   </VcAFrame>
 </template>
@@ -41,6 +29,38 @@
     components: {
       VcAFrame, VcAColumn, VcABox, DepositList, ListMenu, Collapse, VcAFilterTag, CrewPlainName, DepositFilter
     },
+    props: {
+  query: {
+    type: Object,
+    default : function () {
+      return {
+    
+        size: 0,
+    
+        offset: 0,
+    
+        sortby: null,
+    sortdir: "ASC",
+    publicId: null, 
+    takingsId: null,
+    crew: null,
+    name: null,
+    confirmed: null,
+    cby: null,
+    cfrom: null,
+    cto: null,
+    payfrom: null,
+    payto:null,
+    crfrom: null,
+    crto:null
+      }
+    }
+  },
+
+    },
+    created () {
+      this.init(this.query)
+    },
     data () {
             var editableDefault = {
                 "value": null,
@@ -48,13 +68,14 @@
             }
             return {
                 "editableDefault" : editableDefault,
-                "editable": JSON.parse(JSON.stringify(editableDefault))
+                "editable": JSON.parse(JSON.stringify(editableDefault)),
             }
         },
     computed: {
         ...mapGetters('deposits', {
             pageGet: 'page',
-            taggableFilter: 'taggableFilter'
+            taggableFilter: 'taggableFilter',
+            filter: 'filter'
         }),
         hasPrevious () {
             return this.pageGet.previous > 0
@@ -131,6 +152,7 @@
 
     methods: {
         ...mapActions('deposits', [
+            'init',
             'page'
         ]),
         pageDown () {
@@ -145,6 +167,12 @@
         },
       addState () {
         this.editable = JSON.parse(JSON.stringify(this.editableDefault))
+      },
+      refresh () {
+        this.init(this.query)
+      },
+      sorting (sort) {
+        console.logs(sort)
       }
     }
   }
@@ -166,4 +194,23 @@
     cursor: pointer;
     background: none;
   }
+    .box-card {
+        width: 100%;
+    }
+    .box-card.tail {
+        margin-top: 2em;
+    }
+    .box-card.expand {
+        flex-grow: 1;
+    }
+    .title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .title > h2 {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: 0;
+    }
 </style>
