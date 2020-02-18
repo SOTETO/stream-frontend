@@ -1,8 +1,8 @@
 <template>
-  <el-radio-group v-model="confirmed" style="small">
-    <el-radio :label="lang.label1"></el-radio>
-    <el-radio :label="lang.label2"></el-radio>
-    <el-radio :label="lang.label3"></el-radio>
+  <el-radio-group v-model="confirmed" style="small" v-on:change="change">
+    <el-radio :label=true>{{ lang.label_true}}</el-radio>
+    <el-radio :label=false>{{ lang.label_false}}</el-radio>
+    <el-radio :label=null>{{ lang.label_null}}</el-radio>
   </el-radio-group></template>
 <script>
 export default {
@@ -12,16 +12,21 @@ export default {
       type: Object,
       default: function () {
         return {
-          label1: "Confirmed",
-          label2: "Not Confirmed",
-          label3: "All"
+          label_true: "Confirmed",
+          label_false: "Not Confirmed",
+          label_null: "All"
         }
       }
     }
   },
   data () {
     return {
-      confirmed: ''
+      confirmed: null
+    }
+  },
+  methods: {
+    change() {
+      this.$emit("change", this.confirmed)
     }
   }
 }

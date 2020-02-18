@@ -173,12 +173,9 @@
 </script>
 
 <style scoped lang="less">
-  @import '../../assets/less/general.less';
-
   .deposits {
     width: 100%;
     & th {
-      .colorProfilePrimary();
       font-weight: bold;
       padding: 0.25em 0;
       &:first-child {

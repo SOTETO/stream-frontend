@@ -321,11 +321,16 @@
         "confirm": "bestätigen"
       }
     },
-      "placeholder": {
-        "amount": "Eingezahlter Betrag",
-        "dateOfDeposit": "Wann?",
-        "searchDonation": "Wähle eine Spende"
-      },
+      
+    "placeholder": {
+    
+      "amount": "Eingezahlter Betrag",
+      
+      "dateOfDeposit": "Wann?",
+      
+      "searchDonation": "Wähle eine Spende"
+      
+    },
     "errors": {
       "noValueForAssignedDonation": "Der Anteil fehlt...",
       "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
@@ -342,6 +347,7 @@
       "EUR": "€",
       "CHF": "Fr.",
       "USD": "$"
+    
     }
   },
   "externalTransaction": {

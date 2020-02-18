@@ -1,31 +1,6 @@
 import DepositEndpoints from '@/backend-endpoints/DepositEndpoints'
-import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 import axios from "axios"
 
-//const uuidv4 = require('uuid/v4');
-
-// initial state
-// shape: [{
-//             "publicId": UUID
-//             "full": {
-//                  "amount": Double,
-//                  "currency": String
-//             },
-//             "confirmed": Long,
-//             "crew": UUID,
-//             "supporter": UUID,
-//             "created": Long,
-//             "updated": Long,
-//             "dateOfDeposit": Long,
-//             "amount": [{
-//                  "publicId": UUID,
-//                  "confirmed": Long,
-//                  "donationId": UUID,
-//                  "amount": Double,
-//                  "currency": String, 
-//                  "created": Long
-//             }]
-//         }]
 const state = {
   query: {
     size: 0,
@@ -172,39 +147,6 @@ const actions = {
         store.commit({"type": 'setError', error: error})
       })
   },
-
-
-//        var ajax = new DepositEndpoints(store)
-//        var ajaxDons = new DonationEndpoints(store)
-//    
-//        var count = (store) => {
-//            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
-//            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-//            var page = store.state.page
-//            var sort = store.state.sorting
-//            ajax.count(successHandler, errorHandler, page, sort)
-//        }
-//    
-//        var get = (store) => {
-//            var successHandler = (response) => {
-//                store.commit({"type": 'init', "deposits": response.data.data})
-//                ajaxDons.getByIds(
-//                    (response) => store.commit({"type": 'initDons', "donations": response.data.data}),
-//                    (error) => store.commit({"type": 'setError', error: error}),
-//                    response.data.data.reduce((acc, deposit) => acc.concat(deposit.amount.map(unit => unit.donationId)), [])
-//                )
-//            }
-//            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-//            var page = store.state.page
-//            var sort = store.state.sorting
-//            var filter = store.state.filter
-//            ajax.get(successHandler, errorHandler, page, sort, filter)
-//        }
-//    
-//        get(store)
-//        count(store)
-//    },
-    
   page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
@@ -248,6 +190,8 @@ const actions = {
       })
       deposit["amount"] = JSON.parse(JSON.stringify(amount))
       deposit.depositUnits = []
+      deposit["full"] = { "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0), "currency": "EUR"}
+
       
       //post deposit
       var ajax = new DepositEndpoints(store)

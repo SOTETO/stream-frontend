@@ -17,7 +17,7 @@
       @keyup.enter.native="handleInputConfirm"
       @blur="handleInputConfirm">
     </el-input>
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+    <el-button v-else class="button-new-tag" size="small" @click="showInput">{{ lang.new_tag}}</el-button>
   </div>
 </template>
 <style>
@@ -41,6 +41,16 @@
 <script>
   export default {
     name: "FilterTags",
+    props: {
+      lang: {
+        type: Object,
+        default: function () {
+          return {
+            new_tag: "+ New Tag"
+          }
+        }
+      }
+    },
     data() {
       return {
         dynamicTags: [],
