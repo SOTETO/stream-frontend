@@ -193,7 +193,7 @@ const actions = {
         
         var get = (store) => {
             var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            var errorHandler = (error) => true
             ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
         }
         count(store)
