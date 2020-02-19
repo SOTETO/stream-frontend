@@ -17,13 +17,14 @@
 <script>
   
 import { VcAFrame, VcAColumn } from 'vca-widget-base'
+import { Card } from 'element-ui'
 import DepositFilter from '@/components/deposit/overview/DepositFilter'
 import DepositList from '@/components/deposit/overview/DepositList'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: "deposits",
   components: {
-    VcAFrame, VcAColumn, DepositList, DepositFilter
+    VcAFrame, VcAColumn, DepositList, DepositFilter, "el-card": Card
   },
   props: {
     queryString: {
