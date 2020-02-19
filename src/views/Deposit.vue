@@ -17,6 +17,7 @@
 <script>
   
 import { VcAFrame, VcAColumn } from 'vca-widget-base'
+import 'vca-widget-base/dist/vca-widget-base.css'
 import { Card } from 'element-ui'
 import DepositFilter from '@/components/deposit/overview/DepositFilter'
 import DepositList from '@/components/deposit/overview/DepositList'
