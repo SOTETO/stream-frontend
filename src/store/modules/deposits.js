@@ -1,31 +1,26 @@
 import DepositEndpoints from '@/backend-endpoints/DepositEndpoints'
-import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
+import axios from "axios"
 
-//const uuidv4 = require('uuid/v4');
-
-// initial state
-// shape: [{
-//             "publicId": UUID
-//             "full": {
-//                  "amount": Double,
-//                  "currency": String
-//             },
-//             "confirmed": Long,
-//             "crew": UUID,
-//             "supporter": UUID,
-//             "created": Long,
-//             "updated": Long,
-//             "dateOfDeposit": Long,
-//             "amount": [{
-//                  "publicId": UUID,
-//                  "confirmed": Long,
-//                  "donationId": UUID,
-//                  "amount": Double,
-//                  "currency": String, 
-//                  "created": Long
-//             }]
-//         }]
 const state = {
+  query: {
+    size: 0,
+    offset: 0,
+    sortby: null,
+    sortdir: "ASC",
+    publicId: null, 
+    takingsId: null,
+    crew: null,
+    name: "%",
+    confirmed: null,
+    cby: null,
+    cfrom: 1581292800,
+    cto: null,
+    payfrom: null,
+    payto:null,
+    crfrom: null,
+    crto:null
+  },
+
   items: [], 
   donations: [],
   page: {
@@ -97,7 +92,7 @@ const getters = {
     return res
   },
   filter: (state) => {
-    return JSON.parse(JSON.stringify(state.filter))
+    return JSON.parse(JSON.stringify(state.query))
   },
   taggableFilter: (state) => {
     var res = []
@@ -143,38 +138,16 @@ const getters = {
 }
 
 const actions = {
-    init (store) {
-        var ajax = new DepositEndpoints(store)
-        var ajaxDons = new DonationEndpoints(store)
     
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.count(successHandler, errorHandler, page, sort)
-        }
-    
-        var get = (store) => {
-            var successHandler = (response) => {
-                store.commit({"type": 'init', "deposits": response.data.data})
-                ajaxDons.getByIds(
-                    (response) => store.commit({"type": 'initDons', "donations": response.data.data}),
-                    (error) => store.commit({"type": 'setError', error: error}),
-                    response.data.data.reduce((acc, deposit) => acc.concat(deposit.amount.map(unit => unit.donationId)), [])
-                )
-            }
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            var filter = store.state.filter
-            ajax.get(successHandler, errorHandler, page, sort, filter)
-        }
-    
-        get(store)
-        count(store)
-    },
-    page (store, down) {
+  init (store, query) {
+    axios.get('/backend/stream/deposits', {params: query})
+      .then(function (response){
+        store.commit({"type": 'init', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
         if(!down) {
@@ -217,6 +190,8 @@ const actions = {
       })
       deposit["amount"] = JSON.parse(JSON.stringify(amount))
       deposit.depositUnits = []
+      deposit["full"] = { "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0), "currency": "EUR"}
+
       
       //post deposit
       var ajax = new DepositEndpoints(store)
