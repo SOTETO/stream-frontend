@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-default/index.css'
 import { WidgetUserAutocomplete } from 'vca-widget-user'
 import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation'
 import router from './router'
