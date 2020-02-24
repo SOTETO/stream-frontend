@@ -115,11 +115,17 @@ Vue.use(Notification)
 Notification.closeAll()
 
 export default {
-  name: "List",
+  name: "TakingList",
   components: {
     DepositLights, DepositAdd, UserButton, TakingsDetails
   },
   props: {
+    filter: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    },
     depositAddView : {
       type: Boolean,
       default: false
@@ -138,48 +144,34 @@ export default {
       }
     }
   },
-  computed: {
-      ...mapGetters(
-        'takings', {
-          takings: 'overview',
-          isError: 'isError',
-          getErrorCode: 'getErrorCode',
-          getById: 'getById',
-        },
-      ),
-      maximumTags () {
-          return 2;
-      },
-      isEployee () {
-        return this.$store.getters['user/is'](["Admin", "Employee"]);
-      },
-
-  },
-  created () {
-      if(this.isError) {
-          switch(this.getErrorCode) {
-              case 400:
-                  this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
-                  break;
-              case 403:
-                  this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
-                  break;
-              case 404:
-                  this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
-                  break;
-              default:
-                  if(this.getErrorCode > 404) {
-                      this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
-                  }
-          }
-      } else {
-          this.init()
+  data () {
+    return {
+      sortPage: {
+        sortby: null,
+        sort: null,
+        page: 0,
+        offset: 4
       }
+    }
+  },
+  computed: {
+    ...mapGetters(
+      'takings', {
+        takings: 'overview',
+        isError: 'isError',
+        getErrorCode: 'getErrorCode',
+        getById: 'getById',
+      },
+    ),
+
+    maximumTags () {
+      return 2;
+    },
+    isEployee () {
+      return this.$store.getters['user/is'](["Admin", "Employee"]);
+    },
   },
   methods: {
-      ...mapActions('takings', [
-          'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
-      ]),
       formatAmount(amount) {
           var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
           return formatter.localize()
@@ -188,16 +180,6 @@ export default {
           var d = new Date(date)
           return this.$d(d, 'short')
       },
-      /*supporter (taking) {
-          return [taking.author].concat(taking.supporter)
-              .filter((value, index, self) => self.indexOf(value) === index)
-      },
-      teaserSupporter (taking) {
-          return this.supporter(taking).slice(0, this.maximumTags)
-      },
-      hasAddtionalSupporter (taking) {
-          return this.supporter(taking).length > this.maximumTags
-      },*/
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
       },

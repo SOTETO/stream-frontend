@@ -1,12 +1,12 @@
 <template>
-  <dev>
+  <div>
   <span> Übersicht Einnahmen </span>
   <span> Gesamt: </span>
   <p>{{ amount.full}}</p>
   <span> Davon: </span>
   <p>{{$t('takings.table.popup.cash')}}: {{ amount.cash }}</p>
   <p>{{$t('takings.table.popup.extern')}}: {{ amount.extern }}</p>
-  </dev>        
+  </div>        
 </template>
 <script>
 export default {

@@ -1,5 +1,5 @@
 import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
-
+import axios from "axios"
 // initial state
 // shape: [{
 //             "id"
@@ -165,24 +165,14 @@ const getters = {
 }
 
 const actions = {
-    init (store) {
-        var ajax = new DonationEndpoints(store)
-
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.count(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        
-        var get = (store) => {
-            var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        
-        get(store)
-        count(store)
-    },
+  init (store, query) {
+    axios.get('/backend/stream/takings', {params: query})
+      .then(function (response){
+        store.commit({"type": 'init', "takings": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
     page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
