@@ -41,7 +41,7 @@
         width="210"
         >
         <template slot-scope="scope">
-          <DepositLights :donation="scope.row" />
+          <DepositLights :taking="scope.row" />
           <DepositAdd 
             v-if="depositAddView" 
             :depositUnit="deposit.depositUnits" 

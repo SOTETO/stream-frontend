@@ -12,23 +12,6 @@
             <el-form-item :label="lang.events.label" required>
               <FilterTags :lang="lang.events" v-on:commit="addEvent($event)" v-on:delete="deleteEvent($event)"/>
             </el-form-item>
-             <el-form-item
-              :label="lang.confirmed.label"
-              required
-              >
-              <FilterOption :lang="lang.confirmed" @change="setConfimed($event)"/>
-            </el-form-item>           <el-form-item
-              :label="lang.unconfirmed.label"
-              required
-              >
-              <FilterOption :lang="lang.unconfirmed" @change="setUnConfimed($event)"/>
-            </el-form-item>
-            <el-form-item
-              :label="lang.open.label"
-              required
-              >
-              <FilterOption :lang="lang.open" @change="setOpen($event)"/>
-            </el-form-item>
            <el-form-item
               :label="lang.created.label"
               required
@@ -53,12 +36,6 @@
               required
               >
               <FilterOption :lang="lang.confirmed" @change="setConfimed($event)"/>
-            </el-form-item>
-            <el-form-item
-              :label="lang.confirmed_date.label"
-              required
-              >
-              <DateFilter :from="filter.cfrom" :to="filter.cto" v-on:update="dateConfirmed($event)"/>
             </el-form-item>
           </el-form>
           <el-form>

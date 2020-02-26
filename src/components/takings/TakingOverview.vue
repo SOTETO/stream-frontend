@@ -56,6 +56,14 @@ export default {
     updateFilter(filter) {
       this.filter = filter
       this.init(this.query) 
+    },
+    updateSort(sort) {
+      this.sort = sort
+      this.init(this.query)
+    },
+    updatePage(page) {
+      this.page = page
+      this.init(this.query)
     }
   }
 }
