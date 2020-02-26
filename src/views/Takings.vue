@@ -3,14 +3,8 @@
         <VcAColumn size="70%">
             <el-card class="box-card">
 
-                <TakingFilter @vca-filter-updated="addState" />
-
-                <ListMenu :fields="sortFields" store="takings" />
-                <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
-                    {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
-                </button>
-                <List :depositAddView="depositAddView" :deposit="deposit"/>
-                <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
+              <TakingOverview :deposit="deposit" :depositAddView="depositAddView"/>
+              <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
                     {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
                 </button>
             </el-card>
@@ -38,7 +32,7 @@
 </template>
 
 <script>
-  import List from '@/components/takings/overview/List'
+  //import List from '@/components/takings/overview/TakingList'
   import ListMenu from '../components/utils/ListMenu'
   import { Card} from 'element-ui'
   import { mapGetters, mapActions } from 'vuex'
@@ -47,10 +41,11 @@
   import TakingDeposit from '@/components/takings/overview/TakingDeposit' 
   import TakingFilter from "../components/takings/overview/TakingFilter"
   import CrewDetail from '@/components/takings/overview/CrewDetail'
+  import TakingOverview from '@/components/takings/TakingOverview'
   export default {
     name: "takings",
     components: {
-      VcAFrame, VcAColumn, List, ListMenu, TakingDeposit, TakingFilter, 'el-card': Card, CrewDetail
+      VcAFrame, VcAColumn, TakingOverview, ListMenu, TakingDeposit, TakingFilter, 'el-card': Card, CrewDetail
     },
     data () {
       var editableDefault = {
