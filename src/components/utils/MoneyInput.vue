@@ -3,7 +3,7 @@
         class="vca-money-wrapper"
         :class="amountErrorState ? 'vca-error' : ''"
     >
-        <el-input class="vca-input" v-model="displayAmount" :placeholder="label" :disabled="disabled" :size="size" @change="change"/>
+        <el-input class="vca-input" v-model="displayAmount" @input="handleInput" :placeholder="label" :disabled="disabled" :size="size" @change="change"/>
         <div
                 v-if="amountErrorState"
                 class="el-form-item__error"
@@ -15,7 +15,7 @@
 
 <script>
     
-import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
 export default {
   name: "MoneyInput",
   props: {
@@ -23,7 +23,7 @@ export default {
       type: Object,
       default: function () {
         return {
-          "amount": 0.0,
+          "amount": 1233,
           "currency": "EUR"
         }
       }
@@ -51,32 +51,34 @@ export default {
   data () {
     return {
       "amountErrorState": false,
-      "errorMsg": this.$t('donation.hints.error.amount.pattern')
+      "errorMsg": this.$t('donation.hints.error.amount.pattern'),
     }
   },
   computed: {
     displayAmount: {
-      get: function () {
-        var formatter = CurrencyFormatter.getFromNumeric(this.amount.currency, this.amount.amount)
-        return formatter.localize()
+      get: function () { 
+        return Money.getString(this.amount.amount, this.amount.currency)
+      //  let money = this.amount.amount.toString()
+      //  console.log(money)
+      //  if (money.length === 1) {
+      //    return "0,0" + money
+      //  } else if ( money.length === 2) {
+      //    return "0," + money
+      //  } else {
+      //    let euro = money.substring(0, money.length -2)
+          
+      //    let cents = money.substring(money.length -2, money.length)
+      //    return euro.replace(/(\d)(?=(\d{3})+?$)/g, "$1.") + "," + cents
       },
       set: function(value) {
-        if (value === "") {
-          this.amount.amount = 0.0
-        } else {
-          var formatter = new CurrencyFormatter(this.amount.currency, value)
-          var internal = this.internalValidation(formatter.getNumeric())
-          if (formatter.match() && internal.valid) {
-            this.amount.currency = formatter.selectedCurrency
-            this.amount.amount = formatter.getNumeric()
-            this.numericAmount = formatter.getNumeric()
-          } else if(!formatter.match()) {
-            this.amountErrorState = true
-          } else if(!internal.valid) {
-            this.amountErrorState = true
-            this.errorMsg = internal.msg
-          }
-        }
+        this.amount.amount = Money.getAmount(value)
+     //   let cents = parseInt(value.replace(/,|\./g , ""))
+     //           // Ensure that it is not NaN
+     //   if(isNaN(cents)) {
+     //     this.amount.amount = 0
+     //   } else {
+     //     this.amount.amount = cents
+     //   }
       }
     }
   },
@@ -94,6 +96,13 @@ export default {
       }, {
         "valid": true
       })
+    },
+    handleInput(e) {
+      this.prevValue = e.target.value;
+      let targetValue = unformat(e.target.value);
+      this.position = e.target.selectionStart;
+      this.formatedValue = formatNumber(targetValue)
+      this.$emit("input", this.formatedValue);
     },
     change() {
       this.$emit("change", this.amount)
