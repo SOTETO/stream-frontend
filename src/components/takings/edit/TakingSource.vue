@@ -33,7 +33,7 @@
 
 <script>
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
-    import MoneyInput from '@/components/takings/edit/MoneyInput'
+    import MoneyInput from '@/components/utils/MoneyInput'
 
     // Todo: Should use new component utils.MoneyInput!
     export default {

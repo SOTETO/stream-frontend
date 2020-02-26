@@ -54,7 +54,21 @@ const getters = {
                 "id": taking.id,
                 "name": taking.context.description,
                 "norms": taking.norms,
-                "amount": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                "amount": {
+                  "full": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                  "cash": taking.amount.sources.filter(s => s.typeOfSource.category == "cash")
+                    .reduce((amount, source) => amount + source.amount.amount, 0),
+                  "extern": taking.amount.sources.filter(s => s.typeOfSource.category == "extern")
+                    .reduce((amount, source) => amount + source.amount.amount, 0),
+                  "fullDon": taking.amount.sources.filter(s => s.typeOfSource.norms == "DONATION").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "donCash": taking.amount.sources.filter(s => s.typeOfSource.norms == "DONATION" && s.typeOfSource.category == "cash").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "donExtern": taking.amount.sources.filter(s => s.typeOfSource.norms == "DONATION" && s.typeOfSource.category == "extern").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "fullEC":taking.amount.sources.filter(s => s.typeOfSource.norms == "ECONOMIC").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "ecCash": taking.amount.sources.filter(s => s.typeOfSource.norms == "ECONOMIC" && s.typeOfSource.category == "cash").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "ecExtern": taking.amount.sources.filter(s => s.typeOfSource.norms == "ECONOMIC" && s.typeOfSource.category == "extern").reduce((amount, source) => amount + source.amount.amount, 0),
+
+
+                },
                 "deposited": taking.depositUnits.reduce((categories, unit) => {
                     if(unit.hasOwnProperty("confirmed")) {
                         if(!categories.confirmed.hasOwnProperty(unit.amount.currency)) {
@@ -193,7 +207,7 @@ const actions = {
         
         var get = (store) => {
             var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
+            var errorHandler = (error) => true
             ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
         }
         count(store)

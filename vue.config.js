@@ -6,7 +6,7 @@ module.exports = {
             .loader("vue-svg-inline-loader")
             .options({ /* ... */ });
     },
-    baseUrl: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'
         ? '/stream/'
         : '/stream/'
 }

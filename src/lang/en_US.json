@@ -380,7 +380,17 @@
       "dates": {
         "received": "Received: {date}",
         "created": "Recorded: {date}"
+      },
+      "popup": {
+        "extern": "transfer",
+        "cash": "cash"
       }
+    },
+    "labels": {
+      "name": "Name / organisation:",
+      "asp": "Contact person:",
+      "address": "Address:",
+      "email": "E-mail address:"
     },
     "placeholder": {
         "comment": "Comment",
@@ -402,7 +412,11 @@
     },
     "validations": {
       "category": "Please add a category",
-      "description": "Please add a description"
+      "description": "Please add a description",
+      "name": "Please add a name",
+      "asp": "Please add a contact",
+      "email": "Please add an e-mail address",
+      "address": "Please add an address"
     },
     "info": "Questions? "
   },

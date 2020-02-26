@@ -1,58 +1,104 @@
 <template>
-    <table class="takings">
-        <col width="15%">
-        <col width="5%">
-        <col width="15%">
-        <col width="25%">
-        <col width="15%">
-        <col width="10%">
-        <col width="*">
-        <thead>
-        <tr>
-            <th>{{ $t("takings.table.head.title") }}</th>
-            <th>{{ $t("takings.table.head.crew") }}</th>
-            <th>{{ $t("takings.table.head.amount") }}</th>
-            <th>{{ $t("takings.table.head.deposited") }}</th>
-            <th>{{ $t("takings.table.head.date") }}</th>
-            <th>{{ $t("takings.table.head.supporter") }}</th>
-            <th>{{ $t("takings.table.head.edit") }} </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="taking in takings" :key="taking.id" class="taking">
-            <td>{{ taking.name }}</td>
-            <td class="crew">
-              <span class="vca-crew-name" v-for="c in taking.crew" :key="c.id">
-                <el-tag> {{ c.name }} </el-tag>
-              </span>
-            </td>
-            <td>{{ formatAmount(taking.amount) }}</td>
-            <td>
-                <DepositLights :donation="taking" />
-                <DepositAdd v-if="depositAddView" :depositUnit="deposit.depositUnits" :taking="taking" :amount="taking.amount" :takingId="taking.id" />
-            </td>
-            <td>
-                <div class="dates">
-                    <span>{{ $t("takings.table.dates.received", { "date":  formatDate(taking.date.received) }) }}</span>
-                    <span>{{ $t("takings.table.dates.created", { "date":  formatDate(taking.date.created) }) }}</span>
+    <el-table
+      :data="takings"
+      style="width: 100%">
+
+      <el-table-column
+        prop="name"
+        :label='$t("takings.table.head.title")'
+        >
+      </el-table-column>
+
+      <el-table-column
+        prop="crew"
+        :label='$t("takings.table.head.crew")'
+        >
+        <template slot-scope="scope">
+            <div class="vca-crew-name" v-for="c in scope.row.crew" :key="c.id">
+              <el-tag> {{ c.name }} </el-tag>
+            </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop="amount"
+        :label='$t("takings.table.head.amount")'
+        >
+        <template slot-scope="scope">
+        <el-popover trigger="hover" placement="top">
+          <p>{{$t('takings.table.popup.cash')}}: {{ scope.row.amount.cash }}</p>
+          <p>{{$t('takings.table.popup.extern')}}: {{ scope.row.amount.extern }}</p>
+          <div slot="reference" class="name-wrapper">
+            {{ formatAmount(scope.row.amount.full)}}
+          </div>
+        </el-popover>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop=""
+        :label='$t("takings.table.head.deposited")'
+        width="210"
+        >
+        <template slot-scope="scope">
+          <DepositLights :donation="scope.row" />
+          <DepositAdd 
+            v-if="depositAddView" 
+            :depositUnit="deposit.depositUnits" 
+            :taking="scope.row" 
+            :amount="scope.row.amount.full" 
+            :takingId="scope.row.id" />
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        prop=""
+        :label='$t("takings.table.head.date")'
+        width="210"
+        >
+        <template slot-scope="scope">
+          <div class="dates">
+          <span>{{ $t("takings.table.dates.received", { "date":  formatDate(scope.row.date.received) }) }}</span>
+          <span>{{ $t("takings.table.dates.created", { "date":  formatDate(scope.row.date.created) }) }}</span>
+          </div>
+        </template>
+      </el-table-column>
+
+ 
+      <el-table-column
+        prop="supporter"
+        :label='$t("takings.table.head.supporter")'
+        >
+        <template slot-scope="scope">
+          <div class="vca-crew-name" v-for="s in scope.row.supporter" :key="s.uuid">
+            <UserButton :user="s" />
+          </div>
+        </template>
+      </el-table-column>
+      
+      <el-table-column
+        prop="formatAmount(amount)"
+        :label='$t("takings.table.head.edit")'
+        >
+        <template slot-scope="scope">
+          <el-row>
+            <el-col :span="12">
+              <el-popover trigger="click" placement="top">
+                <TakingsDetails :amount="scope.row.amount" />
+                <div slot="reference" class="name-wrapper">
+                  <el-button type="primary" icon="el-icon-search" size="mini">
+                  </el-button>
                 </div>
-            </td>
-            <td>
-                <div class="supporter">
-                    <span class="vca-user-name" v-for="s in taking.supporter" :key="s.uuid">
-                      <UserButton :user="s" />
-                    </span>
-                </div>
-            </td>
-            <td>
-              <el-button type="primary" icon="el-icon-search" size="mini" :disabled="true">
+              </el-popover>
+            </el-col>
+            <el-col :span="12">
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="editPage(scope.row.id)">
               </el-button>
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="editPage(taking.id)">
-              </el-button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </el-col>
+          </el-row>
+        </template>
+      </el-table-column>
+    </el-table>
 </template>
 
 <script>
@@ -62,6 +108,7 @@ import CurrencyFormatter from '@/utils/CurrencyFormatter'
 import DepositLights from '@/components/deposit/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
 import UserButton from '@/components/utils/UserButton'
+import TakingsDetails from '@/components/takings/overview/TakingsDetails'
 import { Notification } from 'element-ui'
 
 Vue.use(Notification)
@@ -70,7 +117,7 @@ Notification.closeAll()
 export default {
   name: "List",
   components: {
-    DepositLights, DepositAdd, UserButton
+    DepositLights, DepositAdd, UserButton, TakingsDetails
   },
   props: {
     depositAddView : {
@@ -141,16 +188,16 @@ export default {
           var d = new Date(date)
           return this.$d(d, 'short')
       },
-      supporter (donation) {
-          return [donation.author].concat(donation.supporter)
+      /*supporter (taking) {
+          return [taking.author].concat(taking.supporter)
               .filter((value, index, self) => self.indexOf(value) === index)
       },
-      teaserSupporter (donation) {
-          return this.supporter(donation).slice(0, this.maximumTags)
+      teaserSupporter (taking) {
+          return this.supporter(taking).slice(0, this.maximumTags)
       },
-      hasAddtionalSupporter (donation) {
-          return this.supporter(donation).length > this.maximumTags
-      },
+      hasAddtionalSupporter (taking) {
+          return this.supporter(taking).length > this.maximumTags
+      },*/
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
       },
