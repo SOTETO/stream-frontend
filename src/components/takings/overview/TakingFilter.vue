@@ -12,7 +12,15 @@
             <el-form-item :label="lang.events.label" required>
               <FilterTags :lang="lang.events" v-on:commit="addEvent($event)" v-on:delete="deleteEvent($event)"/>
             </el-form-item>
-           <el-form-item
+
+          </el-form>
+        </el-col>
+        <el-col :span="12">
+
+          <el-form
+            label-position="left"
+            >
+            <el-form-item
               :label="lang.created.label"
               required
              >
@@ -25,26 +33,6 @@
              >
              <DateFilter :from="filter.payfrom" :to="filter.payto" v-on:update="dateReceived($event)"/>
            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="12">
-          <el-form
-            label-position="left"
-            >
-            <el-form-item
-              :label="lang.confirmed.label"
-              required
-              >
-              <FilterOption :lang="lang.confirmed" @change="setConfimed($event)"/>
-            </el-form-item>
-          </el-form>
-          <el-form>
-            <el-form-item 
-              :label="lang.amount.label"
-              required
-              >
-              <FilterAmount @from="addAmountFrom($event)"  @to="addAmountTo($event)"/>
-            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -149,6 +137,16 @@ export default {
       if (this.filter.name === '') {
         this.filter.name = null
       }
+      this.update()
+    },
+    dateCreated(value) {
+        this.filter.crfrom = value.from
+        this.filter.crto = value.to
+      this.update()
+    },
+    dateReceived(value) {
+        this.filter.payfrom = value.from
+        this.filter.payto = value.to
       this.update()
     },
     update () {
