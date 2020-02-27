@@ -26,8 +26,8 @@
         >
         <template slot-scope="scope">
         <el-popover trigger="hover" placement="top">
-          <p>{{$t('takings.table.popup.cash')}}: {{ scope.row.amount.cash }}</p>
-          <p>{{$t('takings.table.popup.extern')}}: {{ scope.row.amount.extern }}</p>
+          <p>{{$t('takings.table.popup.cash')}}: {{ formatAmount(scope.row.amount.cash) }}</p>
+          <p>{{$t('takings.table.popup.extern')}}: {{ formatAmount(scope.row.amount.extern) }}</p>
           <div slot="reference" class="name-wrapper">
             {{ formatAmount(scope.row.amount.full)}}
           </div>
@@ -105,6 +105,7 @@
 import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
 import DepositLights from '@/components/deposit/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
 import UserButton from '@/components/utils/UserButton'
@@ -174,7 +175,7 @@ export default {
   methods: {
       formatAmount(amount) {
           var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
-          return formatter.localize()
+          return Money.getString(amount, "EUR" )
       },
       formatDate(date) {
           var d = new Date(date)

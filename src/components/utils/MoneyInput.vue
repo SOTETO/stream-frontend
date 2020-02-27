@@ -65,7 +65,7 @@ export default {
   computed: {
     displayAmount: {
       get: function () { 
-        return Money.getString(this.amount.amount, this.amount.currency)
+        return Money.getInputString(this.amount.amount, this.amount.currency)
       },
       set: function(value) {
         this.amount.amount = Money.getAmount(value)
