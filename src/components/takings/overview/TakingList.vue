@@ -30,6 +30,7 @@
           <p>{{$t('takings.table.popup.extern')}}: {{ formatAmount(scope.row.amount.extern) }}</p>
           <div slot="reference" class="name-wrapper">
             {{ formatAmount(scope.row.amount.full)}}
+            <i v-if="isExtern(scope.row.amount.extern)" class="el-icon-bank-card"></i>
           </div>
         </el-popover>
         </template>
@@ -181,6 +182,13 @@ export default {
       },
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
+      },
+      isExtern (value) {
+        if(value > 0) {
+          return true
+        } else {
+          return false
+        }
       },
       open(title, message, type) {
           Notification({

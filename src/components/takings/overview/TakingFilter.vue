@@ -12,7 +12,15 @@
             <el-form-item :label="lang.events.label" required>
               <FilterTags :lang="lang.events" v-on:commit="addEvent($event)" v-on:delete="deleteEvent($event)"/>
             </el-form-item>
-
+            <el-form-item :label="lang.crews.label" required>
+              <FilterTags :lang="lang.crews" v-on:commit="addCrew($event)" v-on:delete="deleteCrew($event)"/>
+            </el-form-item>
+           <el-form-item
+              :label="lang.external.label"
+              required
+              >
+              <FilterOption :lang="lang.external" @change="setExternal($event)"/>
+            </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="12">
@@ -33,6 +41,12 @@
              >
              <DateFilter :from="filter.payfrom" :to="filter.payto" v-on:update="dateReceived($event)"/>
            </el-form-item>
+           <el-form-item
+              :label="lang.norms.label"
+              required
+              >
+              <FilterNorms :lang="lang.norms" @change="setNorms($event)"/>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -48,11 +62,12 @@ import DateFilter from '@/components/utils/FilterDate'
 import FilterTags from '@/components/utils/FilterTags'
 import FilterOption from '@/components/utils/FilterOption'
 import FilterAmount from '@/components/utils/FilterAmount'
+import FilterNorms from '@/components/utils/FilterNorms'
 
 export default {
   name: "TakingFilter",
   components: {
-    FilterTags, DateFilter, FilterOption, FilterAmount
+    FilterTags, DateFilter, FilterOption, FilterAmount, FilterNorms
   },
   props: {
     lang: {
@@ -63,8 +78,12 @@ export default {
             label: "Crew"
           },
           events: {
-            label: "Event",
-            new_tag: "+ New Event"
+            label: "Aktion",
+            new_tag: "+ New Aktion"
+          },
+          crews: {
+            label: "Crews",
+            new_tag: "+ add Crew"
           },
           created: {
             label: "Created"
@@ -72,16 +91,16 @@ export default {
           received: {
             label: "Received"
           },
-          confirmed: {
-            label: "Confirmed",
-            label_true: "Confirmed",
-            label_false: "Not Confirmed",
+          norms: {
+            label: "Art der Einzahlung",
+            label_ECO: "Wirtschaftlich",
+            label_DON: "Spende",
             label_null: "All"
           },
-           unconfirmed: {
-            label: "Unconfirmed",
-            label_true: "Unconfirmed",
-            label_false: "Not Unconfirmed",
+           external: {
+            label: "Bar/Extern",
+            label_true: "Extern",
+            label_false: "Bar",
             label_null: "All"
           }, 
           open: {
@@ -118,7 +137,10 @@ export default {
         payfrom: null,
         payto:null,
         crfrom: null,
-        crto:null
+        crto:null,
+        crewname:null,
+        norms:null,
+        external:null
       }
     }
   },
@@ -139,6 +161,22 @@ export default {
       }
       this.update()
     },
+    addCrew(value) {
+      if (this.filter.crewname !== null) {
+        this.filter.crewname = this.filter.crewname + " " +"%" + value +"%"
+      } else {
+        this.filter.crewname = "%" + value + "%"
+      }
+      this.update()
+    },
+    deleteCrew(value) {
+      var replace = "%"+ value + "%"
+      this.filter.crewname = this.filter.crewname.replace(replace, '')
+      if (this.filter.crewname === '') {
+        this.filter.crewname = null
+      }
+      this.update()
+    },
     dateCreated(value) {
         this.filter.crfrom = value.from
         this.filter.crto = value.to
@@ -147,6 +185,14 @@ export default {
     dateReceived(value) {
         this.filter.payfrom = value.from
         this.filter.payto = value.to
+      this.update()
+    },
+    setNorms(value) {
+      this.filter.norms = value
+      this.update()
+    },
+    setExternal(value) {
+      this.filter.external = value
       this.update()
     },
     update () {
