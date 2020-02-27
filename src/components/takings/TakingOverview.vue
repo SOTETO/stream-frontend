@@ -1,7 +1,11 @@
 <template>
   <div>
-    <TakingFilter v-on:update="updateFilter($event)" />
-    <TakingList :deposit="deposit" :depositAddView="depositAddView"/>
+    <el-card class="box-card">
+      <TakingFilter v-on:update="updateFilter($event)" />
+    </el-card>
+    <el-card class="box-card tail">
+      <TakingList :deposit="deposit" :depositAddView="depositAddView"/>
+    </el-card>
   </div>
 </template>
 <script>
@@ -68,3 +72,11 @@ export default {
   }
 }
 </script>
+<style lang="less">
+    .box-card {
+        width: 100%;
+    }
+    .box-card.tail {
+        margin-top: 2em;
+    }
+</style>

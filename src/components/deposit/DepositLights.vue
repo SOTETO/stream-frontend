@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
     import AmpleLight from '@/components/utils/AmpleLight'
 
     export default {
@@ -81,8 +81,7 @@
         },
         methods: {
             formatAmount(amount) {
-                var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on taking entry!
-                return formatter.localize()
+                return Money.getString(amount, "EUR")
             }
         }
     }

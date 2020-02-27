@@ -14,6 +14,8 @@
 </template>
 
 <script>
+
+import Money from '@/utils/Money'
 import {Button} from 'element-ui'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
 export default {
@@ -98,8 +100,7 @@ export default {
       //this.submitted = true
     },
     formatAmount(unit) {
-      var formatter = CurrencyFormatter.getFromNumeric(unit.currency, unit.amount)
-      return formatter.localize()
+      return Money.getString(unit.amount, unit.currency)
     },
     pop () {
       var index = this.depositUnit.indexOf(this.unit)

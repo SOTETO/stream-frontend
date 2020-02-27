@@ -87,7 +87,7 @@
   import { mapGetters, mapActions } from 'vuex'
   import { CrewPlainName, Tag } from 'vca-widget-user'
   import StateLight from '@/components/utils/StateLight'
-  import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
   import UserButton from '@/components/utils/UserButton'
   export default {
     name: "DepositList",
@@ -134,8 +134,7 @@
         console.log(JSON.stringify(column))
       },
       formatAmount(amount) {
-        var formatter = CurrencyFormatter.getFromNumeric(amount.currency, amount.amount)
-        return formatter.localize()
+        return Money.getString(amount.amount, amount.currency)
       },
       formatDate(date) {
         var d = new Date(date)

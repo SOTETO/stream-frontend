@@ -1,13 +1,11 @@
 <template>
     <VcAFrame>
         <VcAColumn size="70%">
-            <el-card class="box-card">
 
-              <TakingOverview :deposit="deposit" :depositAddView="depositAddView"/>
+              <TakingOverview class="box-card" :deposit="deposit" :depositAddView="depositAddView"/>
               <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
                     {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
                 </button>
-            </el-card>
         </VcAColumn>
         <VcAColumn size="20%">
             <el-card class="box-card">
