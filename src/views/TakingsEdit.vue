@@ -4,7 +4,7 @@
                 :model="taking"
                 :rules="rules"
                 class="columns-container">
-            <VcAColumn size="40%">
+            <VcAColumn size="60%">
                 <el-card class="box-card">
                     <TakingContext v-model="taking.context" v-bind:context="taking.context" />
                 </el-card>  

@@ -76,9 +76,9 @@
           </el-form>
         </div>
         <div class="evaluation">
-            <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
-            <span class="part">{{ $t('donation.hints.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
-            <span class="all">{{ $t('donation.hints.total.all', { 'total': getTotalAll.localize() }) }}</span>
+            <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash }) }}</span>
+            <span class="part">{{ $t('donation.hints.total.extern', { 'total': getTotalExtern }) }}</span>
+            <span class="all">{{ $t('donation.hints.total.all', { 'total': getTotalAll }) }}</span>
         </div>
     </div>
 </template>
@@ -91,6 +91,7 @@
     import TakingSelectSource from '@/components/takings/edit/TakingSelectSource'
     import TakingSource from '@/components/takings/edit/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
 
     export default {
         name: "TakingCalculator",
@@ -281,7 +282,7 @@
             if (typeof part === 'string' && (part === 'cash' || part === 'extern')) {
               result = this.amount.sources.filter(filter).reduce(reducer, 0)
             }
-            return CurrencyFormatter.getFromNumeric(this.currency, result)
+            return Money.getString(result, this.currency)
           },
             commit() {
                 var result = {
