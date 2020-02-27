@@ -20,7 +20,8 @@
                 <button v-if="depositAddView" class="vca-button-warn vca-full-width" v-on:click.prevent="depositAdd">
                     {{ $t('takings.buttons.abort') }}
                 </button>
-          </el-card>
+              <p class="info"><i class="el-icon-info"></i> {{ this.$t("takings.info") }} <a href="https://pool2.vivaconagua.org/wiki/index.php/How_to_Finanzen">How to Finanzen</a> </p>
+            </el-card>
             <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
               <TakingDeposit :deposit="deposit" v-on:resetDepositAddView="resetDepositAddView"></TakingDeposit>
             </el-card>
@@ -173,7 +174,14 @@
 
 <style scoped lang="less">
     @import '../assets/less/general.less';
-    
+
+    .info {
+      font-size: smaller;
+      color: grey;
+      font-style: italic;
+
+    }
+
     .box-card {
         width: 100%;
     }
