@@ -185,8 +185,10 @@
                     { "category": "gl", "desc": false },
                     { "category": "other", "desc": true },
                     { "category": "merch", "desc": false },
+                    { "category": "com", "desc": false },
+                    { "category": "better", "desc": false },
                     { "category": "other_ec", "desc": true }
-                ],
+                    ],
                 "currentSourceType": [
 
                 ],
