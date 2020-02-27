@@ -1,9 +1,17 @@
 <template>
-    <el-form-item
-        class="vca-money-wrapper"
-        :class="amountErrorState ? 'vca-error' : ''"
+  <el-form-item
+    class="vca-money-wrapper"
+    :class="amountErrorState ? 'vca-error' : ''"
     >
-        <el-input class="vca-input" v-model="displayAmount" :placeholder="label" :disabled="disabled" :size="size" @change="change"/>
+  
+    <el-input class="vca-input" ref="ta" v-model="displayAmount" :placeholder="label" :disabled="disabled" :size="size" @change="change">
+      <el-select v-model="amount.currency"  slot="append" :size="size">
+      <el-option label="€" value="EUR"></el-option>
+      <el-option label="$" value="USD"></el-option>
+      <el-option label="Fr" value="CHF"></el-option>
+    </el-select>
+    
+    </el-input>
         <div
                 v-if="amountErrorState"
                 class="el-form-item__error"
@@ -15,7 +23,7 @@
 
 <script>
     
-import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
 export default {
   name: "MoneyInput",
   props: {
@@ -23,7 +31,7 @@ export default {
       type: Object,
       default: function () {
         return {
-          "amount": 0.0,
+          "amount": 1233,
           "currency": "EUR"
         }
       }
@@ -51,32 +59,16 @@ export default {
   data () {
     return {
       "amountErrorState": false,
-      "errorMsg": this.$t('donation.hints.error.amount.pattern')
+      "errorMsg": this.$t('donation.hints.error.amount.pattern'),
     }
   },
   computed: {
     displayAmount: {
-      get: function () {
-        var formatter = CurrencyFormatter.getFromNumeric(this.amount.currency, this.amount.amount)
-        return formatter.localize()
+      get: function () { 
+        return Money.getString(this.amount.amount, this.amount.currency)
       },
       set: function(value) {
-        if (value === "") {
-          this.amount.amount = 0.0
-        } else {
-          var formatter = new CurrencyFormatter(this.amount.currency, value)
-          var internal = this.internalValidation(formatter.getNumeric())
-          if (formatter.match() && internal.valid) {
-            this.amount.currency = formatter.selectedCurrency
-            this.amount.amount = formatter.getNumeric()
-            this.numericAmount = formatter.getNumeric()
-          } else if(!formatter.match()) {
-            this.amountErrorState = true
-          } else if(!internal.valid) {
-            this.amountErrorState = true
-            this.errorMsg = internal.msg
-          }
-        }
+        this.amount.amount = Money.getAmount(value)
       }
     }
   },
@@ -104,6 +96,9 @@ export default {
 </script>
 
 <style scoped>
+  .el-select {
+    width: 60px;
+  }
     .vca-money-wrapper.vca-error {
         margin-bottom: 2em;
     }
