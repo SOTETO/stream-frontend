@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter=20>
-    <el-col :span="4">
+    <el-col :span="6">
       <MoneyInput
         size="small"
         v-model="amount_data.from"
@@ -8,7 +8,7 @@
         @change="setFrom($event)"
         />
     </el-col>
-    <el-col :span="4">
+    <el-col :span="6">
       <MoneyInput
         size="small"
         v-model="amount_data.to"

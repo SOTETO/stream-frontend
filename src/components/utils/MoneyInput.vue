@@ -1,9 +1,17 @@
 <template>
-    <el-form-item
-        class="vca-money-wrapper"
-        :class="amountErrorState ? 'vca-error' : ''"
+  <el-form-item
+    class="vca-money-wrapper"
+    :class="amountErrorState ? 'vca-error' : ''"
     >
-        <el-input class="vca-input" v-model="displayAmount" @input="handleInput" :placeholder="label" :disabled="disabled" :size="size" @change="change"/>
+  
+    <el-input class="vca-input" ref="ta" v-model="displayAmount" :placeholder="label" :disabled="disabled" :size="size" @change="change">
+      <el-select v-model="amount.currency"  slot="append" :size="size">
+      <el-option label="€" value="EUR"></el-option>
+      <el-option label="$" value="USD"></el-option>
+      <el-option label="Fr" value="CHF"></el-option>
+    </el-select>
+    
+    </el-input>
         <div
                 v-if="amountErrorState"
                 class="el-form-item__error"
@@ -58,27 +66,9 @@ export default {
     displayAmount: {
       get: function () { 
         return Money.getString(this.amount.amount, this.amount.currency)
-      //  let money = this.amount.amount.toString()
-      //  console.log(money)
-      //  if (money.length === 1) {
-      //    return "0,0" + money
-      //  } else if ( money.length === 2) {
-      //    return "0," + money
-      //  } else {
-      //    let euro = money.substring(0, money.length -2)
-          
-      //    let cents = money.substring(money.length -2, money.length)
-      //    return euro.replace(/(\d)(?=(\d{3})+?$)/g, "$1.") + "," + cents
       },
       set: function(value) {
         this.amount.amount = Money.getAmount(value)
-     //   let cents = parseInt(value.replace(/,|\./g , ""))
-     //           // Ensure that it is not NaN
-     //   if(isNaN(cents)) {
-     //     this.amount.amount = 0
-     //   } else {
-     //     this.amount.amount = cents
-     //   }
       }
     }
   },
@@ -97,13 +87,6 @@ export default {
         "valid": true
       })
     },
-    handleInput(e) {
-      this.prevValue = e.target.value;
-      let targetValue = unformat(e.target.value);
-      this.position = e.target.selectionStart;
-      this.formatedValue = formatNumber(targetValue)
-      this.$emit("input", this.formatedValue);
-    },
     change() {
       this.$emit("change", this.amount)
     }
@@ -113,6 +96,9 @@ export default {
 </script>
 
 <style scoped>
+  .el-select {
+    width: 60px;
+  }
     .vca-money-wrapper.vca-error {
         margin-bottom: 2em;
     }
