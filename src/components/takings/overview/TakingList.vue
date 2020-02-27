@@ -104,7 +104,6 @@
 <script>
 import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
-import CurrencyFormatter from '@/utils/CurrencyFormatter'
 import Money from '@/utils/Money'
 import DepositLights from '@/components/deposit/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
@@ -174,7 +173,6 @@ export default {
   },
   methods: {
       formatAmount(amount) {
-          var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
           return Money.getString(amount, "EUR" )
       },
       formatDate(date) {
