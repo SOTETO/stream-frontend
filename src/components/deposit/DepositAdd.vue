@@ -1,9 +1,7 @@
 <template>
   <div>
   <div class="unit unsubmitted" v-if="!submitted && !stateConfirmed && !stateUnConfirmed">
-    <el-input class="money-input" :disabled="true" v-model="unit.amount.amount" size="mini">
-      <template class="currency" slot="append">€</template>
-    </el-input>
+    <MoneyInput class="money-input"  v-model="unit.amount" v-bind:amount="unit.amount" size="mini" v-on:change="setAmount($event)"/>
     <el-button @click="submit" type="success" icon="el-icon-check" size="mini"></el-button>
   </div>
   <div class="unit submitted" v-if="submitted">
@@ -18,10 +16,11 @@
 import Money from '@/utils/Money'
 import {Button} from 'element-ui'
 import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import MoneyInput from '@/components/utils/MoneyInput'
 export default {
   name: "DepositAdd",
   components: {
-    "el-button": Button
+    "el-button": Button, MoneyInput
   },
   props: {
     taking: {
@@ -90,6 +89,7 @@ export default {
         }
         return unconfirmed
     },
+
     stateUnConfirmed () {
         return (this.unconfirmedAmount >= this.taking.amount)
     }
@@ -98,6 +98,9 @@ export default {
     submit () {
       this.depositUnit.push(this.unit)
       //this.submitted = true
+    },
+    setAmount (value) {
+      this.unit.amount = value
     },
     formatAmount(unit) {
       return Money.getString(unit.amount, unit.currency)

@@ -1,24 +1,11 @@
 <template>
-  <el-form-item
-    class="vca-money-wrapper"
-    :class="amountErrorState ? 'vca-error' : ''"
-    >
-  
     <el-input class="vca-input" ref="ta" v-model="displayAmount" :placeholder="label" :disabled="disabled" :size="size" @change="change">
       <el-select v-model="amount.currency"  slot="append" :size="size">
-      <el-option label="€" value="EUR"></el-option>
-      <el-option label="$" value="USD"></el-option>
-      <el-option label="Fr" value="CHF"></el-option>
-    </el-select>
-    
+        <el-option label="€" value="EUR"></el-option>
+        <el-option label="$" value="USD"></el-option>
+        <el-option label="Fr" value="CHF"></el-option>
+      </el-select>
     </el-input>
-        <div
-                v-if="amountErrorState"
-                class="el-form-item__error"
-        >
-            {{ errorMsg }}
-        </div>
-    </el-form-item>
 </template>
 
 <script>

@@ -188,7 +188,7 @@ const actions = {
             "created": Date.now()
         }
       })
-      deposit["amount"] = JSON.parse(JSON.stringify(amount))
+      deposit["amount"] = amount
       deposit.depositUnits = []
       deposit["full"] = { "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0), "currency": "EUR"}
 

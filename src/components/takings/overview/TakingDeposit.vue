@@ -45,9 +45,8 @@
 
 <script>
   import { FormItem, Form, DatePicker} from 'element-ui'
-  import CurrencyFormatter from '@/utils/CurrencyFormatter'
   import { mapGetters, mapActions } from 'vuex'
-
+import Money from '@/utils/Money'
   export default {
     name: "TakingDeposit",
     components: {
@@ -139,8 +138,7 @@
         this.reset()
       },
       formatAmount(unit) {
-        var formatter = CurrencyFormatter.getFromNumeric(unit.currency, unit.amount)
-        return formatter.localize()
+        return Money.getString(unit.amount, unit.currency)
       },
       formatTotal() {
         let total = [];
