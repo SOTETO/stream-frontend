@@ -101,7 +101,7 @@
       </el-table-column>
          <template slot="append">
           <div v-infinite-scroll="infiniteHandler" 
-              infinite-scroll distance="10"  
+              infinite-scroll  
                ref="infiniteLoading">
           </div>
         </template>
