@@ -153,7 +153,7 @@ export default {
         sort: null,
       },  
       page: {
-        size: 50,
+        size: 20,
         offset: 0
       }
     }

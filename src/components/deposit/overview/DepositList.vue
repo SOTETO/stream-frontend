@@ -101,6 +101,7 @@ export default {
     ...mapGetters('deposits', {
       depositItems: 'overview',
       donationName: 'donationName',
+      count: 'count',
       isError: 'isError',
       getErrorCode: 'getErrorCode'
     }),
@@ -109,9 +110,6 @@ export default {
         isEmployee: 'isEmployee',
         isAdmin: 'isAdmin'
     }),
-    maximumTags () {
-        return 2;
-    },
     allowedToConfirm () {
       return this.isEmployee || this.isAdmin
     },
@@ -130,7 +128,7 @@ export default {
         sort: null,
       },  
       page: {
-        size: 50,
+        size: 20,
         offset: 0
       }
     }

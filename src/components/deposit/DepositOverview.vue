@@ -23,7 +23,7 @@ export default {
       filter: {},
       sort:{},
       page:{
-        size: 50,
+        size: 20,
         offset: 0
       }
     }

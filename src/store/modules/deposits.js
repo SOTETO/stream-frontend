@@ -32,17 +32,7 @@ const state = {
     field: "deposit.created",
     dir: "DESC"
   },
-  'filter': {
-    'publicId': null,
-    'takingsId': null,
-    'crew': null,
-    'state': {
-                        'complete': "noSelection",
-                        'repayment': "",
-                        'volunteerManager': "",
-                        'employee': ""
-                    }
-  },
+  count: null,
   error: null
 }
 
@@ -126,14 +116,11 @@ const getters = {
     }
     return res
   },
-  page: (state) => {
-      return {
-        "previous": state.page.offset,
-        "next": state.countItems - (state.page.offset + state.page.size)
-    }
-  }, 
   sort: (state) => {
     return state.sorting
+  },
+  count: (state) => {
+    return state.count
   }
 }
 
@@ -146,6 +133,22 @@ const actions = {
       }).catch(function (error) {
         store.commit({"type": 'setError', error: error})
       })
+  },
+  nextPage (store, query) {
+    axios.get('/backend/stream/deposits', { params: query })
+      .then(function (response){
+        store.commit({"type": 'assign', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  count (store, query) {
+    axios.get('/backend/stream/deposits/count', { params: query })
+    .then(function (response) {
+      store.commit({'type': 'count', 'count': response.data })
+    }).catch(function (error) {
+      store.commit({'type': 'setError', error: error})
+    })
   },
   page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
@@ -218,11 +221,16 @@ const mutations = {
     initDons(state, pushDonations) {
         state.donations = pushDonations.donations
     },
+  assign(state, payload) {
+    for (var i in payload.deposits) {
+      state.items.push(payload.deposits[i])
+    }
+  },
+  count(state, payload) {
+    state.count = payload.count
+  },
     sort(state, sort) {
         state.sorting = sort.sort
-    },
-    count(state, count) {
-        state.countItems = count.count.count
     },
     page(state, offset) {
         state.page.offset = offset.offset

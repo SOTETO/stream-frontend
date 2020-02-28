@@ -79,12 +79,6 @@ const getters = {
         }
         return res
     },
-    page: (state) => {
-        return {
-            "previous": state.page.offset,
-            "next": state.countItems - (state.page.offset + state.page.size)
-        }
-    },
     sort: (state) => {
         return state.sorting
     },
@@ -116,7 +110,7 @@ const actions = {
   count (store, query) {
     axios.get('/backend/stream/takings/count', { params: query })
     .then(function (response) {
-      store.commit({'type': 'count', 'takings': response.data })
+      store.commit({'type': 'count', 'count': response.data })
     }).catch(function (error) {
       store.commit({'type': 'setError', error: error})
     })
