@@ -100,9 +100,7 @@
         </template>
       </el-table-column>
          <template slot="append">
-          <div v-infinite-scroll="infiniteHandler" 
-              infinite-scroll  
-               ref="infiniteLoading">
+          <div v-infinite-scroll="infiniteHandler">
           </div>
         </template>
     </el-table>
@@ -143,6 +141,7 @@ export default {
       type: Object,
       default: function () {
         return {
+          busy: false,
           "full": {
             "amount": 0,
             "currency": "EUR"
@@ -195,9 +194,7 @@ export default {
       },
       infiniteHandler() {
         setTimeout(() => {
-        
           this.page.offset= this.page.offset + this.page.size
-        
           this.$emit("page", this.page)
         }, 1000)
       },
