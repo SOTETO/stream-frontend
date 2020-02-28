@@ -173,6 +173,14 @@ const actions = {
         store.commit({"type": 'setError', error: error})
       })
   },
+  nextPage (store, query) {
+    axios.get('/backend/stream/takings', {params: query})
+      .then(function (response){
+        store.commit({"type": 'assign', "takings": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
     page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
@@ -248,9 +256,14 @@ const actions = {
 }
 
 const mutations = {
-    init(state, pushDonations) {
-        state.items = pushDonations.takings
-    },
+  init(state, pushDonations) {
+    state.items = pushDonations.takings
+  },
+  assign(state, t) {
+    for (var i in t.takings) {
+      state.items.push(t.takings[i])
+    }
+  },
     filter(state, filter) {
         state.filter = filter.filter
     },

@@ -4,7 +4,7 @@
       <TakingFilter v-on:update="updateFilter($event)" />
     </el-card>
     <el-card class="box-card tail">
-      <TakingList :deposit="deposit" :depositAddView="depositAddView"/>
+      <TakingList :deposit="deposit" :depositAddView="depositAddView" v-on:page="nextPage($event)"/>
     </el-card>
   </div>
 </template>
@@ -42,7 +42,10 @@ export default {
     return {
       filter: {},
       sort:{},
-      page:{}
+      page:{
+        size: 20,
+        offset: 0
+      }
     }
   },
   computed: {
@@ -55,7 +58,8 @@ export default {
   },
   methods: {
     ...mapActions('takings', [
-      'init', // map `this.init()` to `this.$store.dispatch('donations/init')`
+      'init', 
+      'nextPage'// map `this.init()` to `this.$store.dispatch('donations/init')`
     ]),
     updateFilter(filter) {
       this.filter = filter
@@ -67,7 +71,7 @@ export default {
     },
     updatePage(page) {
       this.page = page
-      this.init(this.query)
+      this.page(this.query)
     }
   }
 }
