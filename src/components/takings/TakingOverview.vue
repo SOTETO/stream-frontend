@@ -4,7 +4,7 @@
       <TakingFilter v-on:update="updateFilter($event)" />
     </el-card>
     <el-card class="box-card tail">
-      <TakingList :deposit="deposit" :depositAddView="depositAddView" v-on:page="nextPage($event)"/>
+      <TakingList :deposit="deposit" :depositAddView="depositAddView" v-on:page="updatePage($event)"/>
     </el-card>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
     },
     updatePage(page) {
       this.page = page
-      this.page(this.query)
+      this.nextPage(this.query)
     }
   }
 }

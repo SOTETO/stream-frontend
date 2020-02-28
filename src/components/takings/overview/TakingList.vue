@@ -101,10 +101,12 @@
       </el-table-column>
       <infinite-loading
         slot="append"
+        infinite-scroll-distance="10"
         @infinite="infiniteHandler"
-        force-use-infinite-wrapper=".el-table__body-wrapper">
+        >
       </infinite-loading>
     </el-table>
+
 </template>
 
 <script>
