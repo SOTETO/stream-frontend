@@ -78,11 +78,6 @@ import Money from '@/utils/Money'
       }
     },
     computed: {
-        unassignedDeposit () {
-            var amount = this.deposit.full.amount - this.deposit.depositUnits.reduce((acc, unit) => acc + unit.deposit.amount, 0)
-            var formatter = CurrencyFormatter.getFromNumeric(this.deposit.full.currency, amount)
-            return formatter
-        },
         isValid() {
             return (this.deposit.depositUnits && this.deposit.depositUnits.length > 0) && 
                    (this.deposit.dateOfDeposit !== null)

@@ -1,47 +1,19 @@
 import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
 import axios from "axios"
-// initial state
-// shape: [{
-//             "id"
-//             "context": {
-//                 "description": "",
-//                 "category": //             },
-//             "comment": "",
-//             "details": {
-//                 "reasonForPayment": "",
-//                 "receipt": false,
-//                 "partner": {}
-//             },
-//             "depositUnits": [],
-//             "amount": {
-//                 "received": Date.now(),
-//                 "sources": [{"category", "amount", "currency", "type"}],
-//                 "involvedSupporter": []
-//             },
-//             "author": "some-uuid",
-//             "crew": "some-uuid",
-//             "created": Date.now(),
-//             "updated": Date.now()
-//         }]
 const state = {
-    items: [],
-    specialRequests: [],
-    page: {
-        size: 10,
-        offset: 0
-    },
-    countItems: 0,
-    sorting: {
-        field: "taking.created",
-        dir: "DESC"
-    },
-    filter: {
-      'publicId': null,
-      'crew': null,
-      'name': null,
-      'norms': null
-    },
-    error: null,
+  items: [],
+  count: null,
+  specialRequests: [],
+  page: {
+    size: 10,
+    offset: 0
+  },
+  countItems: 0,
+  sorting: {
+    field: "taking.created",
+    dir: "DESC"
+  },
+  error: null,
 }
 
 const getters = {
@@ -116,58 +88,15 @@ const getters = {
     sort: (state) => {
         return state.sorting
     },
-    filter: (state) => {
-        return JSON.parse(JSON.stringify(state.filter))
-    },
-    taggableFilter: (state) => {
-        var res = []
-        function check(obj, attr) {
-            return obj.hasOwnProperty(attr) && (typeof obj[attr] !== "undefined") && obj[attr] !== null &&
-                (obj[attr] !== "" || typeof obj[attr] !== "string") &&
-                (obj[attr] !== 0.0 || typeof obj[attr] !== "number") &&
-                ((Array.isArray(obj[attr]) && obj[attr].length !== 0) || !Array.isArray(obj[attr]))
-        }
-        var fields = [
-            {
-                "obj": state.filter,
-                "attr": "publicId"
-            },
-            {
-                "obj": state.filter,
-                "attr": "crew"
-            },
-            {
-                "obj": state.filter,
-                "attr": "name"
-            },
-            {
-                "obj": state.filter.state,
-                "attr": "norms"
-            }
-        ]
-        for(var field of fields) {
-            if(check(field.obj, field.attr)) {
-                res.push({
-                    "name": field.attr,
-                    "value": field.obj[field.attr]
-                })
-            }
-        }
-        if(check(state.filter.amount, "amount")) {
-            res.push({
-                "name": "amount",
-                "value": state.filter.amount
-            })
-        }
-        return res
+    count: (state) => {
+      return state.count
     }
-
 }
 
 const actions = {
 
   init (store, query) {
-    axios.get('/backend/stream/takings', {params: query})
+    axios.get('/backend/stream/takings', { params: query })
       .then(function (response){
         store.commit({"type": 'init', "takings": response.data})
       }).catch(function (error) {
@@ -177,12 +106,20 @@ const actions = {
 
 
   nextPage (store, query) {
-    axios.get('/backend/stream/takings', {params: query})
+    axios.get('/backend/stream/takings', { params: query })
       .then(function (response){
         store.commit({"type": 'assign', "takings": response.data})
       }).catch(function (error) {
         store.commit({"type": 'setError', error: error})
       })
+  },
+  count (store, query) {
+    axios.get('/backend/stream/takings/count', { params: query })
+    .then(function (response) {
+      store.commit({'type': 'count', 'takings': response.data })
+    }).catch(function (error) {
+      store.commit({'type': 'setError', error: error})
+    })
   },
     
   page (store, down) {
@@ -197,24 +134,6 @@ const actions = {
       store.dispatch('init')
     }
   },
-    filter (store, filter) {
-        store.commit({ "type": "filter", "filter": filter })
-        var ajax = new DonationEndpoints(store)
-
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.count(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        
-        var get = (store) => {
-            var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
-            var errorHandler = (error) => true
-            ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        count(store)
-        get(store)
-    },
     sort (store, sorting) {
         store.commit({ "type": "sort", "sort": sorting })
         store.dispatch('init')
@@ -260,13 +179,16 @@ const actions = {
 }
 
 const mutations = {
-  init(state, pushDonations) {
-    state.items = pushDonations.takings
+  init(state, payload) {
+    state.items = payload.takings
   },
-  assign(state, t) {
-    for (var i in t.takings) {
-      state.items.push(t.takings[i])
+  assign(state, payload) {
+    for (var i in payload.takings) {
+      state.items.push(payload.takings[i])
     }
+  },
+  count(state, payload) {
+    state.count = payload.count
   },
     filter(state, filter) {
         state.filter = filter.filter
@@ -277,17 +199,14 @@ const mutations = {
     sort(state, sort) {
         state.sorting = sort.sort
     },
-    count(state, count) {
-        state.countItems = count.count.count
-    },
     page(state, offset) {
         state.page.offset = offset.offset
     },
     push(state, pushDonation) {
         state.items.push(pushDonation.takings)
     },
-    setError(state, pushError) {
-        state.error = pushError.error
+    setError(state, payload) {
+        state.error = payload.error
     }
 }
 

@@ -15,7 +15,6 @@
 
 import Money from '@/utils/Money'
 import {Button} from 'element-ui'
-import CurrencyFormatter from '@/utils/CurrencyFormatter'
 import MoneyInput from '@/components/utils/MoneyInput'
 export default {
   name: "DepositAdd",

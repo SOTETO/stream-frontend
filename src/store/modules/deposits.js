@@ -212,8 +212,8 @@ const actions = {
 }
 
 const mutations = {
-    init(state, pushDeposit) {
-        state.items = pushDeposit.deposits
+    init(state, payload) {
+        state.items = payload.deposits
     },
     initDons(state, pushDonations) {
         state.donations = pushDonations.donations
