@@ -1,11 +1,7 @@
 <template>
     <VcAFrame>
         <VcAColumn size="70%">
-
-              <TakingOverview class="box-card" :deposit="deposit" :depositAddView="depositAddView"/>
-              <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
-                    {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
-                </button>
+            <TakingOverview class="box-card" :deposit="deposit" :depositAddView="depositAddView"/>
         </VcAColumn>
         <VcAColumn size="20%">
             <el-card class="box-card">
@@ -66,16 +62,6 @@
     }
   },
     computed: {
-      ...mapGetters('takings', {
-        pageGet: 'page',
-        taggableFilter: 'taggableFilter'
-      }),
-      hasPrevious () {
-        return this.pageGet.previous > 0
-      },
-      hasNext () {
-        return this.pageGet.next > 0
-      },
       sortFields() {
         return [
           { 
