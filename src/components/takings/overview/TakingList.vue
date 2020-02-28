@@ -196,7 +196,7 @@ export default {
         setTimeout(() => {
           this.page.offset= this.page.offset + this.page.size
           this.$emit("page", this.page)
-        }, 1000)
+        }, 4000)
       },
       isExtern (value) {
         if(value > 0) {
