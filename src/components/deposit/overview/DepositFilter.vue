@@ -18,13 +18,13 @@
               :label="lang.created.label"
               required
              >
-             <DateFilter :from="query.crfrom" :to="query.crto" v-on:update="dateCreated($event)"/>
+             <DateFilter :from="filter.crfrom" :to="filter.crto" v-on:update="dateCreated($event)"/>
            </el-form-item>
            <el-form-item
              :label="lang.received.label"
              required
              >
-             <DateFilter :from="query.payfrom" :to="query.payto" v-on:update="dateReceived($event)"/>
+             <DateFilter :from="filter.payfrom" :to="filter.payto" v-on:update="dateReceived($event)"/>
            </el-form-item>
           </el-form>
         </el-col>
@@ -42,7 +42,7 @@
               :label="lang.confirmed_date.label"
               required
               >
-              <DateFilter :from="query.cfrom" :to="query.cto" v-on:update="dateConfirmed($event)"/>
+              <DateFilter :from="filter.cfrom" :to="filter.cto" v-on:update="dateConfirmed($event)"/>
             </el-form-item>
           </el-form>
           <el-form>
@@ -73,25 +73,6 @@ export default {
     CrewSelect, DateFilter, FilterTags, FilterOption, FilterAmount
   },
   props: {
-    query: {
-      type: Object,
-      default: function () {
-        return {
-          publicId: null, 
-          takingsId: null,
-          crew: null,
-          name: null,
-          confirmed: null,
-          cby: null,
-          cfrom: null,
-          cto: null,
-          payfrom: null,
-          payto:null,
-          crfrom: null,
-          crto:null
-        }
-      }
-    },
     lang: {
       type: Object,
       default: function () {
@@ -127,53 +108,66 @@ export default {
   },
   data () {
     return {
-      filter: this.query
+      filter: {
+        publicId: null, 
+        takingsId: null,
+        crew: null,
+        name: null,
+        confirmed: null,
+        cby: null,
+        cfrom: null,
+        cto: null,
+        payfrom: null,
+        payto:null,
+        crfrom: null,
+        crto:null
+      }
     }
   },
   methods: {
     dateConfirmed(value) {
-        this.query.cfrom = value.from
-        this.query.cto = value.to
-      this.refresh()
+        this.filter.cfrom = value.from
+        this.filter.cto = value.to
+      this.update()
     },
     dateCreated(value) {
-        this.query.crfrom = value.from
-        this.query.crto = value.to
-      this.refresh()
+        this.filter.crfrom = value.from
+        this.filter.crto = value.to
+      this.update()
     },
     dateReceived(value) {
-        this.query.payfrom = value.from
-        this.query.payto = value.to
-      this.refresh()
+        this.filter.payfrom = value.from
+        this.filter.payto = value.to
+      this.update()
     },
 
     addEvent(value) {
-      if (this.query.name !== null) {
-        this.query.name = this.query.name + " " +"%" + value +"%"
+      if (this.filter.name !== null) {
+        this.filter.name = this.filter.name + " " +"%" + value +"%"
       } else {
-        this.query.name = "%" + value + "%"
+        this.filter.name = "%" + value + "%"
       }
-      this.refresh()
+      this.update()
     },
     addAmountFrom(value) {
-      this.query.afrom = value
-      this.refresh()
+      this.filter.afrom = value
+      this.update()
     },
     addAmountTo(value) {
-      this.query.ato = value
-      this.refresh()
+      this.filter.ato = value
+      this.update()
     },
     setConfimed(value) {
-      this.query.confirmed = value
-      this.refresh()
+      this.filter.confirmed = value
+      this.update()
     },
     deleteEvent(value) {
       var replace = "%"+ value + "%"
-      this.query.name = this.query.name.replace(replace, '')
-      if (this.query.name === '') {
-        this.query.name = null
+      this.filter.name = this.filter.name.replace(replace, '')
+      if (this.filter.name === '') {
+        this.filter.name = null
       }
-      this.refresh()
+      this.update()
     },
     commit() {
       if(typeof this.filter.crew === "object" && this.filter.crew !== null && this.filter.crew.hasOwnProperty("id")) {
@@ -182,8 +176,8 @@ export default {
       this.setFilter(JSON.parse(JSON.stringify(this.filter)))
       this.$emit("vca-filter-updated")
     },
-    refresh () {
-      this.$emit("refresh")
+    update () {
+      this.$emit("update", this.filter)
     }
   }
 }

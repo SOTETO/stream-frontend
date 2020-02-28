@@ -81,94 +81,104 @@
         </div>
       </template>
     </el-table-column>
+    <template slot="append">
+      <div>
+        <el-button class="load" type="info" plain @click="loadHandler">{{ loadButton }}</el-button>
+      </div>
+    </template>
   </el-table>
 </template>
-<script>
-  import { mapGetters, mapActions } from 'vuex'
-  import { CrewPlainName, Tag } from 'vca-widget-user'
-  import StateLight from '@/components/utils/StateLight'
-import Money from '@/utils/Money'
-  import UserButton from '@/components/utils/UserButton'
-  export default {
-    name: "DepositList",
-    components: { CrewPlainName, Tag, StateLight, UserButton},
-    props:["query"],
-    computed: {
-      ...mapGetters('deposits', {
-        depositItems: 'overview',
-        donationName: 'donationName',
-        isError: 'isError',
-        getErrorCode: 'getErrorCode'
-      }),
-      ...mapGetters('user', {
-          isEmployee: 'isEmployee',
-          isAdmin: 'isAdmin'
-      }),
-      maximumTags () {
-          return 2;
-      },
-      allowedToConfirm () {
-        return this.isEmployee || this.isAdmin
-      }
-    },
-    data () {
-      return {
-          "donations": []
-      }
-    },
 
-    watch:{
-      query: function(newVal, oldVal) {
-        console.log(this.query)
-        this.init(this.query)
-      }
+<script>
+import { mapGetters, mapActions } from 'vuex'
+import StateLight from '@/components/utils/StateLight'
+import Money from '@/utils/Money'
+import UserButton from '@/components/utils/UserButton'
+export default {
+  name: "DepositList",
+  components: { StateLight, UserButton },
+  computed: {
+    ...mapGetters('deposits', {
+      depositItems: 'overview',
+      donationName: 'donationName',
+      isError: 'isError',
+      getErrorCode: 'getErrorCode'
+    }),
+
+    ...mapGetters('user', {
+        isEmployee: 'isEmployee',
+        isAdmin: 'isAdmin'
+    }),
+    maximumTags () {
+        return 2;
     },
-    updated () {
-      //this.init(this.query)
+    allowedToConfirm () {
+      return this.isEmployee || this.isAdmin
     },
-    methods: {
-      ...mapActions('deposits', [
-        'confirm'
-      ]),
-      sorting(column, event) {
-        console.log(JSON.stringify(column))
-      },
-      formatAmount(amount) {
-        return Money.getString(amount.amount, amount.currency)
-      },
-      formatDate(date) {
-        var d = new Date(date)
-        return this.$d(d, 'short')
-      },
-        supporter (deposit) {
-            return deposit.supporter
-                .filter((value, index, self) => self.indexOf(value) === index)
-        },
-        teaserSupporter (deposit) {
-            return this.supporter(deposit).slice(0, Math.min(this.maximumTags, deposit.supporter.length))
-        },
-        hasAddtionalSupporter (deposit) {
-            return this.supporter(deposit).length > this.maximumTags
-        },
-        donation (donationId) {
-          var name = this.donationName(donationId)
-          if(name === null) {
-              name = this.$t('deposits.errors.takingsNotFound')
-          }
-          return name
-        },
-        confirmed(deposit) {
-          return deposit.status !== "unconfirmed"
-        },
-      open(title, message, type) {
-        Notification({
-          title:  title,
-          message: message,
-          type: type
-        });
+    loadButton () {
+      if (this.count > this.page.offset) {
+        return this.$t('deposits.table.load.more')
+      } else { 
+        return this.$t('deposits.table.load.finish')
       }
     }
+  },
+  data () {
+    return {
+      sort: {
+        sortby: null,
+        sort: null,
+      },  
+      page: {
+        size: 50,
+        offset: 0
+      }
+    }
+  },
+  methods: {
+    ...mapActions('deposits', [
+      'confirm'
+    ]),
+    formatAmount(amount) {
+      return Money.getString(amount.amount, amount.currency)
+    },
+    formatDate(date) {
+      var d = new Date(date)
+      return this.$d(d, 'short')
+    },
+      supporter (deposit) {
+          return deposit.supporter
+              .filter((value, index, self) => self.indexOf(value) === index)
+      },
+      teaserSupporter (deposit) {
+          return this.supporter(deposit).slice(0, Math.min(this.maximumTags, deposit.supporter.length))
+      },
+      hasAddtionalSupporter (deposit) {
+          return this.supporter(deposit).length > this.maximumTags
+      },
+      loadHandler() {
+        this.page.offset= this.page.offset + this.page.size
+        this.$emit("page", this.page)
+      },
+      donation (donationId) {
+        var name = this.donationName(donationId)
+        if(name === null) {
+            name = this.$t('deposits.errors.takingsNotFound')
+        }
+        return name
+      },
+      confirmed(deposit) {
+        return deposit.status !== "unconfirmed"
+      },
+    open(title, message, type) {
+      Notification({
+        title:  title,
+        message: message,
+        type: type
+      });
+    }
   }
+}
 </script>
 
 <style scoped lang="less">
@@ -225,5 +235,8 @@ import Money from '@/utils/Money'
   .padding {
     padding-left: 1em;
     padding-right: 1em;
+  }
+  .load {
+    width: 100%
   }
 </style>

@@ -43,7 +43,7 @@ export default {
       filter: {},
       sort:{},
       page:{
-        size: 20,
+        size: 50,
         offset: 0
       }
     }
@@ -54,15 +54,18 @@ export default {
     },
   },
   created () {
+    this.count(this.query)
     this.init(this.query)
   },
   methods: {
     ...mapActions('takings', [
       'init', 
-      'nextPage'// map `this.init()` to `this.$store.dispatch('donations/init')`
+      'count',
+      'nextPage'
     ]),
     updateFilter(filter) {
       this.filter = filter
+      this.count(this.query)
       this.init(this.query) 
     },
     updateSort(sort) {

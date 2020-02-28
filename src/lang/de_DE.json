@@ -321,6 +321,10 @@
           "unconfirmed": "Nicht bestätigt"
         },
         "confirm": "bestätigen"
+      },
+      "load": {
+        "more": "Mehr Einzahlungen?",
+        "finish": "Alle Einzahlungen geladen"
       }
     },
       
@@ -390,7 +394,12 @@
       "popup": {
         "extern": "Überweisung",
         "cash": "Bargeld"
+      },
+      "load": {
+        "more": "Mehr Einnahmen?",
+        "finish": "Alle Einnahmen geladen"
       }
+
     },
     "placeholder": {
       "comment": "Kommentar",

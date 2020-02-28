@@ -57,17 +57,15 @@
 
 <script>
     
-import { CrewSelect } from 'vca-widget-user'
 import DateFilter from '@/components/utils/FilterDate'
 import FilterTags from '@/components/utils/FilterTags'
 import FilterOption from '@/components/utils/FilterOption'
-import FilterAmount from '@/components/utils/FilterAmount'
 import FilterNorms from '@/components/utils/FilterNorms'
 
 export default {
   name: "TakingFilter",
   components: {
-    FilterTags, DateFilter, FilterOption, FilterAmount, FilterNorms
+    FilterTags, DateFilter, FilterOption, FilterNorms
   },
   props: {
     lang: {

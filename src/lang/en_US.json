@@ -321,6 +321,10 @@
           "unconfirmed": "Not confirmed"
         },
         "confirm": "confirm"
+      },
+      "load": {
+        "more": "More Deposits?",
+        "finish": "No More Deposits"
       }
     },
     "placeholder": {
@@ -384,6 +388,10 @@
       "popup": {
         "extern": "transfer",
         "cash": "cash"
+      },
+      "load": {
+        "more": "More Takings?",
+        "finish": "No More Takings"
       }
     },
     "placeholder": {

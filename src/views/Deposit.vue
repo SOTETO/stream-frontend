@@ -1,15 +1,7 @@
 <template>
   <VcAFrame>
     <VcAColumn size="90%">
-      <el-card class="box-card">
-        <DepositFilter :query="query" v-on:refresh="refresh"/>
-      </el-card>
-      <el-card class="box-card tail">
-        <DepositList :query="query" v-on:sort-change="sorting($event)"/>
-        <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
-          {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
-        </button>
-      </el-card>
+      <DepositOverview  class="box-card" />
     </VcAColumn>
   </VcAFrame>
 </template>
@@ -18,14 +10,11 @@
   
 import { VcAFrame, VcAColumn } from 'vca-widget-base'
 import 'vca-widget-base/dist/vca-widget-base.css'
-import { Card } from 'element-ui'
-import DepositFilter from '@/components/deposit/overview/DepositFilter'
-import DepositList from '@/components/deposit/overview/DepositList'
-import { mapGetters, mapActions } from 'vuex'
+import DepositOverview from '@/components/deposit/DepositOverview'
 export default {
   name: "deposits",
   components: {
-    VcAFrame, VcAColumn, DepositList, DepositFilter, "el-card": Card
+    VcAFrame, VcAColumn, DepositOverview
   },
   props: {
     queryString: {
@@ -48,46 +37,9 @@ export default {
       }
     }
   },
-  created () {
-    this.init(this.query)
-  },
   data () {
     return {
       query: this.queryString  
-    }
-  },
-  computed: {
-    ...mapGetters('deposits', {
-      pageGet: 'page',
-      taggableFilter: 'taggableFilter',
-      filter: 'filter'
-    }),
-    hasPrevious () {
-      return this.pageGet.previous > 0
-    },
-    hasNext () {
-      return this.pageGet.next > 0
-    },
-  },
-  methods: {
-    ...mapActions('deposits', [
-      'init',
-      'page'
-    ]),
-    pageDown () {
-      this.page(true)
-    },
-    pageUp () {
-      this.page(false)
-    },
-    addState () {
-      this.editable = JSON.parse(JSON.stringify(this.editableDefault))
-    },
-    refresh () {
-      this.init(this.query)
-    },
-    sorting (sort) {
-      console.logs(sort)
     }
   }
 }

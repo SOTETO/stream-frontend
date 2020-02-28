@@ -100,7 +100,8 @@
         </template>
       </el-table-column>
          <template slot="append">
-          <div v-infinite-scroll="infiniteHandler">
+          <div>
+            <el-button class="load" type="info" plain @click="loadHandler">{{ loadButton }}</el-button>
           </div>
         </template>
     </el-table>
@@ -109,14 +110,13 @@
 
 <script>
 import Vue from 'vue'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import Money from '@/utils/Money'
 import DepositLights from '@/components/deposit/DepositLights'
 import DepositAdd from '@/components/deposit/DepositAdd'
 import UserButton from '@/components/utils/UserButton'
 import TakingsDetails from '@/components/takings/overview/TakingsDetails'
 import { Notification } from 'element-ui'
-import InfiniteLoading from 'vue-infinite-loading'
 
 Vue.use(Notification)
 Notification.closeAll()
@@ -124,15 +124,9 @@ Notification.closeAll()
 export default {
   name: "TakingList",
   components: {
-    DepositLights, DepositAdd, UserButton, TakingsDetails, InfiniteLoading
+    DepositLights, DepositAdd, UserButton, TakingsDetails
   },
   props: {
-    filter: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
     depositAddView : {
       type: Boolean,
       default: false
@@ -159,7 +153,7 @@ export default {
         sort: null,
       },  
       page: {
-        size: 20,
+        size: 50,
         offset: 0
       }
     }
@@ -168,12 +162,19 @@ export default {
     ...mapGetters(
       'takings', {
         takings: 'overview',
+        count: 'count',
         isError: 'isError',
         getErrorCode: 'getErrorCode',
         getById: 'getById',
       },
     ),
-
+    loadButton () {
+      if (this.count > this.page.offset) {
+        return this.$t('takings.table.load.more')
+      } else { 
+        return this.$t('takings.table.load.finish')
+      }
+    },
     maximumTags () {
       return 2;
     },
@@ -192,11 +193,9 @@ export default {
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
       },
-      infiniteHandler() {
-        setTimeout(() => {
-          this.page.offset= this.page.offset + this.page.size
-          this.$emit("page", this.page)
-        }, 4000)
+      loadHandler() {
+        this.page.offset= this.page.offset + this.page.size
+        this.$emit("page", this.page)
       },
       isExtern (value) {
         if(value > 0) {
@@ -261,5 +260,8 @@ export default {
         & /deep/ .tag {
             margin-right: 0.5em;
         }
+    }
+    .load {
+      width: 100%
     }
 </style>
