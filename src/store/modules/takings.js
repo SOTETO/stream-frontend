@@ -165,6 +165,7 @@ const getters = {
 }
 
 const actions = {
+
   init (store, query) {
     axios.get('/backend/stream/takings', {params: query})
       .then(function (response){
@@ -173,6 +174,8 @@ const actions = {
         store.commit({"type": 'setError', error: error})
       })
   },
+
+
   nextPage (store, query) {
     axios.get('/backend/stream/takings', {params: query})
       .then(function (response){
@@ -181,18 +184,19 @@ const actions = {
         store.commit({"type": 'setError', error: error})
       })
   },
-    page (store, down) {
-        var offset = store.state.page.offset - store.state.page.size
-        var valid = offset >= 0
-        if(!down) {
-            offset = store.state.page.offset + store.state.page.size
-            valid = offset < store.state.countItems
-        }
-        if(valid) {
-            store.commit({ "type": 'page', "offset": offset })
-            store.dispatch('init')
-        }
-    },
+    
+  page (store, down) {
+    var offset = store.state.page.offset - store.state.page.size
+    var valid = offset >= 0
+    if(!down) {
+      offset = store.state.page.offset + store.state.page.size
+      valid = offset < store.state.countItems
+    }
+    if(valid) {
+      store.commit({ "type": 'page', "offset": offset })
+      store.dispatch('init')
+    }
+  },
     filter (store, filter) {
         store.commit({ "type": "filter", "filter": filter })
         var ajax = new DonationEndpoints(store)

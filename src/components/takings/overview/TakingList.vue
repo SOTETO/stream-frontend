@@ -99,12 +99,12 @@
           </el-row>
         </template>
       </el-table-column>
-      <infinite-loading
-        slot="append"
-        infinite-scroll-distance="10"
-        @infinite="infiniteHandler"
-        >
-      </infinite-loading>
+         <template slot="append">
+          <div v-infinite-scroll="infiniteHandler" 
+              infinite-scroll distance="10"  
+               ref="infiniteLoading">
+          </div>
+        </template>
     </el-table>
 
 </template>
@@ -194,8 +194,12 @@ export default {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
       },
       infiniteHandler() {
-        this.page.offset= this.page.offset + this.page.size
-        this.$emit("page", this.page)
+        setTimeout(() => {
+        
+          this.page.offset= this.page.offset + this.page.size
+        
+          this.$emit("page", this.page)
+        }, 1000)
       },
       isExtern (value) {
         if(value > 0) {
