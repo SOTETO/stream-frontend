@@ -99,6 +99,11 @@
           </el-row>
         </template>
       </el-table-column>
+      <infinite-loading
+        slot="append"
+        @infinite="infiniteHandler"
+        force-use-infinite-wrapper=".el-table__body-wrapper">
+      </infinite-loading>
     </el-table>
 </template>
 
@@ -111,6 +116,7 @@ import DepositAdd from '@/components/deposit/DepositAdd'
 import UserButton from '@/components/utils/UserButton'
 import TakingsDetails from '@/components/takings/overview/TakingsDetails'
 import { Notification } from 'element-ui'
+import InfiniteLoading from 'vue-infinite-loading'
 
 Vue.use(Notification)
 Notification.closeAll()
@@ -118,7 +124,7 @@ Notification.closeAll()
 export default {
   name: "TakingList",
   components: {
-    DepositLights, DepositAdd, UserButton, TakingsDetails
+    DepositLights, DepositAdd, UserButton, TakingsDetails, InfiniteLoading
   },
   props: {
     filter: {
@@ -147,11 +153,13 @@ export default {
   },
   data () {
     return {
-      sortPage: {
+      sort: {
         sortby: null,
         sort: null,
-        page: 0,
-        offset: 4
+      },  
+      page: {
+        size: 20,
+        offset: 0
       }
     }
   },
@@ -182,6 +190,10 @@ export default {
       },
       editPage (uuid) {
         this.$router.push({name: 'takings-edit', params: {id: uuid}})
+      },
+      infiniteHandler() {
+        this.page.offset= this.page.offset + this.page.size
+        this.$emit("page", this.page)
       },
       isExtern (value) {
         if(value > 0) {
