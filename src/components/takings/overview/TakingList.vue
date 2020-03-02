@@ -49,7 +49,7 @@
             v-if="depositAddView" 
             :depositUnit="deposit.depositUnits" 
             :taking="scope.row" 
-            :amount="scope.row.amount.full" 
+            :amount="scope.row.amount.open" 
             :takingId="scope.row.id" />
         </template>
       </el-table-column>

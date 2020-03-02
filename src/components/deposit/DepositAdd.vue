@@ -42,7 +42,7 @@ export default {
     }
   },
   created () {
-    this.unit.amount.amount = this.amount
+    this.unit.amount.amount = this.open
     this.unit.takingId = this.takingId
   },
   data () {
@@ -59,6 +59,23 @@ export default {
     }
   },
   computed: {
+    confirmed () {
+      var confirmed = 0
+      if(this.taking.deposited.confirmed.hasOwnProperty("EUR")) {
+        confirmed = this.taking.deposited.confirmed.EUR
+      }
+      return confirmed
+    },
+    unconfirmed () {
+      var unconfirmed = 0
+      if(this.taking.deposited.unconfirmed.hasOwnProperty("EUR")) {
+        unconfirmed = this.taking.deposited.unconfirmed.EUR
+      }
+      return unconfirmed
+    },
+    open () {
+      return this.taking.amount.full - (this.confirmed + this.unconfirmed)
+    },
     deleteUnit () {
       return this.depositUnit.filter(unit => unit.takingId !== this.unit.takingId)
     },
@@ -99,7 +116,11 @@ export default {
       //this.submitted = true
     },
     setAmount (value) {
-      this.unit.amount = value
+      if (value.amount > this.open) {
+        this.unit.amount.amount = this.open
+      } else {
+        this.unit.amount = value
+      }
     },
     formatAmount(unit) {
       return Money.getString(unit.amount, unit.currency)
