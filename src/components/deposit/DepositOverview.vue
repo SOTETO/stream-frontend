@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-card class="box-card">
-      <DepositFilter v-on:update="updateFilter($event)"/>
+      <DepositFilter :lang="$t('filter')" v-on:update="updateFilter"/>
     </el-card>
     <el-card class="box-card tail">
-      <DepositList v-on:page="updatePage($event)"/>
+      <DepositList v-on:update-page="updatePage($event)" v-on:update-sort="updateSort"/>
     </el-card>
   </div>
 </template>
@@ -21,7 +21,10 @@ export default {
   data () {
     return {
       filter: {},
-      sort:{},
+      sort:{
+        sortby: "deposit.created",
+        sortdir: "DESC"
+      },
       page:{
         size: 20,
         offset: 0

@@ -61,99 +61,61 @@
       }
     }
   },
-    computed: {
-      sortFields() {
-        return [
-          { 
-            "value": "taking.norms",
-            "label": this.$t("takings.table.sort.norms")
-          },
-          { 
-            "value": "taking.fullamount",
-            "label": this.$t("takings.table.sort.amount")
-          },
-          {
-            "value": "taking.description",
-            "label": this.$t("takings.table.sort.title")
-          },
-          {
-            "value": "taking.created",
-            "label": this.$t("takings.table.sort.date")
-          }
-        ]
-      },
-      filterCrewTags () {
-        return JSON.parse(JSON.stringify(this.taggableFilter.filter(field => field.name === "crew"))).map(crewTag => {
-          crewTag.name = this.$t('household.filter.tag.crew')
-          return crewTag
-        })
-      },   
-      filterCrewTag () {
-        return [{'name': 'name', 'value': 'value'}]
-      },
-      filterTags () {
-        return [{'name': 'norms', 'value': 'value'}]
-      },
-      filterTag () {
-        return this.taggableFilter.reduce((fields, field) => {
-          var translate = f => {
-            if(f.name === "publicId") {
-              f.value = this.$t("household.filter.tag.values." + f.name + "." + f.value)
-            } else if(f.name === "crew") {
-              f.value = this.$t('household.states.' + f.value)
-            } else if(f.name === "name") {
-              f.value = this.$t('household.process.VolunteerManager.' + f.value)
-            } else if(f.name === "norms") {
-              f.value = this.$t('household.process.Employee.' + f.value)
-            }
-          }
-          var res = fields
-          if((field.name !== "complete" || field.value !== "noSelection") && field.name !== "crew") {
-            if(Array.isArray(field.value)) {
-              res = res.concat(field.value.map(v => {
-                return translate({
-                  "name": field.name,
-                  "value": v
-                })
-              }))
-            } else {
-              res.push(translate(field))
-            }
-          }
-          return res
-        }, [])
-      }
+  computed: {
+    ...mapGetters('deposits', {
+      isError: 'isError',
+      getErrorCode: 'getErrorCode',
+    }),
+  },
+  methods: {
+    ...mapActions('takings', [
+      'page'
+    ]),
+    resetDepositAddView() {
+      this.depositAddView = false;
     },
-    methods: {
-      ...mapActions('takings', [
-        'page'
-      ]),
-      resetDepositAddView() {
-        this.depositAddView = false;
-      },
-      editState (expense) {
-        this.editable.value = this.byId(expense.id)
-        this.editable.key = expense.id
-      },
-      addState () {
-        this.editable = JSON.parse(JSON.stringify(this.editableDefault))
-      },
-      pageDown () {
-        this.page(true)
-      },
-      pageUp () {
-        this.page(false)
-      },
-      depositAdd () {
-        if (this.depositAddView === true) {
-          this.depositAddView = false
-        } else {
-          this.depositAddView = true
-      
-        }
+    editState (expense) {
+      this.editable.value = this.byId(expense.id)
+      this.editable.key = expense.id
+    },
+    addState () {
+      this.editable = JSON.parse(JSON.stringify(this.editableDefault))
+    },
+    pageDown () {
+      this.page(true)
+    },
+    pageUp () {
+      this.page(false)
+    },
+    depositAdd () {
+      if (this.depositAddView === true) {
+        this.depositAddView = false
+      } else {
+        this.depositAddView = true
+    
+      }
+    }
+  },
+  updated () {
+    if(this.isError) {
+      switch(this.getErrorCode) {
+        case 400:
+          this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
+          break;
+        case 403:
+          this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
+          break;
+        case 404:
+          this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
+          break;
+        default:
+          if(this.getErrorCode > 404) {
+            this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
+          }
       }
     }
   }
+}
 </script>
 
 <style scoped lang="less">

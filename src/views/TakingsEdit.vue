@@ -51,162 +51,184 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import { mapGetters, mapActions } from 'vuex'
-    import { VcAFrame, VcAColumn } from 'vca-widget-base'
-    import 'vca-widget-base/dist/vca-widget-base.css'
-    import { Input, Form, Card} from 'element-ui'
-    import TakingCalculator from '@/components/takings/edit/TakingCalculator.vue'
-    import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
-    import ReasonForPayment from '@/components/ReasonForPayment.vue'
-    import TakingDeadline from '@/components/takings/edit/TakingDeadline.vue'
-    import TakingContext from '@/components/takings/edit/TakingContext.vue'
+import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
+import { VcAFrame, VcAColumn } from 'vca-widget-base'
+import 'vca-widget-base/dist/vca-widget-base.css'
+import { Input, Form, Card} from 'element-ui'
+import TakingCalculator from '@/components/takings/edit/TakingCalculator.vue'
+import ExternalTransactionDetails from '@/components/ExternalTransactionDetails.vue'
+import ReasonForPayment from '@/components/ReasonForPayment.vue'
+import TakingDeadline from '@/components/takings/edit/TakingDeadline.vue'
+import TakingContext from '@/components/takings/edit/TakingContext.vue'
 
-    export default {
-        name: "TakingsEdit",
-        components: {
-            'TakingCalculator': TakingCalculator,
-            'ExternalTransactionDetails': ExternalTransactionDetails,
-            'ReasonForPayment': ReasonForPayment,
-            'TakingDeadline': TakingDeadline,
-            'TakingContext': TakingContext,
-            'VcAFrame': VcAFrame,
-            'VcAColumn': VcAColumn,
-            'el-card': Card,
-            'el-input': Input,
-            'el-form': Form,
-        },
-        props: {
-          id: {
-            type: String,
-            default: null
+export default {
+    name: "TakingsEdit",
+    components: {
+        'TakingCalculator': TakingCalculator,
+        'ExternalTransactionDetails': ExternalTransactionDetails,
+        'ReasonForPayment': ReasonForPayment,
+        'TakingDeadline': TakingDeadline,
+        'TakingContext': TakingContext,
+        'VcAFrame': VcAFrame,
+        'VcAColumn': VcAColumn,
+        'el-card': Card,
+        'el-input': Input,
+        'el-form': Form,
+    },
+    props: {
+      id: {
+        type: String,
+        default: null
+      }
+    },
+    data () {
+        return {
+            reason: "",
+            sourceCount: 0,
+            taking: {
+                "context": {
+                    "description": "",
+                    "category": ""
+                },
+                "comment": "",
+                "details": {
+                    "reasonForPayment": "",
+                    "receipt": false,
+                    "partner": {}
+                },
+                "description": "",
+                "amount": {
+                    "received": Date.now(),
+                    "sources": [],
+                    "involvedSupporter": []
+                },
+                "created": Date.now(),
+                "updated": Date.now(),
+            },
+            rules: {},
+        }
+    },
+  mounted () {
+    if (this.id !== null) {
+    axios.get(
+      '/backend/stream/takings/id/' + this.id,
+      { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
+    )
+    .then(response => {
+      if(response.status === 200) {
+        this.taking = response.data
+        this.sourceCount = this.taking.amount.sources.length
+      }
+    })
+        .catch(error => { 
+          console.log(error.response.status)
+          switch(error.response.status) {
+         case 401:
+          this.open401()
+          this.$router.push('/takings')
+          break;
+
+        }})
+    }
+  },
+    computed: {
+        ...mapGetters('takings', {
+            get: 'getById',
+        }),
+        headerTitle () {
+          if (this.id !== null) {
+            return this.$t('takingsEdit.header.edit')
+          } else {
+            return this.$t('takingsEdit.header.add')
           }
         },
-        data () {
-            return {
-                reason: "",
-                sourceCount: 0,
-                taking: {
-                    "context": {
-                        "description": "",
-                        "category": ""
-                    },
-                    "comment": "",
-                    "details": {
-                        "reasonForPayment": "",
-                        "receipt": false,
-                        "partner": {}
-                    },
-                    "description": "",
-                    "amount": {
-                        "received": Date.now(),
-                        "sources": [],
-                        "involvedSupporter": []
-                    },
-                    "created": Date.now(),
-                    "updated": Date.now(),
-                },
-                rules: {},
-            }
+        updateMode () {
+          return this.id !== null
         },
-      mounted () {
-        if (this.id !== null) {
-        axios.get(
-          '/backend/stream/takings/id/' + this.id,
-          { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
-        )
-            .then(response => {
-              if(response.status === 200) {
-                this.taking = response.data
-                this.sourceCount = this.taking.amount.sources.length
-              }
-            })
-            .catch(error => console.log(error))
-
+        showExternalTransactions () {
+            return this.taking.amount.sources.filter(s => s.typeOfSource.category === "extern").length > 0
+        },
+        showInternalTransactions () {
+            return this.taking.amount.sources.filter(s => s.typeOfSource.category === "cash").length > 0
+        },
+        showCalculator () {
+            return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
+                this.taking.context.hasOwnProperty("description") && this.taking.context.description !== "" 
+        },
+        validDonation () {
+          function validateSource(source) {
+            return source.amount.hasOwnProperty("amount") && source.amount.amount > 0 &&
+            source.hasOwnProperty("typeOfSource") && source.typeOfSource !== ""
+          }
+          return this.taking.amount.sources.length > 0 && this.taking.amount.sources.every(validateSource)
         }
-      },
-        computed: {
-            ...mapGetters('takings', {
-                get: 'getById',
-            }),
-            headerTitle () {
-              if (this.id !== null) {
-                return this.$t('takingsEdit.header.edit')
-              } else {
-                return this.$t('takingsEdit.header.add')
-              }
-            },
-            updateMode () {
-              return this.id !== null
-            },
-            showExternalTransactions () {
-                return this.taking.amount.sources.filter(s => s.typeOfSource.category === "extern").length > 0
-            },
-            showInternalTransactions () {
-                return this.taking.amount.sources.filter(s => s.typeOfSource.category === "cash").length > 0
-            },
-            showCalculator () {
-                return this.taking.context.hasOwnProperty("category") && this.taking.context.category !== "" &&
-                    this.taking.context.hasOwnProperty("description") && this.taking.context.description !== "" 
-            },
-            validDonation () {
-              function validateSource(source) {
-                return source.amount.hasOwnProperty("amount") && source.amount.amount > 0 &&
-                source.hasOwnProperty("typeOfSource") && source.typeOfSource !== ""
-              }
-              return this.taking.amount.sources.length > 0 && this.taking.amount.sources.every(validateSource)
-            }
+    },
+    methods: {
+        ...mapActions('takings', [
+            'add', // -> this.foo()
+            'update',
+            'getById',
+        ]),
+        addReason(reason) {
+            this.reason = reason
         },
-        methods: {
-            ...mapActions('takings', [
-                'add', // -> this.foo()
-                'update',
-                'getById',
-            ]),
-            addReason(reason) {
-                this.reason = reason
-            },
-            submitForm () {
+        submitForm () {
 
-                if(this.taking.amount.sources.length > 0) {
-                    for (var source in this.taking.amount.sources) {
-                        if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
-                            this.taking.amount.sources[source].typeOfSource.external = {
-                                "location": this.taking.details.partner.name,
-                                "contactPerson": this.taking.details.partner.asp,
-                                "email": this.taking.details.partner.email,
-                                "address": this.taking.details.partner.address,
-                                "receipt": this.taking.details.receipt,
-                            }
+            if(this.taking.amount.sources.length > 0) {
+                for (var source in this.taking.amount.sources) {
+                    if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
+                        this.taking.amount.sources[source].typeOfSource.external = {
+                            "location": this.taking.details.partner.name,
+                            "contactPerson": this.taking.details.partner.asp,
+                            "email": this.taking.details.partner.email,
+                            "address": this.taking.details.partner.address,
+                            "receipt": this.taking.details.receipt,
                         }
                     }
                 }
-                this.taking.details.reasonForPayment = this.reason
+            }
+            this.taking.details.reasonForPayment = this.reason
 
-                this.add(this.taking)
-                this.$router.push('/takings')
-            },
-            updateForm () {
+            this.add(this.taking)
+            this.$router.push('/takings')
+        },
+        updateForm () {
 
-                if(this.taking.amount.sources.length > 0) {
-                    for (var source in this.taking.amount.sources) {
-                        if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
-                            this.taking.amount.sources[source].typeOfSource.external = {
-                                "location": this.taking.details.partner.name,
-                                "contactPerson": this.taking.details.partner.asp,
-                                "email": this.taking.details.partner.email,
-                                "address": this.taking.details.partner.address,
-                                "receipt": this.taking.details.receipt,
-                            }
+            if(this.taking.amount.sources.length > 0) {
+                for (var source in this.taking.amount.sources) {
+                    if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
+                        this.taking.amount.sources[source].typeOfSource.external = {
+                            "location": this.taking.details.partner.name,
+                            "contactPerson": this.taking.details.partner.asp,
+                            "email": this.taking.details.partner.email,
+                            "address": this.taking.details.partner.address,
+                            "receipt": this.taking.details.receipt,
                         }
                     }
                 }
-
-                this.update(this.taking)
-                this.$router.push('/takings')
             }
-        }
+
+            this.update(this.taking)
+            this.$router.push('/takings')
+        },
+    open401() {
+      this.$notify({
+        title: this.$t('errors.ajax.forbidden.header'),
+        message: this.$t('errors.ajax.forbidden.msg'),
+        type: 'warning'
+      })
+    },
+    open(title, message, type) {
+      Notification({
+        title:  title,
+        message: message,
+        type: type
+      });
     }
+
+    }
+}
 </script>
 
 <style scoped>
