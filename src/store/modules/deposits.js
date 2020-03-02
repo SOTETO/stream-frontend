@@ -227,7 +227,7 @@ const mutations = {
     }
   },
   count(state, payload) {
-    state.count = payload.count
+    state.count = payload.count.count
   },
     sort(state, sort) {
         state.sorting = sort.sort

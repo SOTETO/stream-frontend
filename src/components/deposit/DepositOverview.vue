@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-card class="box-card">
-      <DepositFilter v-on:update="updateFilter($event)"/>
+      <DepositFilter v-on:update="updateFilter"/>
     </el-card>
     <el-card class="box-card tail">
-      <DepositList v-on:page="updatePage($event)"/>
+      <DepositList v-on:update-page="updatePage($event)" v-on:update-sort="updateSort"/>
     </el-card>
   </div>
 </template>

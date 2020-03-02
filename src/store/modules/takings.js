@@ -182,7 +182,7 @@ const mutations = {
     }
   },
   count(state, payload) {
-    state.count = payload.count
+    state.count = payload.count.count
   },
     filter(state, filter) {
         state.filter = filter.filter

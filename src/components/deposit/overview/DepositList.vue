@@ -3,12 +3,14 @@
   <el-table
     :data="depositItems"
     style="width: 100%"
-    @sort-change="sorting()"
+    @sort-change="updateSort"
     >
     <el-table-column
       prop="date"
       :label='$t("deposits.table.head.date")'
-      sortable
+      sortable="custom"
+
+      @sort-change="sorting($event)"
       >
       <template slot-scope="scope">
         <div class="dates">
@@ -19,7 +21,7 @@
     </el-table-column>
     <el-table-column
       prop="crew.name"
-      sortable
+      sortable="custom"
       :label='$t("deposits.table.head.crew")'
       >
       <template slot-scope="scope">
@@ -30,7 +32,7 @@
     </el-table-column>
     <el-table-column
       prop="amount"
-      sortable
+      sortable="custom"
       :label='$t("deposits.table.head.amount")'
       >
       <template slot-scope="scope">
@@ -51,7 +53,7 @@
     </el-table-column>
     <el-table-column
       prop="supporter.name"
-      sortable
+      sortable="custom"
       :label='$t("deposits.table.head.supporter")'
       >
       <template slot-scope="scope">
@@ -70,7 +72,6 @@
     </el-table-column>
     <el-table-column
       prop="status.date"
-      sortable
       :label='$t("deposits.table.head.state")'
       >
       <template slot-scope="scope">
@@ -83,7 +84,7 @@
     </el-table-column>
     <template slot="append">
       <div>
-        <el-button class="load" type="info" plain @click="loadHandler">{{ loadButton }}</el-button>
+        <el-button class="load" type="info" plain @click="updatePage">{{ loadButton }}</el-button>
       </div>
     </template>
   </el-table>
@@ -125,7 +126,7 @@ export default {
     return {
       sort: {
         sortby: null,
-        sort: null,
+        sortdir: null,
       },  
       page: {
         size: 20,
@@ -154,9 +155,9 @@ export default {
       hasAddtionalSupporter (deposit) {
           return this.supporter(deposit).length > this.maximumTags
       },
-      loadHandler() {
+      updatePage () {
         this.page.offset= this.page.offset + this.page.size
-        this.$emit("page", this.page)
+        this.$emit("update-page", this.page)
       },
       donation (donationId) {
         var name = this.donationName(donationId)
@@ -168,6 +169,28 @@ export default {
       confirmed(deposit) {
         return deposit.status !== "unconfirmed"
       },
+    updateSort (value) {
+      if (value.order === 'descending') {
+        this.sort.sortdir= 'DESC'
+      } else {
+        this.sort.sortdir = 'ASC'
+      }
+
+      if (value.prop === 'date' ) {
+        this.sort.sortby = 'deposit.created'
+      }
+      if (value.prop === 'crew.name') {
+        this.sort.sortby = 'deposit.crew'
+      }
+      if (value.prop === 'amount') {
+        this.sort.sortby = 'deposit.full_amount'
+      }
+      if (value.prop === 'supporter.name') {
+        this.sort.sortby = 'deposit.supporter'
+      }
+      
+      this.$emit('update-sort', this.sort)
+    },
     open(title, message, type) {
       Notification({
         title:  title,

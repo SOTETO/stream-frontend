@@ -1,10 +1,12 @@
 <template>
     <el-table
       :data="takings"
-      style="width: 100%">
+      style="width: 100%"
 
+      @sort-change="updateSort">
       <el-table-column
         prop="name"
+        sortable="custom"
         :label='$t("takings.table.head.title")'
         >
       </el-table-column>
@@ -53,9 +55,10 @@
       </el-table-column>
 
       <el-table-column
-        prop=""
+        prop="date"
         :label='$t("takings.table.head.date")'
         width="210"
+        sortable="custom"
         >
         <template slot-scope="scope">
           <div class="dates">
@@ -101,7 +104,7 @@
       </el-table-column>
          <template slot="append">
           <div>
-            <el-button class="load" type="info" plain @click="loadHandler">{{ loadButton }}</el-button>
+            <el-button class="load" type="info" plain @click="updatePage">{{ loadButton }}</el-button>
           </div>
         </template>
     </el-table>
@@ -150,7 +153,7 @@ export default {
     return {
       sort: {
         sortby: null,
-        sort: null,
+        sortdir: null,
       },  
       page: {
         size: 20,
@@ -183,34 +186,49 @@ export default {
     },
   },
   methods: {
-      formatAmount(amount) {
-          return Money.getString(amount, "EUR" )
-      },
-      formatDate(date) {
-          var d = new Date(date)
-          return this.$d(d, 'short')
-      },
-      editPage (uuid) {
-        this.$router.push({name: 'takings-edit', params: {id: uuid}})
-      },
-      loadHandler() {
-        this.page.offset= this.page.offset + this.page.size
-        this.$emit("page", this.page)
-      },
-      isExtern (value) {
-        if(value > 0) {
-          return true
-        } else {
-          return false
-        }
-      },
-      open(title, message, type) {
-          Notification({
-              title:  title,
-              message: message,
-              type: type
-          });
+    formatAmount(amount) {
+        return Money.getString(amount, "EUR" )
+    },
+    formatDate(date) {
+        var d = new Date(date)
+        return this.$d(d, 'short')
+    },
+    editPage (uuid) {
+      this.$router.push({name: 'takings-edit', params: {id: uuid}})
+    },
+    updatePage() {
+      this.page.offset= this.page.offset + this.page.size
+      this.$emit("update-page", this.page)
+    },
+    isExtern (value) {
+      if(value > 0) {
+        return true
+      } else {
+        return false
       }
+    },
+    updateSort (value) {
+      if (value.order === 'descending') {
+        this.sort.sortdir= 'DESC'
+      } else {
+        this.sort.sortdir = 'ASC'
+      }
+
+      if (value.prop === 'name' ) {
+        this.sort.sortby = 'taking.description'
+      }
+      if (value.prop === 'date') {
+        this.sort.sortby = 'taking.created'
+      }
+      this.$emit('update-sort', this.sort)
+    },
+    open(title, message, type) {
+      Notification({
+        title:  title,
+        message: message,
+        type: type
+      });
+    }
   }
 }
 </script>
