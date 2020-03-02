@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  
+import { mapGetters, mapActions } from 'vuex'
 import { VcAFrame, VcAColumn } from 'vca-widget-base'
 import 'vca-widget-base/dist/vca-widget-base.css'
 import DepositOverview from '@/components/deposit/DepositOverview'
@@ -40,6 +40,33 @@ export default {
   data () {
     return {
       query: this.queryString  
+    }
+  },
+
+  computed: {
+    ...mapGetters('deposits', {
+      isError: 'isError',
+      getErrorCode: 'getErrorCode',
+    }),
+  },
+
+  updated () {
+    if(this.isError) {
+      switch(this.getErrorCode) {
+        case 400:
+          this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
+          break;
+        case 403:
+          this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
+          break;
+        case 404:
+          this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
+          break;
+        default:
+          if(this.getErrorCode > 404) {
+            this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
+          }
+      }
     }
   }
 }
