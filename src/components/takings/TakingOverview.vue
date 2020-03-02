@@ -41,7 +41,10 @@ export default {
   data () {
     return {
       filter: {},
-      sort:{},
+      sort:{
+        sortby: "taking.created",
+        sortdir: "DESC"
+      },
       page:{
         size: 20,
         offset: 0

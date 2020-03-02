@@ -21,7 +21,10 @@ export default {
   data () {
     return {
       filter: {},
-      sort:{},
+      sort:{
+        sortby: "deposit.created",
+        sortdir: "DESC"
+      },
       page:{
         size: 20,
         offset: 0

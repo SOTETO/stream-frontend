@@ -145,14 +145,14 @@ export default {
   methods: {
     addEvent(value) {
       if (this.filter.name !== null) {
-        this.filter.name = this.filter.name + " " +"%" + value +"%"
+        this.filter.name = this.filter.name + " %" + value + "%"
       } else {
-        this.filter.name = "%" + value + "%"
+        this.filter.name = " %" + value + "%"
       }
       this.update()
     },
     deleteEvent(value) {
-      var replace = "%"+ value + "%"
+      var replace = " %"+ value + "%"
       this.filter.name = this.filter.name.replace(replace, '')
       if (this.filter.name === '') {
         this.filter.name = null
@@ -161,14 +161,14 @@ export default {
     },
     addCrew(value) {
       if (this.filter.crewname !== null) {
-        this.filter.crewname = this.filter.crewname + " " +"%" + value +"%"
+        this.filter.crewname = this.filter.crewname + " %" + value + "%"
       } else {
-        this.filter.crewname = "%" + value + "%"
+        this.filter.crewname = " %" + value + "%"
       }
       this.update()
     },
     deleteCrew(value) {
-      var replace = "%"+ value + "%"
+      var replace = " %"+ value + "%"
       this.filter.crewname = this.filter.crewname.replace(replace, '')
       if (this.filter.crewname === '') {
         this.filter.crewname = null
