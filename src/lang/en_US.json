@@ -5,6 +5,46 @@
     "employee": "employee",
     "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
   },
+  "filter": {
+    "events": {
+      "label": "Action",
+      "new_tag": "+ Action"
+    },
+    "crews": {
+      "label": "Crews",
+      "new_tag": "+ Crew"
+    },
+    "created": {
+      "label": "Created"
+    },
+    "received": {
+      "label": "Received"
+    },
+    "norms": {
+      "label": "Type of Taking",
+      "label_ECO": "Economic",
+      "label_DON": "Donation",
+      "label_null": "All"
+    },
+    "external": {
+      "label": "Cash/External",
+      "label_true": "Extern",
+      "label_false": "Cash",
+      "label_null": "All"
+    }, 
+    "confirmed_date": {
+      "label": "Confirmed Date"
+    },
+    "amount": {
+      "label": "Amount"
+    },
+    "confirmed": {
+      "label": "Confirmed",
+      "label_true": "Confirmed",
+      "label_false": "Not Confirmed",
+      "label_null": "All"
+    }
+  },
   "errors": {
     "ajax": {
       "badRequest": {

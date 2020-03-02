@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card class="box-card">
-      <TakingFilter v-on:update="updateFilter" />
+      <TakingFilter :lang="$t('filter')" v-on:update="updateFilter" />
     </el-card>
     <el-card class="box-card tail">
       <TakingList :deposit="deposit" :depositAddView="depositAddView" v-on:update-page="updatePage" v-on:update-sort="updateSort"/>

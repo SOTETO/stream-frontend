@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card class="box-card">
-      <DepositFilter v-on:update="updateFilter"/>
+      <DepositFilter :lang="$t('filter')" v-on:update="updateFilter"/>
     </el-card>
     <el-card class="box-card tail">
       <DepositList v-on:update-page="updatePage($event)" v-on:update-sort="updateSort"/>

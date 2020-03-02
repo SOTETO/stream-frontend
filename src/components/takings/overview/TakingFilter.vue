@@ -101,12 +101,6 @@ export default {
             label_false: "Bar",
             label_null: "All"
           }, 
-          open: {
-            label: "open",
-            label_true: "Open",
-            label_false: "Not Open",
-            label_null: "All"
-          },
           confirmed_date: {
             label: "Confirmed Date"
           },
