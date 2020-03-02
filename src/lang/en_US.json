@@ -386,7 +386,10 @@
         "created": "Recorded: {date}"
       },
       "popup": {
-        "extern": "transfer",
+        "header": "Takings details",
+        "full": "Full taking:",
+        "split": "divided:",
+        "extern": "extern",
         "cash": "cash"
       },
       "load": {

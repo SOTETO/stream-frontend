@@ -1,14 +1,15 @@
 <template>
   <div>
-  <span> Übersicht Einnahmen </span>
-  <span> Gesamt: </span>
-  <p>{{ amount.full}}</p>
-  <span> Davon: </span>
-  <p>{{$t('takings.table.popup.cash')}}: {{ amount.cash }}</p>
-  <p>{{$t('takings.table.popup.extern')}}: {{ amount.extern }}</p>
+    <h4> {{$t('takings.table.popup.header')}} </h4>
+    <span> {{$t('takings.table.popup.full')}} </span>
+  <p>{{ formatAmount(amount.full)}}</p>
+  <span> {{$t('takings.table.popup.split')}} </span>
+  <p>{{$t('takings.table.popup.cash')}}: {{ formatAmount(amount.cash) }}</p>
+  <p>{{$t('takings.table.popup.extern')}}: {{ formatAmount(amount.extern) }}</p>
   </div>        
 </template>
 <script>
+import Money from '@/utils/Money'
 export default {
   name: "TakingsDetails",
   props: {
@@ -28,6 +29,11 @@ export default {
         }
       }
     }
+  },
+  methods: {
+    formatAmount(amount) {
+        return Money.getString(amount, "EUR" )
+    },
   }
 }
 </script>

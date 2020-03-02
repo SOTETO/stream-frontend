@@ -392,6 +392,9 @@
         "created": "Eingetragen: {date}"
       },
       "popup": {
+        "header": "Einnahme Details",
+        "full": "Gesamte Einnahme:",
+        "split": "Davon:",
         "extern": "Überweisung",
         "cash": "Bargeld"
       },
