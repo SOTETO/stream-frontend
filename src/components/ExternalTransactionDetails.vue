@@ -1,30 +1,30 @@
 <template>
-    <div>
-        <div>
-            <span>{{ $t("donation.placeholder.externalDetails.partner.label") }}</span>
-            <el-form-item>
-                <el-input v-model="partner.name" @change="changeName" :placeholder="$t('donation.placeholder.externalDetails.partner.name')"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input v-model="partner.asp" @change="changeASP" :placeholder="$t('donation.placeholder.externalDetails.partner.asp')"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input v-model="partner.email" @change="changeEmail" :placeholder="$t('donation.placeholder.externalDetails.partner.email')"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input v-model="partner.address" @change="changeAddress" :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
-            </el-form-item>
-        </div>
-        <el-form-item>
-            <el-checkbox v-model="donationReceipt" @change="commit">{{ $t("donation.placeholder.externalDetails.receipt") }}</el-checkbox>
-        </el-form-item>
+  <div>
+    <h4>{{ $t("donation.placeholder.externalDetails.partner.label") }}</h4>
+         <el-form :rules="rules" :model="partner" ref="partner" >
+               <el-form-item :label="this.$t('takings.labels.name')" prop="name">
+                   <el-input type="text" v-model="partner.name" @change="changeName"  :placeholder="$t('donation.placeholder.externalDetails.partner.name')"></el-input>
+              </el-form-item>
+              <el-form-item :label="this.$t('takings.labels.asp')" prop="asp">
+                   <el-input v-model="partner.asp" @change="changeASP"  :placeholder="$t('donation.placeholder.externalDetails.partner.asp')"></el-input>
+              </el-form-item>
+               <el-form-item :label="this.$t('takings.labels.email')" prop="email">
+                   <el-input v-model="partner.email" @change="changeEmail"  :placeholder="$t('donation.placeholder.externalDetails.partner.email')"></el-input>
+               </el-form-item>
+               <el-form-item :label="this.$t('takings.labels.address')" prop="address">
+                   <el-input v-model="partner.address" @change="changeAddress"  :placeholder="$t('donation.placeholder.externalDetails.partner.address')"></el-input>
+               </el-form-item>
+               <el-form-item>
+                   <el-checkbox v-model="donationReceipt" @change="commit">{{ $t("donation.placeholder.externalDetails.receipt") }}</el-checkbox>
+               </el-form-item>
+         </el-form>
+           <el-card class="box-card tail expand">
+               <div><span>{{ $t("donation.placeholder.externalDetails.description") }}</span></div><br/>
+               <ReasonForPayment :taking="taking" :typeOfSource="external" :name="name" :address="partner.address"  />
+          </el-card>
 
-        <el-card class="box-card tail expand">
-            <div><span>{{ $t("donation.placeholder.externalDetails.description") }}</span></div><br/>
-            <ReasonForPayment :taking="taking" :typeOfSource="external" :name="name" :address="partner.address"  />
-        </el-card>
+  </div>
 
-    </div>
 </template>
 
 <script>
@@ -63,7 +63,26 @@
                     "asp": "",
                     "email": "",
                     "address": ""
+                },
+              rules: {
+                name: [
+                  { required: true, message: this.$t('takings.validations.name'), trigger:'blur' }
+                ],
+                asp: [
+                  { required: true, message: this.$t('takings.validations.asp'), trigger:'blur' }
+                ],
+                email: [
+                  { type: 'email',required: true, message: this.$t('takings.validations.email'), trigger:'blur' }
+                ],
+                address: [
+                  { required: true, message: this.$t('takings.validations.address'), trigger:'blur' }
+                ],
+              },
+              created: {
+                setFocus (){
+                  this.$refs.name.$refs.text.focus()
                 }
+              }
             }
         },
         computed: {

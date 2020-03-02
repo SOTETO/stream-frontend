@@ -419,9 +419,20 @@
     "filter": {
       "name": "Name"
     },
+    "labels": {
+      "name": "Name / Organisation:",
+      "asp": "Ansprechperson:",
+      "address": "Adresse:",
+      "email": "E-Mail Adresss:"
+    },
     "validations": {
       "category": "Bitte gib eine Kategorie an",
-      "description": "Bitte füge eine Beschreibung hinzu"
+      "description": "Bitte füge eine Beschreibung hinzu",
+      "name": "Bitte gib einen Namen ein",
+      "asp": "Bitte gib eine Ansprechperson an",
+      "email": "Bitte gib eine E-Mail Adresse an",
+      "address": "Bitte gib eine Adresse an"
+
     },
     "info": "Unklarheiten? "
   },

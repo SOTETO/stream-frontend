@@ -412,9 +412,19 @@
     "filter":{
       "name": "name"
     },
+    "labels": {
+      "name": "Name / Organisation:",
+      "asp": "Contact Person:",
+      "address": "Addresse:",
+      "email": "E-mail adresss:"
+    },
     "validations": {
       "category": "Please add a category",
-      "description": "Please add a description"
+      "description": "Please add a description",
+      "name": "Please add a name",
+      "asp": "Please add a contact",
+      "email": "Please add an e-mail address",
+      "address": "Please add an address"
     },
     "info": "Questions? "
   },
