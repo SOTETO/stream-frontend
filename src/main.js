@@ -34,7 +34,6 @@ const dateTimeFormats = {
 }
 
 Vue.use(VueI18n);
-
 const locale =  navigator.language;
 const i18n = new VueI18n({
     locale: locale,

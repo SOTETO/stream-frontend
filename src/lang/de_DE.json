@@ -463,6 +463,16 @@
     "filter": {
       "name": "Name"
     },
+    "popover": {
+      "title": "Bitte überprüfe folgende Felder:",
+      "buttonText": "Warum ist dieser Button deaktiviert?",
+      "errors": {
+        "description": "'Wobei ist diese Einnahme entstanden?' fehlt",
+        "category": "'Kategorie' fehlt",
+        "amount": "'Art der Einnahme?' ist nicht komplett",
+        "partner": "'Wer überweist die Einnahme?' ist nicht komplett"
+      }
+    },
     "labels": {
       "name": "Name / Organisation:",
       "asp": "Ansprechperson:",

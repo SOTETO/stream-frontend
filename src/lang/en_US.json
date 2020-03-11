@@ -455,6 +455,16 @@
     "filter":{
       "name": "name"
     },
+    "popover": {
+      "title": "Please, check the following fields...",
+      "buttonText": "Why is the Button disabled?",
+      "errors": {
+        "description": "'How were the takings collected?' is empty",
+        "category": "'Category' is empty",
+        "amount": "'What type of taking?' is incomplete",
+        "partner": "'Who transfers the donation?' is incomplete"
+      }
+    },
     "labels": {
       "name": "Name / Organisation:",
       "asp": "Contact Person:",
