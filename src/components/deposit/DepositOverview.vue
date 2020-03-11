@@ -4,7 +4,7 @@
       <DepositFilter :lang="$t('filter')" v-on:update="updateFilter"/>
     </el-card>
     <el-card class="box-card tail">
-      <DepositList v-on:update-page="updatePage($event)" v-on:update-sort="updateSort"/>
+      <DepositList v-on:update-page="updatePage($event)" v-on:update-sort="updateSort" v-on:refresh="refresh"/>
     </el-card>
   </div>
 </template>
@@ -58,6 +58,10 @@ export default {
     updatePage(page) {
       this.page = page
       this.nextPage(this.query)
+    },
+    refresh() {
+      this.page = {size: 20, offset: 0}
+      this.init(this.query)
     }
   }
 
