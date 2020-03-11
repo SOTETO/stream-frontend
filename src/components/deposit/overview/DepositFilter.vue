@@ -1,21 +1,21 @@
 <template>
-  <el-collapse>
+  <el-collapse title="Filter">
     <el-collapse-item title="Filter">
       <el-row :gutter="50">
         <el-col :span="12">
           <el-form :model="filter" label-position="left" label-width="8em">
-            <el-form-item :label="lang.crews.label" required>
-              <FilterTags
-                :lang="lang.crews"
-                v-on:commit="addCrew($event)"
-                v-on:delete="deleteCrew($event)"
-              />
-            </el-form-item>
             <el-form-item :label="lang.events.label" required>
               <FilterTags
                 :lang="lang.events"
                 v-on:commit="addEvent($event)"
                 v-on:delete="deleteEvent($event)"
+              />
+            </el-form-item>
+            <el-form-item :label="lang.crews.label" required>
+              <FilterTags
+                :lang="lang.crews"
+                v-on:commit="addCrew($event)"
+                v-on:delete="deleteCrew($event)"
               />
             </el-form-item>
             <el-form-item :label="lang.created.label" required>
