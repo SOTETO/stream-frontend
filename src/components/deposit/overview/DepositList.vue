@@ -45,7 +45,7 @@
       <template slot-scope="scope">
         <ul class="actions">
           <li v-for="unit in scope.row.actions" :key="unit.publicId" class="action">
-            <span>{{ unit.description }}</span>
+            <span class="action-description">{{ unit.description }}</span>
             <span>{{ formatAmount({ "amount": unit.amount.amount, "currency": unit.amount.currency }) }}</span>
           </li>
         </ul>
@@ -231,12 +231,17 @@ export default {
     list-style: none;
     padding: 0.2em;
     font-size: 0.8em;
-    max-width: 15em;
+    width: 100%;
     .action {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
     }
+  }
+
+  .actions .action-description {
+    width: 60%;
+    word-break: normal;
   }
 
   .dates {
