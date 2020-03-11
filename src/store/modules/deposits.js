@@ -200,7 +200,6 @@ const actions = {
       var ajax = new DepositEndpoints(store)
       var successHandler = (response) => {
         store.commit({ "type": 'push', "deposit": response.data })
-        //store.dispatch('takings/init', { sortby: "taking.created", sortdir: "DESC" }, { root: true })
       }
       var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
       ajax.save(successHandler, errorHandler, deposit)
