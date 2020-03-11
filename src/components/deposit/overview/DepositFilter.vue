@@ -3,8 +3,6 @@
     <el-collapse-item title="Filter">
       <el-row :gutter="50">
         <el-col :span="12">
-
-      <el-cascader v-model="filter"  @change=""  placeholder=""  expand-trigger="click"/>
           <el-form :model="filter" label-position="left" label-width="8em">
             <el-form-item :label="lang.events.label" required>
               <FilterTags
