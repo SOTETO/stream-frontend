@@ -176,7 +176,6 @@ const actions = {
       var crew = store.rootGetters['user/getCrew']
       //deposit["publicId"] = uuidv4()
       //deposit["crew"] = (crew !== null) ? crew[0] : { "name": "", "uuid": "00000000-0000-0000-0000-000000000000" } // hopefully not undefined
-      deposit["crew"] = crew[0] // hopefully not undefined
       deposit["supporter"] = {}
       deposit.supporter["uuid"] = user.uuid
       deposit.supporter["name"] = user.name
@@ -200,7 +199,6 @@ const actions = {
       var ajax = new DepositEndpoints(store)
       var successHandler = (response) => {
         store.commit({ "type": 'push', "deposit": response.data })
-        store.dispatch('takings/init', null, { root: true })
       }
       var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
       ajax.save(successHandler, errorHandler, deposit)
@@ -208,7 +206,7 @@ const actions = {
     confirm (store, deposit) {
         var user = store.rootGetters['user/get']
         var ajax = new DepositEndpoints(store)
-        var successHandler = () => store.dispatch('init')
+        var successHandler = () => true
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
         ajax.confirm(successHandler, errorHandler, { "id": deposit.id, "date": Date.now(), "uuid": user.uuid, "name": user.name })
     }

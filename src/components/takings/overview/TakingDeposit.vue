@@ -130,6 +130,7 @@ import Money from '@/utils/Money'
       },
       commit () {
         this.save(this.deposit)
+        this.$emit("submit")
         this.reset()
       },
       formatAmount(unit) {

@@ -125,7 +125,7 @@ export default {
         cashfrom: null,
         confirmed: null,
         unconfirmed: null,
-        open: null,
+        open: true,
         payfrom: null,
         payto:null,
         crfrom: null,

@@ -78,6 +78,10 @@ export default {
     updatePage(page) {
       this.page = page
       this.nextPage(this.query)
+    }, 
+    refresh() {
+      this.page = {size: 20, offset: 0}
+      this.init(this.query)
     }
   }
 }

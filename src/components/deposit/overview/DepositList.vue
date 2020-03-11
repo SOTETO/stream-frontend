@@ -25,8 +25,8 @@
       :label='$t("deposits.table.head.crew")'
       >
       <template slot-scope="scope">
-        <span class="vca-crew-name">
-          <el-tag> {{ scope.row.crew.name }} </el-tag>
+        <span class="vca-crew-name" v-for="crew in scope.row.crew" :key="crew.uuid">
+          <el-tag> {{ crew.name }} </el-tag>
         </span>
       </template>
     </el-table-column>
@@ -75,7 +75,7 @@
       :label='$t("deposits.table.head.state")'
       >
       <template slot-scope="scope">
-        <button v-if="!confirmed(scope.row) && allowedToConfirm" class="vca-button-primary padding" @click="confirm(scope.row)">{{ $t('deposits.table.hint.confirm') }}</button>
+        <button v-if="!confirmed(scope.row) && allowedToConfirm" class="vca-button-primary padding" @click="confirmAndRefresh(scope.row)">{{ $t('deposits.table.hint.confirm') }}</button>
         <StateLight v-else-if="!confirmed(scope.row) && !allowedToConfirm" :value="{ 'name': $t('deposits.table.hint.dates.unconfirmed'), 'state': 0 }" />
         <div v-else>
           <StateLight :value="{ 'name': $t('deposits.table.hint.dates.confirmed', { 'date':  formatDate(scope.row.status.date) }), 'state': 1  }" />
@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     ...mapActions('deposits', [
-      'confirm'
+        'confirm'
     ]),
     formatAmount(amount) {
       return Money.getString(amount.amount, amount.currency)
@@ -144,6 +144,10 @@ export default {
     formatDate(date) {
       var d = new Date(date)
       return this.$d(d, 'short')
+    },
+    confirmAndRefresh(value) {
+      this.confirm(value)
+      this.$emit("refresh")
     },
       supporter (deposit) {
           return deposit.supporter
