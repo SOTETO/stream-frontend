@@ -7,8 +7,8 @@
 </template>
 
 <script>
-    import CurrencyFormatter from '@/utils/CurrencyFormatter'
-    import AmpleLight from '@/components/donations/AmpleLight'
+import Money from '@/utils/Money'
+    import AmpleLight from '@/components/utils/AmpleLight'
 
     export default {
         name: "DepositLights",
@@ -16,7 +16,7 @@
             AmpleLight
         },
         props: {
-            "donation": {
+            "taking": {
                 "type": Object,
                 "required": true
             }
@@ -24,20 +24,20 @@
         computed: {
             confirmed () {
                 var confirmed = 0
-                if(this.donation.deposited.confirmed.hasOwnProperty("EUR")) {
-                    confirmed = this.donation.deposited.confirmed.EUR
+                if(this.taking.deposited.confirmed.hasOwnProperty("EUR")) {
+                    confirmed = this.taking.deposited.confirmed.EUR
                 }
                 return confirmed
             },
             unconfirmed () {
                 var unconfirmed = 0
-                if(this.donation.deposited.unconfirmed.hasOwnProperty("EUR")) {
-                    unconfirmed = this.donation.deposited.unconfirmed.EUR
+                if(this.taking.deposited.unconfirmed.hasOwnProperty("EUR")) {
+                    unconfirmed = this.taking.deposited.unconfirmed.EUR
                 }
                 return unconfirmed
             },
             open () {
-                return this.donation.amount - (this.confirmed + this.unconfirmed)
+                return this.taking.amount.full - (this.confirmed + this.unconfirmed)
             },
             showUnconfirmed () {
                 return this.unconfirmed > 0
@@ -47,19 +47,19 @@
             },
             /**
              * Calculates the state of the confirmed amount. It's "red", if there is no confirmed amount and "green", if
-             * the confiremd amount is equal to the donations amount. It has a "yellow" state, if there is some confirmed
+             * the confiremd amount is equal to the takings amount. It has a "yellow" state, if there is some confirmed
              * amount, but some percentage is missing AND also if the confirmed deposit amount is bigger than the amount
-             * of the donation. The last case happens, if the supporter has made an error during counting the donation by
-             * hand. It indicates, that the supporter should edit the donations amount.
+             * of the taking. The last case happens, if the supporter has made an error during counting the donation by
+             * hand. It indicates, that the supporter should edit the takings amount.
              *
              * @author Johann Sell
              * @returns {string}
              */
             stateConfirmed () {
                 var state = "red"
-                if(this.confirmed > 0 && this.confirmed !== this.donation.amount) {
+                if(this.confirmed > 0 && this.confirmed !== this.taking.amount.full) {
                     state = "yellow"
-                } else if(this.confirmed === this.donation.amount) {
+                } else if(this.confirmed === this.taking.amount.full) {
                     state = "green"
                 }
                 return state
@@ -81,8 +81,7 @@
         },
         methods: {
             formatAmount(amount) {
-                var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
-                return formatter.localize()
+                return Money.getString(amount, "EUR")
             }
         }
     }

@@ -1,18 +1,23 @@
 <template>
     <el-select v-model="val" @input="commit">
-      <el-option
-        v-for="item in sourceSelect"
-        :key="item.id"
-        :label="item.label"
-        :value="item.value"
-        :disabled="item.disabled">
-      </el-option>
+      <el-option-group
+        v-for="group in sourceGroups"
+        :key="group.label"
+        :label="group.label">
+          <el-option
+            v-for="item in group.sourceSelect"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled">
+          </el-option>
+      </el-option-group>
     </el-select>
 </template>
 
 <script>
 
-import {FormItem, Select, Option } from 'element-ui'
+import { Select, Option } from 'element-ui'
 
 export default {
   name: 'TakingSelectSource',
@@ -20,74 +25,137 @@ export default {
     'el-select': Select,
     'el-option': Option
   },
+  props: {
+    sources: {
+      type: Array,
+      required: true
+    }
+  },
+  created (){
+    this.sourceGroups = this.sourceGroups.map( entry => {
+      entry.sourceSelect = entry.sourceSelect.map(s => {
+        for(var so in this.sources) {
+          if(this.sources[so].category === s.value.category) {
+            s.disabled = true
+            console.log(s)
+          }
+        }
+        return s
+      })
+      return entry
+    })
+  },
   data () {
     return {
       "val": "",
-      "sourceSelect": [
+      "sourceGroups": [
         {
-          'label': this.$t('donation.placeholder.source.unknown'), 
-          'disabled': false,
-          'value' : {
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+          "label": this.$t('donation.placeholder.source.group.donations'),
+          "sourceSelect":
+          [
+            {
+              'label': this.$t('donation.placeholder.source.unknown'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "unknown",
+                "norms": "DONATION",
+                "typeOfSource": {},
+                "desc": false
+              }
             },
-            "category": "unknown", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.can'),
-          'disabled': false,
-          'value' : {
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.can'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "can",
+                "norms": "DONATION",
+                "typeOfSource": {},
+                "desc": false
+              }
             },
-            "category": "can", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.box'),
-          'disabled': false,
-          'value' : { 
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.box'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "box",
+                "norms": "DONATION",
+                "typeOfSource": {},
+                "desc": false
+              }
             },
-            "category": "box", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.gl'),
-          'disabled': false,
-          'value' : { 
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.gl'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "gl",
+                "norms": "DONATION",
+                "typeOfSource": {},
+                "desc": false
+              }
             },
-            "category": "gl", 
-            "norms": "DONATION",
-            "desc": false
-          }
-        },
-        {
-          'label': this.$t('donation.placeholder.source.other'),
-          'disabled': false,
-          'value' : { 
-            "amount": {      
-              "amount": 0,
-              "currency": "EUR"
+            {
+              'label': this.$t('donation.placeholder.source.other'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "other",
+                "norms": "DONATION",
+                "typeOfSource": {},
+                "desc": true
+              }
+            }
+          ]
+        },{
+          "label": this.$t('donation.placeholder.source.group.economic'),
+          "sourceSelect": [
+            {
+              'label': this.$t('donation.placeholder.source.merch'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "merch",
+                "norms": "ECONOMIC",
+                "typeOfSource": {},
+                "desc": false
+              }
             },
-            "category": "other", 
-            "norms": "DONATION",
-            "desc": true
-          }
+            {
+              'label': this.$t('donation.placeholder.source.other'),
+              'disabled': false,
+              'value' : {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "other_ec",
+                "norms": "ECONOMIC",
+                "typeOfSource": {},
+                "desc": false
+              }
+            }
+          ]
         }
       ]
     }
@@ -95,11 +163,12 @@ export default {
   methods: {
     commit() {
       this.$emit("input", this.val);
-      console.log(this.val.amount);
-      Object.entries(this.sourceSelect).forEach(([key, val]) => {
-        if (this.val.category == val.value.category) {
-          this.sourceSelect[key].disabled=true;
-        }
+      Object.entries(this.sourceGroups).forEach(([groupKey, groupVal]) => {
+        Object.entries(groupVal.sourceSelect).forEach(([key, val]) => {
+          if (this.val.category == val.value.category) {
+            this.sourceGroups[groupKey].sourceSelect[key].disabled=true;
+          }
+        });
       });
     }
   }

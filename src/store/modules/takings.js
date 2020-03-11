@@ -1,50 +1,19 @@
 import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
-
-const uuidv4 = require('uuid/v4');
-
-// initial state
-// shape: [{
-//             "id"
-//             "context": {
-//                 "description": "",
-//                 "category": ""
-//             },
-//             "comment": "",
-//             "details": {
-//                 "reasonForPayment": "",
-//                 "receipt": false,
-//                 "partner": {}
-//             },
-//             "depositUnits": [],
-//             "amount": {
-//                 "received": Date.now(),
-//                 "sources": [{"category", "amount", "currency", "type"}],
-//                 "involvedSupporter": []
-//             },
-//             "author": "some-uuid",
-//             "crew": "some-uuid",
-//             "created": Date.now(),
-//             "updated": Date.now()
-//         }]
+import axios from "axios"
 const state = {
-    items: [],
-    specialRequests: [],
-    page: {
-        size: 10,
-        offset: 0
-    },
-    countItems: 0,
-    sorting: {
-        field: "taking.created",
-        dir: "DESC"
-    },
-    filter: {
-      'publicId': null,
-      'crew': null,
-      'name': null,
-      'norms': null
-    },
-    error: null
+  items: [],
+  count: null,
+  specialRequests: [],
+  page: {
+    size: 10,
+    offset: 0
+  },
+  countItems: 0,
+  sorting: {
+    field: "taking.created",
+    dir: "DESC"
+  },
+  error: null,
 }
 
 const getters = {
@@ -57,18 +26,32 @@ const getters = {
                 "id": taking.id,
                 "name": taking.context.description,
                 "norms": taking.norms,
-                "amount": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                "amount": {
+                  "full": taking.amount.sources.reduce((amount, source) => amount + source.amount.amount, 0),
+                  "cash": taking.amount.sources.filter(s => s.typeOfSource.category == "cash")
+                    .reduce((amount, source) => amount + source.amount.amount, 0),
+                  "extern": taking.amount.sources.filter(s => s.typeOfSource.category == "extern")
+                    .reduce((amount, source) => amount + source.amount.amount, 0),
+                  "fullDon": taking.amount.sources.filter(s => s.typeOfSource.norms == "DONATION").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "donCash": taking.amount.sources.filter(s => s.typeOfSource.norms == "DONATION" && s.typeOfSource.category == "cash").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "donExtern": taking.amount.sources.filter(s => s.typeOfSource.norms == "DONATION" && s.typeOfSource.category == "extern").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "fullEC":taking.amount.sources.filter(s => s.typeOfSource.norms == "ECONOMIC").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "ecCash": taking.amount.sources.filter(s => s.typeOfSource.norms == "ECONOMIC" && s.typeOfSource.category == "cash").reduce((amount, source) => amount + source.amount.amount, 0),
+                  "ecExtern": taking.amount.sources.filter(s => s.typeOfSource.norms == "ECONOMIC" && s.typeOfSource.category == "extern").reduce((amount, source) => amount + source.amount.amount, 0),
+
+
+                },
                 "deposited": taking.depositUnits.reduce((categories, unit) => {
                     if(unit.hasOwnProperty("confirmed")) {
-                        if(!categories.confirmed.hasOwnProperty(unit.currency)) {
-                            categories.confirmed[unit.currency] = 0
+                        if(!categories.confirmed.hasOwnProperty(unit.amount.currency)) {
+                            categories.confirmed[unit.amount.currency] = 0
                         }
-                        categories.confirmed[unit.currency] += unit.amount
+                        categories.confirmed[unit.amount.currency] += unit.amount.amount
                     } else {
-                        if(!categories.unconfirmed.hasOwnProperty(unit.currency)) {
-                            categories.unconfirmed[unit.currency] = 0
+                        if(!categories.unconfirmed.hasOwnProperty(unit.amount.currency)) {
+                            categories.unconfirmed[unit.amount.currency] = 0
                         }
-                        categories.unconfirmed[unit.currency] += unit.amount
+                        categories.unconfirmed[unit.amount.currency] += unit.amount.amount
                     }
                     return categories
                 }, { "confirmed": {}, "unconfirmed": {} }),
@@ -83,7 +66,8 @@ const getters = {
         })
     },
     getById: (state) => (id) => {
-        return JSON.parse(JSON.stringify(state.items.find(item => item.id === id)))
+        var taking = state.items.find(item  => item.id === id)
+        return JSON.parse(JSON.stringify(taking))
     },
     isError: (state) => {
         return state.error !== null
@@ -95,150 +79,111 @@ const getters = {
         }
         return res
     },
-    page: (state) => {
-        return {
-            "previous": state.page.offset,
-            "next": state.countItems - (state.page.offset + state.page.size)
-        }
-    },
     sort: (state) => {
         return state.sorting
     },
-    filter: (state) => {
-        return JSON.parse(JSON.stringify(state.filter))
-    },
-    taggableFilter: (state) => {
-        var res = []
-        function check(obj, attr) {
-            return obj.hasOwnProperty(attr) && (typeof obj[attr] !== "undefined") && obj[attr] !== null &&
-                (obj[attr] !== "" || typeof obj[attr] !== "string") &&
-                (obj[attr] !== 0.0 || typeof obj[attr] !== "number") &&
-                ((Array.isArray(obj[attr]) && obj[attr].length !== 0) || !Array.isArray(obj[attr]))
-        }
-        var fields = [
-            {
-                "obj": state.filter,
-                "attr": "publicId"
-            },
-            {
-                "obj": state.filter,
-                "attr": "crew"
-            },
-            {
-                "obj": state.filter,
-                "attr": "name"
-            },
-            {
-                "obj": state.filter.state,
-                "attr": "norms"
-            }
-        ]
-        for(var field of fields) {
-            if(check(field.obj, field.attr)) {
-                res.push({
-                    "name": field.attr,
-                    "value": field.obj[field.attr]
-                })
-            }
-        }
-        if(check(state.filter.amount, "amount")) {
-            res.push({
-                "name": "amount",
-                "value": state.filter.amount
-            })
-        }
-        return res
+    count: (state) => {
+      return state.count
     }
-
 }
 
 const actions = {
-    init (store) {
-        var ajax = new DonationEndpoints(store)
 
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.count(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        
-        var get = (store) => {
-            var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        
-        get(store)
-        count(store)
-    },
-    page (store, down) {
-        var offset = store.state.page.offset - store.state.page.size
-        var valid = offset >= 0
-        if(!down) {
-            offset = store.state.page.offset + store.state.page.size
-            valid = offset < store.state.countItems
-        }
-        if(valid) {
-            store.commit({ "type": 'page', "offset": offset })
-            store.dispatch('init')
-        }
-    },
-    filter (store, filter) {
-        store.commit({ "type": "filter", "filter": filter })
-        var ajax = new DonationEndpoints(store)
+  init (store, query) {
+    axios.get('/backend/stream/takings', { params: query })
+      .then(function (response){
+        store.commit({"type": 'init', "takings": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
 
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data})
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.count(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        
-        var get = (store) => {
-            var successHandler = (response) => store.commit({ "type": 'init', "takings": response.data })
-            var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-            ajax.get(successHandler, errorHandler, store.state.page, store.state.sort, store.state.filter)
-        }
-        count(store)
-        get(store)
-    },
+
+  nextPage (store, query) {
+    axios.get('/backend/stream/takings', { params: query })
+      .then(function (response){
+        store.commit({"type": 'assign', "takings": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  count (store, query) {
+    axios.get('/backend/stream/takings/count', { params: query })
+    .then(function (response) {
+      store.commit({'type': 'count', 'count': response.data })
+    }).catch(function (error) {
+      store.commit({'type': 'setError', error: error})
+    })
+  },
+    
+  page (store, down) {
+    var offset = store.state.page.offset - store.state.page.size
+    var valid = offset >= 0
+    if(!down) {
+      offset = store.state.page.offset + store.state.page.size
+      valid = offset < store.state.countItems
+    }
+    if(valid) {
+      store.commit({ "type": 'page', "offset": offset })
+      store.dispatch('init')
+    }
+  },
     sort (store, sorting) {
         store.commit({ "type": "sort", "sort": sorting })
         store.dispatch('init')
     },
     add (store, taking) {
         var user = store.rootGetters['user/get']
-        taking["id"] = uuidv4()
+        var supporter = []
+        supporter.push({"uuid": user.uuid, "name": user.name})
+        for (var i=0; i < taking.amount.involvedSupporter.length; i++ ) {
+          var entry = { "uuid": taking.amount.involvedSupporter[i].id, "name": taking.amount.involvedSupporter[i].profiles[0].supporter.fullName}
+          supporter.push(entry)
+        }
         taking["author"] = user.uuid
         //taking["norms"] = "Donation"
         taking["crew"] = store.rootGetters['user/getCrew']
-        taking.amount.involvedSupporter = taking.amount.involvedSupporter.map(supporter => supporter.id)
+        taking.amount.involvedSupporter = supporter
         taking["depositUnits"] = []
 
         var ajax = new DonationEndpoints(store)
-        var successHandler = (response) => store.commit({ "type": 'push', "taking": response.data.data[0] })
+        var successHandler = (response) => store.commit({ "type": 'push', "takings": response.data.data[0] })
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
         ajax.save(successHandler, errorHandler, taking)
     },
     update (store, taking) {
       var ajax = new DonationEndpoints(store)
-      var successHandler = (response) => store.commit({"type": 'push', 'taking': response.data})
+      var successHandler = (response) => store.commit({"type": 'push', 'takings': response.data})
       var errorHandler = (error) => store.commit({'type': 'setError', error: error})
       ajax.update(successHandler, errorHandler, taking)
     },
     getById (store, id) {
         // TODO: Use Ajax query!
         var item = store.state.items.find(item => item.id === id)
-        if(typeof item !== "undefined") {
-            store.commit({ "type": "getById", "taking": item })
+        if(item !== undefined) {
+            store.commit({ "type": "getById", "takings": item })
+        } else {
+            var ajax = new DonationEndpoints(store)
+            var successHandler = (response) => store.commit({'type': 'push', 'takings': response.data})
+            var errorHandler = (error) => store.commit({'type': 'setError', error: error})
+            ajax.getById(successHandler, errorHandler,id)
         }
     },
     
 }
 
 const mutations = {
-    init(state, pushDonations) {
-        state.items = pushDonations.takings
-    },
+  init(state, payload) {
+    state.items = payload.takings
+  },
+  assign(state, payload) {
+    for (var i in payload.takings) {
+      state.items.push(payload.takings[i])
+    }
+  },
+  count(state, payload) {
+    state.count = payload.count.count
+  },
     filter(state, filter) {
         state.filter = filter.filter
     },
@@ -248,17 +193,14 @@ const mutations = {
     sort(state, sort) {
         state.sorting = sort.sort
     },
-    count(state, count) {
-        state.countItems = count.count.count
-    },
     page(state, offset) {
         state.page.offset = offset.offset
     },
     push(state, pushDonation) {
-        state.items.push(pushDonation.taking)
+        state.items.push(pushDonation.takings)
     },
-    setError(state, pushError) {
-        state.error = pushError.error
+    setError(state, payload) {
+        state.error = payload.error
     }
 }
 

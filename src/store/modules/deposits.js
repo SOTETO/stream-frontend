@@ -1,31 +1,26 @@
 import DepositEndpoints from '@/backend-endpoints/DepositEndpoints'
-import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
+import axios from "axios"
 
-//const uuidv4 = require('uuid/v4');
-
-// initial state
-// shape: [{
-//             "publicId": UUID
-//             "full": {
-//                  "amount": Double,
-//                  "currency": String
-//             },
-//             "confirmed": Long,
-//             "crew": UUID,
-//             "supporter": UUID,
-//             "created": Long,
-//             "updated": Long,
-//             "dateOfDeposit": Long,
-//             "amount": [{
-//                  "publicId": UUID,
-//                  "confirmed": Long,
-//                  "donationId": UUID,
-//                  "amount": Double,
-//                  "currency": String, 
-//                  "created": Long
-//             }]
-//         }]
 const state = {
+  query: {
+    size: 0,
+    offset: 0,
+    sortby: null,
+    sortdir: "ASC",
+    publicId: null, 
+    takingsId: null,
+    crew: null,
+    name: "%",
+    confirmed: null,
+    cby: null,
+    cfrom: 1581292800,
+    cto: null,
+    payfrom: null,
+    payto:null,
+    crfrom: null,
+    crto:null
+  },
+
   items: [], 
   donations: [],
   page: {
@@ -37,17 +32,7 @@ const state = {
     field: "deposit.created",
     dir: "DESC"
   },
-  'filter': {
-    'publicId': null,
-    'takingsId': null,
-    'crew': null,
-    'state': {
-                        'complete': "noSelection",
-                        'repayment': "",
-                        'volunteerManager': "",
-                        'employee': ""
-                    }
-  },
+  count: null,
   error: null
 }
 
@@ -63,7 +48,10 @@ const getters = {
         }
       return {
         "id": deposit.publicId,
-        "amount": deposit.full,
+        "amount": {
+          "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0),
+          "currency": deposit.amount[0].amount.currency
+	},
         "date": {
           "received": deposit.dateOfDeposit,
           "created": deposit.created,
@@ -94,7 +82,7 @@ const getters = {
     return res
   },
   filter: (state) => {
-    return JSON.parse(JSON.stringify(state.filter))
+    return JSON.parse(JSON.stringify(state.query))
   },
   taggableFilter: (state) => {
     var res = []
@@ -128,50 +116,41 @@ const getters = {
     }
     return res
   },
-  page: (state) => {
-      return {
-        "previous": state.page.offset,
-        "next": state.countItems - (state.page.offset + state.page.size)
-    }
-  }, 
   sort: (state) => {
     return state.sorting
+  },
+  count: (state) => {
+    return state.count
   }
 }
 
 const actions = {
-    init (store) {
-        var ajax = new DepositEndpoints(store)
-        var ajaxDons = new DonationEndpoints(store)
     
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.count(successHandler, errorHandler, page, sort)
-        }
-    
-        var get = (store) => {
-            var successHandler = (response) => {
-                store.commit({"type": 'init', "deposits": response.data.data})
-                ajaxDons.getByIds(
-                    (response) => store.commit({"type": 'initDons', "donations": response.data.data}),
-                    (error) => store.commit({"type": 'setError', error: error}),
-                    response.data.data.reduce((acc, deposit) => acc.concat(deposit.amount.map(unit => unit.donationId)), [])
-                )
-            }
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            var filter = store.state.filter
-            ajax.get(successHandler, errorHandler, page, sort, filter)
-        }
-    
-        get(store)
-        count(store)
-    },
-    page (store, down) {
+  init (store, query) {
+    axios.get('/backend/stream/deposits', {params: query})
+      .then(function (response){
+        store.commit({"type": 'init', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  nextPage (store, query) {
+    axios.get('/backend/stream/deposits', { params: query })
+      .then(function (response){
+        store.commit({"type": 'assign', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  count (store, query) {
+    axios.get('/backend/stream/deposits/count', { params: query })
+    .then(function (response) {
+      store.commit({'type': 'count', 'count': response.data })
+    }).catch(function (error) {
+      store.commit({'type': 'setError', error: error})
+    })
+  },
+  page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
         if(!down) {
@@ -192,55 +171,66 @@ const actions = {
     },
 
     add (store, deposit) {
-    //get the current user
-    var user = store.rootGetters['user/get']
-    var crew = store.rootGetters['user/getCrew']
-    //deposit["publicId"] = uuidv4()
-    deposit["crew"] = crew // hopefully not undefined
-    deposit["supporter"] = user.uuid
-    deposit["created"] = Date.now()
-    deposit["updated"] = Date.now()
+      //get the current user
+      var user = store.rootGetters['user/get']
+      var crew = store.rootGetters['user/getCrew']
+      //deposit["publicId"] = uuidv4()
+      //deposit["crew"] = (crew !== null) ? crew[0] : { "name": "", "uuid": "00000000-0000-0000-0000-000000000000" } // hopefully not undefined
+      deposit["crew"] = crew[0] // hopefully not undefined
+      deposit["supporter"] = {}
+      deposit.supporter["uuid"] = user.uuid
+      deposit.supporter["name"] = user.name
+      deposit["created"] = Date.now()
+      deposit["updated"] = Date.now()
 
-    var amount = deposit.depositUnits.map((unit) => {
+      var amount = deposit.depositUnits.map((unit) => {
         return {
             //"publicId": uuidv4(),
             "takingId": unit.takingId,
             "amount": unit.amount,
             "created": Date.now()
         }
-    })
-    deposit["amount"] = JSON.parse(JSON.stringify(amount))
-    delete deposit.depositUnits
+      })
+      deposit["amount"] = amount
+      deposit.depositUnits = []
+      deposit["full"] = { "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0), "currency": "EUR"}
+
       
-    //post deposit
+      //post deposit
       var ajax = new DepositEndpoints(store)
       var successHandler = (response) => {
         store.commit({ "type": 'push', "deposit": response.data })
-        store.dispatch('donations/init', null, { root: true })
+        store.dispatch('takings/init', null, { root: true })
       }
       var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
       ajax.save(successHandler, errorHandler, deposit)
   },
     confirm (store, deposit) {
+        var user = store.rootGetters['user/get']
         var ajax = new DepositEndpoints(store)
         var successHandler = () => store.dispatch('init')
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-        ajax.confirm(successHandler, errorHandler, deposit)
+        ajax.confirm(successHandler, errorHandler, { "id": deposit.id, "date": Date.now(), "uuid": user.uuid, "name": user.name })
     }
 }
 
 const mutations = {
-    init(state, pushDeposit) {
-        state.items = pushDeposit.deposits
+    init(state, payload) {
+        state.items = payload.deposits
     },
     initDons(state, pushDonations) {
         state.donations = pushDonations.donations
     },
+  assign(state, payload) {
+    for (var i in payload.deposits) {
+      state.items.push(payload.deposits[i])
+    }
+  },
+  count(state, payload) {
+    state.count = payload.count.count
+  },
     sort(state, sort) {
         state.sorting = sort.sort
-    },
-    count(state, count) {
-        state.countItems = count.count.count
     },
     page(state, offset) {
         state.page.offset = offset.offset

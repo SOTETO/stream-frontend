@@ -3,16 +3,25 @@
     :model="deposit"
     :rules="rules"
     :key="reloadKey">
-    <MoneyInput v-model="deposit.full" currency="EUR" :label="$t('takings.placeholder.amount')" @vca-money-validationError="setErrorState('general')" @input="removeErrorState('general')" />
-    <div v-for="unit in deposit.depositUnits">
-      <span class="depositName"> 
-        {{takingName(unit.takingId) }} 
-      </span>
-      <span class="depositAmount">
-        {{ formatAmount(unit.amount) }} 
-      </span>
-      <el-button class="depositButton" @click="pop" type="danger" icon="el-icon-delete" size="mini"></el-button>
-    </div>
+
+    <div style="display: table; width: 100%;">
+      <div class="depositRow" v-for="unit in deposit.depositUnits" :key="unit.id">
+        <div class="depositCell depositName">
+          {{ takingName(unit.takingId) }}
+        </div>
+        <div class="depositCell depositAmount">
+          {{ formatAmount(unit.amount) }}
+        </div>
+        <div class="depositOption">
+          <el-button class="depositCell depositButton" @click="pop" type="danger" icon="el-icon-delete" size="mini"></el-button>
+        </div>
+      </div>
+      <div class="depositTotal depositRow" v-if="deposit.depositUnits && deposit.depositUnits.length > 0">
+          <div class="depositCell">{{ $t('takings.placeholder.amount') }}</div>
+          <div class="depositCell">{{ formatTotal(deposit.depositUnits) }}</div>
+          <div class="depositCell"></div>
+      </div>
+    </div><br/>
     <el-form-item
       class="vca-form"
       :required="true">
@@ -26,7 +35,7 @@
       </el-date-picker>
     </el-form-item>
     <button
-            :disabled="inErrorState"
+            :disabled="!isValid"
             class="vca-button-primary vca-full-width"
             @click.prevent="commit">
       {{ $t("takings.buttons.depositAdd") }}
@@ -35,23 +44,15 @@
 </template>
 
 <script>
-  import { FormItem, Input, Form, DatePicker} from 'element-ui'
-  import MoneyInput from '@/components/utils/MoneyInput'
-  import TakingDepositAssignment from '@/components/takings/TakingDepositAssignment'
-  import TakingSelect from '@/components/takings/TakingSelect'
-  import CurrencyFormatter from '@/utils/CurrencyFormatter'
+  import { FormItem, Form, DatePicker} from 'element-ui'
   import { mapGetters, mapActions } from 'vuex'
-
+import Money from '@/utils/Money'
   export default {
     name: "TakingDeposit",
     components: {
       "el-form": Form,
       "el-form-item": FormItem,
-      "el-input": Input,
-      "el-date-picker": DatePicker,
-      "MoneyInput": MoneyInput,
-      "TakingDepositAssignment": TakingDepositAssignment,
-      "TakingSelect": TakingSelect
+      "el-date-picker": DatePicker
     },
     props: {
       deposit: {
@@ -71,16 +72,15 @@
     data () {
       return {
         "reloadKey": 1,
-        "donations": [],
+        "takings": [],
         "rules": {},
         "errorState": []
       }
     },
     computed: {
-        unassignedDeposit () {
-            var amount = this.deposit.full.amount - this.deposit.depositUnits.reduce((acc, unit) => acc + unit.deposit.amount, 0)
-            var formatter = CurrencyFormatter.getFromNumeric(this.deposit.full.currency, amount)
-            return formatter
+        isValid() {
+            return (this.deposit.depositUnits && this.deposit.depositUnits.length > 0) && 
+                   (this.deposit.dateOfDeposit !== null)
         },
         inErrorState () {
             return this.errorState.length > 0
@@ -93,10 +93,8 @@
         ...mapActions(
           "deposits", {
             "save": "add"
-        }
-
-        ),
-      addDepositUnit (depositUnit) {
+        }),
+        addDepositUnit (depositUnit) {
         var index = this.deposit.depositUnits.findIndex((unit) => unit.donation === depositUnit.donation)
         if(index !== -1) {
             this.deposit.depositUnits.splice(index, 1, depositUnit)
@@ -106,15 +104,15 @@
       },
       removeDepositUnit (donationId) {
         var indexUnit = this.deposit.depositUnits.findIndex((unit) => unit.donation === donationId)
-        var indexTaking = this.donations.findIndex((donation) => donation.value === donationId)
+        var indexTaking = this.takings.findIndex((donation) => donation.value === donationId)
         this.deposit.depositUnits.splice(indexUnit, 1)
-        this.donations.splice(indexTaking, 1)
+        this.takings.splice(indexTaking, 1)
       },
       selectTaking (donation) {
-          this.donations.push(donation)
+          this.takings.push(donation)
           this.addDepositUnit({
               "deposit": {
-                  "amount": 0,
+                  "amount": donation.amount,
                   "currency": "EUR"
               },
               "donation": donation.value
@@ -127,35 +125,62 @@
           this.errorState = this.errorState.filter(id => id !== donationId)
       },
       reset () {
-          Object.assign(this.$data, this.$options.data.apply(this))
+          this.$emit("resetDepositAddView")
           this.reloadKey += 1
       },
       commit () {
         this.save(this.deposit)
         this.reset()
       },
-      formatAmount(amount) {
-        var formatter = CurrencyFormatter.getFromNumeric("EUR", amount) // Todo: select currency based on donation entry!
-        return formatter.localize()
+      formatAmount(unit) {
+        return Money.getString(unit.amount, unit.currency)
+      },
+      formatTotal() {
+        let total = [];
+        var currency = "EUR";
+
+        Object.entries(this.deposit.depositUnits).forEach(([key, val]) => {
+          total.push(val.amount.amount) // the value of the current key.
+          currency = val.amount.currency
+        });
+
+	var unit = {
+          "amount": total.reduce(function(total, num){ return total + num }, 0),
+          "currency": currency
+        }
+
+        return this.formatAmount(unit)
       },
       takingName(id) {
         var taking = this.getById(id)
         return taking.context.description
       },
-    pop () {
-      var index = this.deposit.depositUnits.indexOf(this.unit)
-      this.deposit.depositUnits.splice(index, 1)
-    }
-
+      pop () {
+        var index = this.deposit.depositUnits.indexOf(this.unit)
+        this.deposit.depositUnits.splice(index, 1)
+      }
     }
   }
 </script>
 <style scoped lang="less">
+  .depositTotal .depositCell {
+    font-weight: bold;
+    border-top: solid thin black;
+  }
+  .depositRow {
+    display: table-row;
+  }
+  .depositCell {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 5px;
+  }
   .depositName {
+    width: 60%;
   }
   .depositButton {
       float: right;
-    }
+  }
   .depositAmount {
   }
 </style>

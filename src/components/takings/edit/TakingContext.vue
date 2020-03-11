@@ -5,18 +5,15 @@
             <el-input :placeholder="$t('donation.placeholder.context.indicator')"  v-model="context.description"></el-input>
         </el-form-item>
         <el-form-item :label="$t('donation.placeholder.category')" class="vca-categories" prop="category">
+          <el-checkbox-group v-model="dataForm.category">
             <table class="categoryChooser">
                 <tr v-for="(group, i) in categories" class="vca-group" :key="i">
-                    <td v-for="cat in group"  :key="cat">
-                        <el-radio
-                                v-model="context.category"
-                                :label="cat"
-                        >
-                            {{ $t("donation.placeholder.categories." + cat) }}
-                        </el-radio>
+                    <td v-for="cat in group" :key="cat">
+                        <el-checkbox @change="createCategoryString" :label="cat">{{ $t("donation.placeholder.categories." + cat) }}</el-checkbox>
                     </td>
                 </tr>
             </table>
+          </el-checkbox-group>
         </el-form-item>
       </el-form>
     </div>
@@ -38,40 +35,44 @@
              }
            }
         },
+        watch: {
+            context: function(context, oldContext) {
+                this.dataForm.description = context.description
+                this.dataForm.category = (context.category !== "") ? context.category.split(",") : [];
+            }
+        },
         components: {
             "el-input": Input,
             "el-radio": Radio,
             "el-form-item": FormItem
         },
         data () {
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                if(this.value.hasOwnProperty("description")) {
-                    description = this.value.description
-                }
-                if(this.value.hasOwnProperty("category")) {
-                    category = this.value.dataForm.category
-                }
-            }
             return {
                 "categories": [
                     ["concert", "run4wash", "streetFestivals"],
                     ["festival", "school", "karaoke"],
-                    ["stadium", "party", "kicker"]
+                    ["stadium", "party", "kicker"],
+                    ["other"]
                 ],
 
                 dataForm: {
-                  description: '',
-                  category: '',
+                  description: "",
+                  category: [],
                 },
 
                 rules: {
                   description: [
-                    { required: true, message: this.$t('takings.validations.description'), trigger:'blur' },
+                    { required: true, message: this.$t('takings.validations.description'), trigger:'blur' }
                   ],
                   category: [
-                    { required: true, message:  this.$t('takings.validations.category'), trigger:'change' }
+                    { required: true, message: this.$t('takings.validations.category'), trigger:'change' }
                   ],
               },
+            }
+        },
+        methods: {
+            createCategoryString() {
+                this.context.category = this.dataForm.category.join(",")
             }
         }
     }

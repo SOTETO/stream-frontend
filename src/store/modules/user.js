@@ -58,7 +58,12 @@ const getters = {
         var crewRole = state.user.roles.find(role => role.hasOwnProperty("crewId"))
         var res = null
         if(typeof crewRole !== "undefined") {
-            res = crewRole.crewId
+            res =  [
+              {
+                "uuid": crewRole.crewId,
+                "name": crewRole.crewName
+              }
+            ]
         }
         return res
     },
@@ -78,11 +83,16 @@ const actions = {
     init(store) {
         // sets `state.loading` to true. Show a spinner or something.
         store.commit('API_USER_PENDING')
+        var name = ""
+        axios.get('/drops/webapp/identity').then( response => {
+          name = response.data.additional_information.profiles[0].supporter.fullName
+        })
 
         return axios.get('/backend/stream/identity')
             .then(response => {
                 // sets `state.loading` to false
                 // also sets `state.apiData to response`
+                response.data["name"] = name
                 store.commit('API_USER_SUCCESS', response.data)
             })
             .catch(error => {

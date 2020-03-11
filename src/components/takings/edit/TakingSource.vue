@@ -3,8 +3,8 @@
         <td>
             <div class="category">
                   <span> {{$t("donation.placeholder.source." + source.category) }}</span>
-                <el-form-item>
-                    <el-input v-model="descriptionTextVar" :placeholder="$t('donation.placeholder.source.description')"></el-input>
+                <el-form-item class="category-description">
+                    <el-input v-model="source.description" :placeholder="$t('donation.placeholder.source.description')"></el-input>
                 </el-form-item>
             </div>
         </td>
@@ -17,33 +17,35 @@
         </td>
         <td>
             <el-form-item>
-                <el-radio v-model="source.typeOfSource" label="cash">&nbsp;</el-radio>
+                <el-radio v-model="source.typeOfSource.category" label="cash">&nbsp;</el-radio>
             </el-form-item>
         </td>
         <td>
             <el-form-item>
-                <el-radio v-model="source.typeOfSource" label="extern" >&nbsp;</el-radio>
+                <el-radio v-model="source.typeOfSource.category" label="extern" >&nbsp;</el-radio>
             </el-form-item>
+        </td>
+        <td>
+          <el-button type="danger" icon="el-icon-delete" :disabled="disableDelete" @click="deleteSource"></el-button>
         </td>
     </tr>
 </template>
 
 <script>
-    import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
-    import MoneyInput from '@/components/takings/edit/MoneyInput'
+    import MoneyInput from '@/components/utils/MoneyInput'
 
     // Todo: Should use new component utils.MoneyInput!
     export default {
         name: "TakingSource",
         components: {
-            "el-input": Input,
-            "el-checkbox": Checkbox,
-            "el-radio": Radio,
-            "el-form-item": FormItem,
             "MoneyInput": MoneyInput
         },
         props: {
+          disableDelete:{
+            type: Boolean,
+            default: false
+          },
           source: {
             type: Object,
             default: function () {
@@ -53,7 +55,10 @@
                   "currency": "EUR"
                 },
                 "category": "",
-                "typeOfSource": ""
+                "description": "",
+                "typeOfSource": {
+                  "category": ""
+                }
               }
             }
           },
@@ -88,13 +93,16 @@
                         "currency": this.source.amount.currency,
                         "type": this.typeVar
                     }
-                    if(this.description) {
+                    if(this.descriptionText) {
                         result["description"] = this.descriptionTextVar
                     }
                     this.$emit('input', result)
                 } else if(!this.checkedVar && !this.amountErrorState) {
                     this.deselect()
                 }
+            },
+            deleteSource() {
+                this.$emit('delete')
             },
             deselect() {
                 this.$emit('deselect', this.category)
@@ -114,6 +122,10 @@
 </script>
 
 <style scoped lang="less">
+
+    .category-description {
+        width: 65%;
+    }
     .category {
         display: flex;
         flex-direction: row;
@@ -121,5 +133,9 @@
         & > :first-child {
             margin-right: 1em;
         }
+    }
+    .category span {
+        margin-top: 9px;
+        width: 30%;
     }
 </style>

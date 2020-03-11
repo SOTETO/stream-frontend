@@ -18,12 +18,11 @@
                 :label="$t('donation.placeholder.involved.label')"
                 prop="who"
                 >
-                <WidgetUserAutocomplete
-                        :placeholder="$t('donation.placeholder.involved.indicator')"
-                        :preselection="amount.involvedSupporter"
-                        @vca-user-selection="selectSupporter"
-                        v-model="dataForm.who"
-                />
+                <el-tag
+                  v-for="user in amount.involvedSupporter"
+                  :disable-transitions="false">
+                  {{ user.name}}
+                </el-tag>
             </el-form-item>
             <el-form-item
                 class="vca-form"
@@ -32,8 +31,10 @@
             >
                 <el-date-picker
                     v-model="dataForm.when"
+                    @change="changeWhen"
                     :placeholder="$t('donation.placeholder.received')"
-                    format="dd.MMM.yyyy"
+                    format="dd.MMM yyyy"
+                    :default-value="formatReceived"
                     :picker-options="datePickerOptions">
                 </el-date-picker>
             </el-form-item>
@@ -41,9 +42,13 @@
           :label="$t('donation.header.donationSource.sourceSelect')"
           prop="where">
           <br/>
-            <TakingSelectSource v-on:input="addSourceType($event)"/>
+            <TakingSelectSource v-on:input="addSourceType($event)" :sources="amount.sources"/>
           </el-form-item>
             <table class="sources">
+                <col width="65%">
+                <col width="20%">
+                <col width="5%">
+                <col width="*">
                 <thead>
                     <tr>
                         <th>{{ $t('donation.header.donationSource.sourceSelect') }}</th>
@@ -53,8 +58,6 @@
                     </tr>
                 </thead>
                 <tbody>
-           <!--     {{ amount.sources[0].amount.amount }} -->
-
                     <TakingSource
                         v-for="t in amount.sources"
                         :source="t"
@@ -64,29 +67,31 @@
                         :numeric="getNumericSource(t.category)"
                         :description="t.desc"
                         :descriptionText="getDescSource(t.category)"
-                        :key="t.category"
+                        :key="t.key"
+                        :disableDelete="disableDelete(t)"
+                        v-on:delete="deleteSource(t)"
                     />
                 </tbody>
             </table>
           </el-form>
         </div>
         <div class="evaluation">
-            <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash.localize() }) }}</span>
-            <span class="part">{{ $t('donation.hints.total.extern', { 'total': getTotalExtern.localize() }) }}</span>
-            <span class="all">{{ $t('donation.hints.total.all', { 'total': getTotalAll.localize() }) }}</span>
+            <span class="part">{{ $t('donation.hints.total.cash', { 'total': getTotalCash }) }}</span>
+            <span class="part">{{ $t('donation.hints.total.extern', { 'total': getTotalExtern }) }}</span>
+            <span class="all">{{ $t('donation.hints.total.all', { 'total': getTotalAll }) }}</span>
         </div>
     </div>
 </template>
 
 <script>
     import { DatePicker, FormItem, Select, Option} from 'element-ui'
-    import { VcABox } from 'vca-widget-base'
     import 'vca-widget-base/dist/vca-widget-base.css'
     import { WidgetUserAutocomplete } from 'vca-widget-user'
     import 'vca-widget-user/dist/vca-widget-user.css'
     import TakingSelectSource from '@/components/takings/edit/TakingSelectSource'
     import TakingSource from '@/components/takings/edit/TakingSource.vue'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
+import Money from '@/utils/Money'
 
     export default {
         name: "TakingCalculator",
@@ -99,38 +104,53 @@
             "el-input": Input,*/
             "TakingSource": TakingSource,
             'WidgetUserAutocomplete': WidgetUserAutocomplete,
-     /*       "VcABox": VcABox, */
             "TakingSelectSource": TakingSelectSource
         },
         props: {
+            sourceCount: {
+              type: Number,
+              default: 0
+            },
             amount: {
               type: Object,
               default: function () {
                 return {
-                  "received": this.dataForm.when,
+                  "received": '',
                   "sources": '',
                   "involvedSupporter": this.dataForm.who
                 }
               }
             },
         },
-        data () {
-            var sources = []
-            var received = Date.now()
-            var involvedSupporter = []
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                if(this.value.hasOwnProperty("sources")) {
-                    sources = this.value.sources
+        watch: {
+            amount: function(amount, oldAmount) {
+                if(amount.hasOwnProperty("received")) {
+                    this.received = this.received
+                    this.dataForm.when = this.formatReceived
                 }
-                if(this.value.hasOwnProperty("received")) {
-                    received = this.dataForm.when
+                if(amount.hasOwnProperty("sources")) {
+                    this.sources = amount.sources
                 }
-                if(this.value.hasOwnProperty("involvedSupporter")) {
-                    involvedSupporter = this.value.involvedSupporter
+                if(amount.hasOwnProperty("involvedSupporter")) {
+                    this.involvedSupporter = amount.involvedSupporter
                 }
             }
-
-
+        },
+        data () {
+            var sources = []
+            var received = new Date()
+            var involvedSupporter = []
+            if(typeof this.amount !== "undefined" && this.amount !== null) {
+                if(this.amount.hasOwnProperty("sources")) {
+                    sources = this.amount.sources
+                }
+                if(this.amount.hasOwnProperty("received")) {
+                    received = this.amount.received
+                }
+                if(this.amount.hasOwnProperty("involvedSupporter")) {
+                    involvedSupporter = this.amount.involvedSupporter
+                }
+            }
 
             return {
                 "datePickerOptions": {
@@ -138,11 +158,12 @@
                         return time.getTime() > Date.now();
                     }
                 },
+                "count": this.amount.sources.length,
 
                 result: Number,
 
                 dataForm: {
-                  when:'',
+                  when: '',
                   who: '',
                 },
 
@@ -159,12 +180,16 @@
                 },
 
               "sourceTypes": [
-                    { "category": "unknown", "desc": false},
-                    { "category": "can", "desc": false},
-                    { "category": "box", "desc": false},
-                    { "category": "gl", "desc": false},
-                    { "category": "other", "desc": true}
-                ],
+                    { "category": "unknown", "desc": false },
+                    { "category": "can", "desc": false },
+                    { "category": "box", "desc": false },
+                    { "category": "gl", "desc": false },
+                    { "category": "other", "desc": true },
+                    { "category": "merch", "desc": false },
+                    { "category": "com", "desc": false },
+                    { "category": "better", "desc": false },
+                    { "category": "other_ec", "desc": true }
+                    ],
                 "currentSourceType": [
 
                 ],
@@ -178,7 +203,6 @@
             }
         },
         computed: {
-
             getTotalCash: function () {
               return this.getTotal('cash')
             },
@@ -187,24 +211,52 @@
             },
             getTotalAll: function () {
                 return this.getTotal()
+            },
+            formatReceived: function() {
+                return new Date(this.amount.received)
             }
         },
         created () {
-            if(typeof this.value !== "undefined" && this.value !== null) {
-                if(this.value.hasOwnProperty("received")) {
-                    this.received = this.value.received
+            if(typeof this.amount !== "undefined" && this.amount !== null) {
+                if(this.amount.hasOwnProperty("received")) {
+                    this.received = this.received
+                    this.dataForm.when = this.formatReceived
                 }
-                if(this.value.hasOwnProperty("sources")) {
-                    this.sources = this.value.sources
+                if(this.amount.hasOwnProperty("sources")) {
+                    this.sources = this.amount.sources
                 }
-                if(this.value.hasOwnProperty("involvedSupporter")) {
-                    this.involvedSupporter = this.value.involvedSupporter
+                if(this.amount.hasOwnProperty("involvedSupporter")) {
+                    this.involvedSupporter = this.amount.involvedSupporter
                 }
             }
         },
         methods: {
           addSourceType(value) {
-            this.amount.sources.push(value)
+            var valueExists = this.amount.sources.filter(t => t.category === value.category)
+
+            if (valueExists.length === 0) {
+              this.amount.sources.push(value)
+            }
+          },
+          deleteSource(value) {
+            var index = this.amount.sources.indexOf(value);
+            if (index > -1) {
+              this.amount.sources.splice(index, 1);
+            }
+          },
+          disableDelete(value) {
+            var index = this.amount.sources.indexOf(value)
+            if(index < this.sourceCount) {
+              return true
+            } else {
+              return false
+            }
+          },
+          getWhen() {
+            var day = this.formatReceived.getDate()
+            var month = this.formatReceived.toString().substr(4,3)
+            var year = this.formatReceived.getFullYear()
+            return day + "." + month + " " + year
           },
           changeDonation(source) {
             var copy = this.sources.slice(0)
@@ -219,6 +271,10 @@
             this.sources = copy
             this.commit()
           },
+          changeWhen() {
+            this.received = Date.parse(this.dataForm.when)
+            this.commit()
+          },
           getTotal(part) {
             const reducer = (acc, c) => acc + c.amount.amount
             const filter = source => source.typeOfSource === part
@@ -226,7 +282,7 @@
             if (typeof part === 'string' && (part === 'cash' || part === 'extern')) {
               result = this.amount.sources.filter(filter).reduce(reducer, 0)
             }
-            return CurrencyFormatter.getFromNumeric(this.currency, result)
+            return Money.getString(result, this.currency)
           },
             commit() {
                 var result = {
