@@ -290,13 +290,6 @@ import Money from '@/utils/Money'
                     "sources": this.sources,
                     "involvedSupporter": this.involvedSupporter
                 }
-                this.$refs[this.dataForm].validate((valid) => {
-                  if (valid) {
-                    alert('submit');
-                  } else {
-                    console.log('error submit');
-                  }
-                });
                 this.$emit("input", result)
             },
             getCheckedSource(category) {
