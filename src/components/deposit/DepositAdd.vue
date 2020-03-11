@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div class="unit unsubmitted" v-if="!submitted && !stateConfirmed && !stateUnConfirmed">
+  <div class="unit unsubmitted" v-if="!submitted && !stateConfirmed && !stateUnConfirmed && showUnit ">
     <MoneyInput class="money-input"  v-model="unit.amount" v-bind:amount="unit.amount" size="mini" v-on:change="setAmount($event)"/>
     <el-button @click="submit" type="success" icon="el-icon-check" size="mini"></el-button>
   </div>
@@ -105,10 +105,18 @@ export default {
         }
         return unconfirmed
     },
-
+    
     stateUnConfirmed () {
         return (this.unconfirmedAmount >= this.taking.amount)
+    },
+    showUnit () {
+      if (this.open === 0) {
+        return false
+      } else {
+        return true
+      }
     }
+
   },
   methods: {
     submit () {

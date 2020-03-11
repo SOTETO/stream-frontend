@@ -78,6 +78,9 @@ export default {
     updatePage(page) {
       this.page = page
       this.nextPage(this.query)
+    }, 
+    refresh() {
+      this.init(this.query)
     }
   }
 }

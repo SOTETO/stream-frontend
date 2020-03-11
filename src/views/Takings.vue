@@ -1,7 +1,7 @@
 <template>
     <VcAFrame>
         <VcAColumn size="70%">
-            <TakingOverview class="box-card" :deposit="deposit" :depositAddView="depositAddView"/>
+            <TakingOverview class="box-card" ref="overview" :deposit="deposit" :depositAddView="depositAddView"/>
         </VcAColumn>
         <VcAColumn size="20%">
             <el-card class="box-card">
@@ -17,7 +17,7 @@
               <p class="info"><i class="el-icon-info"></i> {{ this.$t("takings.info") }} <a href="https://pool2.vivaconagua.org/wiki/index.php/How_to_Finanzen">How to Finanzen</a> </p>
             </el-card>
             <el-card v-if="depositAddView" :deposit="deposit" class="box-card tail">
-              <TakingDeposit :deposit="deposit" v-on:resetDepositAddView="resetDepositAddView"></TakingDeposit>
+              <TakingDeposit :deposit="deposit" v-on:resetDepositAddView="resetDepositAddView" v-on:submit="depositSubmit"></TakingDeposit>
             </el-card>
             <!--el-card class="box-card tail">
               <CrewDetail />
@@ -94,6 +94,9 @@
         this.depositAddView = true
     
       }
+    },
+    depositSubmit () {
+      this.$refs.overview.refresh()
     }
   },
   updated () {
