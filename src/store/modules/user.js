@@ -80,13 +80,6 @@ const getters = {
 }
 
 const actions = {
-    getUser () {
-      var name = ""
-      axios.get('/drops/webapp/identity').then( response => {
-          name = response.data.additional_information.profiles[0].supporter.fullName
-      })
-      return name
-    },
     pending (store) {
       store.commit('API_USER_PENDING')
     },
