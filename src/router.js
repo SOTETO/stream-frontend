@@ -122,22 +122,21 @@ router.beforeEach((to, from, next) => {
           axios.get('/drops/webapp/identity').then( response => {
             var name = response.data.additional_information.profiles[0].supporter.fullName
             axios.get('/backend/stream/identity')
-            .then(response => {
+              .then(response => {
                 // sets `state.loading` to false
                 // also sets `state.apiData to response`
                 response.data["name"] = name
                 store.dispatch('user/success', response.data)
                 checker()
-            })
-            .catch(error => {
+              })
+              .catch(error => {
                 // set `state.loading` to false and do something with error
                 store.dispatch('user/error', error)
-            })
-        })
+              })
+          })
         } else {
             checker()
         }
-
     } else {
         next()
     }
