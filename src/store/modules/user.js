@@ -80,15 +80,30 @@ const getters = {
 }
 
 const actions = {
-    init(store) {
-        // sets `state.loading` to true. Show a spinner or something.
-        store.commit('API_USER_PENDING')
-        var name = ""
-        axios.get('/drops/webapp/identity').then( response => {
+    getUser () {
+      var name = ""
+      axios.get('/drops/webapp/identity').then( response => {
           name = response.data.additional_information.profiles[0].supporter.fullName
-        })
+      })
+      return name
+    },
+    pending (store) {
+      store.commit('API_USER_PENDING')
+    },
+    success (store, user) {
+      store.commit('API_USER_SUCCESS', user)
+    },
+    error (store, error) {
+      store.commit('API_USER_FAILURE', error)
+    },
+    init(store, user) {
+      var name = ""
+      store.commit('API_USER_PENDING')
+        // sets `state.loading` to true. Show a spinner or something.
+        return axios.get('/drops/webapp/identity').then( response => {
+          name = response.data.additional_information.profiles[0].supporter.fullName
 
-        return axios.get('/backend/stream/identity')
+          axios.get('/backend/stream/identity')
             .then(response => {
                 // sets `state.loading` to false
                 // also sets `state.apiData to response`
@@ -99,6 +114,7 @@ const actions = {
                 // set `state.loading` to false and do something with error
                 store.commit('API_USER_FAILURE', error)
             })
+        })
     },
     /**
      * Has to be called by all other AJAX requests, if they receive an [401 status code](https://tools.ietf.org/html/rfc7235#section-3.1).
