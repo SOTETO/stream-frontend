@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-
+import axios from 'axios'
 Vue.use(Router)
 
 /**
@@ -118,13 +118,25 @@ router.beforeEach((to, from, next) => {
         var u = store.getters['user/get']
         if(u === null) {
             // Handshake!
-            store.dispatch('user/init').then(() => {
+          store.dispatch('user/pending')
+          axios.get('/drops/webapp/identity').then( response => {
+            var name = response.data.additional_information.profiles[0].supporter.fullName
+            axios.get('/backend/stream/identity')
+              .then(response => {
+                // sets `state.loading` to false
+                // also sets `state.apiData to response`
+                response.data["name"] = name
+                store.dispatch('user/success', response.data)
                 checker()
-            })
+              })
+              .catch(error => {
+                // set `state.loading` to false and do something with error
+                store.dispatch('user/error', error)
+              })
+          })
         } else {
             checker()
         }
-
     } else {
         next()
     }
