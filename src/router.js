@@ -76,64 +76,74 @@ var router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-     function checker () {
-            // Now, check the roles for the given entry!
-            if(!store.getters['user/isError']) {
-                var records = to.matched.filter(record => record.meta.hasOwnProperty("roles"))
-                var fulfillsRole = records.reduce((fulfills, record) => {
-                    return fulfills || store.getters['user/is'](record.meta.roles)
-                }, records.length === 0)
+     
+  // drops identity request
+  function getDropsIdentity() {
+    return axios.get('/drops/webapp/identity');
+  }
 
-                if(fulfillsRole) {
-                    next();
-                } else {
-                    window.location.replace('/arise/#/error/403')
-                }
-            } else {
-                switch (store.getters['user/getErrorCode']) {
-                    case 401:
-                        // Not Authenticated!
-                        window.location.replace('/arise/#/signin/' + btoa(to.fullPath))
-                        break;
-                    case 403:
-                        // Forbidden!
-                        window.location.replace('/arise/#/error/403')
-                        break;
-                    case 404:
-                        // redirect 404 error page
-                        window.location.replace('/arise/#/error/404')
-                        break;
-                    case 500:
-                        // redirect 500 error page
-                        window.location.replace('/arise/#/error/500')
-                        break;
-                    default:
-                        window.location.replace('/arise/#/signin')
-                        break;
-                }
-            }
-        }
-    if (to.matched.some(record => record.meta.hasOwnProperty("roles"))) {
+  // stream idenity request
+  function getStreamIdentity() {
+    return axios.get('/backend/stream/identity');
+  }
+
+  // checker function
+  function checker () {
+    // Now, check the roles for the given entry!
+    if(!store.getters['user/isError']) {
+      var records = to.matched.filter(record => record.meta.hasOwnProperty("roles"))
+      var fulfillsRole = records.reduce((fulfills, record) => {
+        return fulfills || store.getters['user/is'](record.meta.roles)
+      }, records.length === 0)
+      if(fulfillsRole) {
+        next();
+      } else {
+        window.location.replace('/arise/#/error/403')
+      }
+    } else {
+      switch (store.getters['user/getErrorCode']) {
+        case 401:
+          // Not Authenticated!
+          window.location.replace('/arise/#/signin/' + btoa(to.fullPath))
+          break;
+        case 403:
+          // Forbidden!
+          window.location.replace('/arise/#/error/403')
+          break;
+        case 404:
+          // redirect 404 error page
+          window.location.replace('/arise/#/error/404')
+          break;
+        case 500:
+          // redirect 500 error page
+          window.location.replace('/arise/#/error/500')
+          break;
+        default:
+          window.location.replace('/arise/#/signin')
+          break;
+      }
+    }
+  }
+
+
+  if (to.matched.some(record => record.meta.hasOwnProperty("roles"))) {
         // only for init - checks if there is already a user, initiates OAuth handshake otherwise
         var u = store.getters['user/get']
         if(u === null) {
-            // Handshake!
+          // set user store to pending
           store.dispatch('user/pending')
-          axios.get('/drops/webapp/identity').then( response => {
-            var name = response.data.additional_information.profiles[0].supporter.fullName
-            axios.get('/backend/stream/identity')
-              .then(response => {
-                // sets `state.loading` to false
-                // also sets `state.apiData to response`
-                response.data["name"] = name
-                store.dispatch('user/success', response.data)
-                checker()
-              })
-              .catch(error => {
-                // set `state.loading` to false and do something with error
-                store.dispatch('user/error', error)
-              })
-          })
+          // User request using getDropsIdentity and getStreamIdentity request.
+          axios.all([getDropsIdentity(), getStreamIdentity()])
+            // handle responses
+            .then(axios.spread((drops, stream) => {
+              stream.data["name"] = drops.data.additional_information.profiles[0].supporter.fullName
+              store.dispatch('user/success', stream.data)
+              checker()
+            }))
+            // handle errors
+            .catch((error) => {
+              store.dispatch('user/error', error)
+            })
         } else {
             checker()
         }
@@ -141,5 +151,7 @@ router.beforeEach((to, from, next) => {
         next()
     }
 });
+
+
 
 export default router
