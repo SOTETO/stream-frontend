@@ -28,6 +28,12 @@
           <el-form
             label-position="left"
             >
+           <el-form-item
+             :label="lang.received.label"
+             required
+             >
+             <DateFilter :from="filter.payfrom" :to="filter.payto" v-on:update="dateReceived($event)"/>
+           </el-form-item>
             <el-form-item
               :label="lang.created.label"
               required
@@ -35,12 +41,7 @@
 
              <DateFilter :from="filter.crfrom" :to="filter.crto" v-on:update="dateCreated($event)"/>
            </el-form-item>
-           <el-form-item
-             :label="lang.received.label"
-             required
-             >
-             <DateFilter :from="filter.payfrom" :to="filter.payto" v-on:update="dateReceived($event)"/>
-           </el-form-item>
+
            <el-form-item
               :label="lang.norms.label"
               required
