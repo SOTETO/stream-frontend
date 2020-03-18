@@ -16,12 +16,12 @@ export default class CurrencyFormatter {
     }
 
     numeric() {
-        var numeric = 0.00
+        var numeric = Number(0.0)
         var removed = this.value
         if(this.selectedCurrency === "EUR" && this.value.match(CurrencyFormatter.regex.EUR)) {
             removed = removed.replace(".", "")
             removed = removed.replace(/(\s*€)/g, "")
-            removed = removed.replace(",", '.')
+            removed = removed.replace(",", ".")
             numeric = parseFloat(removed)
         } else if(this.selectedCurrency === "CHF" && this.value.match(CurrencyFormatter.regex.CHF)) {
             removed = removed.replace(",", "")
@@ -64,7 +64,7 @@ export default class CurrencyFormatter {
         }
         return new CurrencyFormatter(currency, localized)
     }
-
+    // Problems with Money > million
     static formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
         try {
             decimalCount = Math.abs(decimalCount);
@@ -73,9 +73,9 @@ export default class CurrencyFormatter {
             const negativeSign = amount < 0 ? "-" : "";
 
             let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-            let j = (i.length > 3) ? i.length % 3 : 0;
+            let j = (i.length > 6) ? i.length % 6 : 0;
 
-            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{6})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
         } catch (e) {
             // console.log(e)
         }

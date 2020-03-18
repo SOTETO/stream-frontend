@@ -18,20 +18,20 @@ export default class DepositEndpoints {
         }
     }
 
-    get(successHandler, errorHandler, page, sort) {
+    get(successHandler, errorHandler, page, sort, filter) {
         axios.post(
             '/backend/stream/deposits',
-            { "page": page, "sort": sort },
+            { "page": page, "sort": sort, "filter": filter },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
             .then(response => successHandler(response))
             .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
 
-    count(successHandler, errorHandler, page, sort) {
+    count(successHandler, errorHandler, page, sort, filter) {
         axios.post(
             "/backend/stream/deposits/count",
-            { "page": page, "sort": sort },
+            { "page": page, "sort": sort, "filter": filter },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
         )
             .then(response => successHandler(response))
@@ -51,8 +51,8 @@ export default class DepositEndpoints {
     confirm(successHandler, errorHandler, deposit) {
         axios.post(
             "/backend/stream/deposits/confirm",
-            { "id": deposit.id, "date": Date.now() },
-            { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+            deposit,  
+          { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
             .then(response => successHandler(response))
             .catch(error => this.defaultErrorHandler(error, errorHandler))

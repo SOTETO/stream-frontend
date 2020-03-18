@@ -2,91 +2,69 @@
     <tr class="source">
         <td>
             <div class="category">
-                <el-form-item>
-                    <el-checkbox v-model="checkedVar" @change="commit">{{ $t("donation.placeholder.source." + category) }}</el-checkbox>
-                </el-form-item>
-                <el-form-item v-if="description">
-                    <el-input v-model="descriptionTextVar" @change="commit" :placeholder="$t('donation.placeholder.source.description')"></el-input>
+                  <span> {{$t("donation.placeholder.source." + source.category) }}</span>
+                <el-form-item class="category-description">
+                    <el-input v-model="source.description" :placeholder="$t('donation.placeholder.source.description')"></el-input>
                 </el-form-item>
             </div>
         </td>
         <td>
             <MoneyInput
-                    v-model="amount"
-                    :currency="currency"
-                    @change="valid"
-                    @input="commit"
+                    v-model="source.amount"
+                    v-bind:amount="source.amount"
                     @vca-money-validationError="invalid"
             />
         </td>
         <td>
             <el-form-item>
-                <el-radio v-model="typeVar" label="cash" @change="commit">&nbsp;</el-radio>
+                <el-radio v-model="source.typeOfSource.category" label="cash">&nbsp;</el-radio>
             </el-form-item>
         </td>
         <td>
             <el-form-item>
-                <el-radio v-model="typeVar" label="extern" @change="commit">&nbsp;</el-radio>
+                <el-radio v-model="source.typeOfSource.category" label="extern" >&nbsp;</el-radio>
             </el-form-item>
+        </td>
+        <td>
+          <el-button type="danger" icon="el-icon-delete" :disabled="disableDelete" @click="deleteSource"></el-button>
         </td>
     </tr>
 </template>
 
 <script>
-    import { Input, Checkbox, Radio, FormItem } from 'element-ui'
     import CurrencyFormatter from '@/utils/CurrencyFormatter'
     import MoneyInput from '@/components/utils/MoneyInput'
 
     // Todo: Should use new component utils.MoneyInput!
     export default {
-        name: "DonationSource",
+        name: "TakingSource",
         components: {
-            "el-input": Input,
-            "el-checkbox": Checkbox,
-            "el-radio": Radio,
-            "el-form-item": FormItem,
             "MoneyInput": MoneyInput
         },
         props: {
-            "category": {
-                "type": String,
-                "required": true,
-                "validator": function (value) {
-                    // The value must match one of these strings
-                    return ["unknown", "can", "box", "gl", "other"].indexOf(value) !== -1
+          disableDelete:{
+            type: Boolean,
+            default: false
+          },
+          source: {
+            type: Object,
+            default: function () {
+              return {
+                "amount": {
+                  "amount": 0,
+                  "currency": "EUR"
+                },
+                "category": "",
+                "description": "",
+                "typeOfSource": {
+                  "category": ""
                 }
-            },
-            "currency": {
-                "type": String,
-                "required": true,
-                "validator": function (value) {
-                    // The value must match one of these strings
-                    return ["EUR", "USD", "CHF"].indexOf(value) !== -1
-                }
-            },
-            "checked": {
-                "type": Boolean,
-                "default": false
-            },
-            "numeric": {
-                "type": Number,
-                "default": 0.0
-            },
-            "type": {
-                "type": String,
-                "default": "cash"
-            },
-            "description": {
-                "type": Boolean,
-                "default": false
-            },
-            "descriptionText": {
-                "type": String,
-                "default": ""
+              }
             }
+          },
         },
         data () {
-            var formatter = CurrencyFormatter.getDefault(this.currency)
+            var formatter = CurrencyFormatter.getDefault(this.source.amount.currency)
             return {
                 "checkedVar": false,
                 "amount": {
@@ -99,30 +77,32 @@
             }
         },
         created: function () {
-            var formatter = CurrencyFormatter.getFromNumeric(this.currency, this.numeric)
+            var formatter = CurrencyFormatter.getFromNumeric(this.source.amount.currency, this.numeric)
             this.amount.formatted = formatter.localize()
             this.amount.amount = formatter.getNumeric()
             this.checkedVar = this.checked
             this.typeVar = this.type
             this.descriptionTextVar = this.descriptionText
-            this.commit()
         },
         methods: {
             commit() {
                 if(this.checkedVar && !this.amountErrorState) {
                     var result = {
                         "category": this.category,
-                        "amount": this.amount.amount,
-                        "currency": this.currency,
+                        "amount": this.source.amount.amount,
+                        "currency": this.source.amount.currency,
                         "type": this.typeVar
                     }
-                    if(this.description) {
+                    if(this.descriptionText) {
                         result["description"] = this.descriptionTextVar
                     }
                     this.$emit('input', result)
                 } else if(!this.checkedVar && !this.amountErrorState) {
                     this.deselect()
                 }
+            },
+            deleteSource() {
+                this.$emit('delete')
             },
             deselect() {
                 this.$emit('deselect', this.category)
@@ -142,6 +122,10 @@
 </script>
 
 <style scoped lang="less">
+
+    .category-description {
+        width: 65%;
+    }
     .category {
         display: flex;
         flex-direction: row;
@@ -149,5 +133,9 @@
         & > :first-child {
             margin-right: 1em;
         }
+    }
+    .category span {
+        margin-top: 9px;
+        width: 30%;
     }
 </style>

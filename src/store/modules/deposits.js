@@ -1,31 +1,26 @@
 import DepositEndpoints from '@/backend-endpoints/DepositEndpoints'
-import DonationEndpoints from '@/backend-endpoints/DonationEndpoints'
+import axios from "axios"
 
-const uuidv4 = require('uuid/v4');
-
-// initial state
-// shape: [{
-//             "publicId": UUID
-//             "full": {
-//                  "amount": Double,
-//                  "currency": String
-//             },
-//             "confirmed": Long,
-//             "crew": UUID,
-//             "supporter": UUID,
-//             "created": Long,
-//             "updated": Long,
-//             "dateOfDeposit": Long,
-//             "amount": [{
-//                  "publicId": UUID,
-//                  "confirmed": Long,
-//                  "donationId": UUID,
-//                  "amount": Double,
-//                  "currency": String, 
-//                  "created": Long
-//             }]
-//         }]
 const state = {
+  query: {
+    size: 0,
+    offset: 0,
+    sortby: null,
+    sortdir: "ASC",
+    publicId: null, 
+    takingsId: null,
+    crew: null,
+    name: "%",
+    confirmed: null,
+    cby: null,
+    cfrom: 1581292800,
+    cto: null,
+    payfrom: null,
+    payto:null,
+    crfrom: null,
+    crto:null
+  },
+
   items: [], 
   donations: [],
   page: {
@@ -37,6 +32,7 @@ const state = {
     field: "deposit.created",
     dir: "DESC"
   },
+  count: null,
   error: null
 }
 
@@ -52,12 +48,16 @@ const getters = {
         }
       return {
         "id": deposit.publicId,
-        "amount": deposit.full,
+        "amount": {
+          "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0),
+          "currency": deposit.amount[0].amount.currency
+	},
         "date": {
           "received": deposit.dateOfDeposit,
           "created": deposit.created,
         },
         "actions": deposit.amount,
+        "crew": deposit.crew,
         "supporter": [deposit.supporter],
         "status": status
       }
@@ -81,49 +81,76 @@ const getters = {
     }
     return res
   },
-  page: (state) => {
-      return {
-        "previous": state.page.offset,
-        "next": state.countItems - (state.page.offset + state.page.size)
+  filter: (state) => {
+    return JSON.parse(JSON.stringify(state.query))
+  },
+  taggableFilter: (state) => {
+    var res = []
+    function check(obj, attr) {
+      return obj.hasOwnProperty(attr) && (typeof obj[attr] !== "undefined") && obj[attr] !== null &&
+        (obj[attr] !== "" || typeof obj[attr] !== "string") &&
+        (obj[attr] !== 0.0 || typeof obj[attr] !== "number") &&
+        ((Array.isArray(obj[attr]) && obj[attr].length !== 0) || !Array.isArray(obj[attr]))
     }
-  }, 
+    var fields = [
+      {
+        "obj": state.filter,
+        "attr": "publicId"
+      },
+      {
+        "obj": state.filter,
+        "attr": "takingsId"
+      },
+      {
+        "obj": state.filter,
+        "attr": "crew"
+      }
+    ]
+    for(var field of fields) {
+      if(check(field.obj, field.attr)) {
+        res.push({
+          "name": field.attr,
+          "value": field.obj[field.attr]
+        })
+      }
+    }
+    return res
+  },
   sort: (state) => {
     return state.sorting
+  },
+  count: (state) => {
+    return state.count
   }
 }
 
 const actions = {
-    init (store) {
-        var ajax = new DepositEndpoints(store)
-        var ajaxDons = new DonationEndpoints(store)
     
-        var count = (store) => {
-            var successHandler = (response) => store.commit({"type": 'count', "count": response.data.data})
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.count(successHandler, errorHandler, page, sort)
-        }
-    
-        var get = (store) => {
-            var successHandler = (response) => {
-                store.commit({"type": 'init', "deposits": response.data.data})
-                ajaxDons.getByIds(
-                    (response) => store.commit({"type": 'initDons', "donations": response.data.data}),
-                    (error) => store.commit({"type": 'setError', error: error}),
-                    response.data.data.reduce((acc, deposit) => acc.concat(deposit.amount.map(unit => unit.donationId)), [])
-                )
-            }
-            var errorHandler = (error) => store.commit({"type": 'setError', error: error})
-            var page = store.state.page
-            var sort = store.state.sorting
-            ajax.get(successHandler, errorHandler, page, sort)
-        }
-    
-        get(store)
-        count(store)
-    },
-    page (store, down) {
+  init (store, query) {
+    axios.get('/backend/stream/deposits', {params: query})
+      .then(function (response){
+        store.commit({"type": 'init', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  nextPage (store, query) {
+    axios.get('/backend/stream/deposits', { params: query })
+      .then(function (response){
+        store.commit({"type": 'assign', "deposits": response.data})
+      }).catch(function (error) {
+        store.commit({"type": 'setError', error: error})
+      })
+  },
+  count (store, query) {
+    axios.get('/backend/stream/deposits/count', { params: query })
+    .then(function (response) {
+      store.commit({'type': 'count', 'count': response.data })
+    }).catch(function (error) {
+      store.commit({'type': 'setError', error: error})
+    })
+  },
+  page (store, down) {
         var offset = store.state.page.offset - store.state.page.size
         var valid = offset >= 0
         if(!down) {
@@ -139,57 +166,69 @@ const actions = {
         store.commit({ "type": "sort", "sort": sorting })
         store.dispatch('init')
     },
-  add (store, deposit) {
-    //get the current user
-    var user = store.rootGetters['user/get']
-    var crew = store.rootGetters['user/getCrew']
-    deposit["publicId"] = uuidv4()
-    deposit["crew"] = crew // hopefully not undefined
-    deposit["supporter"] = user.uuid
-    deposit["created"] = Date.now()
-    deposit["updated"] = Date.now()
+    filter: (state) => {
+        return JSON.parse(JSON.stringify(state.filter))
+    },
 
-    var amount = deposit.depositUnits.map((unit) => {
+    add (store, deposit) {
+      //get the current user
+      var user = store.rootGetters['user/get']
+      var crew = store.rootGetters['user/getCrew']
+      //deposit["publicId"] = uuidv4()
+      //deposit["crew"] = (crew !== null) ? crew[0] : { "name": "", "uuid": "00000000-0000-0000-0000-000000000000" } // hopefully not undefined
+      deposit["supporter"] = {}
+      deposit.supporter["uuid"] = user.uuid
+      deposit.supporter["name"] = user.name
+      deposit["created"] = Date.now()
+      deposit["updated"] = Date.now()
+
+      var amount = deposit.depositUnits.map((unit) => {
         return {
-            "publicId": uuidv4(),
-            "donationId": unit.donation,
-            "amount": unit.deposit.amount,
-            "currency": unit.deposit.currency,  
+            //"publicId": uuidv4(),
+            "takingId": unit.takingId,
+            "amount": unit.amount,
             "created": Date.now()
         }
-    })
-    deposit["amount"] = JSON.parse(JSON.stringify(amount))
-    delete deposit.depositUnits
+      })
+      deposit["amount"] = amount
+      deposit.depositUnits = []
+      deposit["full"] = { "amount": deposit.amount.reduce((amount, source) => amount + source.amount.amount, 0), "currency": "EUR"}
+
       
-    //post deposit
+      //post deposit
       var ajax = new DepositEndpoints(store)
       var successHandler = (response) => {
         store.commit({ "type": 'push', "deposit": response.data })
-        store.dispatch('donations/init', null, { root: true })
       }
       var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
       ajax.save(successHandler, errorHandler, deposit)
   },
     confirm (store, deposit) {
+        var user = store.rootGetters['user/get']
         var ajax = new DepositEndpoints(store)
-        var successHandler = (response) => store.dispatch('init')
+        var successHandler = () => true
         var errorHandler = (error) => store.commit({ "type": 'setError', error: error })
-        ajax.confirm(successHandler, errorHandler, deposit)
+        ajax.confirm(successHandler, errorHandler, { "id": deposit.id, "date": Date.now(), "uuid": user.uuid, "name": user.name })
     }
 }
 
 const mutations = {
-    init(state, pushDeposit) {
-        state.items = pushDeposit.deposits
+    init(state, payload) {
+        state.items = payload.deposits
     },
     initDons(state, pushDonations) {
         state.donations = pushDonations.donations
     },
+  assign(state, payload) {
+    for (var i in payload.deposits) {
+      state.items.push(payload.deposits[i])
+    }
+  },
+  count(state, payload) {
+    state.count = payload.count.count
+  },
     sort(state, sort) {
         state.sorting = sort.sort
-    },
-    count(state, count) {
-        state.countItems = count.count.count
     },
     page(state, offset) {
         state.page.offset = offset.offset

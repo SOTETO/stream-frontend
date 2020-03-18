@@ -5,6 +5,47 @@
     "employee": "Hauptamt",
     "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
   },
+  "filter": {
+    "events": {
+      "label": "Aktion",
+      "new_tag": "+ Aktion"
+    },
+    "crews": {
+      "label": "Crews",
+      "new_tag": "+ Crew"
+    },
+    "created": {
+      "label": "Eingetragen"
+    },
+    "received": {
+      "label": "Erhalten"
+    },
+    "norms": {
+      "label": "Art der Einzahlung",
+      "label_ECO": "Wirtschaftlich",
+      "label_DON": "Spende",
+      "label_null": "Alle"
+    },
+    "external": {
+      "label": "Bar/Extern",
+      "label_true": "Extern",
+      "label_false": "Bar",
+      "label_null": "Alle"
+    }, 
+    "confirmed_date": {
+      "label": " Bestätigt am"
+    },
+    "amount": {
+      "label": "Betrag"
+    },
+    "confirmed": {
+      "label": "Bestätigt",
+      "label_true": "Bestätigt",
+      "label_false": "Nicht Bestätigt",
+      "label_null": "Alle"
+    }
+  },
+
   "errors": {
     "ajax": {
       "badRequest": {
@@ -36,6 +77,9 @@
     "next": "Keine nächsten Einträge | Letzter Eintrag | Nächste %{number} Einträge"
   },
   "household": {
+    "errors": {
+      "invalidIBAN": "IBAN konnte nicht validiert werden."
+    },
     "header": {
       "box": {
         "list": "Übersicht",
@@ -186,7 +230,7 @@
         "deposit": "Einzahlung vermerken"
       },
       "donationSource": {
-        "sourceSelect": "Woher kommt die Spende?",
+        "sourceSelect": "Art der Einnahme?",
         "sum": "Summe",
         "sourceType": {
           "cash": "Bar",
@@ -234,13 +278,13 @@
     },
     "placeholder": {
       "comment": "Bemerkung / Frage",
-      "received": "Wann hast du die Spende erhalten?",
+      "received": "Wann hast du die Einnahme erhalten?",
       "involved": {
-        "label": "Von wem hast du die Spende erhalten?",
+        "label": "Von welchen Supportern hast du die Einnahme erhalten?",
         "indicator": "Max Mustermann aus deiner Crew..."
       },
       "context": {
-        "label": "Wobei ist die Spende entstanden?",
+        "label": "Wobei ist die Einnahme entstanden?",
         "indicator": "z.B. Straßenfest"
       },
       "category": "Kategorie",
@@ -253,29 +297,48 @@
         "party": "Party",
         "streetFestivals": "Straßenfeste",
         "karaoke": "Slam, Powerpoint-Karaoke & Co.",
-        "kicker": "Kickerturniere"
+        "kicker": "Kickerturniere",
+        "other": "Sonstiges"
       },
       "source": {
+        "group": {
+          "donations": "Spendeneinnahmen",
+          "economic": "Wirtschaftliche Einnahmen"
+        },
         "unknown": "Kann ich nicht zuordnen",
         "can": "Pfandtonne",
         "box": "Spendendose",
         "gl": "Gästeliste",
         "other": "Sonstiges",
+        "other_ec": "Sonstiges",
+        "merch": "Merchandise",
+        "com": "Unternehmen",
+        "better": "Betterplace",
         "description": "Beschreibung..."
       },
       "externalDetails": {
         "receipt": "Spendenbescheinigung erwünscht?",
+        "description": "Bitte gib diese Informationen an deine externe Kontaktperson. Das hilft uns dabei die Überweisung mit dieser Einnahme zu verknüpfen:",
         "partner": {
-          "label": "Wer überweist die Spende?",
+          "label": "Wer überweist die Einnahme?",
           "name": "Location / Veranstalter",
           "asp": "Ansprechperson",
           "email": "Emailadresse",
           "address": "Postanschrift"
+        },
+        "account": {
+          "label": "Spendenkonto:",
+          "owner": "Empfänger: Viva con Agua",
+          "iban": "IBAN: DE58 2005 0550 12681 351 81",
+          "bic": "BIC: HASPDEHHXXX"
         }
+      },
+      "internalDetails": {
+        "description": "Bitte nutze diese Informationen für deine Einzahlung mit der Einzahlkarte. Das hilft uns dabei die Einzahlung mit dieser Einnahme zu verknüpfen:"
       }
     }
   },
-  "deposit": {
+  "deposits": {
     "header": {
       "box": "Einzahlungen"
     },
@@ -287,33 +350,41 @@
         "amount": "Betrag",
         "donations": "Zugeordnete Spenden",
         "supporter": "Beteiligte Supporter",
-        "state": "Status"
+        "state": "Status",
+        "confirmed": "Bestätigt von"
+      },
+      "hint": {
+        "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
+        "dates": {
+          "received": "Eingezahlt: {date}",
+          "created": "Eingetragen: {date}",
+          "confirmed": "Bestätigt: {date}",
+          "unconfirmed": "Nicht bestätigt"
+        },
+        "confirm": "bestätigen"
+      },
+      "load": {
+        "more": "Mehr Einzahlungen?",
+        "finish": "Alle Einzahlungen geladen"
       }
     },
+      
     "placeholder": {
-      "amount": "Eingezahlte Summe",
-      "dateOfDeposit": "Wann wurde eingezahlt?",
+    
+      "amount": "Eingezahlter Betrag",
+      
+      "dateOfDeposit": "Wann?",
+      
       "searchDonation": "Wähle eine Spende"
-    },
-    "buttons": {
-      "save": "Speichern"
-    },
-    "hint": {
-      "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
-      "dates": {
-        "received": "Eingezahlt: {date}",
-        "created": "Eingetragen: {date}",
-        "confirmed": "Bestätigt: {date}",
-        "unconfirmed": "Nicht bestätigt"
-      }
+      
     },
     "errors": {
       "noValueForAssignedDonation": "Der Anteil fehlt...",
       "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
-      "donationNotFound": "Kein Name der Spende",
-      "donationBackendError": {
+      "takingsNotFound": "Kein Name der Einzahlung",
+      "takingsBackendError": {
         "title": "Serverfehler",
-        "msg": "Leider konnten keine Spenden gefunden werden."
+        "msg": "Leider konnten keine Einzahlung gefunden werden."
       }
     }
   },
@@ -323,12 +394,106 @@
       "EUR": "€",
       "CHF": "Fr.",
       "USD": "$"
+    
     }
   },
   "externalTransaction": {
     "reasonForPayment": "Verwendungszweck",
     "label": {
       "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
+    }
+  },
+  "takings": {
+    "head":{
+      "table": "Alle Einnahmen",
+      "add": "Einnahme Hinzufügen",
+      "deposit": "Einzahlung vermerken"
+    },
+    "table": {
+      "head": {
+        "edit": "Anzeigen / Bearbeiten",
+        "title": "Name / Aktion",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "deposited": "Eingezahlt",
+        "date": "Datum",
+        "supporter": "Beteiligte Supporter"
+      },
+      "sort": {
+        "title": "Name / Aktion",
+        "crew": "Crew",
+        "amount": "Betrag",
+        "deposited": "Eingezahlt",
+        "date": "Datum",
+        "supporter": "Beteiligte Supporter",
+        "norms": "Art der Einnahme"
+      },
+      "dates": {
+        "received": "Erhalten: {date}",
+        "created": "Eingetragen: {date}"
+      },
+      "popup": {
+        "header": "Einnahme Details",
+        "full": "Gesamte Einnahme:",
+        "split": "Davon:",
+        "extern": "Überweisung",
+        "cash": "Bargeld"
+      },
+      "load": {
+        "more": "Mehr Einnahmen?",
+        "finish": "Alle Einnahmen geladen"
+      }
+
+    },
+    "placeholder": {
+      "comment": "Kommentar",
+      "amount": "Eingezahlte Summe",
+      "dateOfDeposit": "Wann wurde eingezahlt?",
+      "searchDonation": "Wähle eine Spende"
+    },
+    "buttons": {
+      "add": "Einnahme hinzufügen",
+      "save": "Einnahme speichern",
+      "update": "Einnahme aktualisieren",
+      "donation": "Spende hinzufügen",
+      "economic": "Wirtschaftlich Einnahmen hinzufügen",
+      "depositAdd": "Einzahlung hinzufügen",
+      "abort": "Einzahlung abbrechen"
+    },
+    "filter": {
+      "name": "Name"
+    },
+    "popover": {
+      "title": "Bitte überprüfe folgende Felder:",
+      "buttonText": "Warum ist dieser Button deaktiviert?",
+      "errors": {
+        "description": "'Wobei ist diese Einnahme entstanden?' fehlt",
+        "category": "'Kategorie' fehlt",
+        "amount": "'Art der Einnahme?' ist nicht komplett",
+        "partner": "'Wer überweist die Einnahme?' ist nicht komplett"
+      }
+    },
+    "labels": {
+      "name": "Name / Organisation:",
+      "asp": "Ansprechperson:",
+      "address": "Adresse:",
+      "email": "E-Mail Adresss:"
+    },
+    "validations": {
+      "category": "Bitte gib eine Kategorie an",
+      "description": "Bitte füge eine Beschreibung hinzu",
+      "name": "Bitte gib einen Namen ein",
+      "asp": "Bitte gib eine Ansprechperson an",
+      "email": "Bitte gib eine E-Mail Adresse an",
+      "address": "Bitte gib eine Adresse an"
+
+    },
+    "info": "Unklarheiten? "
+  },
+  "takingsEdit": {
+    "header": {
+      "add": "Einnahme Hinzufügen",
+      "edit": "Einnahme Bearbeiten"
     }
   }
 }

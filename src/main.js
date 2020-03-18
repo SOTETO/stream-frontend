@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import { WidgetUserAutocomplete } from 'vca-widget-user'
 import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation'
 import router from './router'
@@ -33,7 +34,6 @@ const dateTimeFormats = {
 }
 
 Vue.use(VueI18n);
-
 const locale =  navigator.language;
 const i18n = new VueI18n({
     locale: locale,

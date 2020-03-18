@@ -19,10 +19,11 @@
         <el-form-item
           :required="true"
         >
-          <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
+        <el-input v-model="expense.reason.wherefor" :placeholder="$t('household.placeholder.wherefor')" :disabled="!isEditable"></el-input>
         </el-form-item>
         <el-form-item
           :required="false"
+          prop="iban"
         >
           <el-input v-model="expense.iban" :placeholder="$t('household.placeholder.iban')" :disabled="!isEditable"></el-input>
         </el-form-item>
@@ -45,6 +46,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     import { mapActions, mapGetters } from 'vuex'
     import { Form, Input, FormItem } from 'element-ui'
     import MoneyInput from '@/components/utils/MoneyInput'
@@ -64,6 +66,21 @@
             }
         },
         data () {
+            var checkIBAN = (rule, iban, callback) => {
+                var that = this
+                axios.get('https://openiban.com/validate/' + iban + '?getBIC=true&validateBankCode=true')
+                .then(function (response) {
+                    if (response.status == 200) {
+			console.log(response.data)
+			if(response.data.valid) {
+                            that.expense.bic = response.data.bankData.bic
+                            callback();
+                        } else {
+                            callback(new Error(that.$i18n.t('household.errors.invalidIBAN')));
+                        }
+                   }
+                })
+            }
             var now = Date.now()
             var defaultExpense = {
                 "amount": {
@@ -80,11 +97,14 @@
                 "created": now,
                 "updated": now
             }
-
             return {
                 "expense": JSON.parse(JSON.stringify(defaultExpense)),
                 "default": defaultExpense,
-                "rules": {}
+                "rules": {
+                    iban: [
+                        { validator: checkIBAN, trigger: 'blur' }
+                    ]
+		}
             }
         },
         computed: {

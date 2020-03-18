@@ -1,82 +1,85 @@
 <template>
   <VcAFrame>
     <VcAColumn size="90%">
-      <VcABox :first="true"  :title="$t('deposit.header.box')">
-        <ListMenu :fields="sortFields" store="deposits" />
-        <button v-if="hasPrevious" v-on:click="pageDown()" class="paginate">
-          {{ $tc('pagination.previous', pageGet.previous, { 'number': pageGet.previous }) }}
-        </button>
-        <DepositList/>
-        <button v-if="hasNext" v-on:click="pageUp()" class="paginate">
-          {{ $tc('pagination.next', pageGet.next, { 'number': pageGet.next }) }}
-        </button>
-      </VcABox>
+      <DepositOverview  class="box-card" />
     </VcAColumn>
   </VcAFrame>
 </template>
 
 <script>
-  import { VcAFrame, VcAColumn, VcABox } from 'vca-widget-base'
-  import DepositList from '@/components/deposit/DepositList'
-  import ListMenu from '../components/utils/ListMenu'
-  import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { VcAFrame, VcAColumn } from 'vca-widget-base'
+import 'vca-widget-base/dist/vca-widget-base.css'
+import DepositOverview from '@/components/deposit/DepositOverview'
+export default {
+  name: "deposits",
+  components: {
+    VcAFrame, VcAColumn, DepositOverview
+  },
+  props: {
+    queryString: {
+      type: Object,
+      default: function () {
+        return {
+          publicId: null, 
+          takingsId: null,
+          crew: null,
+          name: null,
+          confirmed: null,
+          cby: null,
+          cfrom: null,
+          cto: null,
+          payfrom: null,
+          payto:null,
+          crfrom: null,
+          crto:null
+        }
+      }
+    }
+  },
+  data () {
+    return {
+      query: this.queryString  
+    }
+  },
 
-  export default {
-    name: "deposits",
-    components: {
-      VcAFrame, VcAColumn, VcABox, DepositList, ListMenu
-    },
-    computed: {
-        ...mapGetters('donations', {
-            pageGet: 'page'
-        }),
-        hasPrevious () {
-            return this.pageGet.previous > 0
-        },
-        hasNext () {
-            return this.pageGet.next > 0
-        },
-        sortFields() {
-            return [
-                {
-                    "value": "deposit.created",
-                    "label": this.$t("deposit.table.head.created")
-                },
-                {
-                    "value": "deposit.date_of_deposit",
-                    "label": this.$t("deposit.table.head.date")
-                },
-                {
-                    "value": "deposit.full_amount",
-                    "label": this.$t("deposit.table.head.amount")
-                },
-                {
-                    "value": "deposit.confirmed",
-                    "label": this.$t("deposit.table.head.state")
-                },
-                {
-                    "value": "deposit.crew",
-                    "label": this.$t("deposit.table.head.crew")
-                }
-            ]
-        }
-    },
-    methods: {
-        ...mapActions('donations', [
-            'page'
-        ]),
-        pageDown () {
-            this.page(true)
-        },
-        pageUp () {
-            this.page(false)
-        }
+  computed: {
+    ...mapGetters('deposits', {
+      isError: 'isError',
+      getErrorCode: 'getErrorCode',
+    }),
+  },
+
+  updated () {
+    if(this.isError) {
+      switch(this.getErrorCode) {
+        case 400:
+          this.open(this.$t('errors.ajax.badRequest.header'), this.$t('errors.ajax.badRequest.msg'), 'error')
+          break;
+        case 403:
+          this.open(this.$t('errors.ajax.forbidden.header'), this.$t('errors.ajax.forbidden.msg'), 'error')
+          break;
+        case 404:
+          this.open(this.$t('errors.ajax.notFound.header'), this.$t('errors.ajax.notFound.msg'), 'error')
+          break;
+        default:
+          if(this.getErrorCode > 404) {
+            this.open(this.$t('errors.ajax.server.header'), this.$t('errors.ajax.server.msg'), 'error')
+          }
+      }
     }
   }
+}
 </script>
 
 <style scoped lang="less">
   @import '../assets/less/general.less';
+    .tags {
+        margin: 0 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
 
   .paginate {
     width: 100%;
@@ -85,4 +88,23 @@
     cursor: pointer;
     background: none;
   }
+    .box-card {
+        width: 100%;
+    }
+    .box-card.tail {
+        margin-top: 2em;
+    }
+    .box-card.expand {
+        flex-grow: 1;
+    }
+    .title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .title > h2 {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: 0;
+    }
 </style>

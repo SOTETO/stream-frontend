@@ -2,7 +2,48 @@
   "defaults": {
     "support": "it@vivaconagua.org",
     "volunteerManager": "volunteer manager",
-    "employee": "employee"
+    "employee": "employee",
+    "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
+  },
+  "filter": {
+    "events": {
+      "label": "Action",
+      "new_tag": "+ Action"
+    },
+    "crews": {
+      "label": "Crews",
+      "new_tag": "+ Crew"
+    },
+    "created": {
+      "label": "Recorded"
+    },
+    "received": {
+      "label": "Received"
+    },
+    "norms": {
+      "label": "Type of Taking",
+      "label_ECO": "Economic",
+      "label_DON": "Donation",
+      "label_null": "All"
+    },
+    "external": {
+      "label": "Cash/External",
+      "label_true": "Extern",
+      "label_false": "Cash",
+      "label_null": "All"
+    }, 
+    "confirmed_date": {
+      "label": "Confirmed Date"
+    },
+    "amount": {
+      "label": "Amount"
+    },
+    "confirmed": {
+      "label": "Confirmed",
+      "label_true": "Confirmed",
+      "label_false": "Not Confirmed",
+      "label_null": "All"
+    }
   },
   "errors": {
     "ajax": {
@@ -35,6 +76,9 @@
     "next": "No more entries | Show last | Show next (%{number})"
   },
   "household": {
+    "errors": {
+      "invalidIBAN": "IBAN validation failed."
+    },
     "header": {
       "box": {
         "list": "Overview",
@@ -185,7 +229,7 @@
         "deposit": "Enter deposit"
       },
       "donationSource": {
-        "sourceSelect": "What type of donation?",
+        "sourceSelect": "What type of taking?",
         "sum": "Sum",
         "sourceType": {
           "cash": "Cash",
@@ -219,7 +263,7 @@
       "total": {
         "cash": "Total (cash): {total}",
         "extern": "Total (external transaction): {total}",
-        "all": "Total donation: {total}"
+        "all": "Total takings: {total}"
       },
       "error": {
         "amount": {
@@ -233,13 +277,13 @@
     },
     "placeholder": {
       "comment": "Comment / Question",
-      "received": "When did you received the donation?",
+      "received": "When did you received the takings?",
       "involved": {
-        "label": "Who has given the donation to you?",
+        "label": "From which supporters did you receive the takings?",
         "indicator": "Jane Doe of your crew..."
       },
       "context": {
-        "label": "How does the donation was collected?",
+        "label": "How were the takings collected?",
         "indicator": "e.g. street festival"
       },
       "category": "Category",
@@ -252,49 +296,61 @@
         "party": "Party",
         "streetFestivals": "Street markets / festivals",
         "karaoke": "Karaoke",
-        "kicker": "Kicker tournament"
+        "kicker": "Kicker tournament",
+        "other": "Others"
       },
       "source": {
+        "group": {
+          "donations": "donations",
+          "economic": "economic takings"
+        },
         "unknown": "I don't know",
         "can": "Deposit can",
         "box": "Donation box",
         "gl": "Guest list",
         "other": "Other",
+        "other_ec": "Other",
+        "merch": "Merchandise",
+        "com": "Company",
+        "better": "Betterplace",
         "description": "Description..."
       },
       "externalDetails": {
         "receipt": "Donation receipt required?",
+        "description": "Please give these informations to your external contact person. It helps us to allocate the donation the this taking:",
         "partner": {
           "label": "Who transfers the donation?",
           "name": "Location / Organizer",
           "asp": "Contact person",
           "email": "Email address",
           "address": "Postal address"
+        },
+        "account": {
+          "label": "Donation account:",
+          "owner": "Account owner: Viva con Agua",
+          "iban": "IBAN: DE58 2005 0550 12681 351 81",
+          "bic": "BIC: HASPDEHHXXX"
         }
+      },
+      "internalDetails": {
+        "description": "Please use these informations for your deposit of the takings. It helps us to allocate the deposit the this taking:"
       }
+    }
+  },
+  "deposits": {
+    "header": {
+      "box": "Deposits"
     },
-    "deposit": {
-      "header": {
-        "box": "Deposits"
-      },
-      "table": {
-        "head": {
-          "created": "Created",
-          "date": "Date of deposit",
-          "crew": "Crew",
-          "amount": "Amount",
-          "donations": "Associated donations",
-          "supporter": "Involved supporter",
-          "state": "State"
-        }
-      },
-      "placeholder": {
-        "amount": "Deposited amount",
-        "dateOfDeposit": "When?",
-        "searchDonation": "Select a donation"
-      },
-      "buttons": {
-        "save": "Save"
+    "table": {
+      "head": {
+        "created": "Created",
+        "date": "Date of deposit",
+        "crew": "Crew",
+        "amount": "Amount",
+        "donations": "Associated donations",
+        "supporter": "Involved supporter",
+        "state": "State",
+        "confirmed": "Confirmed by"
       },
       "hint": {
         "openDeposit": "{amount} are not assigned to a donation.",
@@ -303,18 +359,29 @@
           "created": "Created: {date}",
           "confirmed": "Confirmed: {date}",
           "unconfirmed": "Not confirmed"
-        }
+        },
+        "confirm": "confirm"
       },
-      "errors": {
-        "noValueForAssignedDonation": "Missing amount...",
-        "valueForAssignedDonationOutOfRange": "Out of range...",
-        "donationNotFound": "No donation name",
-        "donationBackendError": {
-          "title": "Internal error",
-          "msg": "No donation has been found."
-        }
+      "load": {
+        "more": "More Deposits?",
+        "finish": "No More Deposits"
       }
     },
+    "placeholder": {
+      "amount": "Deposited amount",
+      "dateOfDeposit": "When?",
+      "searchDonation": "Select a donation"
+    },
+    "errors": {
+      "noValueForAssignedDonation": "Missing amount...",
+      "valueForAssignedDonationOutOfRange": "Out of range...",
+      "takingsNotFound": "No takings name",
+      "takingsBackendError": {
+        "title": "Internal error",
+        "msg": "No taking has been found."
+      }
+    }
+  },
     "currencies": {
       "default": "USD",
       "label": {
@@ -328,6 +395,96 @@
       "label": {
         "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
       }
+  },
+  "takings": {
+    "head":{
+      "table": "all takings",
+      "add": "add takings",
+      "deposit": "add ecnomy money"
+    },
+    "table": {
+      "head": {
+        "edit": "Show / Edit",
+        "title": "Name / Event",
+        "crew": "Crew",
+        "amount": "Amount",
+        "deposited": "Deposited",
+        "date": "Date",
+        "supporter": "Supporter"
+      },
+      "sort": {
+        "title": "Name / Event",
+        "crew": "Crew",
+        "amount": "Amount",
+        "deposited": "Deposited",
+        "date": "Date",
+        "supporter": "Supporter",
+        "norms": "Type of taking"
+      },
+      "dates": {
+        "received": "Received: {date}",
+        "created": "Recorded: {date}"
+      },
+      "popup": {
+        "header": "Takings details",
+        "full": "Full taking:",
+        "split": "divided:",
+        "extern": "extern",
+        "cash": "cash"
+      },
+      "load": {
+        "more": "More Takings?",
+        "finish": "No More Takings"
+      }
+    },
+    "placeholder": {
+        "comment": "Comment",
+        "amount": "Deposited amount",
+        "dateOfDeposit": "When?",
+        "searchDonation": "Select a donation"
+    },
+    "buttons": {
+      "add": "add taking",
+      "save": "save taking",
+      "update": "update taking",
+      "donation": "add donation",
+      "economic": "add economic money",
+      "depositAdd": "add deposit",
+      "abort": "abort deposit"
+    },
+    "filter":{
+      "name": "name"
+    },
+    "popover": {
+      "title": "Please, check the following fields...",
+      "buttonText": "Why is the Button disabled?",
+      "errors": {
+        "description": "'How were the takings collected?' is empty",
+        "category": "'Category' is empty",
+        "amount": "'What type of taking?' is incomplete",
+        "partner": "'Who transfers the donation?' is incomplete"
+      }
+    },
+    "labels": {
+      "name": "Name / Organisation:",
+      "asp": "Contact Person:",
+      "address": "Addresse:",
+      "email": "E-mail adresss:"
+    },
+    "validations": {
+      "category": "Please add a category",
+      "description": "Please add a description",
+      "name": "Please add a name",
+      "asp": "Please add a contact",
+      "email": "Please add an e-mail address",
+      "address": "Please add an address"
+    },
+    "info": "Questions? "
+  },
+  "takingsEdit": {
+    "header": {
+      "add": "Add Taking",
+      "edit": "Edit Taking"
     }
   }
 }

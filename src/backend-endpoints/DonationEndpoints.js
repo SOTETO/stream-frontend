@@ -17,10 +17,10 @@ export default class DonationEndpoints {
         }
     }
 
-    get(successHandler, errorHandler, page, sort) {
+    get(successHandler, errorHandler, page, sort, filter) {
         axios.post(
-            '/backend/stream/donations',
-            { "page": page, "sort": sort },
+            '/backend/stream/takings',
+            { "page": page, "sort": sort, "filter": filter },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
         .then(response => successHandler(response))
@@ -29,7 +29,7 @@ export default class DonationEndpoints {
     
     getByQuery(successHandler, errorHandler, searchKey) {
         axios.post(
-            '/backend/stream/donations',
+            '/backend/stream/takings',
             { "filter": { "name": searchKey } },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
@@ -39,18 +39,27 @@ export default class DonationEndpoints {
     
     getByIds(successHandler, errorHandler, ids) {
         axios.post(
-            '/backend/stream/donations',
+            '/backend/stream/takings',
             { "filter": { "publicId": ids } },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
         .then(response => successHandler(response))
         .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
+
+    getById(successHandler, errorHandler, id) {
+      axios.get(
+        '/backend/stream/takings/id/' + id,
+        { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+      )
+      .then(response => successHandler(response))
+      .catch(error => this.defaultErrorHandler(error, errorHandler))
+    }
     
-    count(successHandler, errorHandler, page, sort) {
+    count(successHandler, errorHandler, page, sort, filter) {
         axios.post(
-            "/backend/stream/donations/count",
-            { "page": page, "sort": sort },
+            "/backend/stream/takings/count",
+            { "page": page, "sort": sort, 'filter': filter },
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' }}
         )
         .then(response => successHandler(response))
@@ -59,11 +68,20 @@ export default class DonationEndpoints {
 
     save(successHandler, errorHandler, donation) {
         axios.post(
-            '/backend/stream/donations/create',
+            '/backend/stream/takings/create',
             donation,
             { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
         )
         .then(response => successHandler(response))
         .catch(error => this.defaultErrorHandler(error, errorHandler))
     }
+  update(successHandler, errorHandler, taking) {
+    axios.post(
+      '/backend/stream/takings/update',
+      taking,
+      { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+    )
+      .then(response => successHandler(response))
+      .catch(error => this.defaultErrorHandler(error, errorHandler))
+  }
 }
