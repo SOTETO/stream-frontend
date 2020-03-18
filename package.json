@@ -1,6 +1,6 @@
 {
   "name": "stream-frontend",
-  "version": "stage",
+  "version": "0.1.1",
   "description": "Implements the frontend for the Stream microservice. It is part of Viva con Aguas Pool².",
   "private": true,
   "scripts": {
