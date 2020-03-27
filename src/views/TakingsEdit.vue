@@ -35,7 +35,7 @@
 
                 <button
                     v-if="!updateMode"
-                    :disabled="validInput"
+                    :disabled="!validInput"
                     class="vca-button-primary vca-full-width"
                     @click.prevent="submitForm">
                         {{ $t("takings.buttons.save") }}
