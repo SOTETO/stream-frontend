@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-    get: (state, getters) => {
+    get: state => {
         return state.user
     },
     is: (state) => (roles) => {

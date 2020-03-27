@@ -160,8 +160,9 @@
             }
         },
         computed: {
-            ...mapGetters('takings', {
-                get: 'getById',
+            ...mapGetters('user', {
+                user: 'get',
+                crew: 'getCrew',
             }),
             headerTitle () {
               if (this.id !== null) {
@@ -224,7 +225,6 @@
                 this.reason = reason
             },
             submitForm () {
-
                 if(this.taking.amount.sources.length > 0) {
                     for (var source in this.taking.amount.sources) {
                         if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
@@ -238,14 +238,34 @@
                         }
                     }
                 }
-
                 this.taking.details.reasonForPayment = this.reason
-
-                this.add(this.taking)
-                this.$router.push('/takings')
+                // copied from store
+                var user = this.user
+                var supporter = []
+                supporter.push({"uuid": this.user.uuid, "name": this.user.name})
+            //    for (var i=0; i < this.taking.amount.involvedSupporter.length; i++ ) {
+            //        var entry = { 
+            //            "uuid": this.taking.amount.involvedSupporter[i].id, 
+            //            "name": this.taking.amount.involvedSupporter[i].profiles[0].supporter.fullName
+            //        }
+            //        supporter.push(entry)
+            //    }
+                this.taking["author"] = user.uuid
+                //taking["norms"] = "Donation"
+                this.taking["crew"] = this.crew
+                this.taking.amount.involvedSupporter = supporter
+                this.taking["depositUnits"] = []
+                axios.post(
+                    '/backend/stream/takings/create',
+                    this.taking,
+                    { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+                )
+                    .then(response => this.$router.push('/takings'))
+                .catch(error => 
+                    this.open504()
+                )
             },
             updateForm () {
-
                 if(this.taking.amount.sources.length > 0) {
                     for (var source in this.taking.amount.sources) {
                         if (this.taking.amount.sources[source].typeOfSource.category == "extern") {
@@ -259,9 +279,23 @@
                         }
                     }
                 }
+                axios.post(
+                    '/backend/stream/takings/update',
+                    this.taking,
+                    { 'headers': { 'X-Requested-With': 'XMLHttpRequest' } }
+                )
+                    .then(response => this.$router.push('/takings'))
+                .catch(error => 
+                    this.open504()
+                )
 
-                this.update(this.taking)
-                this.$router.push('/takings')
+            },
+            open504() {
+                this.$notify({
+                    title: this.$t('errors.ajax.badRequest.header'),
+                    message: this.$t('errors.ajax.badRequest.msg'),
+                    type: 'warning'
+                })
             },
             open401() {
                 this.$notify({
