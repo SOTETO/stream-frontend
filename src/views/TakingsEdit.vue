@@ -8,7 +8,7 @@
                 <el-card class="box-card">
                     <TakingContext v-model="taking.context" v-bind:context="taking.context" />
                 </el-card>  
-                <el-card class="box-card tail expand" v-if="employee"> 
+                <el-card class="box-card tail expand" v-if="employee || admin"> 
                     <CrewSelect @crew="selectCrew"/>
                 </el-card/>
                 <el-card class="box-card tail expand">
@@ -169,7 +169,8 @@
             ...mapGetters('user', {
                 user: 'get',
                 crew: 'getCrew',
-                employee: 'isEmployee'
+                employee: 'isEmployee',
+                admin: 'isAdmin'
             }),
             headerTitle () {
               if (this.id !== null) {
