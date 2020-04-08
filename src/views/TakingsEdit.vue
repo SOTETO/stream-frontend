@@ -8,6 +8,9 @@
                 <el-card class="box-card">
                     <TakingContext v-model="taking.context" v-bind:context="taking.context" />
                 </el-card>  
+                <el-card class="box-card tail expand" v-if="employee"> 
+                    <CrewSelect @crew="selectCrew"/>
+                </el-card/>
                 <el-card class="box-card tail expand">
                     <TakingCalculator :first="false" :sourceCount="sourceCount" v-model="taking.amount" v-bind:amount="taking.amount" />
                 </el-card>
@@ -76,6 +79,7 @@
     import ReasonForPayment from '@/components/ReasonForPayment.vue'
     import TakingDeadline from '@/components/takings/edit/TakingDeadline.vue'
     import TakingContext from '@/components/takings/edit/TakingContext.vue'
+    import CrewSelect from '@/components/utils/CrewSelect.vue'
 
     export default {
         name: "TakingsEdit",
@@ -90,6 +94,7 @@
             'el-card': Card,
             'el-input': Input,
             'el-form': Form,
+            'CrewSelect': CrewSelect
         },
         props: {
             id: {
@@ -102,6 +107,7 @@
                 reason: "",
                 visible: false,
                 sourceCount: 0,
+                crewSelect: this.crew,
                 taking: {
                     "context": {
                         "description": "",
@@ -163,6 +169,7 @@
             ...mapGetters('user', {
                 user: 'get',
                 crew: 'getCrew',
+                employee: 'isEmployee'
             }),
             headerTitle () {
               if (this.id !== null) {
@@ -289,6 +296,10 @@
                     this.open504()
                 )
 
+            },
+            selectCrew(value) {
+                console.log(value)
+                this.crewSelect = [ value ]
             },
             open504() {
                 this.$notify({
