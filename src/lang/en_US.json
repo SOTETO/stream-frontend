@@ -1,490 +1,498 @@
 {
-  "defaults": {
-    "support": "it@vivaconagua.org",
-    "volunteerManager": "volunteer manager",
-    "employee": "employee",
-    "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
-  },
-  "filter": {
-    "events": {
-      "label": "Action",
-      "new_tag": "+ Action"
-    },
-    "crews": {
-      "label": "Crews",
-      "new_tag": "+ Crew"
-    },
-    "created": {
-      "label": "Recorded"
-    },
-    "received": {
-      "label": "Received"
-    },
-    "norms": {
-      "label": "Type of Taking",
-      "label_ECO": "Economic",
-      "label_DON": "Donation",
-      "label_null": "All"
-    },
-    "external": {
-      "label": "Cash/External",
-      "label_true": "Extern",
-      "label_false": "Cash",
-      "label_null": "All"
-    }, 
-    "confirmed_date": {
-      "label": "Confirmed Date"
-    },
-    "amount": {
-      "label": "Amount"
-    },
-    "confirmed": {
-      "label": "Confirmed",
-      "label_true": "Confirmed",
-      "label_false": "Not Confirmed",
-      "label_null": "All"
-    }
-  },
-  "errors": {
-    "ajax": {
-      "badRequest": {
-        "header": "The server does not understand",
-        "msg": "The data you've sent to the server has been not understood. Maybe a bug has been implemented or the server runs the wrong version. Please contact @:defaults.support and describe the problem."
-      },
-      "forbidden": {
-        "header": "Forbidden",
-        "msg": "You're not allowed to do this!"
-      },
-      "notFound": {
-        "header": "Server not found",
-        "msg": "Cannot access the server and it seems to be unreachable. Please contact @:defaults.support and describe the problem."
-      },
-      "server": {
-        "header": "Ooops...",
-        "msg": "An internal error occurred! Please contact @:defaults.support and describe the problem."
-      }
-    }
-  },
-  "collapse": {
-    "button": {
-      "show": "Show",
-      "hide": "Hide"
-    }
-  },
-  "pagination": {
-    "previous": "No more entries | Show first | Show previous (%{number})",
-    "next": "No more entries | Show last | Show next (%{number})"
-  },
-  "household": {
-    "errors": {
-      "invalidIBAN": "IBAN validation failed."
-    },
-    "header": {
-      "box": {
-        "list": "Overview",
-        "expense": "Expense",
-        "makearequest": "make a request",
-        "transitions": "Process"
-      },
-      "table": {
-        "what": "What?",
-        "wherefor": "Wherefor?",
-        "crew": "Crew",
-        "amount": "Amount",
-        "date": "Date",
-        "supporter": "Supporter",
-        "state": "State",
-        "process": "Process",
-        "created": "Creation date",
-        "updated": "Update"
-      }
-    },
-    "placeholder": {
-      "amount": "Amount",
-      "what": "What?",
-      "wherefor": "Wherefor?",
-      "iban": "IBAN",
-      "bic": "BIC",
-      "request": "Payback",
-      "appliedFor": "Approval"
-    },
-    "buttons": {
-      "save": "Save",
-      "edit": "Edit",
-      "cancel": "Cancel",
-      "sorting": {
-        "ASC": "Ascending",
-        "DESC": "Descending"
-      }
+    "defaults": {
+        "support": "it@vivaconagua.org",
+        "volunteerManager": "volunteer manager",
+        "employee": "employee",
+        "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
     },
     "filter": {
-      "title": "Filter..",
-      "what": "What?",
-      "wherefor": "Wherefor?",
-      "crew": "Crew",
-      "amount": "Amount",
-      "state": {
-        "general": "State",
-        "complete": "Complete",
-        "repayment": "Repayment",
-        "volunteerManager": "@:defaults.volunteerManager",
-        "employee": "@:defaults.employee"
-      },
-      "options": {
-        "complete": {
-          "incomplete": "Incomplete",
-          "complete": "Complete",
-          "noSelection": "No selection"
-        }
-      },
-      "tag": {
-        "what": "What?",
-        "wherefor": "Wherefor?",
-        "amount": "Amount?",
-        "crew": "Crew?",
-        "complete": "Complete?",
-        "repayment": "Repayment?",
-        "volunteerManager": "@:defaults.volunteerManager?",
-        "employee": "@:defaults.employee?",
-        "values": {
-          "complete": {
-            "complete": "Yes",
-            "incomplete": "No"
-          }
-        }
-      }
-    },
-    "hints": {
-      "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before.",
-      "dates": {
-        "created": "{date} (entered)",
-        "updated": "{date} (updated)"
-      },
-      "reason": {
-        "what": {
-          "missing": "Missing"
+        "events": {
+            "label": "Action",
+            "new_tag": "+ Action"
         },
-        "wherefor": {
-          "missing": "No reason given"
-        }
-      }
-    },
-    "states": {
-      "Idle": "Undefined state",
-      "Unknown": "Not possible to identify",
-      "AppliedFor": "Applied for money return",
-      "Requested": "Release requested",
-      "Approved": "Approved",
-      "ToRepay": "To repay",
-      "Repaid": "Repaid",
-      "Refused": "Refused",
-      "HouseholdComplete": "Incomplete",
-      "NotEditable": "Not editable"
-    },
-    "transitions": {
-      "NothingToDo": "Currently, there is nothing to do. Possibly, this changes, if the @:household.process.VolunteerManager.RoleName or an @:household.process.Employee.RoleName edited the expense.",
-      "VolunteerManager": {
-        "knows": "I know it",
-        "knowsNothing": "I don't know"
-      },
-      "Employee": {
-        "free": "Free",
-        "block": "Block",
-        "repay": "Repay"
-      },
-      "Owner": {
-        "requestPayment": "Request payment"
-      }
-    },
-    "process": {
-      "VolunteerManager": {
-        "RoleName": "Volunteer manager",
-        "Idle": "Missing interaction",
-        "Knows": "Knows it",
-        "KnowsNothing": "Knows nothing"
-      },
-      "Employee": {
-        "RoleName": "Employee",
-        "Idle": "Missing interaction",
-        "Freed": "Free",
-        "Blocked": "Blocked",
-        "Start": "@:household.process.Employee.Idle",
-        "Free": "@:household.process.Employee.Freed",
-        "Refused": "@:household.process.Employee.Blocked"
-      }
-    }
-  },
-  "donation": {
-    "header": {
-      "frame": {
-        "create": "Add donation"
-      },
-      "box": {
-        "list": "All donations",
-        "list-methods": "Edit",
-        "save": "Save",
-        "amount": "Donations amount",
-        "externalTransactions": "Details external transaction",
-        "action": "Event",
-        "deposit": "Enter deposit"
-      },
-      "donationSource": {
-        "sourceSelect": "What type of taking?",
-        "sum": "Sum",
-        "sourceType": {
-          "cash": "Cash",
-          "extern": "external transaction"
-        }
-      },
-      "table": {
-        "title": "Name / Event",
-        "crew": "Crew",
-        "amount": "Amount",
-        "deposited": "Deposited",
-        "date": "Date",
-        "supporter": "Supporter"
-      }
-    },
-    "hints": {
-      "deadline": {
-        "prefix": "Please deposit the cash donation using the banking card {0}!",
-        "date": "until {deadline}",
-        "immediately": "immediately"
-      },
-      "dates": {
-        "received": "Received: {date}",
-        "created": "Recorded: {date}"
-      },
-      "deposit": {
-        "confirmed": "Confirmed: {amount}",
-        "unconfirmed": "Unconfirmed: {amount}",
-        "open": "Open: {amount}"
-      },
-      "total": {
-        "cash": "Total (cash): {total}",
-        "extern": "Total (external transaction): {total}",
-        "all": "Total takings: {total}"
-      },
-      "error": {
+        "crews": {
+            "label": "Crews",
+            "new_tag": "+ Crew"
+        },
+        "created": {
+            "label": "Recorded"
+        },
+        "received": {
+            "label": "Received"
+        },
+        "norms": {
+            "label": "Type of Taking",
+            "label_ECO": "Economic",
+            "label_DON": "Donation",
+            "label_null": "All"
+        },
+        "external": {
+            "label": "Cash/External",
+            "label_true": "Extern",
+            "label_false": "Cash",
+            "label_null": "All"
+        }, 
+        "confirmed_date": {
+            "label": "Confirmed Date"
+        },
         "amount": {
-          "pattern": "Wrong money format (e.g. $37.50)"
+            "label": "Amount"
+        },
+        "confirmed": {
+            "label": "Confirmed",
+            "label_true": "Confirmed",
+            "label_false": "Not Confirmed",
+            "label_null": "All"
         }
-      }
-    },
-    "buttons": {
-      "add": "Add donation",
-      "save": "Save"
-    },
-    "placeholder": {
-      "comment": "Comment / Question",
-      "received": "When did you received the takings?",
-      "involved": {
-        "label": "From which supporters did you receive the takings?",
-        "indicator": "Jane Doe of your crew..."
-      },
-      "context": {
-        "label": "How were the takings collected?",
-        "indicator": "e.g. street festival"
-      },
-      "category": "Category",
-      "categories": {
-        "concert": "Concerts",
-        "festival": "Festivals",
-        "stadium": "Stadium",
-        "run4wash": "Run 4 WASH",
-        "school": "School",
-        "party": "Party",
-        "streetFestivals": "Street markets / festivals",
-        "karaoke": "Karaoke",
-        "kicker": "Kicker tournament",
-        "other": "Others"
-      },
-      "source": {
-        "group": {
-          "donations": "donations",
-          "economic": "economic takings"
-        },
-        "unknown": "I don't know",
-        "can": "Deposit can",
-        "box": "Donation box",
-        "gl": "Guest list",
-        "other": "Other",
-        "other_ec": "Other",
-        "merch": "Merchandise",
-        "com": "Company",
-        "better": "Betterplace",
-        "description": "Description..."
-      },
-      "externalDetails": {
-        "receipt": "Donation receipt required?",
-        "description": "Please give these informations to your external contact person. It helps us to allocate the donation the this taking:",
-        "partner": {
-          "label": "Who transfers the donation?",
-          "name": "Location / Organizer",
-          "asp": "Contact person",
-          "email": "Email address",
-          "address": "Postal address"
-        },
-        "account": {
-          "label": "Donation account:",
-          "owner": "Account owner: Viva con Agua",
-          "iban": "IBAN: DE58 2005 0550 12681 351 81",
-          "bic": "BIC: HASPDEHHXXX"
-        }
-      },
-      "internalDetails": {
-        "description": "Please use these informations for your deposit of the takings. It helps us to allocate the deposit the this taking:"
-      }
-    }
-  },
-  "deposits": {
-    "header": {
-      "box": "Deposits"
-    },
-    "table": {
-      "head": {
-        "created": "Created",
-        "date": "Date of deposit",
-        "crew": "Crew",
-        "amount": "Amount",
-        "donations": "Associated donations",
-        "supporter": "Involved supporter",
-        "state": "State",
-        "confirmed": "Confirmed by"
-      },
-      "hint": {
-        "openDeposit": "{amount} are not assigned to a donation.",
-        "dates": {
-          "received": "Date of deposit: {date}",
-          "created": "Created: {date}",
-          "confirmed": "Confirmed: {date}",
-          "unconfirmed": "Not confirmed"
-        },
-        "confirm": "confirm"
-      },
-      "load": {
-        "more": "More Deposits?",
-        "finish": "No More Deposits"
-      }
-    },
-    "placeholder": {
-      "amount": "Deposited amount",
-      "dateOfDeposit": "When?",
-      "searchDonation": "Select a donation"
     },
     "errors": {
-      "noValueForAssignedDonation": "Missing amount...",
-      "valueForAssignedDonationOutOfRange": "Out of range...",
-      "takingsNotFound": "No takings name",
-      "takingsBackendError": {
-        "title": "Internal error",
-        "msg": "No taking has been found."
-      }
-    }
-  },
+        "ajax": {
+            "badRequest": {
+                "header": "The server does not understand",
+                "msg": "The data you've sent to the server has been not understood. Maybe a bug has been implemented or the server runs the wrong version. Please contact @:defaults.support and describe the problem."
+            },
+            "forbidden": {
+                "header": "Forbidden",
+                "msg": "You're not allowed to do this!"
+            },
+            "notFound": {
+                "header": "Server not found",
+                "msg": "Cannot access the server and it seems to be unreachable. Please contact @:defaults.support and describe the problem."
+            },
+            "server": {
+                "header": "Ooops...",
+                "msg": "An internal error occurred! Please contact @:defaults.support and describe the problem."
+            }
+        }
+    },
+    "collapse": {
+        "button": {
+            "show": "Show",
+            "hide": "Hide"
+        }
+    },
+    "pagination": {
+        "previous": "No more entries | Show first | Show previous (%{number})",
+        "next": "No more entries | Show last | Show next (%{number})"
+    },
+    "household": {
+        "errors": {
+            "invalidIBAN": "IBAN validation failed."
+        },
+        "header": {
+            "box": {
+                "list": "Overview",
+                "expense": "Expense",
+                "makearequest": "make a request",
+                "transitions": "Process"
+            },
+            "table": {
+                "what": "What?",
+                "wherefor": "Wherefor?",
+                "crew": "Crew",
+                "amount": "Amount",
+                "date": "Date",
+                "supporter": "Supporter",
+                "state": "State",
+                "process": "Process",
+                "created": "Creation date",
+                "updated": "Update"
+            }
+        },
+        "placeholder": {
+            "amount": "Amount",
+            "what": "What?",
+            "wherefor": "Wherefor?",
+            "iban": "IBAN",
+            "bic": "BIC",
+            "request": "Payback",
+            "appliedFor": "Approval"
+        },
+        "buttons": {
+            "save": "Save",
+            "edit": "Edit",
+            "cancel": "Cancel",
+            "sorting": {
+                "ASC": "Ascending",
+                "DESC": "Descending"
+            }
+        },
+        "filter": {
+            "title": "Filter..",
+            "what": "What?",
+            "wherefor": "Wherefor?",
+            "crew": "Crew",
+            "amount": "Amount",
+            "state": {
+                "general": "State",
+                "complete": "Complete",
+                "repayment": "Repayment",
+                "volunteerManager": "@:defaults.volunteerManager",
+                "employee": "@:defaults.employee"
+            },
+            "options": {
+                "complete": {
+                    "incomplete": "Incomplete",
+                    "complete": "Complete",
+                    "noSelection": "No selection"
+                }
+            },
+            "tag": {
+                "what": "What?",
+                "wherefor": "Wherefor?",
+                "amount": "Amount?",
+                "crew": "Crew?",
+                "complete": "Complete?",
+                "repayment": "Repayment?",
+                "volunteerManager": "@:defaults.volunteerManager?",
+                "employee": "@:defaults.employee?",
+                "values": {
+                    "complete": {
+                        "complete": "Yes",
+                        "incomplete": "No"
+                    }
+                }
+            }
+        },
+        "hints": {
+            "expense": "Here you can add expenses.<br /><br />Please consider that some expenses can not be refunded. All expenses have to correspond with the aims and rules of VcA.<br /><br />If you are uncertain or you want to expose a larger sum of money, please request release before.",
+            "dates": {
+                "created": "{date} (entered)",
+                "updated": "{date} (updated)"
+            },
+            "reason": {
+                "what": {
+                    "missing": "Missing"
+                },
+                "wherefor": {
+                    "missing": "No reason given"
+                }
+            }
+        },
+        "states": {
+            "Idle": "Undefined state",
+            "Unknown": "Not possible to identify",
+            "AppliedFor": "Applied for money return",
+            "Requested": "Release requested",
+            "Approved": "Approved",
+            "ToRepay": "To repay",
+            "Repaid": "Repaid",
+            "Refused": "Refused",
+            "HouseholdComplete": "Incomplete",
+            "NotEditable": "Not editable"
+        },
+        "transitions": {
+            "NothingToDo": "Currently, there is nothing to do. Possibly, this changes, if the @:household.process.VolunteerManager.RoleName or an @:household.process.Employee.RoleName edited the expense.",
+            "VolunteerManager": {
+                "knows": "I know it",
+                "knowsNothing": "I don't know"
+            },
+            "Employee": {
+                "free": "Free",
+                "block": "Block",
+                "repay": "Repay"
+            },
+            "Owner": {
+                "requestPayment": "Request payment"
+            }
+        },
+        "process": {
+            "VolunteerManager": {
+                "RoleName": "Volunteer manager",
+                "Idle": "Missing interaction",
+                "Knows": "Knows it",
+                "KnowsNothing": "Knows nothing"
+            },
+            "Employee": {
+                "RoleName": "Employee",
+                "Idle": "Missing interaction",
+                "Freed": "Free",
+                "Blocked": "Blocked",
+                "Start": "@:household.process.Employee.Idle",
+                "Free": "@:household.process.Employee.Freed",
+                "Refused": "@:household.process.Employee.Blocked"
+            }
+        }
+    },
+    "donation": {
+        "header": {
+            "frame": {
+                "create": "Add donation"
+            },
+            "box": {
+                "list": "All donations",
+                "list-methods": "Edit",
+                "save": "Save",
+                "amount": "Donations amount",
+                "externalTransactions": "Details external transaction",
+                "action": "Event",
+                "deposit": "Enter deposit"
+            },
+            "donationSource": {
+                "sourceSelect": "What type of taking?",
+                "sum": "Sum",
+                "sourceType": {
+                    "cash": "Cash",
+                    "extern": "external transaction"
+                }
+            },
+            "table": {
+                "title": "Name / Event",
+                "crew": "Crew",
+                "amount": "Amount",
+                "deposited": "Deposited",
+                "date": "Date",
+                "supporter": "Supporter"
+            }
+        },
+        "hints": {
+            "deadline": {
+                "prefix": "Please deposit the cash donation using the banking card {0}!",
+                "date": "until {deadline}",
+                "immediately": "immediately"
+            },
+            "dates": {
+                "received": "Received: {date}",
+                "created": "Recorded: {date}"
+            },
+            "deposit": {
+                "confirmed": "Confirmed: {amount}",
+                "unconfirmed": "Unconfirmed: {amount}",
+                "open": "Open: {amount}"
+            },
+            "total": {
+                "cash": "Total (cash): {total}",
+                "extern": "Total (external transaction): {total}",
+                "all": "Total takings: {total}"
+            },
+            "error": {
+                "amount": {
+                    "pattern": "Wrong money format (e.g. $37.50)"
+                }
+            }
+        },
+        "buttons": {
+            "add": "Add donation",
+            "save": "Save"
+        },
+        "placeholder": {
+            "comment": "Comment / Question",
+            "received": "When did you received the takings?",
+            "involved": {
+                "label": "From which supporters did you receive the takings?",
+                "indicator": "Jane Doe of your crew..."
+            },
+            "context": {
+                "label": "How were the takings collected?",
+                "indicator": "e.g. street festival"
+            },
+            "category": "Category",
+            "categories": {
+                "concert": "Concerts",
+                "festival": "Festivals",
+                "stadium": "Stadium",
+                "run4wash": "Run 4 WASH",
+                "school": "School",
+                "party": "Party",
+                "streetFestivals": "Street markets / festivals",
+                "karaoke": "Karaoke",
+                "kicker": "Kicker tournament",
+                "other": "Others"
+            },
+            "source": {
+                "group": {
+                    "donations": "donations",
+                    "economic": "economic takings"
+                },
+                "unknown": "I don't know",
+                "can": "Deposit can",
+                "box": "Donation box",
+                "gl": "Guest list",
+                "other": "Other",
+                "other_ec": "Other",
+                "merch": "Merchandise",
+                "com": "Company",
+                "better": "Betterplace",
+                "description": "Description..."
+            },
+            "externalDetails": {
+                "receipt": "Donation receipt required?",
+                "description": "Please give these informations to your external contact person. It helps us to allocate the donation the this taking:",
+                "partner": {
+                    "label": "Who transfers the donation?",
+                    "name": "Location / Organizer",
+                    "asp": "Contact person",
+                    "email": "Email address",
+                    "address": "Postal address"
+                },
+                "account": {
+                    "label": "Donation account:",
+                    "owner": "Account owner: Viva con Agua",
+                    "iban": "IBAN: DE58 2005 0550 12681 351 81",
+                    "bic": "BIC: HASPDEHHXXX"
+                }
+            },
+            "internalDetails": {
+                "description": "Please use these informations for your deposit of the takings. It helps us to allocate the deposit the this taking:"
+            }
+        }
+    },
+    "deposits": {
+        "header": {
+            "box": "Deposits"
+        },
+        "table": {
+            "head": {
+                "created": "Created",
+                "date": "Date of deposit",
+                "crew": "Crew",
+                "amount": "Amount",
+                "donations": "Associated donations",
+                "supporter": "Involved supporter",
+                "state": "State",
+                "confirmed": "Confirmed by"
+            },
+            "hint": {
+                "openDeposit": "{amount} are not assigned to a donation.",
+                "dates": {
+                    "received": "Date of deposit: {date}",
+                    "created": "Created: {date}",
+                    "confirmed": "Confirmed: {date}",
+                    "unconfirmed": "Not confirmed"
+                },
+                "confirm": "confirm"
+            },
+            "load": {
+                "more": "More Deposits?",
+                "finish": "No More Deposits"
+            }
+        },
+        "placeholder": {
+            "amount": "Deposited amount",
+            "dateOfDeposit": "When?",
+            "searchDonation": "Select a donation"
+        },
+        "errors": {
+            "noValueForAssignedDonation": "Missing amount...",
+            "valueForAssignedDonationOutOfRange": "Out of range...",
+            "takingsNotFound": "No takings name",
+            "takingsBackendError": {
+                "title": "Internal error",
+                "msg": "No taking has been found."
+            }
+        }
+    },
     "currencies": {
-      "default": "USD",
-      "label": {
-        "EUR": "€",
-        "CHF": "Fr.",
-        "USD": "$"
-      }
+        "default": "USD",
+        "label": {
+            "EUR": "€",
+            "CHF": "Fr.",
+            "USD": "$"
+        }
     },
     "externalTransaction": {
-      "reasonForPayment": "Reason for payment",
-      "label": {
-        "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
-      }
-  },
-  "takings": {
-    "head":{
-      "table": "all takings",
-      "add": "add takings",
-      "deposit": "add ecnomy money"
+        "reasonForPayment": "Reason for payment",
+        "label": {
+            "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
+        }
     },
-    "table": {
-      "head": {
-        "edit": "Show / Edit",
-        "title": "Name / Event",
-        "crew": "Crew",
-        "amount": "Amount",
-        "deposited": "Deposited",
-        "date": "Date",
-        "supporter": "Supporter"
-      },
-      "sort": {
-        "title": "Name / Event",
-        "crew": "Crew",
-        "amount": "Amount",
-        "deposited": "Deposited",
-        "date": "Date",
-        "supporter": "Supporter",
-        "norms": "Type of taking"
-      },
-      "dates": {
-        "received": "Received: {date}",
-        "created": "Recorded: {date}"
-      },
-      "popup": {
-        "header": "Takings details",
-        "full": "Full taking:",
-        "split": "divided:",
-        "extern": "extern",
-        "cash": "cash"
-      },
-      "load": {
-        "more": "More Takings?",
-        "finish": "No More Takings"
-      }
+    "takings": {
+        "head":{
+            "table": "all takings",
+            "add": "add takings",
+            "deposit": "add ecnomy money"
+        },
+        "table": {
+            "head": {
+                "edit": "Show / Edit",
+                "title": "Name / Event",
+                "crew": "Crew",
+                "amount": "Amount",
+                "deposited": "Deposited",
+                "date": "Date",
+                "supporter": "Supporter"
+            },
+            "sort": {
+                "title": "Name / Event",
+                "crew": "Crew",
+                "amount": "Amount",
+                "deposited": "Deposited",
+                "date": "Date",
+                "supporter": "Supporter",
+                "norms": "Type of taking"
+            },
+            "dates": {
+                "received": "Received: {date}",
+                "created": "Recorded: {date}"
+            },
+            "popup": {
+                "header": "Takings details",
+                "full": "Full taking:",
+                "split": "divided:",
+                "extern": "extern",
+                "cash": "cash"
+            },
+            "load": {
+                "more": "More Takings?",
+                "finish": "No More Takings"
+            }
+        },
+        "placeholder": {
+            "comment": "Comment",
+            "amount": "Deposited amount",
+            "dateOfDeposit": "When?",
+            "searchDonation": "Select a donation"
+        },
+        "buttons": {
+            "add": "add taking",
+            "save": "save taking",
+            "update": "update taking",
+            "donation": "add donation",
+            "economic": "add economic money",
+            "depositAdd": "add deposit",
+            "abort": "abort deposit"
+        },
+        "filter":{
+            "name": "name"
+        },
+        "popover": {
+            "title": "Please, check the following fields...",
+            "buttonText": "Why is the Button disabled?",
+            "errors": {
+                "description": "'How were the takings collected?' is empty",
+                "category": "'Category' is empty",
+                "amount": "'What type of taking?' is incomplete",
+                "partner": "'Who transfers the donation?' is incomplete"
+            }
+        },
+        "labels": {
+            "name": "Name / Organisation:",
+            "asp": "Contact Person:",
+            "address": "Addresse:",
+            "email": "E-mail adresss:"
+        },
+        "validations": {
+            "category": "Please add a category",
+            "description": "Please add a description",
+            "name": "Please add a name",
+            "asp": "Please add a contact",
+            "email": "Please add an e-mail address",
+            "address": "Please add an address"
+        },
+        "info": "Questions? "
     },
-    "placeholder": {
-        "comment": "Comment",
-        "amount": "Deposited amount",
-        "dateOfDeposit": "When?",
-        "searchDonation": "Select a donation"
+    "takingsEdit": {
+        "header": {
+            "add": "Add Taking",
+            "edit": "Edit Taking"
+        }
     },
-    "buttons": {
-      "add": "add taking",
-      "save": "save taking",
-      "update": "update taking",
-      "donation": "add donation",
-      "economic": "add economic money",
-      "depositAdd": "add deposit",
-      "abort": "abort deposit"
-    },
-    "filter":{
-      "name": "name"
-    },
-    "popover": {
-      "title": "Please, check the following fields...",
-      "buttonText": "Why is the Button disabled?",
-      "errors": {
-        "description": "'How were the takings collected?' is empty",
-        "category": "'Category' is empty",
-        "amount": "'What type of taking?' is incomplete",
-        "partner": "'Who transfers the donation?' is incomplete"
-      }
-    },
-    "labels": {
-      "name": "Name / Organisation:",
-      "asp": "Contact Person:",
-      "address": "Addresse:",
-      "email": "E-mail adresss:"
-    },
-    "validations": {
-      "category": "Please add a category",
-      "description": "Please add a description",
-      "name": "Please add a name",
-      "asp": "Please add a contact",
-      "email": "Please add an e-mail address",
-      "address": "Please add an address"
-    },
-    "info": "Questions? "
-  },
-  "takingsEdit": {
-    "header": {
-      "add": "Add Taking",
-      "edit": "Edit Taking"
+    "utils": {
+        "crewSelect": {
+            "label": "Select Crew",
+            "placeholder": "for example Hamburg",
+            "validate": "Please select a Crew via search"
+        }
     }
-  }
+
 }

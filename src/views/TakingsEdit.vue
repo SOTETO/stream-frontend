@@ -9,7 +9,9 @@
                     <TakingContext v-model="taking.context" v-bind:context="taking.context" />
                 </el-card>  
                 <el-card class="box-card tail expand" v-if="employee || admin"> 
-                    <CrewSelect @crew="selectCrew"/>
+                    <el-form-item class="vca-form" :label="$t('utils.crewSelect.label')" :required="true" prop="crew">
+                        <CrewSelect v-model="taking.crew" @crew="selectCrew"/>
+                    </el-form-item>
                 </el-card/>
                 <el-card class="box-card tail expand">
                     <TakingCalculator :first="false" :sourceCount="sourceCount" v-model="taking.amount" v-bind:amount="taking.amount" />
@@ -120,6 +122,7 @@
                         "partner": {}
                     },
                     "description": "",
+                    "crew": [],
                     "amount": {
                         "received": Date.now(),
                         "sources": [],
@@ -129,6 +132,9 @@
                     "updated": Date.now(),
                 },
                 rules: {
+                    crew: [
+                        { required: true, message: this.$t('utils.crewSelect.validate'), trigger: 'change' }
+                    ],
                     context: [{
                         required: true
                     }],
@@ -260,7 +266,7 @@
             //    }
                 this.taking["author"] = user.uuid
                 //taking["norms"] = "Donation"
-                this.taking["crew"] = this.crew
+                this.taking.crew = this.crew
                 this.taking.amount.involvedSupporter = supporter
                 this.taking["depositUnits"] = []
                 axios.post(
@@ -300,7 +306,7 @@
             },
             selectCrew(value) {
                 console.log(value)
-                this.crewSelect = [ value ]
+                this.taking.crew = [ value ]
             },
             open504() {
                 this.$notify({

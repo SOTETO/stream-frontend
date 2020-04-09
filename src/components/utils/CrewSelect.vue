@@ -1,20 +1,30 @@
 <template>
-    <el-autocomplete
-        class="inline-input"
-        v-model="state2"
-        :fetch-suggestions="querySearch"
-        placeholder="Please Input"
-        :trigger-on-focus="false"
-        @select="handleSelect"
-        >
-    </el-autocomplete>
+            <el-autocomplete
+                class="inline-input"
+                v-model="state2"
+                :fetch-suggestions="querySearch"
+                :placeholder="$t('utils.crewSelect.placeholder')"
+                :trigger-on-focus="true"
+                @select="handleSelect"
+                >
+            </el-autocomplete>
 </template>
 <script>
 
 import axios from 'axios'
 export default {
     name: 'CrewSelect',
-
+    props: {
+        lang: {
+            type: Object,
+            default: function(){
+                return {
+                    label: "Crew Select",
+                    placeholder: "Select a Crew"
+                }
+            }
+        }
+    },
     data() {
         return {
             links: [],
@@ -71,6 +81,10 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
+    
+.vca-form {
+    width: 100%;
+}
 
 </style>

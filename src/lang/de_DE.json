@@ -1,499 +1,506 @@
 {
-  "defaults": {
-    "support": "it@vivaconagua.org",
-    "volunteerManager": "ASP",
-    "employee": "Hauptamt",
-    "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
-  },
-  "filter": {
-    "events": {
-      "label": "Aktion",
-      "new_tag": "+ Aktion"
-    },
-    "crews": {
-      "label": "Crews",
-      "new_tag": "+ Crew"
-    },
-    "created": {
-      "label": "Eingetragen"
-    },
-    "received": {
-      "label": "Erhalten"
-    },
-    "norms": {
-      "label": "Art der Einzahlung",
-      "label_ECO": "Wirtschaftlich",
-      "label_DON": "Spende",
-      "label_null": "Alle"
-    },
-    "external": {
-      "label": "Bar/Extern",
-      "label_true": "Extern",
-      "label_false": "Bar",
-      "label_null": "Alle"
-    }, 
-    "confirmed_date": {
-      "label": " Bestätigt am"
-    },
-    "amount": {
-      "label": "Betrag"
-    },
-    "confirmed": {
-      "label": "Bestätigt",
-      "label_true": "Bestätigt",
-      "label_false": "Nicht Bestätigt",
-      "label_null": "Alle"
-    }
-  },
-
-  "errors": {
-    "ajax": {
-      "badRequest": {
-        "header": "Das versteht der Server nicht",
-        "msg": "Die Daten, die du geschickt hast, können vom Server nicht verstanden werden. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
-      },
-      "forbidden": {
-        "header": "Das darfst du nicht",
-        "msg": "Leider hast du nicht die Berechtigung dies zu machen."
-      },
-      "notFound": {
-        "header": "Server nicht gefunden",
-        "msg": "Der Server scheint nicht erreichbar zu sein. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
-      },
-      "server": {
-        "header": "Ooops...",
-        "msg": "Ein interner Fehler ist aufgetreten. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
-      }
-    }
-  },
-  "collapse": {
-    "button": {
-      "show": "Ausklappen",
-      "hide": "Einklappen"
-    }
-  },
-  "pagination": {
-    "previous": "Keine vorherigen Einträge | Erster Eintrag | Vorherige %{number} Einträge",
-    "next": "Keine nächsten Einträge | Letzter Eintrag | Nächste %{number} Einträge"
-  },
-  "household": {
-    "errors": {
-      "invalidIBAN": "IBAN konnte nicht validiert werden."
-    },
-    "header": {
-      "box": {
-        "list": "Übersicht",
-        "expense": "Ausgabe",
-        "makearequest": "nur anfragen",
-        "transitions": "Prozess"
-      },
-      "table": {
-        "what": "Was?",
-        "wherefor": "Wofür?",
-        "crew": "Crew",
-        "amount": "Betrag",
-        "date": "Datum",
-        "supporter": "Beteiligte",
-        "state": "Status",
-        "process": "Bearbeitung",
-        "created": "Eintragungsdatum",
-        "updated": "Aktualisierungsdatum"
-      }
-    },
-    "placeholder": {
-      "amount": "Betrag",
-      "what": "Was?",
-      "wherefor": "Wofür?",
-      "iban": "IBAN",
-      "bic": "BIC",
-      "request": "Auszahlung",
-      "appliedFor": "Freigabe"
-    },
-    "buttons": {
-      "save": "Speichern",
-      "edit": "Editieren",
-      "cancel": "Abbrechen",
-      "sorting": {
-        "ASC": "Aufsteigend",
-        "DESC": "Absteigend"
-      }
+    "defaults": {
+        "support": "it@vivaconagua.org",
+        "volunteerManager": "ASP",
+        "employee": "Hauptamt",
+        "expenseListURL": "https://pool2.vivaconagua.org/wiki/index.php/Ausgabenliste"
     },
     "filter": {
-      "title": "Filtern...",
-      "what": "Was?",
-      "wherefor": "Wofür?",
-      "crew": "Crew",
-      "amount": "Betrag",
-      "state": {
-        "general": "Zustand",
-        "complete": "Vollständig",
-        "repayment": "Auszahlung",
-        "volunteerManager": "@:defaults.volunteerManager",
-        "employee": "@:defaults.employee"
-      },
-      "options": {
-        "complete": {
-          "incomplete": "Unvollständig",
-          "complete": "Vollständig",
-          "noSelection": "Egal"
-        }
-      },
-      "tag": {
-        "what": "Was?",
-        "wherefor": "Wofür?",
-        "amount": "Betrag?",
-        "crew": "Crew?",
-        "complete": "Vollständig?",
-        "repayment": "Auszahlung?",
-        "volunteerManager": "@:defaults.volunteerManager?",
-        "employee": "@:defaults.employee?",
-        "values": {
-          "complete": {
-            "complete": "Ja",
-            "incomplete": "Nein"
-          }
-        }
-      }
-    },
-    "hints": {
-      "expense": "Hier kannst du alle Ausgaben für die Crewarbeit eintragen.<br /><br />In der Ausgabenliste siehst du, welche Kosten erstattet werden können bzw. vorher freigegeben werden müssen.<br /><br />Beachte bitte, dass zur Erstattung alle Belege im Original vorliegen müssen.",
-      "dates": {
-        "created": "{date} (eingetragen)",
-        "updated": "{date} (aktualisiert)"
-      },
-      "reason": {
-        "what": {
-          "missing": "Nichts angegeben"
+        "events": {
+            "label": "Aktion",
+            "new_tag": "+ Aktion"
         },
-        "wherefor": {
-          "missing": "Kein Grund angegeben"
-        }
-      }
-    },
-    "states": {
-      "Idle": "Undefinierter Zustand",
-      "Unknown": "Zustand kann nicht erkannt werden",
-      "AppliedFor": "Auszahlung beantragt",
-      "Requested": "Freigabe angefragt",
-      "Approved": "Genehmigt",
-      "ToRepay": "Zurückzuzahlen",
-      "Repaid": "Zurückgezahlt",
-      "Refused": "Verwehrt",
-      "HouseholdComplete": "Unvollständig",
-      "NotEditable": "Unveränderbar"
-    },
-    "transitions": {
-      "NothingToDo": "Du kannst gerade nichts tun. Eventuell ändert sich dies, wenn ein @:household.process.VolunteerManager.RoleName oder das @:household.process.Employee.RoleName etwas verändert haben.",
-      "VolunteerManager": {
-        "knows": "Ich weiß davon",
-        "knowsNothing": "Ich weiß davon nichts"
-      },
-      "Employee": {
-        "free": "Freigeben",
-        "block": "Verwehren",
-        "repay": "Zurückzahlen"
-      },
-      "Owner": {
-        "requestPayment": "Rückzahlung beantragen"
-      }
-    },
-    "process": {
-      "VolunteerManager": {
-        "RoleName": "ASP",
-        "Idle": "Nicht bearbeitet",
-        "Knows": "Weiß Bescheid",
-        "KnowsNothing": "Weiß nichts davon"
-      },
-      "Employee": {
-        "RoleName": "Hauptamt",
-        "Idle": "Nicht bearbeitet",
-        "Freed": "Freigegeben",
-        "Blocked": "Verwehrt",
-        "Start": "@:household.process.Employee.Idle",
-        "Free": "@:household.process.Employee.Freed",
-        "Refused": "@:household.process.Employee.Blocked"
-      }
-    }
-  },
-  "donation": {
-    "header": {
-      "frame": {
-        "create": "Spende hinzufügen"
-      },
-      "box": {
-        "list": "Alle Spenden",
-        "list-methods": "Editieren",
-        "save": "Speichern",
-        "amount": "Spendenbetrag",
-        "externalTransactions": "Details externer Überweiser",
-        "action": "Aktion",
-        "deposit": "Einzahlung vermerken"
-      },
-      "donationSource": {
-        "sourceSelect": "Art der Einnahme?",
-        "sum": "Summe",
-        "sourceType": {
-          "cash": "Bar",
-          "extern": "externe Überweisung"
-        }
-      },
-      "table": {
-        "title": "Name / Aktion",
-        "crew": "Crew",
-        "amount": "Betrag",
-        "deposited": "Eingezahlt",
-        "date": "Datum",
-        "supporter": "Beteiligte Supporter"
-      }
-    },
-    "hints": {
-      "deadline": {
-        "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
-        "date": "bis spätestens {deadline}",
-        "immediately": "umgehend"
-      },
-      "dates": {
-        "received": "Erhalten: {date}",
-        "created": "Eingetragen: {date}"
-      },
-      "deposit": {
-        "confirmed": "Bestätigt: {amount}",
-        "unconfirmed": "Unbestätigt: {amount}",
-        "open": "Offen: {amount}"
-      },
-      "total": {
-        "cash": "Summe Barspende: {total}",
-        "extern": "Summe Spende durch externe Überweisung: {total}",
-        "all": "Spendensumme: {total}"
-      },
-      "error": {
+        "crews": {
+            "label": "Crews",
+            "new_tag": "+ Crew"
+        },
+        "created": {
+            "label": "Eingetragen"
+        },
+        "received": {
+            "label": "Erhalten"
+        },
+        "norms": {
+            "label": "Art der Einzahlung",
+            "label_ECO": "Wirtschaftlich",
+            "label_DON": "Spende",
+            "label_null": "Alle"
+        },
+        "external": {
+            "label": "Bar/Extern",
+            "label_true": "Extern",
+            "label_false": "Bar",
+            "label_null": "Alle"
+        }, 
+        "confirmed_date": {
+            "label": " Bestätigt am"
+        },
         "amount": {
-          "pattern": "Falsches Format (z.B. 37,50 € oder Fr. 37.50)"
+            "label": "Betrag"
+        },
+        "confirmed": {
+            "label": "Bestätigt",
+            "label_true": "Bestätigt",
+            "label_false": "Nicht Bestätigt",
+            "label_null": "Alle"
         }
-      }
     },
-    "buttons": {
-      "add": "Spende hinzufügen",
-      "save": "Speichern"
-    },
-    "placeholder": {
-      "comment": "Bemerkung / Frage",
-      "received": "Wann hast du die Einnahme erhalten?",
-      "involved": {
-        "label": "Von welchen Supportern hast du die Einnahme erhalten?",
-        "indicator": "Max Mustermann aus deiner Crew..."
-      },
-      "context": {
-        "label": "Wobei ist die Einnahme entstanden?",
-        "indicator": "z.B. Straßenfest"
-      },
-      "category": "Kategorie",
-      "categories": {
-        "concert": "Konzerte",
-        "festival": "Festivals",
-        "stadium": "Stadien",
-        "run4wash": "Run 4 WASH",
-        "school": "Schule",
-        "party": "Party",
-        "streetFestivals": "Straßenfeste",
-        "karaoke": "Slam, Powerpoint-Karaoke & Co.",
-        "kicker": "Kickerturniere",
-        "other": "Sonstiges"
-      },
-      "source": {
-        "group": {
-          "donations": "Spendeneinnahmen",
-          "economic": "Wirtschaftliche Einnahmen"
-        },
-        "unknown": "Kann ich nicht zuordnen",
-        "can": "Pfandtonne",
-        "box": "Spendendose",
-        "gl": "Gästeliste",
-        "other": "Sonstiges",
-        "other_ec": "Sonstiges",
-        "merch": "Merchandise",
-        "com": "Unternehmen",
-        "better": "Betterplace",
-        "description": "Beschreibung..."
-      },
-      "externalDetails": {
-        "receipt": "Spendenbescheinigung erwünscht?",
-        "description": "Bitte gib diese Informationen an deine externe Kontaktperson. Das hilft uns dabei die Überweisung mit dieser Einnahme zu verknüpfen:",
-        "partner": {
-          "label": "Wer überweist die Einnahme?",
-          "name": "Location / Veranstalter",
-          "asp": "Ansprechperson",
-          "email": "Emailadresse",
-          "address": "Postanschrift"
-        },
-        "account": {
-          "label": "Spendenkonto:",
-          "owner": "Empfänger: Viva con Agua",
-          "iban": "IBAN: DE58 2005 0550 12681 351 81",
-          "bic": "BIC: HASPDEHHXXX"
-        }
-      },
-      "internalDetails": {
-        "description": "Bitte nutze diese Informationen für deine Einzahlung mit der Einzahlkarte. Das hilft uns dabei die Einzahlung mit dieser Einnahme zu verknüpfen:"
-      }
-    }
-  },
-  "deposits": {
-    "header": {
-      "box": "Einzahlungen"
-    },
-    "table": {
-      "head": {
-        "created": "Eingetragen",
-        "date": "Datum der Einzahlung",
-        "crew": "Crew",
-        "amount": "Betrag",
-        "donations": "Zugeordnete Spenden",
-        "supporter": "Beteiligte Supporter",
-        "state": "Status",
-        "confirmed": "Bestätigt von"
-      },
-      "hint": {
-        "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
-        "dates": {
-          "received": "Eingezahlt: {date}",
-          "created": "Eingetragen: {date}",
-          "confirmed": "Bestätigt: {date}",
-          "unconfirmed": "Nicht bestätigt"
-        },
-        "confirm": "bestätigen"
-      },
-      "load": {
-        "more": "Mehr Einzahlungen?",
-        "finish": "Alle Einzahlungen geladen"
-      }
-    },
-      
-    "placeholder": {
-    
-      "amount": "Eingezahlter Betrag",
-      
-      "dateOfDeposit": "Wann?",
-      
-      "searchDonation": "Wähle eine Spende"
-      
-    },
+
     "errors": {
-      "noValueForAssignedDonation": "Der Anteil fehlt...",
-      "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
-      "takingsNotFound": "Kein Name der Einzahlung",
-      "takingsBackendError": {
-        "title": "Serverfehler",
-        "msg": "Leider konnten keine Einzahlung gefunden werden."
-      }
-    }
-  },
-  "currencies": {
-    "default": "EUR",
-    "label": {
-      "EUR": "€",
-      "CHF": "Fr.",
-      "USD": "$"
-    
-    }
-  },
-  "externalTransaction": {
-    "reasonForPayment": "Verwendungszweck",
-    "label": {
-      "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
-    }
-  },
-  "takings": {
-    "head":{
-      "table": "Alle Einnahmen",
-      "add": "Einnahme Hinzufügen",
-      "deposit": "Einzahlung vermerken"
+        "ajax": {
+            "badRequest": {
+                "header": "Das versteht der Server nicht",
+                "msg": "Die Daten, die du geschickt hast, können vom Server nicht verstanden werden. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+            },
+            "forbidden": {
+                "header": "Das darfst du nicht",
+                "msg": "Leider hast du nicht die Berechtigung dies zu machen."
+            },
+            "notFound": {
+                "header": "Server nicht gefunden",
+                "msg": "Der Server scheint nicht erreichbar zu sein. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+            },
+            "server": {
+                "header": "Ooops...",
+                "msg": "Ein interner Fehler ist aufgetreten. Bitte kontaktiere @:defaults.support und beschreibe das Problem."
+            }
+        }
     },
-    "table": {
-      "head": {
-        "edit": "Anzeigen / Bearbeiten",
-        "title": "Name / Aktion",
-        "crew": "Crew",
-        "amount": "Betrag",
-        "deposited": "Eingezahlt",
-        "date": "Datum",
-        "supporter": "Beteiligte Supporter"
-      },
-      "sort": {
-        "title": "Name / Aktion",
-        "crew": "Crew",
-        "amount": "Betrag",
-        "deposited": "Eingezahlt",
-        "date": "Datum",
-        "supporter": "Beteiligte Supporter",
-        "norms": "Art der Einnahme"
-      },
-      "dates": {
-        "received": "Erhalten: {date}",
-        "created": "Eingetragen: {date}"
-      },
-      "popup": {
-        "header": "Einnahme Details",
-        "full": "Gesamte Einnahme:",
-        "split": "Davon:",
-        "extern": "Überweisung",
-        "cash": "Bargeld"
-      },
-      "load": {
-        "more": "Mehr Einnahmen?",
-        "finish": "Alle Einnahmen geladen"
-      }
+    "collapse": {
+        "button": {
+            "show": "Ausklappen",
+            "hide": "Einklappen"
+        }
+    },
+    "pagination": {
+        "previous": "Keine vorherigen Einträge | Erster Eintrag | Vorherige %{number} Einträge",
+        "next": "Keine nächsten Einträge | Letzter Eintrag | Nächste %{number} Einträge"
+    },
+    "household": {
+        "errors": {
+            "invalidIBAN": "IBAN konnte nicht validiert werden."
+        },
+        "header": {
+            "box": {
+                "list": "Übersicht",
+                "expense": "Ausgabe",
+                "makearequest": "nur anfragen",
+                "transitions": "Prozess"
+            },
+            "table": {
+                "what": "Was?",
+                "wherefor": "Wofür?",
+                "crew": "Crew",
+                "amount": "Betrag",
+                "date": "Datum",
+                "supporter": "Beteiligte",
+                "state": "Status",
+                "process": "Bearbeitung",
+                "created": "Eintragungsdatum",
+                "updated": "Aktualisierungsdatum"
+            }
+        },
+        "placeholder": {
+            "amount": "Betrag",
+            "what": "Was?",
+            "wherefor": "Wofür?",
+            "iban": "IBAN",
+            "bic": "BIC",
+            "request": "Auszahlung",
+            "appliedFor": "Freigabe"
+        },
+        "buttons": {
+            "save": "Speichern",
+            "edit": "Editieren",
+            "cancel": "Abbrechen",
+            "sorting": {
+                "ASC": "Aufsteigend",
+                "DESC": "Absteigend"
+            }
+        },
+        "filter": {
+            "title": "Filtern...",
+            "what": "Was?",
+            "wherefor": "Wofür?",
+            "crew": "Crew",
+            "amount": "Betrag",
+            "state": {
+                "general": "Zustand",
+                "complete": "Vollständig",
+                "repayment": "Auszahlung",
+                "volunteerManager": "@:defaults.volunteerManager",
+                "employee": "@:defaults.employee"
+            },
+            "options": {
+                "complete": {
+                    "incomplete": "Unvollständig",
+                    "complete": "Vollständig",
+                    "noSelection": "Egal"
+                }
+            },
+            "tag": {
+                "what": "Was?",
+                "wherefor": "Wofür?",
+                "amount": "Betrag?",
+                "crew": "Crew?",
+                "complete": "Vollständig?",
+                "repayment": "Auszahlung?",
+                "volunteerManager": "@:defaults.volunteerManager?",
+                "employee": "@:defaults.employee?",
+                "values": {
+                    "complete": {
+                        "complete": "Ja",
+                        "incomplete": "Nein"
+                    }
+                }
+            }
+        },
+        "hints": {
+            "expense": "Hier kannst du alle Ausgaben für die Crewarbeit eintragen.<br /><br />In der Ausgabenliste siehst du, welche Kosten erstattet werden können bzw. vorher freigegeben werden müssen.<br /><br />Beachte bitte, dass zur Erstattung alle Belege im Original vorliegen müssen.",
+            "dates": {
+                "created": "{date} (eingetragen)",
+                "updated": "{date} (aktualisiert)"
+            },
+            "reason": {
+                "what": {
+                    "missing": "Nichts angegeben"
+                },
+                "wherefor": {
+                    "missing": "Kein Grund angegeben"
+                }
+            }
+        },
+        "states": {
+            "Idle": "Undefinierter Zustand",
+            "Unknown": "Zustand kann nicht erkannt werden",
+            "AppliedFor": "Auszahlung beantragt",
+            "Requested": "Freigabe angefragt",
+            "Approved": "Genehmigt",
+            "ToRepay": "Zurückzuzahlen",
+            "Repaid": "Zurückgezahlt",
+            "Refused": "Verwehrt",
+            "HouseholdComplete": "Unvollständig",
+            "NotEditable": "Unveränderbar"
+        },
+        "transitions": {
+            "NothingToDo": "Du kannst gerade nichts tun. Eventuell ändert sich dies, wenn ein @:household.process.VolunteerManager.RoleName oder das @:household.process.Employee.RoleName etwas verändert haben.",
+            "VolunteerManager": {
+                "knows": "Ich weiß davon",
+                "knowsNothing": "Ich weiß davon nichts"
+            },
+            "Employee": {
+                "free": "Freigeben",
+                "block": "Verwehren",
+                "repay": "Zurückzahlen"
+            },
+            "Owner": {
+                "requestPayment": "Rückzahlung beantragen"
+            }
+        },
+        "process": {
+            "VolunteerManager": {
+                "RoleName": "ASP",
+                "Idle": "Nicht bearbeitet",
+                "Knows": "Weiß Bescheid",
+                "KnowsNothing": "Weiß nichts davon"
+            },
+            "Employee": {
+                "RoleName": "Hauptamt",
+                "Idle": "Nicht bearbeitet",
+                "Freed": "Freigegeben",
+                "Blocked": "Verwehrt",
+                "Start": "@:household.process.Employee.Idle",
+                "Free": "@:household.process.Employee.Freed",
+                "Refused": "@:household.process.Employee.Blocked"
+            }
+        }
+    },
+    "donation": {
+        "header": {
+            "frame": {
+                "create": "Spende hinzufügen"
+            },
+            "box": {
+                "list": "Alle Spenden",
+                "list-methods": "Editieren",
+                "save": "Speichern",
+                "amount": "Spendenbetrag",
+                "externalTransactions": "Details externer Überweiser",
+                "action": "Aktion",
+                "deposit": "Einzahlung vermerken"
+            },
+            "donationSource": {
+                "sourceSelect": "Art der Einnahme?",
+                "sum": "Summe",
+                "sourceType": {
+                    "cash": "Bar",
+                    "extern": "externe Überweisung"
+                }
+            },
+            "table": {
+                "title": "Name / Aktion",
+                "crew": "Crew",
+                "amount": "Betrag",
+                "deposited": "Eingezahlt",
+                "date": "Datum",
+                "supporter": "Beteiligte Supporter"
+            }
+        },
+        "hints": {
+            "deadline": {
+                "prefix": "Bitte zahle die Barspende {0} mit der Einzahlkarte bei der Commerzbank ein!",
+                "date": "bis spätestens {deadline}",
+                "immediately": "umgehend"
+            },
+            "dates": {
+                "received": "Erhalten: {date}",
+                "created": "Eingetragen: {date}"
+            },
+            "deposit": {
+                "confirmed": "Bestätigt: {amount}",
+                "unconfirmed": "Unbestätigt: {amount}",
+                "open": "Offen: {amount}"
+            },
+            "total": {
+                "cash": "Summe Barspende: {total}",
+                "extern": "Summe Spende durch externe Überweisung: {total}",
+                "all": "Spendensumme: {total}"
+            },
+            "error": {
+                "amount": {
+                    "pattern": "Falsches Format (z.B. 37,50 € oder Fr. 37.50)"
+                }
+            }
+        },
+        "buttons": {
+            "add": "Spende hinzufügen",
+            "save": "Speichern"
+        },
+        "placeholder": {
+            "comment": "Bemerkung / Frage",
+            "received": "Wann hast du die Einnahme erhalten?",
+            "involved": {
+                "label": "Von welchen Supportern hast du die Einnahme erhalten?",
+                "indicator": "Max Mustermann aus deiner Crew..."
+            },
+            "context": {
+                "label": "Wobei ist die Einnahme entstanden?",
+                "indicator": "z.B. Straßenfest"
+            },
+            "category": "Kategorie",
+            "categories": {
+                "concert": "Konzerte",
+                "festival": "Festivals",
+                "stadium": "Stadien",
+                "run4wash": "Run 4 WASH",
+                "school": "Schule",
+                "party": "Party",
+                "streetFestivals": "Straßenfeste",
+                "karaoke": "Slam, Powerpoint-Karaoke & Co.",
+                "kicker": "Kickerturniere",
+                "other": "Sonstiges"
+            },
+            "source": {
+                "group": {
+                    "donations": "Spendeneinnahmen",
+                    "economic": "Wirtschaftliche Einnahmen"
+                },
+                "unknown": "Kann ich nicht zuordnen",
+                "can": "Pfandtonne",
+                "box": "Spendendose",
+                "gl": "Gästeliste",
+                "other": "Sonstiges",
+                "other_ec": "Sonstiges",
+                "merch": "Merchandise",
+                "com": "Unternehmen",
+                "better": "Betterplace",
+                "description": "Beschreibung..."
+            },
+            "externalDetails": {
+                "receipt": "Spendenbescheinigung erwünscht?",
+                "description": "Bitte gib diese Informationen an deine externe Kontaktperson. Das hilft uns dabei die Überweisung mit dieser Einnahme zu verknüpfen:",
+                "partner": {
+                    "label": "Wer überweist die Einnahme?",
+                    "name": "Location / Veranstalter",
+                    "asp": "Ansprechperson",
+                    "email": "Emailadresse",
+                    "address": "Postanschrift"
+                },
+                "account": {
+                    "label": "Spendenkonto:",
+                    "owner": "Empfänger: Viva con Agua",
+                    "iban": "IBAN: DE58 2005 0550 12681 351 81",
+                    "bic": "BIC: HASPDEHHXXX"
+                }
+            },
+            "internalDetails": {
+                "description": "Bitte nutze diese Informationen für deine Einzahlung mit der Einzahlkarte. Das hilft uns dabei die Einzahlung mit dieser Einnahme zu verknüpfen:"
+            }
+        }
+    },
+    "deposits": {
+        "header": {
+            "box": "Einzahlungen"
+        },
+        "table": {
+            "head": {
+                "created": "Eingetragen",
+                "date": "Datum der Einzahlung",
+                "crew": "Crew",
+                "amount": "Betrag",
+                "donations": "Zugeordnete Spenden",
+                "supporter": "Beteiligte Supporter",
+                "state": "Status",
+                "confirmed": "Bestätigt von"
+            },
+            "hint": {
+                "openDeposit": "Noch {amount} sind keiner Spende zugeordnet.",
+                "dates": {
+                    "received": "Eingezahlt: {date}",
+                    "created": "Eingetragen: {date}",
+                    "confirmed": "Bestätigt: {date}",
+                    "unconfirmed": "Nicht bestätigt"
+                },
+                "confirm": "bestätigen"
+            },
+            "load": {
+                "more": "Mehr Einzahlungen?",
+                "finish": "Alle Einzahlungen geladen"
+            }
+        },
 
-    },
-    "placeholder": {
-      "comment": "Kommentar",
-      "amount": "Eingezahlte Summe",
-      "dateOfDeposit": "Wann wurde eingezahlt?",
-      "searchDonation": "Wähle eine Spende"
-    },
-    "buttons": {
-      "add": "Einnahme hinzufügen",
-      "save": "Einnahme speichern",
-      "update": "Einnahme aktualisieren",
-      "donation": "Spende hinzufügen",
-      "economic": "Wirtschaftlich Einnahmen hinzufügen",
-      "depositAdd": "Einzahlung hinzufügen",
-      "abort": "Einzahlung abbrechen"
-    },
-    "filter": {
-      "name": "Name"
-    },
-    "popover": {
-      "title": "Bitte überprüfe folgende Felder:",
-      "buttonText": "Warum ist dieser Button deaktiviert?",
-      "errors": {
-        "description": "'Wobei ist diese Einnahme entstanden?' fehlt",
-        "category": "'Kategorie' fehlt",
-        "amount": "'Art der Einnahme?' ist nicht komplett",
-        "partner": "'Wer überweist die Einnahme?' ist nicht komplett"
-      }
-    },
-    "labels": {
-      "name": "Name / Organisation:",
-      "asp": "Ansprechperson:",
-      "address": "Adresse:",
-      "email": "E-Mail Adresss:"
-    },
-    "validations": {
-      "category": "Bitte gib eine Kategorie an",
-      "description": "Bitte füge eine Beschreibung hinzu",
-      "name": "Bitte gib einen Namen ein",
-      "asp": "Bitte gib eine Ansprechperson an",
-      "email": "Bitte gib eine E-Mail Adresse an",
-      "address": "Bitte gib eine Adresse an"
+        "placeholder": {
 
+            "amount": "Eingezahlter Betrag",
+
+            "dateOfDeposit": "Wann?",
+
+            "searchDonation": "Wähle eine Spende"
+
+        },
+        "errors": {
+            "noValueForAssignedDonation": "Der Anteil fehlt...",
+            "valueForAssignedDonationOutOfRange": "Der Anteil ist größer als die gesammte Summe...",
+            "takingsNotFound": "Kein Name der Einzahlung",
+            "takingsBackendError": {
+                "title": "Serverfehler",
+                "msg": "Leider konnten keine Einzahlung gefunden werden."
+            }
+        }
     },
-    "info": "Unklarheiten? "
-  },
-  "takingsEdit": {
-    "header": {
-      "add": "Einnahme Hinzufügen",
-      "edit": "Einnahme Bearbeiten"
+    "currencies": {
+        "default": "EUR",
+        "label": {
+            "EUR": "€",
+            "CHF": "Fr.",
+            "USD": "$"
+
+        }
+    },
+    "externalTransaction": {
+        "reasonForPayment": "Verwendungszweck",
+        "label": {
+            "reasonForPayment": "@:externalTransaction.reasonForPayment: {generated}"
+        }
+    },
+    "takings": {
+        "head":{
+            "table": "Alle Einnahmen",
+            "add": "Einnahme Hinzufügen",
+            "deposit": "Einzahlung vermerken"
+        },
+        "table": {
+            "head": {
+                "edit": "Anzeigen / Bearbeiten",
+                "title": "Name / Aktion",
+                "crew": "Crew",
+                "amount": "Betrag",
+                "deposited": "Eingezahlt",
+                "date": "Datum",
+                "supporter": "Beteiligte Supporter"
+            },
+            "sort": {
+                "title": "Name / Aktion",
+                "crew": "Crew",
+                "amount": "Betrag",
+                "deposited": "Eingezahlt",
+                "date": "Datum",
+                "supporter": "Beteiligte Supporter",
+                "norms": "Art der Einnahme"
+            },
+            "dates": {
+                "received": "Erhalten: {date}",
+                "created": "Eingetragen: {date}"
+            },
+            "popup": {
+                "header": "Einnahme Details",
+                "full": "Gesamte Einnahme:",
+                "split": "Davon:",
+                "extern": "Überweisung",
+                "cash": "Bargeld"
+            },
+            "load": {
+                "more": "Mehr Einnahmen?",
+                "finish": "Alle Einnahmen geladen"
+            }
+
+        },
+        "placeholder": {
+            "comment": "Kommentar",
+            "amount": "Eingezahlte Summe",
+            "dateOfDeposit": "Wann wurde eingezahlt?",
+            "searchDonation": "Wähle eine Spende"
+        },
+        "buttons": {
+            "add": "Einnahme hinzufügen",
+            "save": "Einnahme speichern",
+            "update": "Einnahme aktualisieren",
+            "donation": "Spende hinzufügen",
+            "economic": "Wirtschaftlich Einnahmen hinzufügen",
+            "depositAdd": "Einzahlung hinzufügen",
+            "abort": "Einzahlung abbrechen"
+        },
+        "filter": {
+            "name": "Name"
+        },
+        "popover": {
+            "title": "Bitte überprüfe folgende Felder:",
+            "buttonText": "Warum ist dieser Button deaktiviert?",
+            "errors": {
+                "description": "'Wobei ist diese Einnahme entstanden?' fehlt",
+                "category": "'Kategorie' fehlt",
+                "amount": "'Art der Einnahme?' ist nicht komplett",
+                "partner": "'Wer überweist die Einnahme?' ist nicht komplett"
+            }
+        },
+        "labels": {
+            "name": "Name / Organisation:",
+            "asp": "Ansprechperson:",
+            "address": "Adresse:",
+            "email": "E-Mail Adresss:"
+        },
+        "validations": {
+            "category": "Bitte gib eine Kategorie an",
+            "description": "Bitte füge eine Beschreibung hinzu",
+            "name": "Bitte gib einen Namen ein",
+            "asp": "Bitte gib eine Ansprechperson an",
+            "email": "Bitte gib eine E-Mail Adresse an",
+            "address": "Bitte gib eine Adresse an"
+
+        },
+        "info": "Unklarheiten? "
+    },
+    "takingsEdit": {
+        "header": {
+            "add": "Einnahme Hinzufügen",
+            "edit": "Einnahme Bearbeiten"
+        }
+    },
+    "utils": {
+        "crewSelect": {
+            "label": "Crew auswählen",
+            "placeholder": "z.B. Hamburg",
+            "validate": "Bitte wähle eine Crew aus"
+        }
     }
-  }
 }
