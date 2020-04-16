@@ -122,7 +122,7 @@
                         "partner": {}
                     },
                     "description": "",
-                    "crew": [ this.crew ],
+                    "crew": null,
                     "amount": {
                         "received": Date.now(),
                         "sources": [],
@@ -266,7 +266,9 @@
             //    }
                 this.taking["author"] = user.uuid
                 //taking["norms"] = "Donation"
-             //   this.taking.crew = this.crew
+                if (this.taking.crew === null) {
+                    this.taking.crew = this.crew
+                }
                 this.taking.amount.involvedSupporter = supporter
                 this.taking["depositUnits"] = []
                 axios.post(
